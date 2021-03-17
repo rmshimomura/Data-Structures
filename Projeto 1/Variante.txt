@@ -1,0 +1,8 @@
+Seguindo as orientações do primeiro pdf, interpretei que a função TP apenas altera a exibição do conjunto de retângulos inseridos na lista.
+Dessa forma, minha função TP procura pares de retângulos que se sobrepõem, troca a cor deles par a par entre 10 selecionadas previamente e irá exibir somente aqueles com pelo menos uma sobreposição
+
+Já a TPR segue o mesmo formato, assim, ela altera a exibição do conjunto de retângulos inseridos na lista.
+Dessa forma, minha função TPR procura pares de retângulos que se sobrepõem, troca a cor deles par a par entre 10 selecionadas previamente e irá exibir somente aqueles com pelo menos uma sobreposição 
+e que estiverem dentro do retângulo passado nos argumentos da função. 
+
+Saliento que essas funções não são de remoção, portanto, os retângulos que não são exibidos, não foram removidos, então ainda são consultados nas outras funções.
