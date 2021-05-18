@@ -138,6 +138,7 @@ void getArguments(int argc, char** argv, flag checkers, path paths) {
         puts("Argumentos faltando.");
         return;
     }
+    printf("dentro %p\n", paths);
     bool pathEntrada = false;
     bool qryvalido = true;
     setIbExecutado(checkers, false);
@@ -268,40 +269,9 @@ void getArguments(int argc, char** argv, flag checkers, path paths) {
             //[sample-text]//
         }
     }
-    if(getFileGeo(checkers)){
-        FILE *geoTeste = fopen(getGeoInicial(paths), "r");
-        if(!geoTeste){
-            setFileGeo(checkers, false);
-        } else{
-            fclose(geoTeste);
-        }
-    }
-    if(getConsultafeita(checkers)){
-        FILE* qryTeste = fopen(getQryConsultas(paths), "r");
-        if(!qryTeste){
-            qryvalido = false;
-            puts("Arquivo qry inserido invalido!");
-            setFileQryValido(checkers, false);
-            return;
-        }else{
-            fclose(qryTeste);
-        }
-    }
-    if (getFail(checkers) || !getFileGeo(checkers) || !getPathSaida(checkers)) {
-        if (!getFileGeo(checkers)) {
-            puts("Arquivo geo inexistente.");
-        }
-        if (!getPathSaida(checkers)) {
-            puts("Path de saida nao inserido.");
-        }
-        if (getFail(checkers)) {
-            puts("Coleta nao iniciada!");
-        }
-        puts("Erro!");
-        return;
-    }
+
     //Apos coletar todas as informacoes, esta na hora de arrumar e organizar todos os dados reunidos, nomes autoexplicativos
-    char* tempPathDoSvgDoGeoSemMudanca = calloc(strlen(getDirBaseDeSaida(paths)) + strlen(getNomeGEO(paths)) + 5, sizeof(char));
+    char* tempPathDoSvgDoGeoSemMudanca = calloc(strlen(getDirBaseDeSaida(paths)) + strlen(getNomeGEO(paths)) + 100, sizeof(char));
     sprintf(tempPathDoSvgDoGeoSemMudanca, "%s%s.svg", getDirBaseDeSaida(paths), getNomeGEO(paths));
     allocatePathDoSvgDoGeoSemMudanca(paths, strlen(tempPathDoSvgDoGeoSemMudanca)+ 1);
     strcpyPathDoSvgDoGeoSemMudanca(paths, tempPathDoSvgDoGeoSemMudanca);
@@ -319,16 +289,17 @@ void getArguments(int argc, char** argv, flag checkers, path paths) {
         strcpyPathArquivoGeoInicial(paths, tempElse);
         free(tempElse);
     }
+    
     if (getConsultafeita(checkers)) {
-        char* tempp = calloc(strlen(getDirBaseDeEntrada(paths)) + strlen(getQryConsultas(paths)) + 2, sizeof(char));
+        char* tempp = calloc(strlen(getDirBaseDeEntrada(paths)) + strlen(getQryConsultas(paths)) + 100, sizeof(char));
         allocatePathArquivoQryAtual(paths, strlen(getDirBaseDeEntrada(paths)) + strlen(getQryConsultas(paths)) + 2);
 
         sprintf(tempp, "%s%s", getDirBaseDeEntrada(paths), getQryConsultas(paths));
         strcpyPathArquivoQryAtual(paths, tempp);
         allocatePathDoSvgComOQryExecutado(paths, strlen(getDirBaseDeSaida(paths)) + strlen(getNomeGEO(paths)) + strlen(getNomeQRY(paths)) + 9);
         allocatePathDoTXTComOQryExecutado(paths, strlen(getDirBaseDeSaida(paths)) + strlen(getNomeGEO(paths)) + strlen(getNomeQRY(paths)) + 9);
-        char* temp1 = calloc(strlen(getDirBaseDeSaida(paths)) + strlen(getNomeGEO(paths)) + strlen(getNomeQRY(paths)) + 9, sizeof(char));
-        char* temp2 = calloc(strlen(getDirBaseDeSaida(paths)) + strlen(getNomeGEO(paths)) + strlen(getNomeQRY(paths)) + 9, sizeof(char));
+        char* temp1 = calloc(strlen(getDirBaseDeSaida(paths)) + strlen(getNomeGEO(paths)) + strlen(getNomeQRY(paths)) + 100, sizeof(char));
+        char* temp2 = calloc(strlen(getDirBaseDeSaida(paths)) + strlen(getNomeGEO(paths)) + strlen(getNomeQRY(paths)) + 100, sizeof(char));
         sprintf(temp1, "%s%s-%s.txt", getDirBaseDeSaida(paths), getNomeGEO(paths), getNomeQRY(paths));
         strcpyPathDoTXTComOQryExecutado(paths, temp1);
         sprintf(temp2, "%s%s-%s.svg", getDirBaseDeSaida(paths), getNomeGEO(paths), getNomeQRY(paths));
@@ -338,7 +309,7 @@ void getArguments(int argc, char** argv, flag checkers, path paths) {
         free(temp2);
     }
     if (getFbExecutado(checkers)) {
-        char* temporario = calloc(strlen(getDirBaseDeSaida(paths)) + strlen(getNomeArqSVGFinal(paths)) + 10, sizeof(char));
+        char* temporario = calloc(strlen(getDirBaseDeSaida(paths)) + strlen(getNomeArqSVGFinal(paths)) + 100, sizeof(char));
         allocatePathSVGFinalGrafico(paths, strlen(getDirBaseDeSaida(paths)) + strlen(getNomeArqSVGFinal(paths)) + 10);
         sprintf(temporario, "%s%s.svg", getDirBaseDeSaida(paths), getNomeArqSVGFinal(paths));
         strcpyPathSVGFinalGrafico(paths, temporario);
