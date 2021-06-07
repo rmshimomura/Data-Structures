@@ -293,7 +293,7 @@ void imInOrderCircles(tree shadows, tree circleTree, node currentCircle, FILE* r
         if(!getInsideNShadows(KDgetData(currentCircle))){
             setRadiation(KDgetData(currentCircle), getRadiation(KDgetData(currentCircle)) + radiation);
         }else{
-            setRadiation(KDgetData(currentCircle), getRadiation(KDgetData(currentCircle)) + (pow(0.8, getInsideNShadows(KDgetData(currentCircle))/2) * radiation));
+            setRadiation(KDgetData(currentCircle), getRadiation(KDgetData(currentCircle)) + (pow(0.8, getInsideNShadows(KDgetData(currentCircle))) * radiation));
         }
         if (getRadiation(KDgetData(currentCircle)) >= 1000 && getRadiation(KDgetData(currentCircle)) < 8000) {
             fprintf(results, "%s morte iminente --> radiacao = %.2lf \n", getCircleId(KDgetData(currentCircle)), getRadiation(KDgetData(currentCircle)));
@@ -409,8 +409,8 @@ void nve(dynamicList listOfTreesShadows, path paths, double x, double y) {
             radiationAtThePoint += (getDataRadiation(posAuxList));    
         }else{
             puts("la");
-            printf("Inside %d polygons\n", inside_n_polygons/2);
-            radiationAtThePoint += (pow(0.8, inside_n_polygons/2) * getDataRadiation(posAuxList));
+            printf("Inside %d polygons\n", inside_n_polygons);
+            radiationAtThePoint += (pow(0.8, inside_n_polygons) * getDataRadiation(posAuxList));
         }
 
         posAuxList = getNext(listOfTreesShadows, posAuxList);

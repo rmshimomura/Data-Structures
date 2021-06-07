@@ -17,6 +17,7 @@ typedef struct point {
     int quadrant;
     double distance;
     char code[5];
+    bool analyzed;
 
 } point_t;
 
@@ -28,7 +29,6 @@ typedef struct segment {
 } segment_t;
 
 void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList segmentsList, double xMeteor, double yMeteor) {
-    
     point_t* auxVertex = vertexArray;
     point_t* extremes = calloc(4, sizeof(point_t));
     void* root = NTgetRootNode(shadowPolygons);
@@ -51,7 +51,11 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
     // printf("%.2lf, %.2lf\n", biggestX, biggestY);
 
     for (int i = 0; i < getSize(segmentsList) * 2; i++) {
-        if (strcmp(auxVertex[i].code, "RE") && strcmp(auxVertex[i].code, "DIV") && strcmp(getCode(auxVertex[i].pair), "RE") && strcmp(getCode(auxVertex[i].pair), "DIV")) {
+
+        if (strcmp(auxVertex[i].code, "RE") && strcmp(auxVertex[i].code, "DIV") && strcmp(getCode(auxVertex[i].pair), "RE") && strcmp(getCode(auxVertex[i].pair), "DIV") && auxVertex[i].analyzed == false && getAnalyzed(auxVertex[i].pair) == false) {
+            
+            // printf("Analizando segmento (%.2lf, %.2lf) - (%.2lf, %.2lf) analisados? %s - %s\n", auxVertex[i].x, auxVertex[i].y, getPointX(auxVertex[i].pair), getPointX(auxVertex[i].pair), auxVertex[i].analyzed ? "Sim" : "Nao", getAnalyzed(auxVertex[i].pair) ? "Sim" : "Nao");
+
             segment_t* segment = calloc(1, sizeof(segment_t));
             segment_t* sidesOfShadowPolygon = calloc(7, sizeof(segment_t));
 
@@ -123,7 +127,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
             // puts("----------------------------------------------------------------------------------------------");
 
             // printf("Analizando segmento (%.2lf, %.2lf) - (%.2lf, %.2lf) tipo = %s\n", segment->point1->x, segment->point1->y, segment->point2->x, segment->point2->y, vertical == 1 ? "vertical" : "horizontal");
-
+            
             segment_t* wallPointSegPoint1 = calloc(1, sizeof(segment_t));
 
             if (strcmp(segment->point1->code, "RE") && strcmp(segment->point1->code, "DIV")) {
@@ -618,7 +622,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                     newLeftSegment->point2 = calloc(1, sizeof(point_t));
 
                     newLeftSegment->point1->x = 0.0;
-                    newLeftSegment->point1->y = wallPointSegPoint1->point1->y;
+                    newLeftSegment->point1->y = wallPointSegPoint1->point2->y;
                     newLeftSegment->point2->x = 0.0;
                     newLeftSegment->point2->y = 0.0;
 
@@ -782,7 +786,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                     newLeftSegment->point2 = calloc(1, sizeof(point_t));
 
                     newLeftSegment->point1->x = 0.0;
-                    newLeftSegment->point1->y = wallPointSegPoint1->point1->y;
+                    newLeftSegment->point1->y = wallPointSegPoint1->point2->y;
                     newLeftSegment->point2->x = 0.0;
                     newLeftSegment->point2->y = biggestY;
 
@@ -899,7 +903,6 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                     free(newRightSegment);
 
                 } else if (wallPointSegPoint1->point2->x == 0.0 && wallPointSegPoint2->point2->x == 0.0) {
-                    
                     // puts("Procedment 24");
                     ok = 1;
                     segment_t* newLeftSegment = calloc(1, sizeof(segment_t));
@@ -942,13 +945,19 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
             //         printf("(%.2lf, %.2lf) - (%.2lf, %.2lf)\n", sidesOfShadowPolygon[i].point1->x, sidesOfShadowPolygon[i].point1->y, sidesOfShadowPolygon[i].point2->x, sidesOfShadowPolygon[i].point2->y);
             //     }
             // }
-            // puts("----------------------------------------------------------------------------------------------");
 
             free(segment);
 
             free(wallPointSegPoint1);
 
             free(wallPointSegPoint2);
+
+            
+            setAnalyzed(auxVertex[i].pair, true);
+            setAnalyzed(getPair(auxVertex[i].pair), true);
+            
+            puts("----------------------------------------------------------------------------------------------");
+            
         }
     }
     NTsetRootNode(shadowPolygons, root);

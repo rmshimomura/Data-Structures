@@ -16,6 +16,7 @@ typedef struct point {
     int quadrant;
     double distance;
     char code[5];
+    bool analyzed;
 
 } point_t;
 
@@ -45,6 +46,7 @@ void* createPoint() {
     point_t* aux = calloc(1, sizeof(point_t));
     aux->angle = 0;
     aux->linkedTo = NULL;
+    aux->analyzed = false;
     return aux;
 }
 
@@ -603,6 +605,8 @@ void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor)
 
         aux[i] = *(dataAux->point1);
         aux[i + 1] = *(dataAux->point2);
+        // aux[i].pair = &aux[i+1];
+        // aux[i+1].pair = &aux[i];
     }
 
     qsort(aux, 2 * getSize(segmentsList), sizeof(point_t), compareForQSort);
@@ -703,9 +707,24 @@ void* getOrigin(void* point) {
     return aux->linkedTo;
 }
 
+bool getAnalyzed(void* point){
+    point_t* aux = point;
+    return aux->analyzed;
+}
+
 void* atPosArray(void* array, int pos){
     segment_t* aux = array;
     return &aux[pos];
+}
+
+void* getPair(void* point){
+    point_t* aux = point;
+    return aux->pair;
+}
+
+void setAnalyzed(void* point, bool state){
+    point_t* aux = point;
+    aux->analyzed = state;
 }
 
 void freePointsInfo(void* segment) {
