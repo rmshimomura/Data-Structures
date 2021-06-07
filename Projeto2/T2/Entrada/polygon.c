@@ -53,8 +53,6 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
     for (int i = 0; i < getSize(segmentsList) * 2; i++) {
 
         if (strcmp(auxVertex[i].code, "RE") && strcmp(auxVertex[i].code, "DIV") && strcmp(getCode(auxVertex[i].pair), "RE") && strcmp(getCode(auxVertex[i].pair), "DIV") && auxVertex[i].analyzed == false && getAnalyzed(auxVertex[i].pair) == false) {
-            
-            // printf("Analizando segmento (%.2lf, %.2lf) - (%.2lf, %.2lf) analisados? %s - %s\n", auxVertex[i].x, auxVertex[i].y, getPointX(auxVertex[i].pair), getPointX(auxVertex[i].pair), auxVertex[i].analyzed ? "Sim" : "Nao", getAnalyzed(auxVertex[i].pair) ? "Sim" : "Nao");
 
             segment_t* segment = calloc(1, sizeof(segment_t));
             segment_t* sidesOfShadowPolygon = calloc(7, sizeof(segment_t));
@@ -956,7 +954,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
             setAnalyzed(auxVertex[i].pair, true);
             setAnalyzed(getPair(auxVertex[i].pair), true);
             
-            puts("----------------------------------------------------------------------------------------------");
+            // puts("----------------------------------------------------------------------------------------------");
             
         }
     }

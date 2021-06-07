@@ -1,0 +1,269 @@
+<!-- Rodrigo Mimura Shimomura -->
+ <svg viewBox = "0 0 715.91 613.72" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<rect x="0" y="0" width="715.91" height="613.72" 
+  style="fill:lightgrey;stroke:yellow;stroke-width:.5;fill-opacity:0.1;stroke-opacity:1" />
+	<rect x="5.00" y="310.72" width="45.00" height="25.00" id="r_5.00-310.72"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="5.00" y="209.28" width="45.00" height="25.00" id="r_5.00-209.28"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="43.82" y="115.55" width="45.00" height="25.00" id="r_43.82-115.55"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="115.55" y="43.82" width="45.00" height="25.00" id="r_115.55-43.82"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="209.28" y="5.00" width="45.00" height="25.00" id="r_209.28-5.00"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="310.72" y="5.00" width="45.00" height="25.00" id="r_310.72-5.00"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="404.45" y="43.82" width="45.00" height="25.00" id="r_404.45-43.82"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="260.00" y="70.00" width="45.00" height="25.00" id="r_260.00-70.00"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="187.29" y="84.46" width="45.00" height="25.00" id="r_187.29-84.46"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="332.71" y="84.46" width="45.00" height="25.00" id="r_332.71-84.46"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="125.65" y="125.65" width="45.00" height="25.00" id="r_125.65-125.65"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="394.35" y="125.65" width="45.00" height="25.00" id="r_394.35-125.65"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="84.46" y="187.29" width="45.00" height="25.00" id="r_84.46-187.29"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="435.54" y="187.29" width="45.00" height="25.00" id="r_435.54-187.29"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="70.00" y="260.00" width="45.00" height="25.00" id="r_70.00-260.00"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="435.54" y="332.71" width="45.00" height="25.00" id="r_435.54-332.71"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="84.46" y="332.71" width="45.00" height="25.00" id="r_84.46-332.71"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="43.82" y="404.45" width="45.00" height="25.00" id="r_43.82-404.45"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="125.65" y="394.35" width="45.00" height="25.00" id="r_125.65-394.35"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="332.71" y="435.54" width="45.00" height="25.00" id="r_332.71-435.54"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="187.29" y="435.54" width="45.00" height="25.00" id="r_187.29-435.54"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="260.00" y="450.00" width="45.00" height="25.00" id="r_260.00-450.00"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="115.55" y="476.18" width="45.00" height="25.00" id="r_115.55-476.18"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="209.28" y="515.00" width="45.00" height="25.00" id="r_209.28-515.00"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="310.72" y="515.00" width="45.00" height="25.00" id="r_310.72-515.00"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="394.35" y="394.35" width="45.00" height="25.00" id="r_394.35-394.35"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="404.45" y="476.18" width="45.00" height="25.00" id="r_404.45-476.18"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="450.00" y="260.00" width="45.00" height="25.00" id="r_450.00-260.00"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="476.18" y="115.55" width="45.00" height="25.00" id="r_476.18-115.55"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="515.00" y="209.28" width="45.00" height="25.00" id="r_515.00-209.28"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="515.00" y="310.72" width="45.00" height="25.00" id="r_515.00-310.72"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="476.18" y="404.45" width="45.00" height="25.00" id="r_476.18-404.45"
+  style="fill:darkkhaki;stroke:darkblue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<circle cx="8.00" cy="101.58" r="2.50" id="c-_8.00-101.58_143" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="14.45" cy="107.39" r="2.50" id="c-_14.45-107.39_17" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="138.47" cy="18.74" r="2.50" id="c-_138.47-18.74_57" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="23.97" cy="58.25" r="2.50" id="c-_23.97-58.25_195" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="54.88" cy="77.91" r="2.50" id="c-_54.88-77.91_75" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="124.89" cy="56.68" r="2.50" id="c-_124.89-56.68_169" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="85.11" cy="144.82" r="2.50" id="c-_85.11-144.82_8" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="0.50" cy="187.50" r="2.50" id="c-_0.50-187.50_60" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="5.69" cy="252.44" r="2.50" id="c-_5.69-252.44_131" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="10.63" cy="256.84" r="2.50" id="c-_10.63-256.84_59" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="12.48" cy="148.56" r="2.50" id="c-_12.48-148.56_130" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="50.11" cy="186.79" r="2.50" id="c-_50.11-186.79_115" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="54.66" cy="204.65" r="2.50" id="c-_54.66-204.65_188" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="53.19" cy="218.15" r="2.50" id="c-_53.19-218.15_151" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="56.90" cy="304.84" r="2.50" id="c-_56.90-304.84_68" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="66.83" cy="318.03" r="2.50" id="c-_66.83-318.03_155" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="72.46" cy="369.39" r="2.50" id="c-_72.46-369.39_22" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="70.21" cy="429.79" r="2.50" id="c-_70.21-429.79_45" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="72.92" cy="420.33" r="2.50" id="c-_72.92-420.33_87" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="84.91" cy="187.15" r="2.50" id="c-_84.91-187.15_19" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="92.73" cy="153.63" r="2.50" id="c-_92.73-153.63_183" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="85.60" cy="162.32" r="2.50" id="c-_85.60-162.32_159" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="99.05" cy="241.05" r="2.50" id="c-_99.05-241.05_142" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="121.11" cy="282.64" r="2.50" id="c-_121.11-282.64_88" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="115.76" cy="285.11" r="2.50" id="c-_115.76-285.11_127" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="150.59" cy="373.21" r="2.50" id="c-_150.59-373.21_3" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="189.24" cy="25.40" r="2.50" id="c-_189.24-25.40_166" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="179.26" cy="45.45" r="2.50" id="c-_179.26-45.45_186" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="181.58" cy="67.98" r="2.50" id="c-_181.58-67.98_189" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="190.46" cy="27.23" r="2.50" id="c-_190.46-27.23_150" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="281.75" cy="41.83" r="2.50" id="c-_281.75-41.83_196" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="248.17" cy="81.77" r="2.50" id="c-_248.17-81.77_83" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="310.69" cy="1.84" r="2.50" id="c-_310.69-1.84_51" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="340.08" cy="68.00" r="2.50" id="c-_340.08-68.00_101" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="289.69" cy="83.70" r="2.50" id="c-_289.69-83.70_50" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="177.80" cy="105.96" r="2.50" id="c-_177.80-105.96_126" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="182.18" cy="157.81" r="2.50" id="c-_182.18-157.81_52" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="255.97" cy="109.13" r="2.50" id="c-_255.97-109.13_193" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="283.83" cy="118.54" r="2.50" id="c-_283.83-118.54_97" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="187.51" cy="124.55" r="2.50" id="c-_187.51-124.55_91" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="198.68" cy="125.35" r="2.50" id="c-_198.68-125.35_167" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="305.79" cy="135.95" r="2.50" id="c-_305.79-135.95_178" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="262.56" cy="148.42" r="2.50" id="c-_262.56-148.42_179" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="306.12" cy="84.99" r="2.50" id="c-_306.12-84.99_63" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="388.25" cy="138.15" r="2.50" id="c-_388.25-138.15_92" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="272.51" cy="163.17" r="2.50" id="c-_272.51-163.17_56" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="388.23" cy="174.14" r="2.50" id="c-_388.23-174.14_154" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="437.05" cy="44.01" r="2.50" id="c-_437.05-44.01_6" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="506.87" cy="8.04" r="2.50" id="c-_506.87-8.04_85" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="458.01" cy="43.10" r="2.50" id="c-_458.01-43.10_122" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="525.60" cy="17.28" r="2.50" id="c-_525.60-17.28_21" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="461.17" cy="57.44" r="2.50" id="c-_461.17-57.44_20" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="439.77" cy="66.05" r="2.50" id="c-_439.77-66.05_41" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="480.97" cy="80.11" r="2.50" id="c-_480.97-80.11_86" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="530.59" cy="57.46" r="2.50" id="c-_530.59-57.46_109" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="520.22" cy="129.39" r="2.50" id="c-_520.22-129.39_191" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="520.92" cy="129.84" r="2.50" id="c-_520.92-129.84_173" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="503.41" cy="161.12" r="2.50" id="c-_503.41-161.12_138" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="544.46" cy="153.86" r="2.50" id="c-_544.46-153.86_128" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="448.71" cy="162.05" r="2.50" id="c-_448.71-162.05_73" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="458.17" cy="188.56" r="2.50" id="c-_458.17-188.56_5" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="175.92" cy="217.44" r="2.50" id="c-_175.92-217.44_77" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="157.13" cy="242.97" r="2.50" id="c-_157.13-242.97_80" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="176.55" cy="193.58" r="2.50" id="c-_176.55-193.58_47" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="208.46" cy="204.44" r="2.50" id="c-_208.46-204.44_129" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="223.21" cy="228.31" r="2.50" id="c-_223.21-228.31_149" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="231.21" cy="219.02" r="2.50" id="c-_231.21-219.02_137" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="285.04" cy="199.56" r="2.50" id="c-_285.04-199.56_121" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="289.22" cy="230.37" r="2.50" id="c-_289.22-230.37_104" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="207.06" cy="240.07" r="2.50" id="c-_207.06-240.07_107" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="277.12" cy="253.34" r="2.50" id="c-_277.12-253.34_24" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="155.91" cy="272.38" r="2.50" id="c-_155.91-272.38_185" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="206.50" cy="299.20" r="2.50" id="c-_206.50-299.20_79" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="210.39" cy="307.91" r="2.50" id="c-_210.39-307.91_26" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="274.64" cy="268.79" r="2.50" id="c-_274.64-268.79_164" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="217.68" cy="333.06" r="2.50" id="c-_217.68-333.06_100" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="269.32" cy="366.22" r="2.50" id="c-_269.32-366.22_103" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="291.68" cy="331.93" r="2.50" id="c-_291.68-331.93_49" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="249.75" cy="378.36" r="2.50" id="c-_249.75-378.36_40" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="293.67" cy="205.83" r="2.50" id="c-_293.67-205.83_18" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="340.14" cy="269.76" r="2.50" id="c-_340.14-269.76_58" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="346.44" cy="247.17" r="2.50" id="c-_346.44-247.17_171" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="334.72" cy="334.94" r="2.50" id="c-_334.72-334.94_28" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="344.99" cy="351.15" r="2.50" id="c-_344.99-351.15_72" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="335.52" cy="400.87" r="2.50" id="c-_335.52-400.87_13" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="241.03" cy="425.81" r="2.50" id="c-_241.03-425.81_180" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="259.33" cy="415.10" r="2.50" id="c-_259.33-415.10_15" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="259.51" cy="414.26" r="2.50" id="c-_259.51-414.26_32" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="348.93" cy="427.12" r="2.50" id="c-_348.93-427.12_7" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="364.07" cy="195.87" r="2.50" id="c-_364.07-195.87_140" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="369.37" cy="223.80" r="2.50" id="c-_369.37-223.80_94" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="349.65" cy="336.17" r="2.50" id="c-_349.65-336.17_163" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="349.67" cy="376.01" r="2.50" id="c-_349.67-376.01_158" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="367.24" cy="226.69" r="2.50" id="c-_367.24-226.69_113" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="373.66" cy="265.55" r="2.50" id="c-_373.66-265.55_181" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="375.78" cy="346.35" r="2.50" id="c-_375.78-346.35_12" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="443.50" cy="202.65" r="2.50" id="c-_443.50-202.65_95" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="380.68" cy="217.34" r="2.50" id="c-_380.68-217.34_165" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="484.95" cy="209.96" r="2.50" id="c-_484.95-209.96_64" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="505.66" cy="227.22" r="2.50" id="c-_505.66-227.22_184" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="534.47" cy="242.05" r="2.50" id="c-_534.47-242.05_114" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="391.29" cy="256.67" r="2.50" id="c-_391.29-256.67_30" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="385.76" cy="348.39" r="2.50" id="c-_385.76-348.39_31" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="446.21" cy="263.92" r="2.50" id="c-_446.21-263.92_90" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="496.91" cy="299.29" r="2.50" id="c-_496.91-299.29_132" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="463.82" cy="300.48" r="2.50" id="c-_463.82-300.48_182" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="469.40" cy="301.68" r="2.50" id="c-_469.40-301.68_147" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="453.43" cy="325.04" r="2.50" id="c-_453.43-325.04_62" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="391.44" cy="332.09" r="2.50" id="c-_391.44-332.09_118" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="352.76" cy="379.85" r="2.50" id="c-_352.76-379.85_9" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="394.96" cy="403.59" r="2.50" id="c-_394.96-403.59_37" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="362.83" cy="417.42" r="2.50" id="c-_362.83-417.42_74" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="453.46" cy="411.90" r="2.50" id="c-_453.46-411.90_161" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="498.75" cy="387.29" r="2.50" id="c-_498.75-387.29_29" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="537.70" cy="411.13" r="2.50" id="c-_537.70-411.13_175" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="462.32" cy="441.08" r="2.50" id="c-_462.32-441.08_2" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="4.40" cy="444.02" r="2.50" id="c-_4.40-444.02_82" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="105.75" cy="451.77" r="2.50" id="c-_105.75-451.77_177" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="52.58" cy="471.07" r="2.50" id="c-_52.58-471.07_43" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="44.99" cy="474.77" r="2.50" id="c-_44.99-474.77_134" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="108.47" cy="482.24" r="2.50" id="c-_108.47-482.24_33" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="260.98" cy="451.79" r="2.50" id="c-_260.98-451.79_48" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="179.74" cy="455.68" r="2.50" id="c-_179.74-455.68_198" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="202.67" cy="453.47" r="2.50" id="c-_202.67-453.47_93" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="245.28" cy="462.04" r="2.50" id="c-_245.28-462.04_70" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="280.10" cy="467.67" r="2.50" id="c-_280.10-467.67_55" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="345.89" cy="474.02" r="2.50" id="c-_345.89-474.02_192" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="3.20" cy="497.57" r="2.50" id="c-_3.20-497.57_14" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="232.43" cy="523.00" r="2.50" id="c-_232.43-523.00_199" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="32.24" cy="536.97" r="2.50" id="c-_32.24-536.97_133" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="271.68" cy="510.38" r="2.50" id="c-_271.68-510.38_108" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="119.26" cy="541.43" r="2.50" id="c-_119.26-541.43_54" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="21.44" cy="596.22" r="2.50" id="c-_21.44-596.22_67" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="67.02" cy="557.38" r="2.50" id="c-_67.02-557.38_146" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="90.29" cy="569.60" r="2.50" id="c-_90.29-569.60_111" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="188.30" cy="551.41" r="2.50" id="c-_188.30-551.41_120" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="277.41" cy="582.74" r="2.50" id="c-_277.41-582.74_136" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="167.70" cy="588.14" r="2.50" id="c-_167.70-588.14_98" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="297.13" cy="583.84" r="2.50" id="c-_297.13-583.84_23" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="298.39" cy="500.28" r="2.50" id="c-_298.39-500.28_119" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="345.40" cy="529.26" r="2.50" id="c-_345.40-529.26_105" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="325.81" cy="551.05" r="2.50" id="c-_325.81-551.05_42" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="314.53" cy="583.44" r="2.50" id="c-_314.53-583.44_168" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="384.85" cy="510.93" r="2.50" id="c-_384.85-510.93_11" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="407.30" cy="463.72" r="2.50" id="c-_407.30-463.72_117" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="437.00" cy="464.59" r="2.50" id="c-_437.00-464.59_162" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="444.34" cy="449.20" r="2.50" id="c-_444.34-449.20_76" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="448.79" cy="481.73" r="2.50" id="c-_448.79-481.73_27" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="422.04" cy="510.51" r="2.50" id="c-_422.04-510.51_116" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="386.84" cy="558.87" r="2.50" id="c-_386.84-558.87_174" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="443.80" cy="486.05" r="2.50" id="c-_443.80-486.05_53" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="452.16" cy="486.20" r="2.50" id="c-_452.16-486.20_190" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="531.19" cy="492.92" r="2.50" id="c-_531.19-492.92_106" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="498.72" cy="567.55" r="2.50" id="c-_498.72-567.55_153" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="531.77" cy="535.66" r="2.50" id="c-_531.77-535.66_139" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="545.81" cy="323.01" r="2.50" id="c-_545.81-323.01_0" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="550.92" cy="140.45" r="2.50" id="c-_550.92-140.45_141" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="570.22" cy="176.31" r="2.50" id="c-_570.22-176.31_152" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="584.63" cy="135.83" r="2.50" id="c-_584.63-135.83_34" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="596.86" cy="154.78" r="2.50" id="c-_596.86-154.78_187" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="641.43" cy="75.84" r="2.50" id="c-_641.43-75.84_112" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="609.92" cy="163.34" r="2.50" id="c-_609.92-163.34_81" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="648.81" cy="53.16" r="2.50" id="c-_648.81-53.16_46" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="642.61" cy="193.01" r="2.50" id="c-_642.61-193.01_39" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="614.36" cy="215.48" r="2.50" id="c-_614.36-215.48_25" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="548.84" cy="309.23" r="2.50" id="c-_548.84-309.23_71" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="556.98" cy="317.33" r="2.50" id="c-_556.98-317.33_69" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="575.59" cy="241.34" r="2.50" id="c-_575.59-241.34_99" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="580.25" cy="277.20" r="2.50" id="c-_580.25-277.20_96" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="566.91" cy="438.96" r="2.50" id="c-_566.91-438.96_61" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="581.61" cy="388.61" r="2.50" id="c-_581.61-388.61_44" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="622.37" cy="256.44" r="2.50" id="c-_622.37-256.44_144" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="612.41" cy="274.34" r="2.50" id="c-_612.41-274.34_148" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="632.61" cy="272.58" r="2.50" id="c-_632.61-272.58_157" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="634.66" cy="274.77" r="2.50" id="c-_634.66-274.77_124" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="598.91" cy="292.82" r="2.50" id="c-_598.91-292.82_66" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="581.74" cy="440.63" r="2.50" id="c-_581.74-440.63_172" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="641.11" cy="301.82" r="2.50" id="c-_641.11-301.82_160" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="622.25" cy="484.99" r="2.50" id="c-_622.25-484.99_145" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="647.13" cy="390.73" r="2.50" id="c-_647.13-390.73_123" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="661.47" cy="312.79" r="2.50" id="c-_661.47-312.79_197" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="660.77" cy="437.04" r="2.50" id="c-_660.77-437.04_125" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="661.22" cy="498.71" r="2.50" id="c-_661.22-498.71_176" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="664.18" cy="396.21" r="2.50" id="c-_664.18-396.21_16" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="677.72" cy="30.14" r="2.50" id="c-_677.72-30.14_65" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="664.20" cy="153.26" r="2.50" id="c-_664.20-153.26_36" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="685.42" cy="204.78" r="2.50" id="c-_685.42-204.78_89" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="671.26" cy="380.12" r="2.50" id="c-_671.26-380.12_156" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="676.15" cy="231.65" r="2.50" id="c-_676.15-231.65_194" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="679.17" cy="446.41" r="2.50" id="c-_679.17-446.41_170" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="679.43" cy="495.10" r="2.50" id="c-_679.43-495.10_110" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="692.44" cy="336.91" r="2.50" id="c-_692.44-336.91_102" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="698.27" cy="364.33" r="2.50" id="c-_698.27-364.33_38" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="698.41" cy="502.11" r="2.50" id="c-_698.41-502.11_1" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="594.87" cy="552.86" r="2.50" id="c-_594.87-552.86_4" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="695.55" cy="506.54" r="2.50" id="c-_695.55-506.54_10" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="629.18" cy="560.11" r="2.50" id="c-_629.18-560.11_78" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="622.04" cy="572.19" r="2.50" id="c-_622.04-572.19_135" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="624.17" cy="588.85" r="2.50" id="c-_624.17-588.85_84" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+	<circle cx="694.64" cy="588.20" r="2.50" id="c-_694.64-588.20_35" stroke="darkblue" stroke-width=".5" fill="darkturquoise" fill-opacity = "0.5" />
+</svg>

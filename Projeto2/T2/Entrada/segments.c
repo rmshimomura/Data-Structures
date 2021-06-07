@@ -605,8 +605,7 @@ void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor)
 
         aux[i] = *(dataAux->point1);
         aux[i + 1] = *(dataAux->point2);
-        // aux[i].pair = &aux[i+1];
-        // aux[i+1].pair = &aux[i];
+
     }
 
     qsort(aux, 2 * getSize(segmentsList), sizeof(point_t), compareForQSort);
