@@ -144,6 +144,7 @@ void allocateVectorOfPeople(node current){
     }else{
         aux->peopleInside = realloc(aux->peopleInside, (aux->numberOfPeopleInside + 1) * sizeof(void*));
     }
+    
 
 }
 

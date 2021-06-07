@@ -292,6 +292,7 @@ void addWrapAroundRectangle(tree rectangleTree, tree circleTree, dynamicList seg
 }
 
 void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor) {
+    
     point_t* aux = calloc(2 * getSize(segmentsList), sizeof(point_t));
     void* pos = getHead(segmentsList);
 

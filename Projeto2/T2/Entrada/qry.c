@@ -121,46 +121,45 @@ void stopEveryone(tree circleTree, void* current_circle) {
     }
 }
 
+void fgCheckShelteredRectangle(tree rectangleTree, tree circleTree, void* current_rectangle, void* current_circle){
+    if(current_rectangle){
+        fgCheckShelteredRectangle(rectangleTree, circleTree, KDgetLeftNode(current_rectangle), current_circle);
+        
+        if (inside(getCircleX(KDgetData(current_circle)), getCircleY(KDgetData(current_circle)), 0, 0, getRectangleX(KDgetData(current_rectangle)), getRectangleY(KDgetData(current_rectangle)), getRectangleWidth(KDgetData(current_rectangle)), getRectangleHeight(KDgetData(current_rectangle))) && KDgetState(current_rectangle)) {
+            if (!getVectorOfPeopleStarted(KDgetData(current_rectangle))) {
+                setVectorOfPeopleStarted(KDgetData(current_rectangle), 1);
+            }
+            setNearestDistance(KDgetData(current_circle), sqrt(pow(getCircleX(KDgetData(current_circle)) - getRectangleCenterX(KDgetData(current_rectangle)), 2) + pow((getCircleY(KDgetData(current_circle)) - getRectangleCenterY(KDgetData(current_rectangle))), 2)));
+            setRunTo(KDgetData(current_circle), current_rectangle);
+            setFg(KDgetData(current_circle), true);
+            allocateVectorOfPeople(KDgetData(current_rectangle));
+            int exist = 0;
+            for (int i = 0; i < getNumberOfPeopleInside(KDgetData(current_rectangle)); i++) { //Compare if someone that is already inside is trying to enter again
+                if (!strcmp(getCircleId(KDgetData(getVectorOfPeople(KDgetData(current_rectangle))[i])), getCircleId(KDgetData(current_circle)))) { 
+                    exist = 1;
+                }
+            }
+            if (!exist) {
+                setAddresses(KDgetData(current_rectangle), current_circle, getNumberOfPeopleInside(KDgetData(current_rectangle)));
+                setNumberOfPeopleInside(KDgetData(current_rectangle), getNumberOfPeopleInside(KDgetData(current_rectangle)) + 1);
+            }
+        }
+        fgCheckShelteredRectangle(rectangleTree, circleTree, KDgetRightNode(current_rectangle), current_circle);
+    }
+}
+
+void fgCheckShelteredCircle(tree rectangleTree, tree circleTree, void* current_circle){
+    if(current_circle){
+        fgCheckShelteredCircle(rectangleTree, circleTree, KDgetLeftNode(current_circle));
+        fgCheckShelteredRectangle(rectangleTree, circleTree, KDgetRootNode(rectangleTree), current_circle);
+        fgCheckShelteredCircle(rectangleTree, circleTree, KDgetRightNode(current_circle));
+    }
+}
+
 void fgInOrderRectangle(tree rectangleTree, FILE* results, void* current_rect, void* current_circ) {
     if (current_rect) {
         fgInOrderRectangle(rectangleTree, results, KDgetLeftNode(current_rect), current_circ);
-        if (!KDgetState(current_rect)) {  //Reseta informacoes do predio
-            if (getVectorOfPeopleStarted(KDgetData(current_rect))) {
-                freeVectorOfPeople(KDgetData(current_rect));
-            }
-            setNumberOfPeopleInside(KDgetData(current_rect), 0);
-            setVectorOfPeopleStarted(KDgetData(current_rect), 0);
-        }
-
-        if (!KDgetState(current_rect) && getRunTo(KDgetData(current_circ)) == current_rect) {  //Reseta informacoes para aonde a pessoa vai correr
-            // puts("==================================================================RESET!==================================================================");
-            // printf("I'm inside because %s is deactivated and circle %s had to run to it.\n", getCircleId(KDgetData(current_rect)), getCircleId(KDgetData(current_circ)));
-            setNearestDistance(KDgetData(current_circ), __DBL_MAX__);
-            setRunTo(KDgetData(current_circ), NULL);
-            setFg(KDgetData(current_circ), 0);
-            setNumberOfPeopleInside(KDgetData(current_rect), 0);
-            fgInOrderRectangle(rectangleTree, results, KDgetRootNode(rectangleTree), current_circ);
-        }
-
-        // if(!KDgetState(current_rect)){ //Reseta informacoes do predio
-        //     if(getVectorOfPeopleStarted(KDgetData(current_rect))){
-        //         freeVectorOfPeople(KDgetData(current_rect));
-        //     }
-        //     setNumberOfPeopleInside(KDgetData(current_rect), 0);
-        //     setVectorOfPeopleStarted(KDgetData(current_rect), 0);
-        // }
-
-        // if(!KDgetState(current_rect) && getRunTo(KDgetData(current_circ)) == current_rect){ //Reseta informacoes para aonde a pessoa vai correr aqui nao mudando para onde a pessoa vai correr
-        //     // puts("==================================================================RESET!==================================================================");
-        //     // printf("I'm inside because %s is deactivated and circle %s had to run to it.\n", getCircleId(KDgetData(current_rect)), getCircleId(KDgetData(current_circ)));
-        //     // setNearestDistance(KDgetData(current_circ), __DBL_MAX__);
-        //     // setRunTo(KDgetData(current_circ), NULL);
-        //     // setFg(KDgetData(current_circ), 0);
-        //     setNumberOfPeopleInside(KDgetData(current_rect), 0);
-        //     fgInOrderRectangle(rectangleTree, results, KDgetRootNode(rectangleTree), current_circ);
-
-        // }
-
+        
         if (sqrt(pow((getCircleX(KDgetData(current_circ)) - getRectangleCenterX(KDgetData(current_rect))), 2) + (pow((getCircleY(KDgetData(current_circ)) - getRectangleCenterY(KDgetData(current_rect))), 2))) < getNearestDistance(KDgetData(current_circ)) && KDgetState(current_rect)) {
             if (getRunTo(KDgetData(current_circ)) != current_rect && getRunTo(KDgetData(current_circ)) != NULL) { //Someone leave the current rect, and has to run to a new one
                 // printf("UPDATE ! %s has now to run to %s\n",  getCircleId(KDgetData(current_circ)), getRectangleId(KDgetData(current_rect)));
@@ -178,8 +177,8 @@ void fgInOrderRectangle(tree rectangleTree, FILE* results, void* current_rect, v
             }
             allocateVectorOfPeople(KDgetData(current_rect));
             int exist = 0;
-            for (int i = 0; i < getNumberOfPeopleInside(KDgetData(current_rect)); i++) {
-                if (!strcmp(getCircleId(KDgetData(getVectorOfPeople(KDgetData(current_rect))[i])), getCircleId(KDgetData(current_circ)))) { //Compare if someone that is already inside is trying to enter again
+            for (int i = 0; i < getNumberOfPeopleInside(KDgetData(current_rect)); i++) { //Compare if someone that is already inside is trying to enter again
+                if (!strcmp(getCircleId(KDgetData(getVectorOfPeople(KDgetData(current_rect))[i])), getCircleId(KDgetData(current_circ)))) { 
                     exist = 1;
                 }
             }
@@ -187,7 +186,7 @@ void fgInOrderRectangle(tree rectangleTree, FILE* results, void* current_rect, v
                 setAddresses(KDgetData(current_rect), current_circ, getNumberOfPeopleInside(KDgetData(current_rect)));
                 setNumberOfPeopleInside(KDgetData(current_rect), getNumberOfPeopleInside(KDgetData(current_rect)) + 1);
             }
-            printf("There are %d inside %s\n", getNumberOfPeopleInside(KDgetData(current_rect)), getRectangleId(KDgetData(current_rect)));
+            // printf("There are %d inside %s\n", getNumberOfPeopleInside(KDgetData(current_rect)), getRectangleId(KDgetData(current_rect)));
         }
         fgInOrderRectangle(rectangleTree, results, KDgetRightNode(current_rect), current_circ);
     }
@@ -197,27 +196,33 @@ void fgInOrderCircle(tree rectangleTree, tree circleTree, FILE* results, void* c
     if (current_circ) {
         fgInOrderCircle(rectangleTree, circleTree, results, current_rect, KDgetLeftNode(current_circ), x, y, radius);
         if ((pow(abs(x - getCircleX(KDgetData(current_circ))), 2) + pow(abs(y - getCircleY(KDgetData(current_circ))), 2) <= pow(radius, 2))) {
+            
             fgInOrderRectangle(rectangleTree, results, KDgetRootNode(rectangleTree), current_circ);
         }
         fgInOrderCircle(rectangleTree, circleTree, results, current_rect, KDgetRightNode(current_circ), x, y, radius);
     }
 }
 
-void writeFgresults(tree rectangleTree, FILE* results, void* current_rect) {
+void writeFgresults(tree rectangleTree, FILE* results, void* current_rect, double x, double y, double radius) {
     if (current_rect) {
-        writeFgresults(rectangleTree, results, KDgetLeftNode(current_rect));
-        if (getVectorOfPeopleStarted(KDgetData(current_rect))) {
-            fprintf(results, "✷ %s:\n", getRectangleId(KDgetData(current_rect)));
-            if (!getNumberOfPeopleInside(KDgetData(current_rect))) {
-                fprintf(results, "-> Nobody\n");
+        writeFgresults(rectangleTree, results, KDgetLeftNode(current_rect), x, y, radius);
+            if (getVectorOfPeopleStarted(KDgetData(current_rect))) {
+                if (getNumberOfPeopleInside(KDgetData(current_rect))) {
+                    
+                    fprintf(results, "✷ %s:\n", getRectangleId(KDgetData(current_rect)));
+
+                }
+                for (int i = 0; i < getNumberOfPeopleInside(KDgetData(current_rect)); i++) {
+                    fprintf(results, "-> %s\n", getCircleId(KDgetData(getVectorOfPeople(KDgetData(current_rect))[i])));
+                    // fprintf(results, "-> %p\n", KDgetData(getVectorOfPeople(KDgetData(current_rect))[i]));
+                }
+                if (getNumberOfPeopleInside(KDgetData(current_rect))) {
+                    
+                    fprintf(results, "\n");
+
+                }
             }
-            for (int i = 0; i < getNumberOfPeopleInside(KDgetData(current_rect)); i++) {
-                fprintf(results, "-> %s\n", getCircleId(KDgetData(getVectorOfPeople(KDgetData(current_rect))[i])));
-                // fprintf(results, "-> %p\n", KDgetData(getVectorOfPeople(KDgetData(current_rect))[i]));
-            }
-            fprintf(results, "\n");
-        }
-        writeFgresults(rectangleTree, results, KDgetRightNode(current_rect));
+        writeFgresults(rectangleTree, results, KDgetRightNode(current_rect), x, y, radius);
     }
 }
 
@@ -246,10 +251,11 @@ void fg(tree rectangleTree, tree circleTree, double x, double y, double radius, 
         fclose(results);
         return;
     }
+    fgCheckShelteredCircle(rectangleTree, circleTree, KDgetRootNode(circleTree));
     fgInOrderCircle(rectangleTree, circleTree, results, KDgetRootNode(rectangleTree), KDgetRootNode(circleTree), x, y, radius);
     fprintf(results, "FG: \n\n");
     updateCirclesNewPositions(circleTree, KDgetRootNode(circleTree));
-    writeFgresults(rectangleTree, results, KDgetRootNode(rectangleTree));
+    writeFgresults(rectangleTree, results, KDgetRootNode(rectangleTree), x, y, radius);
     fprintf(results, "========================================================\n");
     fclose(results);
 }
@@ -284,7 +290,11 @@ void imInOrderCircles(tree shadows, tree circleTree, node currentCircle, FILE* r
         imInOrderCircles(shadows, circleTree, KDgetLeftNode(currentCircle), results, radiation);
         setInsideNShadows(KDgetData(currentCircle), 0);
         imInOrderShadows(shadows, NTgetRootNode(shadows), currentCircle);
-        setRadiation(KDgetData(currentCircle), getRadiation(KDgetData(currentCircle)) + (pow(0.8, getInsideNShadows(KDgetData(currentCircle))) * radiation));
+        if(!getInsideNShadows(KDgetData(currentCircle))){
+            setRadiation(KDgetData(currentCircle), getRadiation(KDgetData(currentCircle)) + radiation);
+        }else{
+            setRadiation(KDgetData(currentCircle), getRadiation(KDgetData(currentCircle)) + (pow(0.8, getInsideNShadows(KDgetData(currentCircle))/2) * radiation));
+        }
         if (getRadiation(KDgetData(currentCircle)) >= 1000 && getRadiation(KDgetData(currentCircle)) < 8000) {
             fprintf(results, "%s morte iminente --> radiacao = %.2lf \n", getCircleId(KDgetData(currentCircle)), getRadiation(KDgetData(currentCircle)));
             setCircleMarkedForDeath(KDgetData(currentCircle), true);
@@ -298,10 +308,13 @@ void imInOrderCircles(tree shadows, tree circleTree, node currentCircle, FILE* r
     }
 }
 
-void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, dynamicList segments ,double xMeteor, double yMeteor, double radiation, path paths) {
+void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows ,double xMeteor, double yMeteor, double radiation, path paths) {
     FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
     setvbuf(results, 0, _IONBF, 0);
     tree shadows = NTcreateTree();
+    dynamicList segments = createList();
+    buildSegments(rectangleTree, segments, KDgetRootNode(rectangleTree));
+    addWrapAroundRectangle(rectangleTree, circleTree, segments);
     void* vertexArray = buildVertexArray(segments, xMeteor, yMeteor);
     storeShadowPolygons(shadows, vertexArray, segments, xMeteor, yMeteor);
     fprintf(results, "IM: \n\n");
@@ -309,13 +322,13 @@ void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, dyn
     fprintf(results, "\n========================================================\n");
     FILE* tempIm = fopen("imTemp.txt", "a+");
     setvbuf(tempIm, 0, _IONBF, 0);
-    fprintf(tempIm, "%.6lf %.6lf %.6lf", xMeteor, yMeteor, radiation/5);
-    // printSvgShadows(shadows, getBiggestX(rectangleTree) > getBiggestX(circleTree) ? getBiggestX(rectangleTree) + 15 : getBiggestX(circleTree) + 15, getBiggestY(rectangleTree) > getBiggestY(circleTree) ? getBiggestY(rectangleTree) + 15 : getBiggestY(circleTree) + 15);
+    fprintf(tempIm, "%.6lf %.6lf %.6lf\n", xMeteor, yMeteor, radiation/5);
+    printSvgShadows(shadows, getBiggestX(rectangleTree) > getBiggestX(circleTree) ? getBiggestX(rectangleTree) + 15 : getBiggestX(circleTree) + 15, getBiggestY(rectangleTree) > getBiggestY(circleTree) ? getBiggestY(rectangleTree) + 15 : getBiggestY(circleTree) + 15);
     // checkNewDivisions(segments, xMeteor, yMeteor);
     void* auxNode = insert(listOfTreesShadows, shadows);
     setDataRadiation(auxNode, radiation);
     free(vertexArray);
-    // freeListOfSegments(segments);
+    freeListOfSegments(segments);
     fclose(results);
     fclose(tempIm);
 }
@@ -345,7 +358,9 @@ void nveUpdateRadiation(void* currentPolygon, double x, double y, int* inside_po
     int insideNPolygons = 0;
     void* line = NTgetData(currentPolygon);
     int intersections = 0;
+
     for (int i = 0; i < 7; i++) {
+
         void* info = atPosArray(line, i);
         void* point1 = getP1(info);
         void* point2 = getP2(info);
@@ -356,13 +371,14 @@ void nveUpdateRadiation(void* currentPolygon, double x, double y, int* inside_po
 
         if (get_line_intersection(getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2), x, y, 999999999, y)) {
             intersections++;
+            
         }
     }
     if (intersections % 2 == 1) {
         insideNPolygons++;
+            
     }   
-    *inside_polygons += insideNPolygons;
-    
+    *inside_polygons += (insideNPolygons);
 }
 
 void nveInOrder(tree shadowTree, node currentListPosition , node currentPolygon, int* insideNPolygons, double x, double y) {
@@ -387,7 +403,16 @@ void nve(dynamicList listOfTreesShadows, path paths, double x, double y) {
         void* treeAux = getItem(listOfTreesShadows, posAuxList);  //Now I'm getting the address of the whole tree inside node
         void* treeNodeAux = NTgetRootNode(treeAux);               //I'm getting the root node from the tree that I'm analysing
         nveInOrder(treeAux, posAuxList, treeNodeAux, &inside_n_polygons, x, y);
-        radiationAtThePoint += (pow(0.8, inside_n_polygons) * getDataRadiation(posAuxList));
+        // printf("%d inside polygons\n", inside_n_polygons);
+        if(!inside_n_polygons){
+            puts("aqui");
+            radiationAtThePoint += (getDataRadiation(posAuxList));    
+        }else{
+            puts("la");
+            printf("Inside %d polygons\n", inside_n_polygons/2);
+            radiationAtThePoint += (pow(0.8, inside_n_polygons/2) * getDataRadiation(posAuxList));
+        }
+
         posAuxList = getNext(listOfTreesShadows, posAuxList);
     }
     fprintf(results, "NVE: \n\n(%.2lf, %.2lf) has %.2lf mSv\n", x, y, radiationAtThePoint);

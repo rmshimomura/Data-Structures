@@ -6,7 +6,7 @@
 int nxFind(path paths); //Pegar o nx do geo
 void getData(tree rectangleTree, tree circleTree, path paths); //Funcao para ler o .geo
 int getArguments(int argc, char** argv, path paths); //Analise do argc's e argv's passados
-void getFunctions(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, dynamicList segments , path paths);
+void getFunctions(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, path paths);
 void CloseFiles(FILE* geo, FILE* svg_source); //Fecha os arquivos restantes
 void createTempFiles(); //Arquivos temporarios usados nas funcoes
 void removeTempFiles(); //Remover arquivos temporarios usados nas funcoes

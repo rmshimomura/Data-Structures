@@ -35,9 +35,17 @@
 	<rect x="470.00" y="250.00" width="30.00" height="35.00" id="r_470.00-250.00"
   style="fill:aquamarine;stroke:darkgoldenrod;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
 	<circle cx="39.82" cy="71.61" r="2.50" id="c-_30.00-250.00_39.82-71.61_0" stroke="dimgray" stroke-width=".5" fill="darkkhaki" fill-opacity = "0.5" />
-	<circle cx="51.54" cy="170.08" r="2.50" id="c-_46.75-334.19_51.54-170.08_0" stroke="dimgray" stroke-width=".5" fill="darkkhaki" fill-opacity = "0.5" />
+	<circle cx="51.54" cy="170.08" r="2.50" id="c-_46.75-334.19_51.54-170.08_0" stroke="grey" stroke-width=".5" fill="lightgrey" fill-opacity = "0.3" />
+	<path fill="none" stroke="red" stroke-dasharray="2" d="M51.54,170.08 61.75,183.31 z"/>
+	<circle r="2.50" id="c-_46.75-334.19_51.54-170.08_0" stroke="dimgray" stroke-width=".5" fill="darkkhaki" fill-opacity = "0.5" >
+		<animateMotion dur="10s" repeatCount="indefinite" path="M51.54,170.08 61.75,183.31 z"/>
+	</circle>
 	<circle cx="64.74" cy="98.88" r="2.50" id="c-_46.75-165.81_64.74-98.88_0" stroke="dimgray" stroke-width=".5" fill="darkkhaki" fill-opacity = "0.5" />
-	<circle cx="109.99" cy="122.46" r="2.50" id="c-_94.44-94.44_109.99-122.46_0" stroke="dimgray" stroke-width=".5" fill="darkkhaki" fill-opacity = "0.5" />
+	<circle cx="109.99" cy="122.46" r="2.50" id="c-_94.44-94.44_109.99-122.46_0" stroke="grey" stroke-width=".5" fill="lightgrey" fill-opacity = "0.3" />
+	<path fill="none" stroke="red" stroke-dasharray="2" d="M109.99,122.46 109.44,111.94 z"/>
+	<circle r="2.50" id="c-_94.44-94.44_109.99-122.46_0" stroke="dimgray" stroke-width=".5" fill="darkkhaki" fill-opacity = "0.5" >
+		<animateMotion dur="10s" repeatCount="indefinite" path="M109.99,122.46 109.44,111.94 z"/>
+	</circle>
 	<circle cx="167.65" cy="184.57" r="2.50" id="c-_165.81-46.75_167.65-184.57_0" stroke="grey" stroke-width=".5" fill="lightgrey" fill-opacity = "0.3" />
 	<path fill="none" stroke="red" stroke-dasharray="2" d="M167.65,184.57 109.44,111.94 z"/>
 	<circle r="2.50" id="c-_165.81-46.75_167.65-184.57_0" stroke="dimgray" stroke-width=".5" fill="darkkhaki" fill-opacity = "0.5" >

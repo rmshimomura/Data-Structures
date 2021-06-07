@@ -329,7 +329,7 @@ void getData(tree rectangleTree, tree circleTree, path paths) {
     fclose(arq);
 }
 
-void getFunctions(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, dynamicList segments , path paths) {  //Leitura do .qry
+void getFunctions(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows , path paths) {  //Leitura do .qry
     FILE* Svg_Modificado = fopen(getPathDoSvgComOQryExecutado(paths), "w+");
     setvbuf(Svg_Modificado, 0, _IONBF, 0);
     FILE* comandos = fopen(getPathArquivoQryAtual(paths), "r");
@@ -355,7 +355,7 @@ void getFunctions(tree rectangleTree, tree circleTree, dynamicList listOfTreesSh
             
         }else if(!strcmp(comando, "im")){
             fscanf(comandos, "%lf %lf %lf",&x, &y, &radiation);
-            im(rectangleTree, circleTree, listOfTreesShadows, segments, x, y, radiation, paths);
+            im(rectangleTree, circleTree, listOfTreesShadows, x, y, radiation, paths);
         }else if(!strcmp(comando, "t30")){
             t30(circleTree, paths);
         }else if(!strcmp(comando, "nve")){

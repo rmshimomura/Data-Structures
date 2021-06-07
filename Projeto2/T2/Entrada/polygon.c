@@ -28,6 +28,7 @@ typedef struct segment {
 } segment_t;
 
 void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList segmentsList, double xMeteor, double yMeteor) {
+    
     point_t* auxVertex = vertexArray;
     point_t* extremes = calloc(4, sizeof(point_t));
     void* root = NTgetRootNode(shadowPolygons);
@@ -932,6 +933,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
             } else {
                 NTinsertShadow(shadowPolygons, root, root, sidesOfShadowPolygon);
             }
+
             // puts("I'm storing: ");
             // for(int i = 0; i < 7; i++){
             //     if(!sidesOfShadowPolygon[i].point1 ||!sidesOfShadowPolygon[i].point2 || !&sidesOfShadowPolygon[i]){

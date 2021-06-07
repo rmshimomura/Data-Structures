@@ -51,25 +51,25 @@ void printCircleInOrder(FILE* svg_source, tree initialTree, node current) {
 
 void printNves(FILE* nveTemp, FILE* svg_source) {
     double posX, posY, radiation;
-    char color[7];
+    char color[8];
     while (fscanf(nveTemp, "%lf %lf %lf", &posX, &posY, &radiation) != -1) {
         
         if (radiation < 25) {
-            strcpy(color, "00ffff");
+            strcpy(color, "#00ffff");
         } else if (radiation >= 25 && radiation < 50) {
-            strcpy(color, "00ff00");
+            strcpy(color, "#00ff00");
         } else if (radiation >= 50 && radiation < 100) {
-            strcpy(color, "ff00ff");
+            strcpy(color, "#ff00ff");
         } else if (radiation >= 100 && radiation < 250) {
-            strcpy(color, "0000ff");
+            strcpy(color, "#0000ff");
         } else if (radiation >= 250 && radiation < 600) {
-            strcpy(color, "800080");
+            strcpy(color, "#800080");
         } else if (radiation >= 600 && radiation < 1000) {
-            strcpy(color, "000080");
+            strcpy(color, "#000080");
         } else if (radiation >= 1000 && radiation < 8000) {
-            strcpy(color, "ff0000");
+            strcpy(color, "#ff0000");
         } else if (radiation >= 8000) {
-            strcpy(color, "000000");
+            strcpy(color, "#000000");
         }
 
         fprintf(svg_source, "\t<rect x=\"%.2lf\" y=\"%.2lf\" width=\"5\" height=\"5\"\n  style=\"fill:%s;stroke:%s;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1\" rx=\"1\"/>\n", posX, posY, color, color);
@@ -80,7 +80,6 @@ void printIms(FILE* imExist, FILE* svg_source){
     double x, y, radius;
     while(fscanf(imExist, "%lf %lf %lf", &x, &y, &radius) != -1){
         fprintf(svg_source, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"%.2lf\" stroke=\"dimgrey\" stroke-width=\".5\" fill=\"dimgrey\" fill-opacity = \"0.1\" />\n", x, y, radius);
-        puts("Donew");
     }
     
 }

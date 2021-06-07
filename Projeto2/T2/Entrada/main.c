@@ -18,9 +18,9 @@ int main(int argc, char** argv) {
     dynamicList listOfTreesShadows = createList();
     int consulta = getArguments(argc, argv, paths);
     getData(rectangles, circles, paths);
-    dynamicList segments = createList();
-    buildSegments(rectangles, segments, KDgetRootNode(rectangles));
-    addWrapAroundRectangle(rectangles, circles, segments);
+    // dynamicList segments = createList();
+    // buildSegments(rectangles, segments, KDgetRootNode(rectangles));
+    // addWrapAroundRectangle(rectangles, circles, segments);
     FILE* svg_source = fopen(getPathDoSvgDoGeoSemMudanca(paths), "w+");
     setvbuf(svg_source, 0, _IONBF, 0);
     writeOnSvg(svg_source, rectangles, circles, paths);
@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
         FILE* txt_results = fopen(getPathDoTXTComOQryExecutado(paths), "w+");
         fprintf(txt_results, "Rodrigo Mimura Shimomura\n");
         setvbuf(txt_results, 0, _IONBF, 0);
-        getFunctions(rectangles, circles, listOfTreesShadows , segments, paths);
+        getFunctions(rectangles, circles, listOfTreesShadows, paths);
         fclose(txt_results);
     }
     KDdestroyRectTree(rectangles, KDgetRootNode(rectangles));
@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
     free(rectangles);
     free(circles);
     // free(shadows);
-    freeListOfSegments(segments);
+    // freeListOfSegments(segments);
     freeListOfTreesShadows(listOfTreesShadows);
     fclose(svg_source);
 }
