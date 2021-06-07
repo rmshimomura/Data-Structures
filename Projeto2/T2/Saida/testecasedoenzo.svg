@@ -1,0 +1,20 @@
+<!-- Rodrigo Mimura Shimomura -->
+ <svg viewBox = "0 0 142.00 113.20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<rect x="0" y="0" width="142.00" height="113.20" 
+  style="fill:lightgrey;stroke:yellow;stroke-width:.5;fill-opacity:0.1;stroke-opacity:1" />
+	<rect x="21.00" y="24.00" width="37.00" height="23.00" id="r1"
+  style="fill:cyan;stroke:blue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="111.00" y="23.70" width="16.00" height="74.50" id="r2"
+  style="fill:cyan;stroke:blue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="22.00" y="25.00" width="10.00" height="10.00" id="rteste"
+  style="fill:cyan;stroke:blue;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="33.79" y="61.44" width="52.00" height="34.50" id="r.01"
+  style="fill:lime;stroke:red;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<rect x="76.85" y="25.35" width="22.50" height="46.00" id="rt02"
+  style="fill:magenta;stroke:red;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" />
+	<circle cx="10.00" cy="10.00" r="5.00" id="c1" stroke="green" stroke-width=".5" fill="orange" fill-opacity = "0.5" />
+	<circle cx="30.00" cy="5.00" r="5.00" id="c2" stroke="red" stroke-width=".5" fill="orange" fill-opacity = "0.5" />
+	<circle cx="38.00" cy="15.00" r="5.00" id="c4" stroke="red" stroke-width=".5" fill="purple" fill-opacity = "0.5" />
+	<circle cx="49.00" cy="90.00" r="5.00" id="c5" stroke="red" stroke-width=".5" fill="pink" fill-opacity = "0.5" />
+	<circle cx="92.00" cy="20.00" r="5.00" id="c3" stroke="red" stroke-width=".5" fill="orange" fill-opacity = "0.5" />
+</svg>
