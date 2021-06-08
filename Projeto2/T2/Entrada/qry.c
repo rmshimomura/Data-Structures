@@ -319,6 +319,7 @@ void imInOrderCircles(tree shadows, tree circleTree, node currentCircle, FILE* r
                 setCircleAlive(KDgetData(currentCircle), false);
             }
         }
+        fprintf(results, "DEBUG - %s has %.6lf mSv\n",  getCircleId(KDgetData(currentCircle)), getRadiation(KDgetData(currentCircle)));
         imInOrderCircles(shadows, circleTree, KDgetRightNode(currentCircle), results, radiation);
     }
 }
@@ -338,7 +339,7 @@ void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, dou
     FILE* tempIm = fopen("imTemp.txt", "a+");
     setvbuf(tempIm, 0, _IONBF, 0);
     fprintf(tempIm, "%.6lf %.6lf %.6lf\n", xMeteor, yMeteor, radiation / 5);
-    printSvgShadows(shadows, getBiggestX(rectangleTree) > getBiggestX(circleTree) ? getBiggestX(rectangleTree) + 15 : getBiggestX(circleTree) + 15, getBiggestY(rectangleTree) > getBiggestY(circleTree) ? getBiggestY(rectangleTree) + 15 : getBiggestY(circleTree) + 15);
+    // printSvgShadows(shadows, getBiggestX(rectangleTree) > getBiggestX(circleTree) ? getBiggestX(rectangleTree) + 100 : getBiggestX(circleTree) + 100, getBiggestY(rectangleTree) > getBiggestY(circleTree) ? getBiggestY(rectangleTree) + 100 : getBiggestY(circleTree) + 100);
     // checkNewDivisions(segments, xMeteor, yMeteor);
     void* auxNode = insert(listOfTreesShadows, shadows);
     setDataRadiation(auxNode, radiation);
@@ -419,8 +420,8 @@ void nve(dynamicList listOfTreesShadows, path paths, double x, double y) {
             // puts("aqui");
             radiationAtThePoint += (getDataRadiation(posAuxList));
         } else {
-            // puts("la");
-            // printf("Inside %d polygons\n", inside_n_polygons);
+            puts("la");
+            printf("Inside %d polygons\n", inside_n_polygons);
             radiationAtThePoint += (pow(0.8, inside_n_polygons) * getDataRadiation(posAuxList));
         }
 
