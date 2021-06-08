@@ -308,7 +308,7 @@ void imInOrderCircles(tree shadows, tree circleTree, node currentCircle, FILE* r
                 setCircleAlive(KDgetData(currentCircle), false);
             }
         }
-        fprintf(results, "DEBUG - %s has %.6lf mSv\n",  getCircleId(KDgetData(currentCircle)), getRadiation(KDgetData(currentCircle)));
+        // fprintf(results, "DEBUG - %s has %.6lf mSv\n",  getCircleId(KDgetData(currentCircle)), getRadiation(KDgetData(currentCircle)));
         imInOrderCircles(shadows, circleTree, KDgetRightNode(currentCircle), results, radiation, xMeteor, yMeteor);
     }
 }
