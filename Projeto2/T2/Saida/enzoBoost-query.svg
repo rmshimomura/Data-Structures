@@ -37,7 +37,7 @@
 	<circle r="5.00" id="c3" stroke="#00ff00" stroke-width=".5" fill="#00ff00" fill-opacity = "0.5" >
 		<animateMotion dur="10s" repeatCount="indefinite" path="M92.00,20.00 88.10,48.35 z"/>
 	</circle>
-	<rect x="1.00" y="10.00" width="5" height="5"
+	<rect x="0.00" y="10.00" width="5" height="5"
   style="fill:#00ff00;stroke:#00ff00;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1" rx="1"/>
 	<circle cx="72.00" cy="50.00" r="5.00" stroke="dimgrey" stroke-width=".5" fill="dimgrey" fill-opacity = "0.1" />
 	<circle cx="100.00" cy="20.00" r="2.40" stroke="dimgrey" stroke-width=".5" fill="dimgrey" fill-opacity = "0.1" />

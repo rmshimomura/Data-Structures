@@ -18,34 +18,22 @@ int inside(double x1, double y1, double p1Width, double p1Height, double x2, dou
     }
 }
 
-int get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y, float p2_x, float p2_y, float p3_x, float p3_y) {
-    float s02_x, s02_y, s10_x, s10_y, s32_x, s32_y, s_numer, t_numer, denom, t;
-    s10_x = p1_x - p0_x;
-    s10_y = p1_y - p0_y;
-    s32_x = p3_x - p2_x;
-    s32_y = p3_y - p2_y;
+int get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y, float p2_x, float p2_y, float p3_x, float p3_y){
+    float s1_x, s1_y, s2_x, s2_y;
+    s1_x = p1_x - p0_x;     s1_y = p1_y - p0_y;
+    s2_x = p3_x - p2_x;     s2_y = p3_y - p2_y;
 
-    denom = s10_x * s32_y - s32_x * s10_y;
-    if (denom == 0)
-        return 0;
-    bool denomPositive = denom > 0;
+    float s, t;
+    s = (-s1_y * (p0_x - p2_x) + s1_x * (p0_y - p2_y)) / (-s2_x * s1_y + s1_x * s2_y);
+    t = ( s2_x * (p0_y - p2_y) - s2_y * (p0_x - p2_x)) / (-s2_x * s1_y + s1_x * s2_y);
 
-    s02_x = p0_x - p2_x;
-    s02_y = p0_y - p2_y;
-    s_numer = s10_x * s02_y - s10_y * s02_x;
-    if ((s_numer < 0) == denomPositive)
-        return 0;
+    if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
+    {
+        // Collision detected
+        return 1;
+    }
 
-    t_numer = s32_x * s02_y - s32_y * s02_x;
-    if ((t_numer < 0) == denomPositive)
-        return 0;
-
-    if (fabs(s_numer) > fabs(denom) || fabs(t_numer) > fabs(denom))
-        return 0;
-
-    t = t_numer / denom;
-
-    return 1;
+    return 0; // No collision
 }
 
 void dpiInOrder(tree rectangleTree, FILE* svg_source, node currentNode, double x, double y) {
@@ -288,7 +276,8 @@ void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircl
             }
 
             if (get_line_intersection(getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2), getCircleX(KDgetData(currentCircle)), getCircleY(KDgetData(currentCircle)), xMeteor, yMeteor)) {
-                intersections++;
+                if(getCircleX(KDgetData(currentCircle)) != getPointX(point1) && getCircleX(KDgetData(currentCircle)) != getPointX(point2) && getCircleY(KDgetData(currentCircle)) != getPointY(point1) && getCircleY(KDgetData(currentCircle)) != getPointY(point2))
+                    intersections++;
             }
         }
         if (intersections % 2 == 1) {
@@ -387,13 +376,14 @@ void nveUpdateRadiation(void* currentPolygon, double xNve, double yNve, int* ins
         }
 
         if (get_line_intersection(getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2), xNve, yNve, xMeteor, yMeteor)) {
-            intersections++;
-            printf("Intercept with (%.2lf, %.2lf) - (%.2lf, %.2lf)\n", getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2));
+            if(xNve != getPointX(point1) && xNve != getPointX(point2) && yNve != getPointY(point1) && yNve != getPointY(point2))
+                intersections++;
+            // printf("Intercept with (%.2lf, %.2lf) - (%.2lf, %.2lf)\n", getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2));
         }
     }
     if (intersections % 2 == 1) {
         insideNPolygons++;
-        puts("UP!");
+        // puts("UP!");
     }
     *inside_polygons += (insideNPolygons);
 }
@@ -419,15 +409,15 @@ void nve(dynamicList listOfTreesShadows, path paths, double x, double y) {
         int inside_n_polygons = 0;
         void* treeAux = getItem(listOfTreesShadows, posAuxList);  //Now I'm getting the address of the whole tree inside node
         void* treeNodeAux = NTgetRootNode(treeAux);               //I'm getting the root node from the tree that I'm analysing
-        printf("xmeteor = %.2lf ymeteor = %.2lf\n", getDataxMeteor(posAuxList), getDatayMeteor(posAuxList));
+        // printf("xmeteor = %.2lf ymeteor = %.2lf\n", getDataxMeteor(posAuxList), getDatayMeteor(posAuxList));
         nveInOrder(treeAux, posAuxList, treeNodeAux, &inside_n_polygons, x, y, getDataxMeteor(posAuxList), getDatayMeteor(posAuxList));
         // printf("%d inside polygons\n", inside_n_polygons);
         if (!inside_n_polygons) {
             // puts("aqui");
             radiationAtThePoint += (getDataRadiation(posAuxList));
         } else {
-            puts("la");
-            printf("Inside %d polygons\n", inside_n_polygons);
+            // puts("la");
+            // printf("Inside %d polygons\n", inside_n_polygons);
             radiationAtThePoint += (pow(0.8, inside_n_polygons) * getDataRadiation(posAuxList));
         }
 
