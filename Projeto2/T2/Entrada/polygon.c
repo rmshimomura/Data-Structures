@@ -122,6 +122,8 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
             }
 
             int ok = 0;
+            int ok1 = 0;
+            int ok2 = 0;
             // puts("----------------------------------------------------------------------------------------------");
 
             // printf("Analizando segmento (%.2lf, %.2lf) - (%.2lf, %.2lf) tipo = %s\n", segment->point1->x, segment->point1->y, segment->point2->x, segment->point2->y, vertical == 1 ? "vertical" : "horizontal");
@@ -130,7 +132,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
 
             if (strcmp(segment->point1->code, "RE") && strcmp(segment->point1->code, "DIV")) {
                 // printf("\nsegment->point1: (%.2lf, %.2lf) angle = %.2lf code = %s type = %c\n", segment->point1->x, segment->point1->y, segment->point1->angle, segment->point1->code, segment->point1->type);
-                if ((segment->point1->angle >= 0 && segment->point1->angle < extremes[0].angle) || (segment->point1->angle >= extremes[3].angle && segment->point1->angle < 360)) {
+                if ((segment->point1->angle >= 0 && segment->point1->angle < extremes[0].angle) || (segment->point1->angle >= extremes[3].angle && segment->point1->angle <= 360)) {
                     //From (segment->point1->x, segment->point1->y) to (biggestX, dist)
                     double dist = (((segment->point1->y - yMeteor) / (segment->point1->x - xMeteor)) * (biggestX - segment->point1->x)) + segment->point1->y;
                     // wallPointSegPoint1->point1 = segment->point1;
@@ -143,6 +145,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                     wallPointSegPoint1->point2 = calloc(1, sizeof(point_t));
                     wallPointSegPoint1->point2->x = biggestX;
                     wallPointSegPoint1->point2->y = dist;
+                    ok1 = 1;
 
                 } else if (segment->point1->angle >= extremes[0].angle && segment->point1->angle < extremes[1].angle) {
                     //From (segment->point1->x, segment->point1->y) to (dist, biggestY)
@@ -157,6 +160,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                     wallPointSegPoint1->point2 = calloc(1, sizeof(point_t));
                     wallPointSegPoint1->point2->x = dist;
                     wallPointSegPoint1->point2->y = biggestY;
+                    ok1 = 1;
 
                 } else if (segment->point1->angle >= extremes[1].angle && segment->point1->angle < extremes[2].angle) {
                     //From (segment->point1->x, segment->point1->y) to (0.0, dist)
@@ -171,6 +175,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                     wallPointSegPoint1->point2 = calloc(1, sizeof(point_t));
                     wallPointSegPoint1->point2->x = 0.0;
                     wallPointSegPoint1->point2->y = dist;
+                    ok1 = 1;
 
                 } else if (segment->point1->angle >= extremes[2].angle && segment->point1->angle < extremes[3].angle) {
                     //From (segment->point1->x, segment->point1->y) to (dist, 0.0)
@@ -186,14 +191,15 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                     wallPointSegPoint1->point2 = calloc(1, sizeof(point_t));
                     wallPointSegPoint1->point2->x = dist;
                     wallPointSegPoint1->point2->y = 0.0;
+                    ok1 = 1;
                 }
             }
 
             segment_t* wallPointSegPoint2 = calloc(1, sizeof(segment_t));
-
+            
             if (strcmp(segment->point2->code, "RE") && strcmp(segment->point2->code, "DIV")) {
                 // printf("\nsegment->point2: (%.2lf, %.2lf) angle = %.2lf code = %s type = %c\n", segment->point2->x, segment->point2->y, segment->point2->angle, segment->point2->code, segment->point2->type);
-                if ((segment->point2->angle >= 0 && segment->point2->angle < extremes[0].angle) || (segment->point2->angle >= extremes[3].angle && segment->point2->angle < 360)) {
+                if ((segment->point2->angle >= 0 && segment->point2->angle < extremes[0].angle) || (segment->point2->angle >= extremes[3].angle && segment->point2->angle <= 360)) {
                     //From (segment->point2->x, segment->point2->y) to (biggestX, dist)
                     double dist = (((segment->point2->y - yMeteor) / (segment->point2->x - xMeteor)) * (biggestX - segment->point2->x)) + segment->point2->y;
                     // wallPointSegPoint2->point1 = segment->point2;
@@ -207,6 +213,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                     wallPointSegPoint2->point2 = calloc(1, sizeof(point_t));
                     wallPointSegPoint2->point2->x = biggestX;
                     wallPointSegPoint2->point2->y = dist;
+                    ok2 = 1;
 
                 } else if (segment->point2->angle >= extremes[0].angle && segment->point2->angle < extremes[1].angle) {
                     //From (segment->point2->x, segment->point2->y) to (dist, biggestY)
@@ -223,6 +230,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                     wallPointSegPoint2->point2 = calloc(1, sizeof(point_t));
                     wallPointSegPoint2->point2->x = dist;
                     wallPointSegPoint2->point2->y = biggestY;
+                    ok2 = 1;
 
                 } else if (segment->point2->angle >= extremes[1].angle && segment->point2->angle < extremes[2].angle) {
                     //From (segment->point2->x, segment->point2->y) to (0.0, dist)
@@ -239,6 +247,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                     wallPointSegPoint2->point2 = calloc(1, sizeof(point_t));
                     wallPointSegPoint2->point2->x = 0.0;
                     wallPointSegPoint2->point2->y = dist;
+                    ok2 = 1;
 
                 } else if (segment->point2->angle >= extremes[2].angle && segment->point2->angle < extremes[3].angle) {
                     //From (segment->point2->x, segment->point2->y) to (dist, 0.0)
@@ -255,11 +264,15 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                     wallPointSegPoint2->point2 = calloc(1, sizeof(point_t));
                     wallPointSegPoint2->point2->x = dist;
                     wallPointSegPoint2->point2->y = 0.0;
+                    ok2 = 1;
                 }
             }
-
-            // printf("wallpointseg1.p2 = (%.2lf, %.2lf) wallpointseg2.p2 = (%.2lf, %.2lf)\n\n", wallPointSegPoint1->point2->x, wallPointSegPoint1->point2->y, wallPointSegPoint2->point2->x, wallPointSegPoint2->point2->y);
-
+            if(!ok1){
+                puts("OK1 fail");
+            }
+            if(!ok2){
+                puts("OK2 fail");
+            }
             if (segment->point1->x < xMeteor && vertical) {
                 if (wallPointSegPoint1->point2->x == 0.0 && wallPointSegPoint2->point2->x == 0.0) {
                     // puts("Procedment 1");
@@ -425,7 +438,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                 }
 
             } else if (segment->point1->x > xMeteor && vertical) {
-                //TODO
+                
 
                 if (wallPointSegPoint1->point2->x == biggestX && wallPointSegPoint2->point2->x == biggestX) {
                     // puts("Procedment 7");
@@ -590,9 +603,10 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                     free(newUpSegment);
                 }
 
-            } else if (segment->point1->x == xMeteor) {
-                puts("SUGOI! X == xMeteor");
+            } else if (segment->point1->x == xMeteor && vertical) {
+                    sidesOfShadowPolygon[0] = *(segment);
             } else if (segment->point1->y < yMeteor && horizontal) {
+
                 if (wallPointSegPoint1->point2->y == 0.0 && wallPointSegPoint2->point2->y == 0.0) {
                     // puts("Procedment 13");
                     ok = 1;
@@ -920,14 +934,10 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                     free(newLeftSegment);
                 }
 
-            } else if (segment->point1->y == yMeteor) {
-                puts("SUGOI! Y == yMeteor");
+            } else if (segment->point1->y == yMeteor && horizontal) {
+                sidesOfShadowPolygon[0] = *(segment);
             }
-            // if (!ok) {
-            //     puts("Alguma condicional nao bateu :( ");
-            // } else {
-            //     puts("Bateu em alguma coisa, OK");
-            // }
+           
 
             if (!root) {
                 root = NTinsertShadow(shadowPolygons, root, root, sidesOfShadowPolygon);
@@ -935,14 +945,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                 NTinsertShadow(shadowPolygons, root, root, sidesOfShadowPolygon);
             }
 
-            // puts("I'm storing: ");
-            // for(int i = 0; i < 7; i++){
-            //     if(!sidesOfShadowPolygon[i].point1 ||!sidesOfShadowPolygon[i].point2 || !&sidesOfShadowPolygon[i]){
-            //         break;
-            //     }else{
-            //         printf("(%.2lf, %.2lf) - (%.2lf, %.2lf)\n", sidesOfShadowPolygon[i].point1->x, sidesOfShadowPolygon[i].point1->y, sidesOfShadowPolygon[i].point2->x, sidesOfShadowPolygon[i].point2->y);
-            //     }
-            // }
+            
 
             free(segment);
 
@@ -958,6 +961,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
             
         }
     }
+
     NTsetRootNode(shadowPolygons, root);
     free(extremes);
 }
