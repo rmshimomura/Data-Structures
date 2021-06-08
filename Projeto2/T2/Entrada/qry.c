@@ -327,9 +327,9 @@ void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, dou
     fprintf(results, "\n========================================================\n");
     FILE* tempIm = fopen("imTemp.txt", "a+");
     setvbuf(tempIm, 0, _IONBF, 0);
-    fprintf(tempIm, "%.6lf %.6lf %.6lf\n", xMeteor, yMeteor, radiation / 5);
-    if(xMeteor == 72 && yMeteor == 50)
-        printSvgShadows(shadows, getBiggestX(rectangleTree) > getBiggestX(circleTree) ? getBiggestX(rectangleTree) + 100 : getBiggestX(circleTree) + 100, getBiggestY(rectangleTree) > getBiggestY(circleTree) ? getBiggestY(rectangleTree) + 100 : getBiggestY(circleTree) + 100);
+    fprintf(tempIm, "%.6lf %.6lf %.6lf\n", xMeteor, yMeteor, radiation / 3);
+    
+    printSvgShadows(shadows, getBiggestX(rectangleTree) > getBiggestX(circleTree) ? getBiggestX(rectangleTree) + 100 : getBiggestX(circleTree) + 100, getBiggestY(rectangleTree) > getBiggestY(circleTree) ? getBiggestY(rectangleTree) + 100 : getBiggestY(circleTree) + 100);
     // checkNewDivisions(segments, xMeteor, yMeteor);
     void* auxNode = insert(listOfTreesShadows, shadows);
     setDataRadiation(auxNode, radiation);
