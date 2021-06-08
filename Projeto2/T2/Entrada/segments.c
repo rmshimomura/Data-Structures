@@ -238,7 +238,7 @@ void addWrapAroundRectangle(tree rectangleTree, tree circleTree, dynamicList seg
 
     aux1->point1->x = 0;
     aux1->point1->y = 0;
-    aux1->point2->x = max(getBiggestX(rectangleTree), getBiggestX(circleTree)) + 15;
+    aux1->point2->x = max(getBiggestX(rectangleTree), getBiggestX(circleTree)) + 100;
     aux1->point2->y = 0;
     aux1->point1->linkedTo = aux1;
     aux1->point2->linkedTo = aux1;
@@ -247,10 +247,10 @@ void addWrapAroundRectangle(tree rectangleTree, tree circleTree, dynamicList seg
     strcpy(aux1->point1->code, "RE");
     strcpy(aux1->point2->code, "RE");
 
-    aux2->point1->x = max(getBiggestX(rectangleTree), getBiggestX(circleTree)) + 15;
+    aux2->point1->x = max(getBiggestX(rectangleTree), getBiggestX(circleTree)) + 100;
     aux2->point1->y = 0;
-    aux2->point2->x = max(getBiggestX(rectangleTree), getBiggestX(circleTree)) + 15;
-    aux2->point2->y = max(getBiggestY(rectangleTree), getBiggestY(circleTree)) + 15;
+    aux2->point2->x = max(getBiggestX(rectangleTree), getBiggestX(circleTree)) + 100;
+    aux2->point2->y = max(getBiggestY(rectangleTree), getBiggestY(circleTree)) + 100;
     aux2->point1->linkedTo = aux2;
     aux2->point2->linkedTo = aux2;
     aux2->point1->pair = aux2->point2;
@@ -258,10 +258,10 @@ void addWrapAroundRectangle(tree rectangleTree, tree circleTree, dynamicList seg
     strcpy(aux2->point1->code, "RE");
     strcpy(aux2->point2->code, "RE");
 
-    aux3->point1->x = max(getBiggestX(rectangleTree), getBiggestX(circleTree)) + 15;
-    aux3->point1->y = max(getBiggestY(rectangleTree), getBiggestY(circleTree)) + 15;
+    aux3->point1->x = max(getBiggestX(rectangleTree), getBiggestX(circleTree)) + 100;
+    aux3->point1->y = max(getBiggestY(rectangleTree), getBiggestY(circleTree)) + 100;
     aux3->point2->x = 0;
-    aux3->point2->y = max(getBiggestY(rectangleTree), getBiggestY(circleTree)) + 15;
+    aux3->point2->y = max(getBiggestY(rectangleTree), getBiggestY(circleTree)) + 100;
     aux3->point1->linkedTo = aux3;
     aux3->point2->linkedTo = aux3;
     aux3->point1->pair = aux3->point2;
@@ -270,7 +270,7 @@ void addWrapAroundRectangle(tree rectangleTree, tree circleTree, dynamicList seg
     strcpy(aux3->point2->code, "RE");
 
     aux4->point1->x = 0;
-    aux4->point1->y = max(getBiggestY(rectangleTree), getBiggestY(circleTree)) + 15;
+    aux4->point1->y = max(getBiggestY(rectangleTree), getBiggestY(circleTree)) + 100;
     aux4->point2->x = 0;
     aux4->point2->y = 0;
     aux4->point1->linkedTo = aux4;
