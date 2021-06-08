@@ -273,9 +273,9 @@ char* colorPicker(double radiation) {
     }
 }
 
-void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircle) {
+void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircle, double xMeteor, double yMeteor) {
     if (currentShadowPolygon) {
-        imInOrderShadows(shadows, NTgetLeftNode(currentShadowPolygon), currentCircle);
+        imInOrderShadows(shadows, NTgetLeftNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
         void* line = NTgetData(currentShadowPolygon);  //Now has the array of segments
         int intersections = 0;
         for (int i = 0; i < 7; i++) {
@@ -287,22 +287,22 @@ void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircl
                 break;
             }
 
-            if (get_line_intersection(getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2), getCircleX(KDgetData(currentCircle)), getCircleY(KDgetData(currentCircle)), 999999999, getCircleY(KDgetData(currentCircle)))) {
+            if (get_line_intersection(getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2), getCircleX(KDgetData(currentCircle)), getCircleY(KDgetData(currentCircle)), xMeteor, yMeteor)) {
                 intersections++;
             }
         }
         if (intersections % 2 == 1) {
             setInsideNShadows(KDgetData(currentCircle), getInsideNShadows(KDgetData(currentCircle)) + 1);
         }
-        imInOrderShadows(shadows, NTgetRightNode(currentShadowPolygon), currentCircle);
+        imInOrderShadows(shadows, NTgetRightNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
     }
 }
 
-void imInOrderCircles(tree shadows, tree circleTree, node currentCircle, FILE* results, double radiation) {
+void imInOrderCircles(tree shadows, tree circleTree, node currentCircle, FILE* results, double radiation, double xMeteor, double yMeteor) {
     if (currentCircle) {
-        imInOrderCircles(shadows, circleTree, KDgetLeftNode(currentCircle), results, radiation);
+        imInOrderCircles(shadows, circleTree, KDgetLeftNode(currentCircle), results, radiation, xMeteor, yMeteor);
         setInsideNShadows(KDgetData(currentCircle), 0);
-        imInOrderShadows(shadows, NTgetRootNode(shadows), currentCircle);
+        imInOrderShadows(shadows, NTgetRootNode(shadows), currentCircle, xMeteor, yMeteor);
         if (!getInsideNShadows(KDgetData(currentCircle))) {
             setRadiation(KDgetData(currentCircle), getRadiation(KDgetData(currentCircle)) + radiation);
         } else {
@@ -320,7 +320,7 @@ void imInOrderCircles(tree shadows, tree circleTree, node currentCircle, FILE* r
             }
         }
         fprintf(results, "DEBUG - %s has %.6lf mSv\n",  getCircleId(KDgetData(currentCircle)), getRadiation(KDgetData(currentCircle)));
-        imInOrderCircles(shadows, circleTree, KDgetRightNode(currentCircle), results, radiation);
+        imInOrderCircles(shadows, circleTree, KDgetRightNode(currentCircle), results, radiation, xMeteor, yMeteor);
     }
 }
 
@@ -334,15 +334,18 @@ void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, dou
     void* vertexArray = buildVertexArray(segments, xMeteor, yMeteor);
     storeShadowPolygons(shadows, vertexArray, segments, xMeteor, yMeteor);
     fprintf(results, "IM: \n\n");
-    imInOrderCircles(shadows, circleTree, KDgetRootNode(circleTree), results, radiation);
+    imInOrderCircles(shadows, circleTree, KDgetRootNode(circleTree), results, radiation, xMeteor, yMeteor);
     fprintf(results, "\n========================================================\n");
     FILE* tempIm = fopen("imTemp.txt", "a+");
     setvbuf(tempIm, 0, _IONBF, 0);
     fprintf(tempIm, "%.6lf %.6lf %.6lf\n", xMeteor, yMeteor, radiation / 5);
-    // printSvgShadows(shadows, getBiggestX(rectangleTree) > getBiggestX(circleTree) ? getBiggestX(rectangleTree) + 100 : getBiggestX(circleTree) + 100, getBiggestY(rectangleTree) > getBiggestY(circleTree) ? getBiggestY(rectangleTree) + 100 : getBiggestY(circleTree) + 100);
+    if(xMeteor == 72 && yMeteor == 50)
+        printSvgShadows(shadows, getBiggestX(rectangleTree) > getBiggestX(circleTree) ? getBiggestX(rectangleTree) + 100 : getBiggestX(circleTree) + 100, getBiggestY(rectangleTree) > getBiggestY(circleTree) ? getBiggestY(rectangleTree) + 100 : getBiggestY(circleTree) + 100);
     // checkNewDivisions(segments, xMeteor, yMeteor);
     void* auxNode = insert(listOfTreesShadows, shadows);
     setDataRadiation(auxNode, radiation);
+    setDataxMeteor(auxNode, xMeteor);
+    setDatayMeteor(auxNode, yMeteor);
     free(vertexArray);
     freeListOfSegments(segments);
     fclose(results);
@@ -369,7 +372,7 @@ void t30(tree circleTree, path paths) {
     fclose(results);
 }
 
-void nveUpdateRadiation(void* currentPolygon, double x, double y, int* inside_polygons) {
+void nveUpdateRadiation(void* currentPolygon, double xNve, double yNve, int* inside_polygons, double xMeteor, double yMeteor) {
     int insideNPolygons = 0;
     void* line = NTgetData(currentPolygon);
     int intersections = 0;
@@ -383,23 +386,25 @@ void nveUpdateRadiation(void* currentPolygon, double x, double y, int* inside_po
             break;
         }
 
-        if (get_line_intersection(getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2), x, y, 999999999, y)) {
+        if (get_line_intersection(getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2), xNve, yNve, xMeteor, yMeteor)) {
             intersections++;
+            printf("Intercept with (%.2lf, %.2lf) - (%.2lf, %.2lf)\n", getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2));
         }
     }
     if (intersections % 2 == 1) {
         insideNPolygons++;
+        puts("UP!");
     }
     *inside_polygons += (insideNPolygons);
 }
 
-void nveInOrder(tree shadowTree, node currentListPosition, node currentPolygon, int* insideNPolygons, double x, double y) {
+void nveInOrder(tree shadowTree, node currentListPosition, node currentPolygon, int* insideNPolygons, double x, double y, double xMeteor, double yMeteor) {
     if (currentPolygon) {
-        nveInOrder(shadowTree, currentListPosition, NTgetLeftNode(currentPolygon), insideNPolygons, x, y);
+        nveInOrder(shadowTree, currentListPosition, NTgetLeftNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
 
-        nveUpdateRadiation(currentPolygon, x, y, insideNPolygons);
+        nveUpdateRadiation(currentPolygon, x, y, insideNPolygons, xMeteor, yMeteor);
 
-        nveInOrder(shadowTree, currentListPosition, NTgetRightNode(currentPolygon), insideNPolygons, x, y);
+        nveInOrder(shadowTree, currentListPosition, NTgetRightNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
     }
 }
 
@@ -414,7 +419,8 @@ void nve(dynamicList listOfTreesShadows, path paths, double x, double y) {
         int inside_n_polygons = 0;
         void* treeAux = getItem(listOfTreesShadows, posAuxList);  //Now I'm getting the address of the whole tree inside node
         void* treeNodeAux = NTgetRootNode(treeAux);               //I'm getting the root node from the tree that I'm analysing
-        nveInOrder(treeAux, posAuxList, treeNodeAux, &inside_n_polygons, x, y);
+        printf("xmeteor = %.2lf ymeteor = %.2lf\n", getDataxMeteor(posAuxList), getDatayMeteor(posAuxList));
+        nveInOrder(treeAux, posAuxList, treeNodeAux, &inside_n_polygons, x, y, getDataxMeteor(posAuxList), getDatayMeteor(posAuxList));
         // printf("%d inside polygons\n", inside_n_polygons);
         if (!inside_n_polygons) {
             // puts("aqui");

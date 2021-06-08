@@ -17,5 +17,10 @@ void freeListOfSegments(void* sequence);
 void freeListOfTreesShadows(void* sequence);
 double getDataRadiation(void* node);
 void setDataRadiation(void* node, double radiation);
+double getDataxMeteor(void* node);
+void setDataxMeteor(void* node, double xMeteor);
+double getDatayMeteor(void* node);
+void setDatayMeteor(void* node, double yMeteor);
+
 
 #endif

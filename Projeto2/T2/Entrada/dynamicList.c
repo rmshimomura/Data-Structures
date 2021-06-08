@@ -12,6 +12,7 @@ typedef struct data {
     struct data* prev;
     void* element;
     double radiation;
+    double xMeteor, yMeteor;
 } data_t;
 
 typedef struct list {
@@ -36,6 +37,8 @@ void* insert(void* sequence, void* elemento){
     data_t* pontAux = calloc(1, sizeof(data_t));
     pontAux->element = elemento;
     pontAux->radiation = 0;
+    pontAux->xMeteor = 0;
+    pontAux->yMeteor = 0;
     if(listaAux->size == 0){
         pontAux->next = NULL;
         pontAux->prev = NULL;
@@ -67,6 +70,26 @@ double getDataRadiation(void* node){
 void setDataRadiation(void* node, double radiation){
     data_t* dataAux = node;
     dataAux->radiation = radiation;
+}
+
+double getDataxMeteor(void* node){
+    data_t* dataAux = node;
+    return dataAux->xMeteor;
+}
+
+void setDataxMeteor(void* node, double xMeteor){
+    data_t* dataAux = node;
+    dataAux->xMeteor = xMeteor;
+}
+
+double getDatayMeteor(void* node){
+    data_t* dataAux = node;
+    return dataAux->yMeteor;
+}
+
+void setDatayMeteor(void* node, double yMeteor){
+    data_t* dataAux = node;
+    dataAux->yMeteor = yMeteor;
 }
 
 void* getHead(void* sequence){

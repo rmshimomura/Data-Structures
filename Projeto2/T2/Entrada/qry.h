@@ -14,11 +14,11 @@ void fg(tree rectangleTree, tree circleTree, double x, double y, double radius, 
 void stopEveryone(tree circleTree, void* current_circle);
 void writeFgresults(tree rectangleTree, FILE* results, void* current_rect, double x, double y, double radius);
 void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, double xMeteor, double yMeteor, double radiation, path paths);
-void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircle);
-void imInOrderCircles(tree shadows, tree circleTree, node currentCircle, FILE* results, double radiation);
+void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircle, double xMeteor, double yMeteor);
+void imInOrderCircles(tree shadows, tree circleTree, node currentCircle, FILE* results, double radiation, double xMeteor, double yMeteor);
 void t30InOrderT30(tree circleTree, node currentCircle, FILE* results);
 void t30(tree circleTree, path paths);
-void nveInOrder(tree shadowTree, node currentListPosition, node currentPolygon, int* insideNPolygons, double x, double y);
+void nveInOrder(tree shadowTree, node currentListPosition, node currentPolygon, int* insideNPolygons, double x, double y, double xMeteor, double yMeteor);
 void nve(dynamicList listOfTreesShadows, path paths, double x, double y);
-void nveUpdateRadiation(void* currentPolygon, double x, double y, int* inside_polygons);
+void nveUpdateRadiation(void* currentPolygon, double x, double y, int* inside_polygons, double xMeteor, double yMeteor);
 #endif
