@@ -64,31 +64,25 @@ node KDcreateNewNode(item element) {
 }
 
 node KDsearchID(node current, char *id) {
-
     node_kd *aux = current;
 
-    if(aux){
-        
-        if(!strcmp(getRectangleId(aux->data), id)){
-            
+    if (aux) {
+        if (!strcmp(getRectangleId(aux->data), id)) {
             return aux;
         }
 
         node_kd *left = KDsearchID(aux->left, id);
 
-        if(left){
+        if (left) {
             return left;
         }
 
-        
         node_kd *right = KDsearchID(aux->right, id);
 
-        if(right){
+        if (right) {
             return right;
         }
-
     }
-
 }
 
 void KDsetRootNode(tree current, node modifyRoot) {
@@ -120,13 +114,10 @@ node KDinsertRect(tree initialTree, node initialNode, node generator, item eleme
             arvore->size++;
             noh->father = generator;
 
-
         } else if (getRectangleY(element) >= getRectangleY(noh->data)) {
-
             noh->right = KDinsertRect(initialTree, noh->right, noh, element, level + 1);
 
         } else if (getRectangleY(element) < getRectangleY(noh->data)) {
-
             noh->left = KDinsertRect(initialTree, noh->left, noh, element, level + 1);
         }
     }
@@ -157,13 +148,10 @@ node KDinsertCirc(tree initialTree, node initialNode, node generator, item eleme
             arvore->size++;
             noh->father = generator;
 
-
         } else if (getCircleY(element) >= getCircleY(noh->data)) {
-
             noh->right = KDinsertCirc(initialTree, noh->right, noh, element, level + 1);
 
         } else if (getCircleY(element) < getCircleY(noh->data)) {
-
             noh->left = KDinsertCirc(initialTree, noh->left, noh, element, level + 1);
         }
     }
@@ -217,10 +205,10 @@ void circleinorder(node initialNode) {
         if (getCircleY(aux->data)) {
             printf("[y = %.2lf] ", getCircleY(aux->data));
         }
-        if (getCircleOriginalX(aux->data)){
+        if (getCircleOriginalX(aux->data)) {
             printf("[originalX = %.2lf] ", getCircleOriginalX(aux->data));
         }
-        if (getCircleOriginalY(aux->data)){
+        if (getCircleOriginalY(aux->data)) {
             printf("[originalY = %.2lf] ", getCircleOriginalY(aux->data));
         }
         if (getCircleRadius(aux->data)) {
@@ -235,7 +223,7 @@ void circleinorder(node initialNode) {
         if (getCircleStroke(aux->data)) {
             printf("[stroke = %s] ", getCircleStroke(aux->data));
         }
-        if(getRunTo(aux->data)){
+        if (getRunTo(aux->data)) {
             printf("[Run to = %s] ", getRectangleId(KDgetData(getRunTo(aux->data))));
         }
         // if(getNearestDistance(aux->data) != __DBL_MAX__){
@@ -252,9 +240,9 @@ void KDdestroyRectTree(tree initialTree, node initialRoot) {
 
     if (auxRoot != NULL) {
         KDdestroyRectTree(auxTree, auxRoot->left);
-        if(auxRoot->data != NULL){
-            if(getVectorOfPeopleStarted(auxRoot->data)){
-                freeVectorOfPeople(auxRoot->data); 
+        if (auxRoot->data != NULL) {
+            if (getVectorOfPeopleStarted(auxRoot->data)) {
+                freeVectorOfPeople(auxRoot->data);
             }
         }
         free(auxRoot->data);
@@ -280,7 +268,7 @@ int KDgetSize(tree initialTree) {
     return aux->size;
 }
 
-void KDsetSize(tree initialTree, int size){
+void KDsetSize(tree initialTree, int size) {
     tree_kd *aux = initialTree;
     aux->size = size;
 }
@@ -295,27 +283,27 @@ char getType(tree initialTree) {
     return aux->type;
 }
 
-void* KDgetData(node current) {
+void *KDgetData(node current) {
     node_kd *aux = current;
     return aux->data;
 }
 
-void setBiggestX(tree initialTree, double value){
-    tree_kd* aux = initialTree;
+void setBiggestX(tree initialTree, double value) {
+    tree_kd *aux = initialTree;
     aux->biggestX = value;
 }
 
-void setBiggestY(tree initialTree, double value){
-    tree_kd* aux = initialTree;
+void setBiggestY(tree initialTree, double value) {
+    tree_kd *aux = initialTree;
     aux->biggestY = value;
 }
 
-double getBiggestX(tree initialTree){
-    tree_kd* aux = initialTree;
+double getBiggestX(tree initialTree) {
+    tree_kd *aux = initialTree;
     return aux->biggestX;
 }
 
-double getBiggestY(tree initialTree){
-    tree_kd* aux = initialTree;
+double getBiggestY(tree initialTree) {
+    tree_kd *aux = initialTree;
     return aux->biggestY;
 }

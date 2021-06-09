@@ -50,12 +50,9 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
     }
 
     for (int i = 0; i < getSize(segmentsList) * 2; i++) {
-
         if (strcmp(auxVertex[i].code, "RE") && strcmp(auxVertex[i].code, "DIV") && strcmp(getCode(auxVertex[i].pair), "RE") && strcmp(getCode(auxVertex[i].pair), "DIV") && auxVertex[i].analyzed == false && getAnalyzed(auxVertex[i].pair) == false) {
-
             segment_t* segment = calloc(1, sizeof(segment_t));
             segment_t* sidesOfShadowPolygon = calloc(7, sizeof(segment_t));
-
 
             int horizontal = 0;
             int vertical = 0;
@@ -122,7 +119,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
             // puts("----------------------------------------------------------------------------------------------");
 
             // printf("Analizando segmento (%.2lf, %.2lf) - (%.2lf, %.2lf) tipo = %s\n", segment->point1->x, segment->point1->y, segment->point2->x, segment->point2->y, vertical == 1 ? "vertical" : "horizontal");
-            
+
             segment_t* wallPointSegPoint1 = calloc(1, sizeof(segment_t));
 
             if (strcmp(segment->point1->code, "RE") && strcmp(segment->point1->code, "DIV")) {
@@ -191,7 +188,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
             }
 
             segment_t* wallPointSegPoint2 = calloc(1, sizeof(segment_t));
-            
+
             if (strcmp(segment->point2->code, "RE") && strcmp(segment->point2->code, "DIV")) {
                 // printf("\nsegment->point2: (%.2lf, %.2lf) angle = %.2lf code = %s type = %c\n", segment->point2->x, segment->point2->y, segment->point2->angle, segment->point2->code, segment->point2->type);
                 if ((segment->point2->angle >= 0 && segment->point2->angle < extremes[0].angle) || (segment->point2->angle >= extremes[3].angle && segment->point2->angle <= 360)) {
@@ -263,8 +260,8 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                 }
             }
 
-            if(!ok1) puts("OK1 fail");
-            if(!ok2) puts("OK2 fail");
+            if (!ok1) puts("OK1 fail");
+            if (!ok2) puts("OK2 fail");
 
             sidesOfShadowPolygon[0] = *(segment);
             sidesOfShadowPolygon[1] = *(wallPointSegPoint1);
@@ -272,19 +269,16 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
 
             (!root) ? root = NTinsertShadow(shadowPolygons, root, root, sidesOfShadowPolygon) : NTinsertShadow(shadowPolygons, root, root, sidesOfShadowPolygon);
 
-            
             free(segment);
 
             free(wallPointSegPoint1);
 
             free(wallPointSegPoint2);
 
-            
             setAnalyzed(auxVertex[i].pair, true);
             setAnalyzed(getPair(auxVertex[i].pair), true);
-            
+
             // puts("----------------------------------------------------------------------------------------------");
-            
         }
     }
 

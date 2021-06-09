@@ -76,9 +76,7 @@ int compareForQSort(const void* a, const void* b) {
 }
 
 void buildSegments(tree rectangleTree, dynamicList segmentsList, void* current_rect) {
-    
     if (current_rect) {
-        
         buildSegments(rectangleTree, segmentsList, KDgetLeftNode(current_rect));
 
         if (KDgetState(current_rect)) {
@@ -144,27 +142,23 @@ void buildSegments(tree rectangleTree, dynamicList segmentsList, void* current_r
             strcpy(segment4->point1->code, "ORIG");
             strcpy(segment4->point2->code, "ORIG");
 
-
             insert(segmentsList, segment1);
             insert(segmentsList, segment2);
             insert(segmentsList, segment3);
             insert(segmentsList, segment4);
-
         }
         buildSegments(rectangleTree, segmentsList, KDgetRightNode(current_rect));
     }
 }
 
-void checkNewDivisions(dynamicList segmentsList, double xMeteor, double yMeteor){
-    
+void checkNewDivisions(dynamicList segmentsList, double xMeteor, double yMeteor) {
     void* posAux = getHead(segmentsList);
 
-    while(posAux){
+    while (posAux) {
         int removed = 0;
         segment_t* segmentChecker = getItem(segmentsList, posAux);
         void* temp = getNext(segmentsList, posAux);
-        if((segmentChecker->point1->y < yMeteor && segmentChecker->point2->y > yMeteor) || (segmentChecker->point1->y > yMeteor && segmentChecker->point2->y < yMeteor)){
-            
+        if ((segmentChecker->point1->y < yMeteor && segmentChecker->point2->y > yMeteor) || (segmentChecker->point1->y > yMeteor && segmentChecker->point2->y < yMeteor)) {
             segment_t* newSegment1 = calloc(1, sizeof(segment_t));
             newSegment1->point1 = calloc(1, sizeof(point_t));
             newSegment1->point2 = calloc(1, sizeof(point_t));
@@ -183,7 +177,6 @@ void checkNewDivisions(dynamicList segmentsList, double xMeteor, double yMeteor)
 
             strcpy(newSegment1->point1->code, "ORIG");
             strcpy(newSegment1->point2->code, "DIV");
-
 
             segment_t* newSegment2 = calloc(1, sizeof(segment_t));
             newSegment2->point1 = calloc(1, sizeof(point_t));
@@ -208,15 +201,12 @@ void checkNewDivisions(dynamicList segmentsList, double xMeteor, double yMeteor)
             removeNode(segmentsList, posAux);
             removed = 1;
         }
-        if(removed){
-
+        if (removed) {
             posAux = temp;
-        }else{
+        } else {
             posAux = getNext(posAux, posAux);
         }
-
     }
-
 }
 
 void addWrapAroundRectangle(tree rectangleTree, tree circleTree, dynamicList segmentsList) {
@@ -294,7 +284,6 @@ void addWrapAroundRectangle(tree rectangleTree, tree circleTree, dynamicList seg
 }
 
 void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor) {
-    
     point_t* aux = calloc(2 * getSize(segmentsList), sizeof(point_t));
     void* pos = getHead(segmentsList);
 
@@ -605,7 +594,6 @@ void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor)
 
         aux[i] = *(dataAux->point1);
         aux[i + 1] = *(dataAux->point2);
-
     }
 
     qsort(aux, 2 * getSize(segmentsList), sizeof(point_t), compareForQSort);
@@ -706,22 +694,22 @@ void* getOrigin(void* point) {
     return aux->linkedTo;
 }
 
-bool getAnalyzed(void* point){
+bool getAnalyzed(void* point) {
     point_t* aux = point;
     return aux->analyzed;
 }
 
-void* atPosArray(void* array, int pos){
+void* atPosArray(void* array, int pos) {
     segment_t* aux = array;
     return &aux[pos];
 }
 
-void* getPair(void* point){
+void* getPair(void* point) {
     point_t* aux = point;
     return aux->pair;
 }
 
-void setAnalyzed(void* point, bool state){
+void setAnalyzed(void* point, bool state) {
     point_t* aux = point;
     aux->analyzed = state;
 }
@@ -738,7 +726,7 @@ void freePointsInfo(void* segment) {
     }
 }
 
-void destorySegment(void* segment){
+void destorySegment(void* segment) {
     segment_t* aux = segment;
     free(aux->point1);
     free(aux->point2);
@@ -755,7 +743,7 @@ void freeShadowPolygonsArray(void* array) {
     for (int i = 0; i < 7; i++) {
         if (!aux[i].point1 || !aux[i].point2 || !&aux[i]) {
             break;
-        }else{
+        } else {
             free(aux[i].point1);
             free(aux[i].point2);
         }

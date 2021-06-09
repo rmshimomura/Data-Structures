@@ -53,7 +53,6 @@ void printNves(FILE* nveTemp, FILE* svg_source) {
     double posX, posY, radiation;
     char color[8];
     while (fscanf(nveTemp, "%lf %lf %lf", &posX, &posY, &radiation) != -1) {
-        
         if (radiation < 25) {
             strcpy(color, "#00ffff");
         } else if (radiation >= 25 && radiation < 50) {
@@ -76,12 +75,11 @@ void printNves(FILE* nveTemp, FILE* svg_source) {
     }
 }
 
-void printIms(FILE* imExist, FILE* svg_source){
+void printIms(FILE* imExist, FILE* svg_source) {
     double x, y, radius;
-    while(fscanf(imExist, "%lf %lf %lf", &x, &y, &radius) != -1){
+    while (fscanf(imExist, "%lf %lf %lf", &x, &y, &radius) != -1) {
         fprintf(svg_source, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"%.2lf\" stroke=\"dimgrey\" stroke-width=\".5\" fill=\"dimgrey\" fill-opacity = \"0.1\" />\n", x, y, radius);
     }
-    
 }
 
 void writeOnSvg(FILE* svg_source, tree rectTree, tree circleTree, path paths) {
@@ -105,7 +103,7 @@ void writeOnSvg(FILE* svg_source, tree rectTree, tree circleTree, path paths) {
         remove("nveTemp.txt");
     }
     FILE* imExist = fopen("imTemp.txt", "r");
-    if(imExist){
+    if (imExist) {
         setvbuf(imExist, 0, _IONBF, 0);
         printIms(imExist, svg_source);
         fclose(imExist);

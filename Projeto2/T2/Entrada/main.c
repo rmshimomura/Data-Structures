@@ -1,14 +1,14 @@
 #include "bibliotecas.h"
 #include "circle.h"
+#include "dynamicList.h"
 #include "kdTree.h"
+#include "normalTree.h"
 #include "paths.h"
+#include "polygon.h"
 #include "rectangle.h"
+#include "segments.h"
 #include "svg.h"
 #include "system.h"
-#include "segments.h"
-#include "dynamicList.h"
-#include "normalTree.h"
-#include "polygon.h"
 
 int main(int argc, char** argv) {
     path paths = createPathsGerais();

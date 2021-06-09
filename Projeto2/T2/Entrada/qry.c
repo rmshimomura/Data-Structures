@@ -18,22 +18,23 @@ int inside(double x1, double y1, double p1Width, double p1Height, double x2, dou
     }
 }
 
-int get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y, float p2_x, float p2_y, float p3_x, float p3_y){
+int get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y, float p2_x, float p2_y, float p3_x, float p3_y) {
     float s1_x, s1_y, s2_x, s2_y;
-    s1_x = p1_x - p0_x;     s1_y = p1_y - p0_y;
-    s2_x = p3_x - p2_x;     s2_y = p3_y - p2_y;
+    s1_x = p1_x - p0_x;
+    s1_y = p1_y - p0_y;
+    s2_x = p3_x - p2_x;
+    s2_y = p3_y - p2_y;
 
     float s, t;
     s = (-s1_y * (p0_x - p2_x) + s1_x * (p0_y - p2_y)) / (-s2_x * s1_y + s1_x * s2_y);
-    t = ( s2_x * (p0_y - p2_y) - s2_y * (p0_x - p2_x)) / (-s2_x * s1_y + s1_x * s2_y);
+    t = (s2_x * (p0_y - p2_y) - s2_y * (p0_x - p2_x)) / (-s2_x * s1_y + s1_x * s2_y);
 
-    if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
-    {
+    if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
         // Collision detected
         return 1;
     }
 
-    return 0; // No collision
+    return 0;  // No collision
 }
 
 void dpiInOrder(tree rectangleTree, FILE* svg_source, node currentNode, double x, double y) {
@@ -116,8 +117,7 @@ void fgCheckShelteredRectangle(tree rectangleTree, tree circleTree, void* curren
             if (!getVectorOfPeopleStarted(KDgetData(current_rectangle))) {
                 setVectorOfPeopleStarted(KDgetData(current_rectangle), 1);
             }
-            // setNearestDistance(KDgetData(current_circle), sqrt(pow(getCircleX(KDgetData(current_circle)) - getRectangleCenterX(KDgetData(current_rectangle)), 2) + pow((getCircleY(KDgetData(current_circle)) - getRectangleCenterY(KDgetData(current_rectangle))), 2)));
-            // setRunTo(KDgetData(current_circle), current_rectangle);
+
             setFg(KDgetData(current_circle), false);
             allocateVectorOfPeople(KDgetData(current_rectangle));
             int exist = 0;
@@ -276,7 +276,7 @@ void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircl
             }
 
             if (get_line_intersection(getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2), getCircleX(KDgetData(currentCircle)), getCircleY(KDgetData(currentCircle)), xMeteor, yMeteor)) {
-                if(getCircleX(KDgetData(currentCircle)) != getPointX(point1) && getCircleX(KDgetData(currentCircle)) != getPointX(point2) && getCircleY(KDgetData(currentCircle)) != getPointY(point1) && getCircleY(KDgetData(currentCircle)) != getPointY(point2))
+                if (getCircleX(KDgetData(currentCircle)) != getPointX(point1) && getCircleX(KDgetData(currentCircle)) != getPointX(point2) && getCircleY(KDgetData(currentCircle)) != getPointY(point1) && getCircleY(KDgetData(currentCircle)) != getPointY(point2))
                     intersections++;
             }
         }
@@ -375,7 +375,7 @@ void nveUpdateRadiation(void* currentPolygon, double xNve, double yNve, int* ins
         }
 
         if (get_line_intersection(getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2), xNve, yNve, xMeteor, yMeteor)) {
-            if(xNve != getPointX(point1) && xNve != getPointX(point2) && yNve != getPointY(point1) && yNve != getPointY(point2))
+            if (xNve != getPointX(point1) && xNve != getPointX(point2) && yNve != getPointY(point1) && yNve != getPointY(point2))
                 intersections++;
             // printf("Intercept with (%.2lf, %.2lf) - (%.2lf, %.2lf)\n", getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2));
         }
