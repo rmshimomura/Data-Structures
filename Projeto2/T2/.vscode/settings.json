@@ -18,6 +18,8 @@
         "unordered_map": "c",
         "vector": "c",
         "ostream": "c",
-        "cstdio": "cpp"
+        "cstdio": "cpp",
+        "cmath": "c",
+        "typeinfo": "c"
     }
 }

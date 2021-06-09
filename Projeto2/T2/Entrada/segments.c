@@ -96,19 +96,13 @@ int compareForQSort(const void* a, const void* b) {
     const point_t* tempA = (point_t*)a;
     const point_t* tempB = (point_t*)b;
 
-    if (tempA->angle > tempB->angle) {
-        return 1;
-    } else if (tempA->angle < tempB->angle) {
-        return -1;
-    } else if (tempA->distance > tempB->distance) {
-        return -1;
-    } else if (tempA->distance < tempB->distance) {
-        return 1;
-    } else if (tempA->type == 's' && tempB->type == 'e') {
-        return -1;
-    } else if (tempA->type == 'e' && tempB->type == 's') {
-        return 1;
-    }
+    if (tempA->angle > tempB->angle) return 1;
+    else if (tempA->angle < tempB->angle) return -1;
+    else if (tempA->distance > tempB->distance) return -1;
+    else if (tempA->distance < tempB->distance) return 1;
+    else if (tempA->type == 's' && tempB->type == 'e') return -1;
+    else if (tempA->type == 'e' && tempB->type == 's') return 1;
+    
     return 0;
 }
 
@@ -217,6 +211,18 @@ void checkNewDivisions(dynamicList segmentsList, double xMeteor, double yMeteor)
                 strcpy(newSegment1->point1->code, "ORIG");
                 strcpy(newSegment1->point2->code, "DIV");
 
+                if(newSegment1->point1->y > newSegment1->point2->y){
+                    newSegment1->point1->type = 'e';
+                    newSegment1->point2->type = 's';
+                    
+                }
+                if(newSegment1->point1->y < newSegment1->point2->y){
+                    newSegment1->point1->type = 's';
+                    newSegment1->point2->type = 'e';
+                    
+                }
+                
+
                 segment_t* newSegment2 = calloc(1, sizeof(segment_t));
                 newSegment2->point1 = calloc(1, sizeof(point_t));
                 newSegment2->point2 = calloc(1, sizeof(point_t));
@@ -235,6 +241,18 @@ void checkNewDivisions(dynamicList segmentsList, double xMeteor, double yMeteor)
 
                 strcpy(newSegment2->point1->code, "ORIG");
                 strcpy(newSegment2->point2->code, "DIV");
+
+                if(newSegment2->point1->y > newSegment2->point2->y){
+                    newSegment2->point1->type = 'e';
+                    newSegment2->point2->type = 's';
+                   
+                }
+                if(newSegment2->point1->y < newSegment2->point2->y){
+                    newSegment2->point1->type = 's';
+                    newSegment2->point2->type = 'e';
+                    
+                }
+
                 insert(segmentsList, newSegment1);
                 insert(segmentsList, newSegment2);
                 removeNode(segmentsList, posAux);
@@ -393,8 +411,6 @@ void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor)
                 dataAux->point2->quadrant = 1;
             }
         }
-
-        // printf("Aux[i] = (%.2lf, %.2lf)Aux[i+1] = (%.2lf, %.2lf)\n", aux[i].x, aux[i].y, aux[i+1].x, aux[i+1].y);
        
         switch (dataAux->point1->quadrant) {
             case 1:
@@ -631,18 +647,21 @@ void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor)
                 break;
         }
         //============================================================================
-
+        
         aux[i] = *(dataAux->point1);
         aux[i + 1] = *(dataAux->point2);
+        
     }
-
+    
     qsort(aux, 2 * getSize(segmentsList), sizeof(point_t), compareForQSort);
-    puts("=======================================");
-    for(int i = 0; i < 2 * getSize(segmentsList); i++){
-        if(!strcmp(aux[i].code, "DIV")) 
-            printf("aux[%d] = (%.2lf, %.2lf) type = %c angle = %.2lf connected to (%.2lf, %.2lf) type = %c angle = %.2lf\n", i, aux[i].x, aux[i].y, aux[i].type, aux[i].angle ,getPointX(aux[i].pair), getPointY(aux[i].pair), getType(aux[i].pair), getAngle(aux[i].pair));
-    }
-    puts("=======================================\n\n\n\n\n");
+
+    // puts("=======================================");
+    // for(int i = 0; i < 2 * getSize(segmentsList); i++){
+    //     if(!strcmp(aux[i].code, "DIV")) 
+    //         printf("aux[%d] = (%.2lf, %.2lf) type = %c angle = %.2lf connected to (%.2lf, %.2lf) type = %c angle = %.2lf\n", i, aux[i].x, aux[i].y, aux[i].type, aux[i].angle , getPointX(aux[i].pair), getPointY(aux[i].pair), getPointType(aux[i].pair), getAngle(aux[i].pair));
+    // }
+    // puts("=======================================\n\n\n\n\n");
+    
     return aux;
 }
 
