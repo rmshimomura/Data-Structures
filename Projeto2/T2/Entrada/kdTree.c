@@ -6,7 +6,7 @@
 typedef struct node_kd {
     struct node_kd *left;
     struct node_kd *right;
-    struct node_kd *father;
+
     void *data;
     bool activate;
 
@@ -99,7 +99,7 @@ node KDinsertRect(tree initialTree, node initialNode, node generator, item eleme
         if (!noh) {
             noh = KDcreateNewNode(element);
             arvore->size++;
-            noh->father = nohPai;
+            
         } else if (getRectangleX(element) >= getRectangleX(noh->data)) {
             noh->right = KDinsertRect(initialTree, noh->right, noh, element, level + 1);
 
@@ -112,7 +112,7 @@ node KDinsertRect(tree initialTree, node initialNode, node generator, item eleme
         if (!noh) {
             noh = KDcreateNewNode(element);
             arvore->size++;
-            noh->father = generator;
+            
 
         } else if (getRectangleY(element) >= getRectangleY(noh->data)) {
             noh->right = KDinsertRect(initialTree, noh->right, noh, element, level + 1);
@@ -133,7 +133,7 @@ node KDinsertCirc(tree initialTree, node initialNode, node generator, item eleme
         if (!noh) {
             noh = KDcreateNewNode(element);
             arvore->size++;
-            noh->father = nohPai;
+            
         } else if (getCircleX(element) >= getCircleX(noh->data)) {
             noh->right = KDinsertCirc(initialTree, noh->right, noh, element, level + 1);
 
@@ -146,7 +146,7 @@ node KDinsertCirc(tree initialTree, node initialNode, node generator, item eleme
         if (!noh) {
             noh = KDcreateNewNode(element);
             arvore->size++;
-            noh->father = generator;
+            
 
         } else if (getCircleY(element) >= getCircleY(noh->data)) {
             noh->right = KDinsertCirc(initialTree, noh->right, noh, element, level + 1);

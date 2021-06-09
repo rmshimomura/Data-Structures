@@ -479,6 +479,9 @@ void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, dou
     fprintf(tempIm, "%.6lf %.6lf %.6lf\n", xMeteor, yMeteor, radiation / 3);
     // printSvgShadows(shadows, getBiggestX(rectangleTree) > getBiggestX(circleTree) ? getBiggestX(rectangleTree) + 100 : getBiggestX(circleTree) + 100, getBiggestY(rectangleTree) > getBiggestY(circleTree) ? getBiggestY(rectangleTree) + 100 : getBiggestY(circleTree) + 100);
     checkNewDivisions(segments, xMeteor, yMeteor);
+    tree visible = NTcreateTree();
+    freeStyleVisibility(visible, segments, xMeteor, yMeteor);
+    free(visible);
     void* auxNode = insert(listOfTreesShadows, shadows);
     setDataRadiation(auxNode, radiation);
     setDataxMeteor(auxNode, xMeteor);

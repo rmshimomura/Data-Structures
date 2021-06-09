@@ -27,9 +27,11 @@ bool getAnalyzed(void* point);
 void setAnalyzed(void* point, bool state);
 void freeShadowPolygonsArray(void* array);
 void* getPair(void* point);
+int determinant(void* node1, void* node2);
 void constructTempSVG(void* vertexArray, dynamicList segmentsList);  //Debug
 void buildLines(void* vertexArray, dynamicList segmentsList, double xMeteor, double yMeteor, double biggestX, double biggestY);
 void addWrapAroundRectangle(tree rectangleTree, tree circleTree, dynamicList segmentsList);
 void destorySegment(void* segment);
+void freeStyleVisibility(tree visibilityPolygon, dynamicList listOfSegments, double xMeteor, double yMeteor);
 
 #endif

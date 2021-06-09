@@ -7,10 +7,7 @@
 typedef struct node_t {
     struct node_t* left;
     struct node_t* right;
-    struct node_t* father;
     void* data;
-    int height;
-    int depth;
     bool activated;
 
 } node_t;
@@ -32,7 +29,6 @@ node NTcreateNewNode(item element) {
     node_t* aux = calloc(1, sizeof(node_t));
     aux->data = element;
     aux->left = aux->right = NULL;
-    aux->depth = aux->height = 0;
     aux->activated = false;
     return aux;
 }
@@ -74,7 +70,6 @@ node NTinsertShadow(tree initialTree, node initialNode, node generator, item ele
     if (!nodeAux) {
         nodeAux = NTcreateNewNode(element);
         treeAux->size++;
-        nodeAux->father = generator;
 
     } else if (getMinimumX(element) >= getMinimumX(nodeAux->data)) {
         nodeAux->right = NTinsertShadow(initialTree, nodeAux->right, nodeAux, element);
@@ -121,8 +116,8 @@ node_t* minValueNode(node_t* node){
  
     return current;
 }
-/*
-void* NTdeleteNode(void* root, void* toRemove, int(*compare_function)(void*, void*)){
+
+void* NTdeleteNode(void* root, void* toRemove, int (*compare_function)(void*, void*)){
     
     node_t* auxRoot = root; 
     node_t* auxToRemove = toRemove;
@@ -167,4 +162,20 @@ void* NTdeleteNode(void* root, void* toRemove, int(*compare_function)(void*, voi
     return auxRoot;
 
 }
-*/
+
+void* NTinsertSegment(tree activeSegmentsTree, node initialNode, void* active_segment, int(*compare_function)(void*, void*)){
+    tree_t* treeAux = activeSegmentsTree;
+    node_t* nodeAux = initialNode;
+
+    if(!nodeAux)    
+        nodeAux = NTcreateNewNode(active_segment);
+
+    else if(compare_function(nodeAux->data, NTgetData(active_segment)) == 1)
+        nodeAux->left = NTinsertSegment(activeSegmentsTree ,nodeAux->left, active_segment, compare_function);
+
+    else if(compare_function(nodeAux->data, NTgetData(active_segment)) == -1)
+        nodeAux->right = NTinsertSegment(activeSegmentsTree ,nodeAux->right, active_segment, compare_function);
+    
+    return nodeAux;
+
+}

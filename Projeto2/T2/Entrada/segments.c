@@ -55,16 +55,43 @@ void* getLinkedTo(void* point) {
     return aux->linkedTo;
 }
 
-/*
 int determinant(void* node1, void* node2){
-    
+
+    segment_t* auxNode1 = node1;
+    segment_t* auxNode2 = node2;
+    double x1, y1, x2, y2, x3, y3;
+
+    if(auxNode1->point1->type == 's'){
+        x1 = auxNode1->point1->x;
+        y1 = auxNode1->point1->y;
+        x2 = auxNode1->point2->x;
+        y2 = auxNode1->point2->y;
+    }else if(auxNode1->point1->type == 'e'){
+        x1 = auxNode1->point2->x;
+        y1 = auxNode1->point2->y;
+        x2 = auxNode1->point1->x;
+        y2 = auxNode1->point1->y;
+    }
+
+    if(auxNode2->point1->type == 's'){
+        
+        x3 = auxNode2->point1->x;
+        y3 = auxNode2->point1->y;
+        
+    }else if(auxNode2->point1->type == 'e'){
+        
+        x3 = auxNode2->point2->x;
+        y3 = auxNode2->point2->y;
+        
+    }
+
     if (x1*y2 + x2*y3 + x3*y1 - x3*y2 - x2*y1 - x1*y3 > 0) return 1;
 
     else if(x1*y2 + x2*y3 + x3*y1 - x3*y2 - x2*y1 - x1*y3 < 0) return -1;
 
     return 0;
 }
-*/
+
 int compareForQSort(const void* a, const void* b) {
     const point_t* tempA = (point_t*)a;
     const point_t* tempB = (point_t*)b;
@@ -168,7 +195,7 @@ void checkNewDivisions(dynamicList segmentsList, double xMeteor, double yMeteor)
         int removed = 0;
         segment_t* segmentChecker = getItem(segmentsList, posAux);
         void* temp = getNext(segmentsList, posAux);
-        if ((segmentChecker->point1->y < yMeteor && segmentChecker->point2->y > yMeteor) || (segmentChecker->point1->y > yMeteor && segmentChecker->point2->y < yMeteor)) {
+        if ((segmentChecker->point1->y < yMeteor && segmentChecker->point2->y > yMeteor && segmentChecker->point1->x == segmentChecker->point2->x && segmentChecker->point1->x >= xMeteor) || (segmentChecker->point1->y > yMeteor && segmentChecker->point2->y < yMeteor && segmentChecker->point1->x == segmentChecker->point2->x && segmentChecker->point1->x >= xMeteor)) {
             segment_t* newSegment1 = calloc(1, sizeof(segment_t));
             newSegment1->point1 = calloc(1, sizeof(point_t));
             newSegment1->point2 = calloc(1, sizeof(point_t));
@@ -607,7 +634,11 @@ void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor)
     }
 
     qsort(aux, 2 * getSize(segmentsList), sizeof(point_t), compareForQSort);
-
+    // puts("=======================================");
+    // for(int i = 0; i < 2 * getSize(segmentsList); i++){
+    //     printf("aux[%d] = (%.2lf, %.2lf) angle = %.2lf | CODE = %s type = %c\n", i, aux[i].x, aux[i].y, aux[i].angle,aux[i].code, aux[i].type);
+    // }
+    // puts("=======================================\n\n\n\n\n");
     return aux;
 }
 
@@ -758,4 +789,13 @@ void freeShadowPolygonsArray(void* array) {
             free(aux[i].point2);
         }
     }
+}
+
+void freeStyleVisibility(tree visibilityPolygon, dynamicList listOfSegments, double xMeteor, double yMeteor){
+    
+    void* vertexArray = buildVertexArray(listOfSegments, xMeteor, yMeteor);
+    
+    free(vertexArray);
+
+
 }
