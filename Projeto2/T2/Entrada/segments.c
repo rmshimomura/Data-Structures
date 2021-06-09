@@ -212,8 +212,10 @@ void checkNewDivisions(dynamicList segmentsList, double xMeteor, double yMeteor)
                 strcpy(newSegment1->point2->code, "DIV");
 
                 if(newSegment1->point1->y > newSegment1->point2->y){
+                    
                     newSegment1->point1->type = 'e';
                     newSegment1->point2->type = 's';
+                    
                     
                 }
                 if(newSegment1->point1->y < newSegment1->point2->y){
@@ -251,6 +253,18 @@ void checkNewDivisions(dynamicList segmentsList, double xMeteor, double yMeteor)
                     newSegment2->point1->type = 's';
                     newSegment2->point2->type = 'e';
                     
+                }
+
+                if(newSegment1->point1->y > newSegment2->point1->y){
+                    strcpy(newSegment1->point1->code, "SI");
+                    strcpy(newSegment1->point2->code, "SI");
+                    strcpy(newSegment2->point1->code, "SF");
+                    strcpy(newSegment2->point2->code, "SF");
+                }else if(newSegment1->point1->y < newSegment2->point1->y){
+                    strcpy(newSegment2->point1->code, "SI");
+                    strcpy(newSegment2->point2->code, "SI");
+                    strcpy(newSegment1->point1->code, "SF");
+                    strcpy(newSegment1->point2->code, "SF");
                 }
 
                 insert(segmentsList, newSegment1);
@@ -815,10 +829,22 @@ void freeShadowPolygonsArray(void* array) {
 }
 
 void freeStyleVisibility(tree visibilityPolygon, dynamicList listOfSegments, double xMeteor, double yMeteor){
-    
+/*    
     void* vertexArray = buildVertexArray(listOfSegments, xMeteor, yMeteor);
     
+    void* rootAux = NTgetRootNode(visibilityPolygon);
+
+    void* posAuxList = getHead(listOfSegments);
+
+    for(int i = 0; i < getSize(listOfSegments); i++){
+        segment_t* tempSegment = getItem(listOfSegments, posAuxList);
+        if(!strcmp(tempSegment->point2->type, "DIV") && tempSegment->point1->y){
+
+        }
+        posAuxList = getNext(posAuxList);
+    }
+
     free(vertexArray);
 
-
+*/
 }

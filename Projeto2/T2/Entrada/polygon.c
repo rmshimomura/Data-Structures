@@ -50,7 +50,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
     }
 
     for (int i = 0; i < getSize(segmentsList) * 2; i++) {
-        if (strcmp(auxVertex[i].code, "RE") && strcmp(auxVertex[i].code, "DIV") && strcmp(getCode(auxVertex[i].pair), "RE") && strcmp(getCode(auxVertex[i].pair), "DIV") && auxVertex[i].analyzed == false && getAnalyzed(auxVertex[i].pair) == false) {
+        if (!strcmp(auxVertex[i].code, "ORIG") && !strcmp(getCode(auxVertex[i].pair), "ORIG") && auxVertex[i].analyzed == false && getAnalyzed(auxVertex[i].pair) == false) {
             segment_t* segment = calloc(1, sizeof(segment_t));
             segment_t* sidesOfShadowPolygon = calloc(7, sizeof(segment_t));
 
