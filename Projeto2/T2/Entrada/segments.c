@@ -55,6 +55,16 @@ void* getLinkedTo(void* point) {
     return aux->linkedTo;
 }
 
+/*
+int determinant(void* node1, void* node2){
+    
+    if (x1*y2 + x2*y3 + x3*y1 - x3*y2 - x2*y1 - x1*y3 > 0) return 1;
+
+    else if(x1*y2 + x2*y3 + x3*y1 - x3*y2 - x2*y1 - x1*y3 < 0) return -1;
+
+    return 0;
+}
+*/
 int compareForQSort(const void* a, const void* b) {
     const point_t* tempA = (point_t*)a;
     const point_t* tempB = (point_t*)b;
