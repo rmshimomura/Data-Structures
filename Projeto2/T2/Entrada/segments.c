@@ -196,47 +196,50 @@ void checkNewDivisions(dynamicList segmentsList, double xMeteor, double yMeteor)
         segment_t* segmentChecker = getItem(segmentsList, posAux);
         void* temp = getNext(segmentsList, posAux);
         if ((segmentChecker->point1->y < yMeteor && segmentChecker->point2->y > yMeteor && segmentChecker->point1->x == segmentChecker->point2->x && segmentChecker->point1->x >= xMeteor) || (segmentChecker->point1->y > yMeteor && segmentChecker->point2->y < yMeteor && segmentChecker->point1->x == segmentChecker->point2->x && segmentChecker->point1->x >= xMeteor)) {
-            segment_t* newSegment1 = calloc(1, sizeof(segment_t));
-            newSegment1->point1 = calloc(1, sizeof(point_t));
-            newSegment1->point2 = calloc(1, sizeof(point_t));
+            if(strcmp(segmentChecker->point1->code, "RE") && strcmp(segmentChecker->point2->code, "RE")){
 
-            newSegment1->point1->x = segmentChecker->point1->x;
-            newSegment1->point1->y = segmentChecker->point1->y;
+                segment_t* newSegment1 = calloc(1, sizeof(segment_t));
+                newSegment1->point1 = calloc(1, sizeof(point_t));
+                newSegment1->point2 = calloc(1, sizeof(point_t));
 
-            newSegment1->point2->x = segmentChecker->point1->x;
-            newSegment1->point2->y = yMeteor;
+                newSegment1->point1->x = segmentChecker->point1->x;
+                newSegment1->point1->y = segmentChecker->point1->y;
 
-            newSegment1->point1->linkedTo = newSegment1;
-            newSegment1->point2->linkedTo = newSegment1;
+                newSegment1->point2->x = segmentChecker->point1->x;
+                newSegment1->point2->y = yMeteor;
 
-            newSegment1->point1->pair = newSegment1->point2;
-            newSegment1->point2->pair = newSegment1->point1;
+                newSegment1->point1->linkedTo = newSegment1;
+                newSegment1->point2->linkedTo = newSegment1;
 
-            strcpy(newSegment1->point1->code, "ORIG");
-            strcpy(newSegment1->point2->code, "DIV");
+                newSegment1->point1->pair = newSegment1->point2;
+                newSegment1->point2->pair = newSegment1->point1;
 
-            segment_t* newSegment2 = calloc(1, sizeof(segment_t));
-            newSegment2->point1 = calloc(1, sizeof(point_t));
-            newSegment2->point2 = calloc(1, sizeof(point_t));
+                strcpy(newSegment1->point1->code, "ORIG");
+                strcpy(newSegment1->point2->code, "DIV");
 
-            newSegment2->point1->x = segmentChecker->point2->x;
-            newSegment2->point1->y = segmentChecker->point2->y;
+                segment_t* newSegment2 = calloc(1, sizeof(segment_t));
+                newSegment2->point1 = calloc(1, sizeof(point_t));
+                newSegment2->point2 = calloc(1, sizeof(point_t));
 
-            newSegment2->point2->x = segmentChecker->point2->x;
-            newSegment2->point2->y = yMeteor;
+                newSegment2->point1->x = segmentChecker->point2->x;
+                newSegment2->point1->y = segmentChecker->point2->y;
 
-            newSegment2->point1->linkedTo = newSegment2;
-            newSegment2->point2->linkedTo = newSegment2;
+                newSegment2->point2->x = segmentChecker->point2->x;
+                newSegment2->point2->y = yMeteor;
 
-            newSegment2->point1->pair = newSegment2->point2;
-            newSegment2->point2->pair = newSegment2->point1;
+                newSegment2->point1->linkedTo = newSegment2;
+                newSegment2->point2->linkedTo = newSegment2;
 
-            strcpy(newSegment2->point1->code, "ORIG");
-            strcpy(newSegment2->point2->code, "DIV");
-            insert(segmentsList, newSegment1);
-            insert(segmentsList, newSegment2);
-            removeNode(segmentsList, posAux);
-            removed = 1;
+                newSegment2->point1->pair = newSegment2->point2;
+                newSegment2->point2->pair = newSegment2->point1;
+
+                strcpy(newSegment2->point1->code, "ORIG");
+                strcpy(newSegment2->point2->code, "DIV");
+                insert(segmentsList, newSegment1);
+                insert(segmentsList, newSegment2);
+                removeNode(segmentsList, posAux);
+                removed = 1;
+            }
         }
         if (removed) {
             posAux = temp;
@@ -323,7 +326,6 @@ void addWrapAroundRectangle(tree rectangleTree, tree circleTree, dynamicList seg
 void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor) {
     point_t* aux = calloc(2 * getSize(segmentsList), sizeof(point_t));
     void* pos = getHead(segmentsList);
-
     for (int i = 0; i < getSize(segmentsList) * 2; i += 2) {
         segment_t* dataAux = getItem(segmentsList, pos);
         pos = getNext(segmentsList, pos);
@@ -393,6 +395,7 @@ void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor)
         }
 
         // printf("Aux[i] = (%.2lf, %.2lf)Aux[i+1] = (%.2lf, %.2lf)\n", aux[i].x, aux[i].y, aux[i+1].x, aux[i+1].y);
+       
         switch (dataAux->point1->quadrant) {
             case 1:
 
@@ -634,11 +637,12 @@ void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor)
     }
 
     qsort(aux, 2 * getSize(segmentsList), sizeof(point_t), compareForQSort);
-    // puts("=======================================");
-    // for(int i = 0; i < 2 * getSize(segmentsList); i++){
-    //     printf("aux[%d] = (%.2lf, %.2lf) angle = %.2lf | CODE = %s type = %c\n", i, aux[i].x, aux[i].y, aux[i].angle,aux[i].code, aux[i].type);
-    // }
-    // puts("=======================================\n\n\n\n\n");
+    puts("=======================================");
+    for(int i = 0; i < 2 * getSize(segmentsList); i++){
+        if(!strcmp(aux[i].code, "DIV")) 
+            printf("aux[%d] = (%.2lf, %.2lf) type = %c angle = %.2lf connected to (%.2lf, %.2lf) type = %c angle = %.2lf\n", i, aux[i].x, aux[i].y, aux[i].type, aux[i].angle ,getPointX(aux[i].pair), getPointY(aux[i].pair), getType(aux[i].pair), getAngle(aux[i].pair));
+    }
+    puts("=======================================\n\n\n\n\n");
     return aux;
 }
 
