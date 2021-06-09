@@ -116,9 +116,9 @@ void fgCheckShelteredRectangle(tree rectangleTree, tree circleTree, void* curren
             if (!getVectorOfPeopleStarted(KDgetData(current_rectangle))) {
                 setVectorOfPeopleStarted(KDgetData(current_rectangle), 1);
             }
-            setNearestDistance(KDgetData(current_circle), sqrt(pow(getCircleX(KDgetData(current_circle)) - getRectangleCenterX(KDgetData(current_rectangle)), 2) + pow((getCircleY(KDgetData(current_circle)) - getRectangleCenterY(KDgetData(current_rectangle))), 2)));
-            setRunTo(KDgetData(current_circle), current_rectangle);
-            setFg(KDgetData(current_circle), true);
+            // setNearestDistance(KDgetData(current_circle), sqrt(pow(getCircleX(KDgetData(current_circle)) - getRectangleCenterX(KDgetData(current_rectangle)), 2) + pow((getCircleY(KDgetData(current_circle)) - getRectangleCenterY(KDgetData(current_rectangle))), 2)));
+            // setRunTo(KDgetData(current_circle), current_rectangle);
+            setFg(KDgetData(current_circle), false);
             allocateVectorOfPeople(KDgetData(current_rectangle));
             int exist = 0;
             for (int i = 0; i < getNumberOfPeopleInside(KDgetData(current_rectangle)); i++) {  //Compare if someone that is already inside is trying to enter again
@@ -300,11 +300,11 @@ void imInOrderCircles(tree shadows, tree circleTree, node currentCircle, FILE* r
         setCircleFill(KDgetData(currentCircle), colorPicker(getRadiation(KDgetData(currentCircle))));
         setCircleStroke(KDgetData(currentCircle), colorPicker(getRadiation(KDgetData(currentCircle))));
         if (getRadiation(KDgetData(currentCircle)) >= 1000 && getRadiation(KDgetData(currentCircle)) < 8000) {
-            fprintf(results, "%s morte iminente --> radiacao = %.2lf \n", getCircleId(KDgetData(currentCircle)), getRadiation(KDgetData(currentCircle)));
+            fprintf(results, "%s morte iminente\n", getCircleId(KDgetData(currentCircle)));
             setCircleMarkedForDeath(KDgetData(currentCircle), true);
         } else if (getRadiation(KDgetData(currentCircle)) >= 8000) {
             if (getCircleAlive(KDgetData(currentCircle))) {
-                fprintf(results, "%s morte instantanea --> radiacao = %.2lf \n", getCircleId(KDgetData(currentCircle)), getRadiation(KDgetData(currentCircle)));
+                fprintf(results, "%s morte instantanea\n", getCircleId(KDgetData(currentCircle)));
                 setCircleAlive(KDgetData(currentCircle), false);
             }
         }
