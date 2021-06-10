@@ -18,10 +18,6 @@ int inside(double x1, double y1, double p1Width, double p1Height, double x2, dou
 
 }
 
-double radius(double x1, double y1, double x2, double y2){
-    return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
-}
-
 int get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y, float p2_x, float p2_y, float p3_x, float p3_y) {
     
     float s1_x, s1_y, s2_x, s2_y;

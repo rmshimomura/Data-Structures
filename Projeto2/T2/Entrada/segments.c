@@ -106,6 +106,13 @@ int compareForQSort(const void* a, const void* b) {
     return 0;
 }
 
+void* radius(point_t* point1, point_t* point2){ //Need to fix!
+    segment_t* aux = calloc(1, sizeof(segment_t));
+    aux->point1->x = point1->x;     aux->point1->y = point1->y;
+    aux->point2->x = point2->x;     aux->point2->y = point2->y;
+    return aux;
+}
+
 void buildSegments(tree rectangleTree, dynamicList segmentsList, void* current_rect) {
     if (current_rect) {
         buildSegments(rectangleTree, segmentsList, KDgetLeftNode(current_rect));
