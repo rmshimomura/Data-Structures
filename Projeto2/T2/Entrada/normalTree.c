@@ -97,6 +97,22 @@ void freeNTTree(tree initialTree, node initialRoot) {
     }
 }
 
+void freeSegmentsTree(tree initialTree, node initialNode){
+    
+    node_t* auxRoot = initialNode;
+
+    if (auxRoot->left)
+        freeSegmentsTree(initialTree, auxRoot->left);
+    
+    auxRoot->data = NULL;
+
+    if(auxRoot->right)
+        freeSegmentsTree(initialTree, auxRoot->right);
+        
+    free(auxRoot);
+
+}
+
 void* NTgetData(node current) {
     node_t* aux = current;
     return aux->data;
@@ -167,15 +183,17 @@ void* NTinsertSegment(tree activeSegmentsTree, node initialNode, void* active_se
     tree_t* treeAux = activeSegmentsTree;
     node_t* nodeAux = initialNode;
 
-    if(!nodeAux)    
+    if(!nodeAux)    {
         nodeAux = NTcreateNewNode(active_segment);
+        treeAux->size++;
+    }
 
-    else if(compare_function(nodeAux->data, NTgetData(active_segment)) == 1)
-        nodeAux->left = NTinsertSegment(activeSegmentsTree ,nodeAux->left, active_segment, compare_function);
+    else if(compare_function(nodeAux->data, (active_segment)) == 1)
+        nodeAux->left = NTinsertSegment(activeSegmentsTree , nodeAux->left, active_segment, compare_function);
 
-    else if(compare_function(nodeAux->data, NTgetData(active_segment)) == -1)
+    else if(compare_function(nodeAux->data, (active_segment)) == -1)
         nodeAux->right = NTinsertSegment(activeSegmentsTree ,nodeAux->right, active_segment, compare_function);
-    
+
     return nodeAux;
 
 }

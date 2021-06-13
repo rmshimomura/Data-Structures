@@ -836,7 +836,7 @@ void freeShadowPolygonsArray(void* array) {
 }
 
 void freeStyleVisibility(tree visibilityPolygon, dynamicList listOfSegments, double xMeteor, double yMeteor){
-/*    
+    
     void* vertexArray = buildVertexArray(listOfSegments, xMeteor, yMeteor);
     
     void* rootAux = NTgetRootNode(visibilityPolygon);
@@ -845,13 +845,21 @@ void freeStyleVisibility(tree visibilityPolygon, dynamicList listOfSegments, dou
 
     for(int i = 0; i < getSize(listOfSegments); i++){
         segment_t* tempSegment = getItem(listOfSegments, posAuxList);
-        if(!strcmp(tempSegment->point2->type, "DIV") && tempSegment->point1->y){
+        // if(!strcmp(tempSegment->point2->code, "SI"))
+        //     printf("I found (%.2lf, %.2lf) - (%.2lf, %.2lf) as SI (1)\n", tempSegment->point2->x, tempSegment->point2->y, tempSegment->point1->x, tempSegment->point1->y);
+        // else if(!strcmp(tempSegment->point1->code, "SI"))
+        //     printf("I found (%.2lf, %.2lf) - (%.2lf, %.2lf) as SI (2)\n", tempSegment->point1->x, tempSegment->point1->y, tempSegment->point2->x, tempSegment->point2->y);
+        if(!strcmp(tempSegment->point2->code, "SI")){
 
+            if(!rootAux) rootAux = NTinsertSegment(visibilityPolygon, rootAux, tempSegment, determinant);
+            else NTinsertSegment(visibilityPolygon, rootAux, tempSegment, determinant);
+            
         }
-        posAuxList = getNext(posAuxList);
+        
+        posAuxList = getNext(listOfSegments, posAuxList);
     }
-
+    freeSegmentsTree(visibilityPolygon, rootAux);
     free(vertexArray);
 
-*/
+
 }

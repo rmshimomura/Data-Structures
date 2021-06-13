@@ -15,5 +15,6 @@
     void NTsetRootNode(tree initialTree, node root);
     void* NTdeleteNode(void* root, void* toRemove, int(*compare_function)(void*, void*));
     void* NTinsertSegment(tree activeSegmentsTree, node initialNode, void* active_segment, int(*compare_function)(void*, void*));
+    void freeSegmentsTree(tree initialTree, node initialNode);
 
 #endif
