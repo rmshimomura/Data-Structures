@@ -149,60 +149,6 @@ void stopEveryone(tree circleTree, void* current_circle) {
 
 }
 
-void fgCheckShelteredRectangle(tree rectangleTree, tree circleTree, void* current_rectangle, void* current_circle) {
-    
-    if (current_rectangle) {
-
-        fgCheckShelteredRectangle(rectangleTree, circleTree, KDgetLeftNode(current_rectangle), current_circle);
-
-        if (inside(getCircleX(KDgetData(current_circle)), getCircleY(KDgetData(current_circle)), 0, 0, getRectangleX(KDgetData(current_rectangle)), getRectangleY(KDgetData(current_rectangle)), getRectangleWidth(KDgetData(current_rectangle)), getRectangleHeight(KDgetData(current_rectangle))) && KDgetState(current_rectangle)) {
-            
-            if (!getVectorOfPeopleStarted(KDgetData(current_rectangle))) {
-                
-                setVectorOfPeopleStarted(KDgetData(current_rectangle), 1);
-
-            }
-
-            setFg(KDgetData(current_circle), false);
-            allocateVectorOfPeople(KDgetData(current_rectangle));
-            int exist = 0;
-
-            for (int i = 0; i < getNumberOfPeopleInside(KDgetData(current_rectangle)); i++) {  //Compare if someone that is already inside is trying to enter again
-                
-                if (!strcmp(getCircleId(KDgetData(getVectorOfPeople(KDgetData(current_rectangle))[i])), getCircleId(KDgetData(current_circle)))) {
-                    
-                    exist = 1;
-
-                }
-
-            }
-
-            if (!exist) {
-
-                setAddresses(KDgetData(current_rectangle), current_circle, getNumberOfPeopleInside(KDgetData(current_rectangle)));
-                setNumberOfPeopleInside(KDgetData(current_rectangle), getNumberOfPeopleInside(KDgetData(current_rectangle)) + 1);
-
-            }
-
-        }
-
-        fgCheckShelteredRectangle(rectangleTree, circleTree, KDgetRightNode(current_rectangle), current_circle);
-
-    }
-}
-
-void fgCheckShelteredCircle(tree rectangleTree, tree circleTree, void* current_circle) {
-    
-    if (current_circle) {
-
-        fgCheckShelteredCircle(rectangleTree, circleTree, KDgetLeftNode(current_circle));
-        fgCheckShelteredRectangle(rectangleTree, circleTree, KDgetRootNode(rectangleTree), current_circle);
-        fgCheckShelteredCircle(rectangleTree, circleTree, KDgetRightNode(current_circle));
-
-    }
-
-}
-
 void fgInOrderRectangle(tree rectangleTree, FILE* results, void* current_rect, void* current_circ) {
     
     if (current_rect) {
