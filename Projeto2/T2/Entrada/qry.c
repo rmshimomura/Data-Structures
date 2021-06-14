@@ -351,7 +351,7 @@ void fg(tree rectangleTree, tree circleTree, double x, double y, double radius, 
 
     }
 
-    fgCheckShelteredCircle(rectangleTree, circleTree, KDgetRootNode(circleTree));
+    // fgCheckShelteredCircle(rectangleTree, circleTree, KDgetRootNode(circleTree));
     fgInOrderCircle(rectangleTree, circleTree, results, KDgetRootNode(rectangleTree), KDgetRootNode(circleTree), x, y, radius);
     fprintf(results, "FG: \n\n");
     updateCirclesNewPositions(circleTree, KDgetRootNode(circleTree));
@@ -474,10 +474,6 @@ void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, dou
     setvbuf(tempIm, 0, _IONBF, 0);
     fprintf(tempIm, "%.6lf %.6lf %.6lf\n", xMeteor, yMeteor, radiation / 3);
     // printSvgShadows(shadows, getBiggestX(rectangleTree) > getBiggestX(circleTree) ? getBiggestX(rectangleTree) + 100 : getBiggestX(circleTree) + 100, getBiggestY(rectangleTree) > getBiggestY(circleTree) ? getBiggestY(rectangleTree) + 100 : getBiggestY(circleTree) + 100);
-    checkNewDivisions(segments, xMeteor, yMeteor);
-    tree visible = NTcreateTree();
-    freeStyleVisibility(visible, segments, xMeteor, yMeteor);
-    free(visible);
     void* auxNode = insert(listOfTreesShadows, shadows);
     setDataRadiation(auxNode, radiation);
     setDataxMeteor(auxNode, xMeteor);

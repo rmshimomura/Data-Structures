@@ -32,6 +32,6 @@ void constructTempSVG(void* vertexArray, dynamicList segmentsList);  //Debug
 void buildLines(void* vertexArray, dynamicList segmentsList, double xMeteor, double yMeteor, double biggestX, double biggestY);
 void addWrapAroundRectangle(tree rectangleTree, tree circleTree, dynamicList segmentsList);
 void destorySegment(void* segment);
-void freeStyleVisibility(tree visibilityPolygon, dynamicList listOfSegments, double xMeteor, double yMeteor);
+void visibility(tree visibilityPolygon, dynamicList listOfSegments, double xMeteor, double yMeteor);
 
 #endif
