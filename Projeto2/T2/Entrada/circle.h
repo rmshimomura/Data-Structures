@@ -10,6 +10,7 @@ void setCircleFill(node current, char* fillValue);
 void setCircleStroke(node current, char* strokeValue);
 void setCircleRadius(node current, double radius);
 double getCircleX(node current);
+const char* getCircleIdQSort(const void* current);
 double getCircleY(node current);
 char* getCircleId(node current);
 char* getCircleFill(node current);

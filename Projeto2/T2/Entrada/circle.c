@@ -165,3 +165,8 @@ bool getCircleMarkedForDeath(node current) {
     data_c* aux = current;
     return aux->markedForDeath;
 }
+
+const char* getCircleIdQSort(const void* current){
+    const data_c* aux = current;
+    return aux->id;
+}

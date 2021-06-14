@@ -134,7 +134,7 @@ void** getVectorOfPeople(node current) {
 void allocateVectorOfPeople(node current) {
     data_t* aux = current;
 
-    if (!getVectorOfPeople(current)) {
+    if (!getVectorOfPeople(current) || !aux->numberOfPeopleInside) {
         aux->peopleInside = calloc(1, sizeof(void*));
     } else {
         aux->peopleInside = realloc(aux->peopleInside, (aux->numberOfPeopleInside + 1) * sizeof(void*));
@@ -153,4 +153,13 @@ void freeVectorOfPeople(node current) {
         free(aux->peopleInside[i]);
     }
     free(aux->peopleInside);
+}
+
+void tempFreeVectorOfPeople(node current) {
+    data_t* aux = current;
+    for (int i = 0; i < getNumberOfPeopleInside(current); i++) {
+        aux->peopleInside[i] = NULL;
+        free(aux->peopleInside[i]);
+    }
+    
 }
