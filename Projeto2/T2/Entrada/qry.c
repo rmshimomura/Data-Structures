@@ -10,11 +10,26 @@
 #include "segments.h"
 #include "system.h"
 
+typedef struct data {
+    char rectName[100];
+    void** peopleInside;
+    void* originalRect;
+    int numberOfPeopleInside;
+} data_s;
+
+typedef struct sorting {
+    data_s* data;
+    int size;
+} sorting_t;
+
+int newSortingNames(const void* pos1, const void* pos2) {
+    const data_s* aux1 = pos1;
+    const data_s* aux2 = pos2;
+    return strcmp(aux1->rectName, aux2->rectName);
+}
 
 int sortNames(const void* name1, const void* name2) {
-    
     return strcmp(*(const char**)name1, *(const char**)name2);
-
 }
 
 int inside(double x1, double y1, double p1Width, double p1Height, double x2, double y2, double p2Width, double p2Height) {
@@ -116,15 +131,12 @@ void dr(tree rectangleTree, char* id, path paths) {
 
 void fgInOrderRectangle(tree rectangleTree, FILE* results, void* current_rect, void* current_circ) {
     if (current_rect) {
-        
         fgInOrderRectangle(rectangleTree, results, KDgetLeftNode(current_rect), current_circ);
 
         if (sqrt(pow((getCircleX(KDgetData(current_circ)) - getRectangleCenterX(KDgetData(current_rect))), 2) + (pow((getCircleY(KDgetData(current_circ)) - getRectangleCenterY(KDgetData(current_rect))), 2))) < getNearestDistance(KDgetData(current_circ)) && KDgetState(current_rect)) {
-
             setNearestDistance(KDgetData(current_circ), sqrt(pow(getCircleX(KDgetData(current_circ)) - getRectangleCenterX(KDgetData(current_rect)), 2) + pow((getCircleY(KDgetData(current_circ)) - getRectangleCenterY(KDgetData(current_rect))), 2)));
             setRunTo(KDgetData(current_circ), current_rect);
             setFg(KDgetData(current_circ), true);
-
         }
 
         fgInOrderRectangle(rectangleTree, results, KDgetRightNode(current_rect), current_circ);
@@ -132,19 +144,14 @@ void fgInOrderRectangle(tree rectangleTree, FILE* results, void* current_rect, v
 }
 
 void fgInOrderCircle(tree rectangleTree, tree circleTree, FILE* results, void* current_rect, void* current_circ, double x, double y, double radius) {
-    
     if (current_circ) {
-        
         fgInOrderCircle(rectangleTree, circleTree, results, current_rect, KDgetLeftNode(current_circ), x, y, radius);
 
         if ((pow(abs(x - getCircleX(KDgetData(current_circ))), 2) + pow(abs(y - getCircleY(KDgetData(current_circ))), 2) <= pow(radius, 2))) {
-            
-            fgInOrderRectangle(rectangleTree, results, KDgetRootNode(rectangleTree), current_circ); //Find closest rectangle
+            fgInOrderRectangle(rectangleTree, results, KDgetRootNode(rectangleTree), current_circ);  //Find closest rectangle
 
-            if (!getVectorOfPeopleStarted(KDgetData(getRunTo(KDgetData(current_circ))))){
-
+            if (!getVectorOfPeopleStarted(KDgetData(getRunTo(KDgetData(current_circ))))) {
                 setVectorOfPeopleStarted(KDgetData(getRunTo(KDgetData(current_circ))), 1);
-
             }
 
             allocateVectorOfPeople(KDgetData(getRunTo(KDgetData(current_circ))));
@@ -162,14 +169,13 @@ void fgInOrderCircle(tree rectangleTree, tree circleTree, FILE* results, void* c
                 setAddresses(KDgetData(getRunTo(KDgetData(current_circ))), current_circ, getNumberOfPeopleInside(KDgetData(getRunTo(KDgetData(current_circ)))));
                 setNumberOfPeopleInside(KDgetData(getRunTo(KDgetData(current_circ))), getNumberOfPeopleInside(KDgetData(getRunTo(KDgetData(current_circ)))) + 1);
             }
-
-            
         }
 
         fgInOrderCircle(rectangleTree, circleTree, results, current_rect, KDgetRightNode(current_circ), x, y, radius);
     }
 }
 
+/*
 void writeFgresults(tree rectangleTree, FILE* results, void* current_rect, double x, double y, double radius) {
     
     if (current_rect) {
@@ -215,6 +221,117 @@ void writeFgresults(tree rectangleTree, FILE* results, void* current_rect, doubl
         writeFgresults(rectangleTree, results, KDgetRightNode(current_rect), x, y, radius);
     }
 }
+*/
+
+void loop_rectangle_tree(sorting_t rectangles_to_sort, void* current_rect, int* size) {
+    if (current_rect) {
+
+        loop_rectangle_tree(rectangles_to_sort, KDgetLeftNode(current_rect), size);
+
+        if(getVectorOfPeopleStarted(KDgetData(current_rect))){
+            
+            strcpy(rectangles_to_sort.data[*size].rectName, getRectangleId(KDgetData(current_rect)));
+            rectangles_to_sort.data[*size].peopleInside = getVectorOfPeople(KDgetData(current_rect));
+            rectangles_to_sort.data[*size].numberOfPeopleInside = getNumberOfPeopleInside(KDgetData(current_rect));
+            rectangles_to_sort.data[*size].originalRect = current_rect;
+            *size = *size + 1;
+
+        }
+
+        loop_rectangle_tree(rectangles_to_sort, KDgetRightNode(current_rect), size);
+    }
+}
+
+void storeRectanglesToSort(tree rectangleTree, FILE* results) {
+    
+    sorting_t rectangles_to_sort;
+    rectangles_to_sort.data = calloc(KDgetSize(rectangleTree), sizeof(data_s));
+    rectangles_to_sort.size = 0;
+    int size = 0;
+
+    loop_rectangle_tree(rectangles_to_sort, KDgetRootNode(rectangleTree), &size);
+
+    qsort(rectangles_to_sort.data, size, sizeof(data_s), newSortingNames);
+
+    for (int i = 0; i < size; i++) {
+        
+        void** arrayOfPeople = rectangles_to_sort.data[i].peopleInside;
+        char** temp = calloc(rectangles_to_sort.data[i].numberOfPeopleInside, sizeof(char*));
+
+        for (int j = 0; j < rectangles_to_sort.data[i].numberOfPeopleInside; j++) {
+            temp[j] = calloc(strlen(getCircleId(KDgetData(rectangles_to_sort.data[i].peopleInside[j]))) + 1, sizeof(char));
+            strcpy(temp[j], getCircleId(KDgetData(rectangles_to_sort.data[i].peopleInside[j])));
+        }
+
+        qsort(temp, rectangles_to_sort.data[i].numberOfPeopleInside, sizeof(char*), sortNames);
+
+        
+        fprintf(results, "✷ %s:\n", rectangles_to_sort.data[i].rectName);
+        
+
+        for (int j = 0; j < rectangles_to_sort.data[i].numberOfPeopleInside; j++) {
+            fprintf(results, "-> %s\n", temp[j]);
+        }
+
+        if (rectangles_to_sort.data[i].numberOfPeopleInside) {
+            fprintf(results, "\n");
+        }
+
+        for (int j = 0; j < rectangles_to_sort.data[i].numberOfPeopleInside; j++) {
+            free(temp[j]);
+        }
+        free(temp);
+
+        freeVectorOfPeople(KDgetData(rectangles_to_sort.data[i].originalRect));
+        setNumberOfPeopleInside(KDgetData(rectangles_to_sort.data[i].originalRect), 0);
+        setVectorOfPeopleStarted(KDgetData(rectangles_to_sort.data[i].originalRect), 0);
+
+    }
+    free(rectangles_to_sort.data);
+}
+
+/*
+void writeFgresults(tree rectangleTree, FILE* results, void* current_rect, double x, double y, double radius) {
+    if (current_rect) {
+        writeFgresults(rectangleTree, results, KDgetLeftNode(current_rect), x, y, radius);
+
+        if (getVectorOfPeopleStarted(KDgetData(current_rect))) {
+            void** arrayOfPeople = getVectorOfPeople(KDgetData(current_rect));
+            char** temp = calloc(getNumberOfPeopleInside(KDgetData(current_rect)), sizeof(char*));
+
+            for (int i = 0; i < getNumberOfPeopleInside(KDgetData(current_rect)); i++) {
+                temp[i] = calloc(strlen(getCircleId(KDgetData(getVectorOfPeople(KDgetData(current_rect))[i]))) + 1, sizeof(char));
+                strcpy(temp[i], getCircleId(KDgetData(getVectorOfPeople(KDgetData(current_rect))[i])));
+            }
+
+            qsort(temp, getNumberOfPeopleInside(KDgetData(current_rect)), sizeof(char*), sortNames);
+
+            if (getNumberOfPeopleInside(KDgetData(current_rect))) {
+                fprintf(results, "✷ %s:\n", getRectangleId(KDgetData(current_rect)));
+            }
+
+            for (int i = 0; i < getNumberOfPeopleInside(KDgetData(current_rect)); i++) {
+                fprintf(results, "-> %s\n", temp[i]);
+            }
+
+            if (getNumberOfPeopleInside(KDgetData(current_rect))) {
+                fprintf(results, "\n");
+            }
+
+            for (int i = 0; i < getNumberOfPeopleInside(KDgetData(current_rect)); i++) {
+                free(temp[i]);
+            }
+            free(temp);
+
+            freeVectorOfPeople(KDgetData(current_rect));
+            setNumberOfPeopleInside(KDgetData(current_rect), 0);
+            setVectorOfPeopleStarted(KDgetData(current_rect), 0);
+        }
+
+        writeFgresults(rectangleTree, results, KDgetRightNode(current_rect), x, y, radius);
+    }
+}
+*/
 
 void updateCirclesNewPositions(tree circleTree, void* current_circ) {
     if (current_circ) {
@@ -233,14 +350,13 @@ void fg(tree rectangleTree, tree circleTree, double x, double y, double radius, 
     FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
     setvbuf(results, 0, _IONBF, 0);
 
-
     fgInOrderCircle(rectangleTree, circleTree, results, KDgetRootNode(rectangleTree), KDgetRootNode(circleTree), x, y, radius);
     fprintf(results, "FG: \n\n");
     updateCirclesNewPositions(circleTree, KDgetRootNode(circleTree));
-    writeFgresults(rectangleTree, results, KDgetRootNode(rectangleTree), x, y, radius);
+    // writeFgresults(rectangleTree, results, KDgetRootNode(rectangleTree), x, y, radius);
+    storeRectanglesToSort(rectangleTree, results);
     fprintf(results, "========================================================\n");
     fclose(results);
-
 }
 
 char* colorPicker(double radiation) {
