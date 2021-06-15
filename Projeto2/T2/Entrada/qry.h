@@ -6,7 +6,7 @@
 void dr(tree rectangleTree, char* id, path paths);
 void dpi(tree rectangleTree, double x, double y, path paths);
 int inside(double x1, double y1, double p1Width, double p1Height, double x2, double y2, double p2Width, double p2Height);
-void dpiInOrder(tree rectangleTree, FILE* svg_source, node currentNode, double x, double y);
+void dpiInOrder(tree rectangleTree, node currentNode, double x, double y, char** names, int* index);
 void drInOrder(tree rectangleTree, FILE* results, node current, node analize);
 void fgInOrderRectangle(tree rectangleTree, FILE* results, void* current_rect, void* current_circ);
 void fgInOrderCircle(tree rectangleTree, tree circleTree, FILE* results, void* current_rect, void* current_circ, double x, double y, double radius);

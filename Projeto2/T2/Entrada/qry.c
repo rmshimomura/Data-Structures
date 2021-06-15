@@ -56,6 +56,8 @@ int get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y, float 
     return 0;
 }
 
+
+/*
 void dpiInOrder(tree rectangleTree, FILE* svg_source, node currentNode, double x, double y) {
     if (currentNode != NULL) {
         dpiInOrder(rectangleTree, svg_source, KDgetLeftNode(currentNode), x, y);
@@ -69,11 +71,32 @@ void dpiInOrder(tree rectangleTree, FILE* svg_source, node currentNode, double x
         dpiInOrder(rectangleTree, svg_source, KDgetRightNode(currentNode), x, y);
     }
 }
+*/
+
+void dpiInOrder(tree rectangleTree, node currentNode, double x, double y, char** names, int* index) {
+    if (currentNode != NULL) {
+        dpiInOrder(rectangleTree, KDgetLeftNode(currentNode), x, y, names, index);
+
+        if (inside(x, y, 0, 0, getRectangleX(KDgetData(currentNode)), getRectangleY(KDgetData(currentNode)), getRectangleWidth(KDgetData(currentNode)), getRectangleHeight(KDgetData(currentNode))) && KDgetState(currentNode)) {
+            names[*index] = calloc(strlen(getRectangleId(KDgetData(currentNode))) + 1, sizeof(char));
+            strcpy(names[*index], getRectangleId(KDgetData(currentNode))); 
+            printf("Storing %s\n", getRectangleId(KDgetData(currentNode)));
+            KDsetState(currentNode, 0);
+            KDsetSize(rectangleTree, KDgetSize(rectangleTree) - 1);
+            *index = *index + 1;
+        }
+
+        dpiInOrder(rectangleTree, KDgetRightNode(currentNode), x, y, names, index);
+    }
+}
 
 void dpi(tree rectangleTree, double x, double y, path paths) {
     FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
     setvbuf(results, 0, _IONBF, 0);
     int size = KDgetSize(rectangleTree);
+
+    int pos = 0;
+    char** names = calloc(KDgetSize(rectangleTree), sizeof(char*));
 
     if (!size) {
         fprintf(results, "dpi\nTree size = 0 :( \n");
@@ -83,8 +106,16 @@ void dpi(tree rectangleTree, double x, double y, path paths) {
     }
 
     void* root = KDgetRootNode(rectangleTree);
-    fprintf(results, "\ndpi:\n");
-    dpiInOrder(rectangleTree, results, root, x, y);
+    fprintf(results, "\ndpi:\n\n");
+    dpiInOrder(rectangleTree, root, x, y, names, &pos);
+    qsort(names, pos , sizeof(char*), sortNames);
+    for(int i = 0; i < pos; i++){
+        fprintf(results, "%s\n", names[i]);
+    }
+    for(int i = 0; i < size; i++){
+        free(names[i]);
+    }
+    free(names);
     fprintf(results, "\n========================================================\n");
     fclose(results);
 }
@@ -368,7 +399,7 @@ char* colorPicker(double radiation) {
     else if (radiation >= 600 && radiation < 1000) return "#000080";
     else if (radiation >= 1000 && radiation < 8000) return "#ff0000";
     else if (radiation >= 8000) return "#000000";
-    
+
 }
 
 void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircle, double xMeteor, double yMeteor) {
