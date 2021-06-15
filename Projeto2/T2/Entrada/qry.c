@@ -353,29 +353,22 @@ void fg(tree rectangleTree, tree circleTree, double x, double y, double radius, 
     fgInOrderCircle(rectangleTree, circleTree, results, KDgetRootNode(rectangleTree), KDgetRootNode(circleTree), x, y, radius);
     fprintf(results, "FG: \n\n");
     updateCirclesNewPositions(circleTree, KDgetRootNode(circleTree));
-    // writeFgresults(rectangleTree, results, KDgetRootNode(rectangleTree), x, y, radius);
     storeRectanglesToSort(rectangleTree, results);
     fprintf(results, "========================================================\n");
     fclose(results);
 }
 
 char* colorPicker(double radiation) {
-    if (radiation < 25)
-        return "#00ffff";
-    else if (radiation >= 25 && radiation < 50)
-        return "#00ff00";
-    else if (radiation >= 50 && radiation < 100)
-        return "#ff00ff";
-    else if (radiation >= 100 && radiation < 250)
-        return "#0000ff";
-    else if (radiation >= 250 && radiation < 600)
-        return "#800080";
-    else if (radiation >= 600 && radiation < 1000)
-        return "#000080";
-    else if (radiation >= 1000 && radiation < 8000)
-        return "#ff0000";
-    else if (radiation >= 8000)
-        return "#000000";
+    
+    if (radiation < 25) return "#00ffff";
+    else if (radiation >= 25 && radiation < 50) return "#00ff00";
+    else if (radiation >= 50 && radiation < 100) return "#ff00ff";
+    else if (radiation >= 100 && radiation < 250) return "#0000ff";
+    else if (radiation >= 250 && radiation < 600) return "#800080";
+    else if (radiation >= 600 && radiation < 1000) return "#000080";
+    else if (radiation >= 1000 && radiation < 8000) return "#ff0000";
+    else if (radiation >= 8000) return "#000000";
+    
 }
 
 void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircle, double xMeteor, double yMeteor) {
