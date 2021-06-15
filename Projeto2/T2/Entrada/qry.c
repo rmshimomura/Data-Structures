@@ -10,11 +10,11 @@
 #include "segments.h"
 #include "system.h"
 
-int sortNames(const void* name1, const void* name2) {
-    const char* aux1 = getCircleIdQSort(name1);
-    const char* aux2 = getCircleIdQSort(name2);
 
-    return strcmp(aux1, aux2);
+int sortNames(const void* name1, const void* name2) {
+    
+    return strcmp(*(const char**)name1, *(const char**)name2);
+
 }
 
 int inside(double x1, double y1, double p1Width, double p1Height, double x2, double y2, double p2Width, double p2Height) {
@@ -124,109 +124,6 @@ void stopEveryone(tree circleTree, void* current_circle) {
     }
 }
 
-/*
-void fgInOrderRectangle(tree rectangleTree, FILE* results, void* current_rect, void* current_circ) {
-    
-    if (current_rect) {
-
-        fgInOrderRectangle(rectangleTree, results, KDgetLeftNode(current_rect), current_circ);
-
-        if (sqrt(pow((getCircleX(KDgetData(current_circ)) - getRectangleCenterX(KDgetData(current_rect))), 2) + (pow((getCircleY(KDgetData(current_circ)) - getRectangleCenterY(KDgetData(current_rect))), 2))) < getNearestDistance(KDgetData(current_circ)) && KDgetState(current_rect)) {
-            
-            if (getRunTo(KDgetData(current_circ)) != current_rect && getRunTo(KDgetData(current_circ)) != NULL) {  //Someone leave the current rect, and has to run to a new one
-                // printf("UPDATE ! %s has now to run to %s\n",  getCircleId(KDgetData(current_circ)), getRectangleId(KDgetData(current_rect)));
-
-                setNumberOfPeopleInside(KDgetData(getRunTo(KDgetData(current_circ))), getNumberOfPeopleInside(KDgetData(getRunTo(KDgetData(current_circ)))) - 1);
-            
-            }
-
-            // printf("I'm setting %s to run to %s.\n", getCircleId(KDgetData(current_circ)), getRectangleId(KDgetData(current_rect)));
-            // puts("SET!");
-            setNearestDistance(KDgetData(current_circ), sqrt(pow(getCircleX(KDgetData(current_circ)) - getRectangleCenterX(KDgetData(current_rect)), 2) + pow((getCircleY(KDgetData(current_circ)) - getRectangleCenterY(KDgetData(current_rect))), 2)));
-            setRunTo(KDgetData(current_circ), current_rect);
-            setFg(KDgetData(current_circ), true);
-
-            if (!getVectorOfPeopleStarted(KDgetData(current_rect))) {
-                
-                setVectorOfPeopleStarted(KDgetData(current_rect), 1);
-
-            }
-
-            allocateVectorOfPeople(KDgetData(current_rect));
-            int exist = 0;
-
-            for (int i = 0; i < getNumberOfPeopleInside(KDgetData(current_rect)); i++) {  //Compare if someone that is already inside is trying to enter again
-                
-                if (!strcmp(getCircleId(KDgetData(getVectorOfPeople(KDgetData(current_rect))[i])), getCircleId(KDgetData(current_circ)))) {
-                    
-                    exist = 1;
-
-                }
-
-            }
-
-            if (!exist) {
-
-                setAddresses(KDgetData(current_rect), current_circ, getNumberOfPeopleInside(KDgetData(current_rect)));
-                setNumberOfPeopleInside(KDgetData(current_rect), getNumberOfPeopleInside(KDgetData(current_rect)) + 1);
-            
-            }
-
-            // printf("There are %d inside %s\n", getNumberOfPeopleInside(KDgetData(current_rect)), getRectangleId(KDgetData(current_rect)));
-        }
-
-        fgInOrderRectangle(rectangleTree, results, KDgetRightNode(current_rect), current_circ);
-
-    }
-
-}
-*/
-/*
-void fgInOrderRectangle(tree rectangleTree, FILE* results, void* current_rect, void* current_circ) {
-    if (current_rect) {
-        
-        fgInOrderRectangle(rectangleTree, results, KDgetLeftNode(current_rect), current_circ);
-
-        if (sqrt(pow((getCircleX(KDgetData(current_circ)) - getRectangleCenterX(KDgetData(current_rect))), 2) + (pow((getCircleY(KDgetData(current_circ)) - getRectangleCenterY(KDgetData(current_rect))), 2))) < getNearestDistance(KDgetData(current_circ)) && KDgetState(current_rect)) {
-            
-            if (getRunTo(KDgetData(current_circ)) != current_rect && getRunTo(KDgetData(current_circ)) != NULL) {  //Someone leave the current rect, and has to run to a new one
-
-                setNumberOfPeopleInside(KDgetData(getRunTo(KDgetData(current_circ))), getNumberOfPeopleInside(KDgetData(getRunTo(KDgetData(current_circ)))) - 1);
-
-            }
-
-            setNearestDistance(KDgetData(current_circ), sqrt(pow(getCircleX(KDgetData(current_circ)) - getRectangleCenterX(KDgetData(current_rect)), 2) + pow((getCircleY(KDgetData(current_circ)) - getRectangleCenterY(KDgetData(current_rect))), 2)));
-            setRunTo(KDgetData(current_circ), current_rect);
-            setFg(KDgetData(current_circ), true);
-
-            if (!getVectorOfPeopleStarted(KDgetData(current_rect))) setVectorOfPeopleStarted(KDgetData(current_rect), 1);
-
-            allocateVectorOfPeople(KDgetData(current_rect));
-
-            int exist = 0;
-
-            for (int i = 0; i < getNumberOfPeopleInside(KDgetData(current_rect)); i++) {  //Compare if someone that is already inside is trying to enter again
-
-                if (!strcmp(getCircleId(KDgetData(getVectorOfPeople(KDgetData(current_rect))[i])), getCircleId(KDgetData(current_circ)))) {
-                    exist = 1;
-                }
-            }
-
-            if (!exist) {
-                setAddresses(KDgetData(current_rect), current_circ, getNumberOfPeopleInside(KDgetData(current_rect)));
-                setNumberOfPeopleInside(KDgetData(current_rect), getNumberOfPeopleInside(KDgetData(current_rect)) + 1);
-            }
-
-            // void** arrayOfPeople = getVectorOfPeople(KDgetData(current_rect));
-
-            // qsort(arrayOfPeople, getNumberOfPeopleInside(KDgetData(current_circ)), sizeof(const char*), sortNames);
-        }
-
-        fgInOrderRectangle(rectangleTree, results, KDgetRightNode(current_rect), current_circ);
-    }
-}
-*/
-
 void fgInOrderRectangle(tree rectangleTree, FILE* results, void* current_rect, void* current_circ) {
     if (current_rect) {
         
@@ -245,7 +142,9 @@ void fgInOrderRectangle(tree rectangleTree, FILE* results, void* current_rect, v
 }
 
 void fgInOrderCircle(tree rectangleTree, tree circleTree, FILE* results, void* current_rect, void* current_circ, double x, double y, double radius) {
+    
     if (current_circ) {
+        
         fgInOrderCircle(rectangleTree, circleTree, results, current_rect, KDgetLeftNode(current_circ), x, y, radius);
 
         if ((pow(abs(x - getCircleX(KDgetData(current_circ))), 2) + pow(abs(y - getCircleY(KDgetData(current_circ))), 2) <= pow(radius, 2))) {
@@ -257,7 +156,6 @@ void fgInOrderCircle(tree rectangleTree, tree circleTree, FILE* results, void* c
                 setVectorOfPeopleStarted(KDgetData(getRunTo(KDgetData(current_circ))), 1);
 
             }
-
 
             allocateVectorOfPeople(KDgetData(getRunTo(KDgetData(current_circ))));
 
@@ -275,47 +173,48 @@ void fgInOrderCircle(tree rectangleTree, tree circleTree, FILE* results, void* c
                 setNumberOfPeopleInside(KDgetData(getRunTo(KDgetData(current_circ))), getNumberOfPeopleInside(KDgetData(getRunTo(KDgetData(current_circ)))) + 1);
             }
 
-            void** arrayOfPeople = getVectorOfPeople(KDgetData(getRunTo(KDgetData(current_circ))));
-
-            qsort(arrayOfPeople, getNumberOfPeopleInside(KDgetData(current_circ)), sizeof(const char*), sortNames);
+            
         }
 
         fgInOrderCircle(rectangleTree, circleTree, results, current_rect, KDgetRightNode(current_circ), x, y, radius);
     }
 }
-
-
-/*
-void fgInOrderCircle(tree rectangleTree, tree circleTree, FILE* results, void* current_rect, void* current_circ, double x, double y, double radius) {
-    if (current_circ) {
-        fgInOrderCircle(rectangleTree, circleTree, results, current_rect, KDgetLeftNode(current_circ), x, y, radius);
-
-        if ((pow(abs(x - getCircleX(KDgetData(current_circ))), 2) + pow(abs(y - getCircleY(KDgetData(current_circ))), 2) <= pow(radius, 2))) {
-            fgInOrderRectangle(rectangleTree, results, KDgetRootNode(rectangleTree), current_circ);
-        }
-
-        fgInOrderCircle(rectangleTree, circleTree, results, current_rect, KDgetRightNode(current_circ), x, y, radius);
-    }
-}
-*/
 
 void writeFgresults(tree rectangleTree, FILE* results, void* current_rect, double x, double y, double radius) {
     if (current_rect) {
+        
         writeFgresults(rectangleTree, results, KDgetLeftNode(current_rect), x, y, radius);
 
         if (getVectorOfPeopleStarted(KDgetData(current_rect))) {
             
+            void** arrayOfPeople = getVectorOfPeople(KDgetData(current_rect));
+            char** temp = calloc(getNumberOfPeopleInside(KDgetData(current_rect)), sizeof(char*));
+            for(int i = 0; i < getNumberOfPeopleInside(KDgetData(current_rect)); i++){
+                temp[i] = calloc(strlen(getCircleId(KDgetData(getVectorOfPeople(KDgetData(current_rect))[i]))) + 1, sizeof(char));
+                strcpy(temp[i], getCircleId(KDgetData(getVectorOfPeople(KDgetData(current_rect))[i])));
+            }
+
+            // qsort(arrayOfPeople, getNumberOfPeopleInside(KDgetData(current_rect)), sizeof(*arrayOfPeople), sortNames);
+
+            qsort(temp, getNumberOfPeopleInside(KDgetData(current_rect)), sizeof(char*), sortNames);
+
             if (getNumberOfPeopleInside(KDgetData(current_rect))) {
                 fprintf(results, "✷ %s:\n", getRectangleId(KDgetData(current_rect)));
             }
 
             for (int i = 0; i < getNumberOfPeopleInside(KDgetData(current_rect)); i++) {
-                fprintf(results, "-> %s\n", getCircleId(KDgetData(getVectorOfPeople(KDgetData(current_rect))[i])));
+                // fprintf(results, "-> %s\n", getCircleId(KDgetData(getVectorOfPeople(KDgetData(current_rect))[i])));
+                fprintf(results, "-> %s\n", temp[i]);
             }
 
             if (getNumberOfPeopleInside(KDgetData(current_rect))) {
                 fprintf(results, "\n");
             }
+
+            for(int i = 0; i < getNumberOfPeopleInside(KDgetData(current_rect)); i++){
+                free(temp[i]);
+            }
+            free(temp);
 
             freeVectorOfPeople(KDgetData(current_rect));
             setNumberOfPeopleInside(KDgetData(current_rect), 0);

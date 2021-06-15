@@ -1,6 +1,7 @@
 #include "rectangle.h"
 
 typedef struct data {
+    
     double x, y, width, height, centerX, centerY;
     char id[100], fill[100], stroke[100];
     void** peopleInside;
@@ -156,6 +157,7 @@ void freeVectorOfPeople(node current) {
 }
 
 void tempFreeVectorOfPeople(node current) {
+ 
     data_t* aux = current;
     for (int i = 0; i < getNumberOfPeopleInside(current); i++) {
         aux->peopleInside[i] = NULL;
