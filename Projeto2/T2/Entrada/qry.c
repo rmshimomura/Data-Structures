@@ -80,7 +80,7 @@ void dpiInOrder(tree rectangleTree, node currentNode, double x, double y, char**
         if (inside(x, y, 0, 0, getRectangleX(KDgetData(currentNode)), getRectangleY(KDgetData(currentNode)), getRectangleWidth(KDgetData(currentNode)), getRectangleHeight(KDgetData(currentNode))) && KDgetState(currentNode)) {
             names[*index] = calloc(strlen(getRectangleId(KDgetData(currentNode))) + 1, sizeof(char));
             strcpy(names[*index], getRectangleId(KDgetData(currentNode))); 
-            printf("Storing %s\n", getRectangleId(KDgetData(currentNode)));
+            // printf("Storing %s\n", getRectangleId(KDgetData(currentNode)));
             KDsetState(currentNode, 0);
             KDsetSize(rectangleTree, KDgetSize(rectangleTree) - 1);
             *index = *index + 1;
@@ -120,6 +120,7 @@ void dpi(tree rectangleTree, double x, double y, path paths) {
     fclose(results);
 }
 
+/*
 void drInOrder(tree rectangleTree, FILE* results, node current, node analize) {
     void* aux = current;
 
@@ -135,18 +136,41 @@ void drInOrder(tree rectangleTree, FILE* results, node current, node analize) {
         drInOrder(rectangleTree, results, KDgetRightNode(aux), analize);
     }
 }
+*/
+
+void drInOrder(tree rectangleTree, node current, node analize, char** names, int* index) {
+    void* aux = current;
+
+    if (aux) {
+
+        drInOrder(rectangleTree, KDgetLeftNode(aux), analize, names, index);
+
+        if (inside(getRectangleX(KDgetData(aux)), getRectangleY(KDgetData(aux)), getRectangleWidth(KDgetData(aux)), getRectangleHeight(KDgetData(aux)), getRectangleX(KDgetData(analize)), getRectangleY(KDgetData(analize)), getRectangleWidth(KDgetData(analize)), getRectangleHeight(KDgetData(analize))) && getRectangleId(KDgetData(aux)) != getRectangleId(KDgetData(analize))) {
+            // fprintf(results, "%s\n", getRectangleId(KDgetData(aux)));
+            names[*index] = calloc(strlen(getRectangleId(KDgetData(aux))) + 1, sizeof(char));
+            strcpy(names[*index], getRectangleId(KDgetData(aux)));
+
+            KDsetState(current, 0);
+            KDsetSize(rectangleTree, KDgetSize(rectangleTree) - 1);
+            *index = *index + 1;
+        }
+
+        drInOrder(rectangleTree, KDgetRightNode(aux), analize, names, index);
+    }
+}
 
 void dr(tree rectangleTree, char* id, path paths) {
     FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
     setvbuf(results, 0, _IONBF, 0);
-
+    char** names = calloc(KDgetSize(rectangleTree), sizeof(char*));
+    int size = KDgetSize(rectangleTree);
     if (!KDgetSize(rectangleTree)) {
         fprintf(results, "dr\nTree size = 0 :( \n");
         fclose(results);
         return;
     }
-
-    fprintf(results, "\ndr:\n");
+    int pos = 0;
+    fprintf(results, "\ndr:\n\n");
 
     if (!KDsearchID(KDgetRootNode(rectangleTree), id)) {
         fprintf(results, "id does not match any nodes in the tree :( \n");
@@ -155,7 +179,15 @@ void dr(tree rectangleTree, char* id, path paths) {
         return;
     }
 
-    drInOrder(rectangleTree, results, KDgetRootNode(rectangleTree), KDsearchID(KDgetRootNode(rectangleTree), id));
+    drInOrder(rectangleTree, KDgetRootNode(rectangleTree), KDsearchID(KDgetRootNode(rectangleTree), id), names, &pos);
+    qsort(names, pos, sizeof(char*), sortNames);
+    for(int i = 0; i < pos; i++){
+        fprintf(results, "%s\n", names[i]);
+    }
+    for(int i = 0; i < size; i++){
+        free(names[i]);
+    }
+    free(names);
     fprintf(results, "\n========================================================\n");
     fclose(results);
 }
