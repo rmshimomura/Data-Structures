@@ -114,16 +114,6 @@ void dr(tree rectangleTree, char* id, path paths) {
     fclose(results);
 }
 
-void stopEveryone(tree circleTree, void* current_circle) {
-    if (current_circle) {
-        stopEveryone(circleTree, KDgetLeftNode(current_circle));
-        setNearestDistance(KDgetData(current_circle), __DBL_MAX__);
-        setRunTo(KDgetData(current_circle), NULL);
-        setFg(KDgetData(current_circle), 0);
-        stopEveryone(circleTree, KDgetRightNode(current_circle));
-    }
-}
-
 void fgInOrderRectangle(tree rectangleTree, FILE* results, void* current_rect, void* current_circ) {
     if (current_rect) {
         
@@ -181,6 +171,7 @@ void fgInOrderCircle(tree rectangleTree, tree circleTree, FILE* results, void* c
 }
 
 void writeFgresults(tree rectangleTree, FILE* results, void* current_rect, double x, double y, double radius) {
+    
     if (current_rect) {
         
         writeFgresults(rectangleTree, results, KDgetLeftNode(current_rect), x, y, radius);
@@ -189,12 +180,11 @@ void writeFgresults(tree rectangleTree, FILE* results, void* current_rect, doubl
             
             void** arrayOfPeople = getVectorOfPeople(KDgetData(current_rect));
             char** temp = calloc(getNumberOfPeopleInside(KDgetData(current_rect)), sizeof(char*));
+
             for(int i = 0; i < getNumberOfPeopleInside(KDgetData(current_rect)); i++){
                 temp[i] = calloc(strlen(getCircleId(KDgetData(getVectorOfPeople(KDgetData(current_rect))[i]))) + 1, sizeof(char));
                 strcpy(temp[i], getCircleId(KDgetData(getVectorOfPeople(KDgetData(current_rect))[i])));
             }
-
-            // qsort(arrayOfPeople, getNumberOfPeopleInside(KDgetData(current_rect)), sizeof(*arrayOfPeople), sortNames);
 
             qsort(temp, getNumberOfPeopleInside(KDgetData(current_rect)), sizeof(char*), sortNames);
 
@@ -203,7 +193,7 @@ void writeFgresults(tree rectangleTree, FILE* results, void* current_rect, doubl
             }
 
             for (int i = 0; i < getNumberOfPeopleInside(KDgetData(current_rect)); i++) {
-                // fprintf(results, "-> %s\n", getCircleId(KDgetData(getVectorOfPeople(KDgetData(current_rect))[i])));
+                
                 fprintf(results, "-> %s\n", temp[i]);
             }
 
@@ -243,18 +233,6 @@ void fg(tree rectangleTree, tree circleTree, double x, double y, double radius, 
     FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
     setvbuf(results, 0, _IONBF, 0);
 
-    if (!KDgetSize(rectangleTree)) {
-        fprintf(results, "There are no more buildings to run to :( .\n");
-        stopEveryone(circleTree, KDgetRootNode(circleTree));
-        fclose(results);
-        return;
-    }
-    if (!KDgetSize(circleTree)) {
-        fprintf(results, "Everyone is dead :( .\n");
-        fclose(results);
-
-        return;
-    }
 
     fgInOrderCircle(rectangleTree, circleTree, results, KDgetRootNode(rectangleTree), KDgetRootNode(circleTree), x, y, radius);
     fprintf(results, "FG: \n\n");
@@ -262,6 +240,7 @@ void fg(tree rectangleTree, tree circleTree, double x, double y, double radius, 
     writeFgresults(rectangleTree, results, KDgetRootNode(rectangleTree), x, y, radius);
     fprintf(results, "========================================================\n");
     fclose(results);
+
 }
 
 char* colorPicker(double radiation) {
