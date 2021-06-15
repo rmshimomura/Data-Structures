@@ -22,11 +22,28 @@ typedef struct sorting {
     int size;
 } sorting_t;
 
-int newSortingNames(const void* pos1, const void* pos2) {
+typedef struct circleData{
+    char circleName[100];
+    double radiation;
+}circle_data_t;
+
+typedef struct imSorting{
+    circle_data_t* data;
+    int pos;
+}imSorting_t;
+
+int sortingNamesRectangle(const void* pos1, const void* pos2) {
     const data_s* aux1 = pos1;
     const data_s* aux2 = pos2;
     return strcmp(aux1->rectName, aux2->rectName);
 }
+
+int sortingNamesCircle(const void* pos1, const void* pos2) {
+    const circle_data_t* aux1 = pos1;
+    const circle_data_t* aux2 = pos2;
+    return strcmp(aux1->circleName, aux2->circleName);
+}
+
 
 int sortNames(const void* name1, const void* name2) {
     return strcmp(*(const char**)name1, *(const char**)name2);
@@ -314,7 +331,7 @@ void storeRectanglesToSort(tree rectangleTree, FILE* results) {
 
     loop_rectangle_tree(rectangles_to_sort, KDgetRootNode(rectangleTree), &size);
 
-    qsort(rectangles_to_sort.data, size, sizeof(data_s), newSortingNames);
+    qsort(rectangles_to_sort.data, size, sizeof(data_s), sortingNamesRectangle);
 
     for (int i = 0; i < size; i++) {
         
@@ -464,6 +481,8 @@ void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircl
     }
 }
 
+/*
+
 void imInOrderCircles(tree shadows, tree circleTree, node currentCircle, FILE* results, double radiation, double xMeteor, double yMeteor) {
     if (currentCircle) {
         imInOrderCircles(shadows, circleTree, KDgetLeftNode(currentCircle), results, radiation, xMeteor, yMeteor);
@@ -491,8 +510,53 @@ void imInOrderCircles(tree shadows, tree circleTree, node currentCircle, FILE* r
             }
         }
 
-        // fprintf(results, "DEBUG - %s has %.6lf mSv\n",  getCircleId(KDgetData(currentCircle)), getRadiation(KDgetData(currentCircle)));
+        
         imInOrderCircles(shadows, circleTree, KDgetRightNode(currentCircle), results, radiation, xMeteor, yMeteor);
+    }
+}
+
+*/
+
+void imInOrderCircles(tree shadows, node currentCircle, double radiation, double xMeteor, double yMeteor, imSorting_t circlesToSort, int *index) {
+    
+    if (currentCircle) {
+        imInOrderCircles(shadows, KDgetLeftNode(currentCircle), radiation, xMeteor, yMeteor, circlesToSort, index);
+        setInsideNShadows(KDgetData(currentCircle), 0);
+        imInOrderShadows(shadows, NTgetRootNode(shadows), currentCircle, xMeteor, yMeteor);
+
+        if (!getInsideNShadows(KDgetData(currentCircle))) {
+            setRadiation(KDgetData(currentCircle), getRadiation(KDgetData(currentCircle)) + radiation);
+
+        } else {
+            setRadiation(KDgetData(currentCircle), getRadiation(KDgetData(currentCircle)) + (pow(0.8, getInsideNShadows(KDgetData(currentCircle))) * radiation));
+        }
+
+        setCircleFill(KDgetData(currentCircle), colorPicker(getRadiation(KDgetData(currentCircle))));
+        setCircleStroke(KDgetData(currentCircle), colorPicker(getRadiation(KDgetData(currentCircle))));
+
+        if (getRadiation(KDgetData(currentCircle)) >= 1000 && getRadiation(KDgetData(currentCircle)) < 8000) {
+            
+            strcpy(circlesToSort.data[*(index)].circleName, getCircleId(KDgetData(currentCircle)));
+            circlesToSort.data[*(index)].radiation = getRadiation(KDgetData(currentCircle));
+            *index = *index + 1;
+
+            // fprintf(results, "%s morte iminente\n", getCircleId(KDgetData(currentCircle)));
+            setCircleMarkedForDeath(KDgetData(currentCircle), true);
+
+        } else if (getRadiation(KDgetData(currentCircle)) >= 8000) {
+            if (getCircleAlive(KDgetData(currentCircle))) {
+                
+                strcpy(circlesToSort.data[*(index)].circleName, getCircleId(KDgetData(currentCircle)));
+                circlesToSort.data[*(index)].radiation = getRadiation(KDgetData(currentCircle));
+                *index = *index + 1;
+                // fprintf(results, "%s morte instantanea\n", getCircleId(KDgetData(currentCircle)));
+                setCircleAlive(KDgetData(currentCircle), false);
+            }
+        }
+
+        
+        imInOrderCircles(shadows, KDgetRightNode(currentCircle), radiation, xMeteor, yMeteor, circlesToSort, index);
+
     }
 }
 
@@ -506,8 +570,25 @@ void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, dou
     void* vertexArray = buildVertexArray(segments, xMeteor, yMeteor);
     storeShadowPolygons(shadows, vertexArray, segments, xMeteor, yMeteor);
     fprintf(results, "IM: \n\n");
-    imInOrderCircles(shadows, circleTree, KDgetRootNode(circleTree), results, radiation, xMeteor, yMeteor);
+    
+
+    imSorting_t toSortCircles;
+    toSortCircles.data = calloc(KDgetSize(circleTree), sizeof(circle_data_t));
+    int pos = 0;
+    imInOrderCircles(shadows, KDgetRootNode(circleTree), radiation, xMeteor, yMeteor, toSortCircles, &pos);
+    qsort(toSortCircles.data, pos, sizeof(circle_data_t), sortingNamesCircle);
+    
+    for(int i = 0; i < pos; i++){
+        if(toSortCircles.data[i].radiation >= 1000 && toSortCircles.data[i].radiation < 8000){
+            fprintf(results, "%s - Morte Iminente\n", toSortCircles.data[i].circleName);
+        }else if(toSortCircles.data[i].radiation >= 8000){
+            fprintf(results, "%s - Morte Instantanea\n", toSortCircles.data[i].circleName);
+        }
+    }
+
+
     fprintf(results, "\n========================================================\n");
+    free(toSortCircles.data);
     FILE* tempIm = fopen("imTemp.txt", "a+");
     setvbuf(tempIm, 0, _IONBF, 0);
     fprintf(tempIm, "%.6lf %.6lf %.6lf\n", xMeteor, yMeteor, radiation / 3);
