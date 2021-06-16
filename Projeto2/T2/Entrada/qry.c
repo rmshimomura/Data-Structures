@@ -91,6 +91,8 @@ void dpiInOrder(tree rectangleTree, node currentNode, double x, double y, char**
     }
 }
 
+
+
 void dpi(tree rectangleTree, double x, double y, path paths) {
     FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
     setvbuf(results, 0, _IONBF, 0);
@@ -507,6 +509,7 @@ void nveUpdateRadiation(void* currentPolygon, double xNve, double yNve, int* ins
 
 void nveInOrder(tree shadowTree, node currentListPosition, node currentPolygon, int* insideNPolygons, double x, double y, double xMeteor, double yMeteor) {
     if (currentPolygon) {
+
         nveInOrder(shadowTree, currentListPosition, NTgetLeftNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
 
         nveUpdateRadiation(currentPolygon, x, y, insideNPolygons, xMeteor, yMeteor);
