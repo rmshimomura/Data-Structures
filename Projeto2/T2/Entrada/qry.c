@@ -22,15 +22,15 @@ typedef struct sorting {
     int size;
 } sorting_t;
 
-typedef struct circleData{
+typedef struct circleData {
     char circleName[100];
     double radiation;
-}circle_data_t;
+} circle_data_t;
 
-typedef struct imSorting{
+typedef struct imSorting {
     circle_data_t* data;
     int pos;
-}imSorting_t;
+} imSorting_t;
 
 int sortingNamesRectangle(const void* pos1, const void* pos2) {
     const data_s* aux1 = pos1;
@@ -43,7 +43,6 @@ int sortingNamesCircle(const void* pos1, const void* pos2) {
     const circle_data_t* aux2 = pos2;
     return strcmp(aux1->circleName, aux2->circleName);
 }
-
 
 int sortNames(const void* name1, const void* name2) {
     return strcmp(*(const char**)name1, *(const char**)name2);
@@ -73,25 +72,36 @@ int get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y, float 
     return 0;
 }
 
-void dpiInOrder(tree rectangleTree, node currentNode, double x, double y, char** names, int* index) {
-    
+void dpiInOrder(tree rectangleTree, node currentNode, double x, double y, char** names, int* index, int level) {
     if (currentNode) {
-        
-        dpiInOrder(rectangleTree, KDgetLeftNode(currentNode), x, y, names, index);
-
         if (inside(x, y, 0, 0, getRectangleX(KDgetData(currentNode)), getRectangleY(KDgetData(currentNode)), getRectangleWidth(KDgetData(currentNode)), getRectangleHeight(KDgetData(currentNode))) && KDgetState(currentNode)) {
             names[*index] = calloc(strlen(getRectangleId(KDgetData(currentNode))) + 1, sizeof(char));
-            strcpy(names[*index], getRectangleId(KDgetData(currentNode))); 
+            strcpy(names[*index], getRectangleId(KDgetData(currentNode)));
             KDsetState(currentNode, 0);
             KDsetSize(rectangleTree, KDgetSize(rectangleTree) - 1);
             *index = *index + 1;
         }
 
-        dpiInOrder(rectangleTree, KDgetRightNode(currentNode), x, y, names, index);
+        if (level % 2 == 0) {
+            if (x < getRectangleX(KDgetData(currentNode))) {
+                dpiInOrder(rectangleTree, KDgetRightNode(currentNode), x, y, names, index, level + 1);
+
+            } else if (x >= getRectangleX(KDgetData(currentNode))) {
+                dpiInOrder(rectangleTree, KDgetLeftNode(currentNode), x, y, names, index, level + 1);
+                dpiInOrder(rectangleTree, KDgetRightNode(currentNode), x, y, names, index, level + 1);
+            }
+
+        } else if (level % 2 == 1) {
+            if (y < getRectangleY(KDgetData(currentNode))) {
+                dpiInOrder(rectangleTree, KDgetRightNode(currentNode), x, y, names, index, level + 1);
+
+            } else if (y >= getRectangleY(KDgetData(currentNode))) {
+                dpiInOrder(rectangleTree, KDgetLeftNode(currentNode), x, y, names, index, level + 1);
+                dpiInOrder(rectangleTree, KDgetRightNode(currentNode), x, y, names, index, level + 1);
+            }
+        }
     }
 }
-
-
 
 void dpi(tree rectangleTree, double x, double y, path paths) {
     FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
@@ -110,12 +120,12 @@ void dpi(tree rectangleTree, double x, double y, path paths) {
 
     void* root = KDgetRootNode(rectangleTree);
     fprintf(results, "\ndpi:\n\n");
-    dpiInOrder(rectangleTree, root, x, y, names, &pos);
-    qsort(names, pos , sizeof(char*), sortNames);
-    for(int i = 0; i < pos; i++){
+    dpiInOrder(rectangleTree, root, x, y, names, &pos, 0);
+    qsort(names, pos, sizeof(char*), sortNames);
+    for (int i = 0; i < pos; i++) {
         fprintf(results, "%s\n", names[i]);
     }
-    for(int i = 0; i < size; i++){
+    for (int i = 0; i < size; i++) {
         free(names[i]);
     }
     free(names);
@@ -123,24 +133,36 @@ void dpi(tree rectangleTree, double x, double y, path paths) {
     fclose(results);
 }
 
-void drInOrder(tree rectangleTree, node current, node analize, char** names, int* index) {
-    void* aux = current;
+void drInOrder(tree rectangleTree, node current, node foundId, char** names, int* index, int level) {
+    if (current) {
 
-    if (aux) {
-
-        drInOrder(rectangleTree, KDgetLeftNode(aux), analize, names, index);
-
-        if (inside(getRectangleX(KDgetData(aux)), getRectangleY(KDgetData(aux)), getRectangleWidth(KDgetData(aux)), getRectangleHeight(KDgetData(aux)), getRectangleX(KDgetData(analize)), getRectangleY(KDgetData(analize)), getRectangleWidth(KDgetData(analize)), getRectangleHeight(KDgetData(analize))) && getRectangleId(KDgetData(aux)) != getRectangleId(KDgetData(analize))) {
-            
-            names[*index] = calloc(strlen(getRectangleId(KDgetData(aux))) + 1, sizeof(char));
-            strcpy(names[*index], getRectangleId(KDgetData(aux)));
+        if (inside(getRectangleX(KDgetData(current)), getRectangleY(KDgetData(current)), getRectangleWidth(KDgetData(current)), getRectangleHeight(KDgetData(current)), getRectangleX(KDgetData(foundId)), getRectangleY(KDgetData(foundId)), getRectangleWidth(KDgetData(foundId)), getRectangleHeight(KDgetData(foundId))) && getRectangleId(KDgetData(current)) != getRectangleId(KDgetData(foundId))) {
+            names[*index] = calloc(strlen(getRectangleId(KDgetData(current))) + 1, sizeof(char));
+            strcpy(names[*index], getRectangleId(KDgetData(current)));
 
             KDsetState(current, 0);
             KDsetSize(rectangleTree, KDgetSize(rectangleTree) - 1);
             *index = *index + 1;
         }
 
-        drInOrder(rectangleTree, KDgetRightNode(aux), analize, names, index);
+        if (level % 2 == 0) {
+            if (getRectangleX(KDgetData(current)) < getRectangleX(KDgetData(foundId))) {
+                drInOrder(rectangleTree, KDgetRightNode(current), foundId, names, index, level + 1);
+
+            } else {
+                drInOrder(rectangleTree, KDgetLeftNode(current), foundId, names, index, level + 1);
+                drInOrder(rectangleTree, KDgetRightNode(current), foundId, names, index, level + 1);
+            }
+
+        } else {
+            if (getRectangleY(KDgetData(current)) < getRectangleY(KDgetData(foundId))) {
+                drInOrder(rectangleTree, KDgetRightNode(current), foundId, names, index, level + 1);
+
+            } else {
+                drInOrder(rectangleTree, KDgetLeftNode(current), foundId, names, index, level + 1);
+                drInOrder(rectangleTree, KDgetRightNode(current), foundId, names, index, level + 1);
+            }
+        }
     }
 }
 
@@ -164,12 +186,12 @@ void dr(tree rectangleTree, char* id, path paths) {
         return;
     }
 
-    drInOrder(rectangleTree, KDgetRootNode(rectangleTree), KDsearchID(KDgetRootNode(rectangleTree), id), names, &pos);
+    drInOrder(rectangleTree, KDgetRootNode(rectangleTree), KDsearchID(KDgetRootNode(rectangleTree), id), names, &pos, 0);
     qsort(names, pos, sizeof(char*), sortNames);
-    for(int i = 0; i < pos; i++){
+    for (int i = 0; i < pos; i++) {
         fprintf(results, "%s\n", names[i]);
     }
-    for(int i = 0; i < size; i++){
+    for (int i = 0; i < size; i++) {
         free(names[i]);
     }
     free(names);
@@ -225,17 +247,14 @@ void fgInOrderCircle(tree rectangleTree, tree circleTree, FILE* results, void* c
 
 void loop_rectangle_tree(sorting_t rectangles_to_sort, void* current_rect, int* size) {
     if (current_rect) {
-
         loop_rectangle_tree(rectangles_to_sort, KDgetLeftNode(current_rect), size);
 
-        if(getVectorOfPeopleStarted(KDgetData(current_rect))){
-            
+        if (getVectorOfPeopleStarted(KDgetData(current_rect))) {
             strcpy(rectangles_to_sort.data[*size].rectName, getRectangleId(KDgetData(current_rect)));
             rectangles_to_sort.data[*size].peopleInside = getVectorOfPeople(KDgetData(current_rect));
             rectangles_to_sort.data[*size].numberOfPeopleInside = getNumberOfPeopleInside(KDgetData(current_rect));
             rectangles_to_sort.data[*size].originalRect = current_rect;
             *size = *size + 1;
-
         }
 
         loop_rectangle_tree(rectangles_to_sort, KDgetRightNode(current_rect), size);
@@ -243,7 +262,6 @@ void loop_rectangle_tree(sorting_t rectangles_to_sort, void* current_rect, int* 
 }
 
 void storeRectanglesToSort(tree rectangleTree, FILE* results) {
-    
     sorting_t rectangles_to_sort;
     rectangles_to_sort.data = calloc(KDgetSize(rectangleTree), sizeof(data_s));
     rectangles_to_sort.size = 0;
@@ -256,7 +274,6 @@ void storeRectanglesToSort(tree rectangleTree, FILE* results) {
     qsort(rectangles_to_sort.data, size, sizeof(data_s), sortingNamesRectangle);
 
     for (int i = 0; i < size; i++) {
-        
         void** arrayOfPeople = rectangles_to_sort.data[i].peopleInside;
         char** temp = calloc(rectangles_to_sort.data[i].numberOfPeopleInside, sizeof(char*));
 
@@ -267,9 +284,7 @@ void storeRectanglesToSort(tree rectangleTree, FILE* results) {
 
         qsort(temp, rectangles_to_sort.data[i].numberOfPeopleInside, sizeof(char*), sortNames);
 
-        
         fprintf(results, "✷ %s:\n", rectangles_to_sort.data[i].rectName);
-        
 
         for (int j = 0; j < rectangles_to_sort.data[i].numberOfPeopleInside; j++) {
             fprintf(results, "-> %s\n", temp[j]);
@@ -284,17 +299,15 @@ void storeRectanglesToSort(tree rectangleTree, FILE* results) {
         }
         free(temp);
 
-        fprintf(howManyRun, "%.2lf %.2lf %d\n", getRectangleX(KDgetData(rectangles_to_sort.data[i].originalRect)) + 2 , getRectangleY(KDgetData(rectangles_to_sort.data[i].originalRect)) + 5, rectangles_to_sort.data[i].numberOfPeopleInside);
+        fprintf(howManyRun, "%.2lf %.2lf %d\n", getRectangleX(KDgetData(rectangles_to_sort.data[i].originalRect)) + 2, getRectangleY(KDgetData(rectangles_to_sort.data[i].originalRect)) + 5, rectangles_to_sort.data[i].numberOfPeopleInside);
 
         freeVectorOfPeople(KDgetData(rectangles_to_sort.data[i].originalRect));
         setNumberOfPeopleInside(KDgetData(rectangles_to_sort.data[i].originalRect), 0);
         setVectorOfPeopleStarted(KDgetData(rectangles_to_sort.data[i].originalRect), 0);
-
     }
     free(rectangles_to_sort.data);
     fclose(howManyRun);
 }
-
 
 void updateCirclesNewPositions(tree circleTree, void* current_circ) {
     if (current_circ) {
@@ -322,22 +335,27 @@ void fg(tree rectangleTree, tree circleTree, double x, double y, double radius, 
 }
 
 char* colorPicker(double radiation) {
-    
-    if (radiation < 25) return "#00ffff";
-    else if (radiation >= 25 && radiation < 50) return "#00ff00";
-    else if (radiation >= 50 && radiation < 100) return "#ff00ff";
-    else if (radiation >= 100 && radiation < 250) return "#0000ff";
-    else if (radiation >= 250 && radiation < 600) return "#800080";
-    else if (radiation >= 600 && radiation < 1000) return "#000080";
-    else if (radiation >= 1000 && radiation < 8000) return "#ff0000";
-    else if (radiation >= 8000) return "#000000";
-
+    if (radiation < 25)
+        return "#00ffff";
+    else if (radiation >= 25 && radiation < 50)
+        return "#00ff00";
+    else if (radiation >= 50 && radiation < 100)
+        return "#ff00ff";
+    else if (radiation >= 100 && radiation < 250)
+        return "#0000ff";
+    else if (radiation >= 250 && radiation < 600)
+        return "#800080";
+    else if (radiation >= 600 && radiation < 1000)
+        return "#000080";
+    else if (radiation >= 1000 && radiation < 8000)
+        return "#ff0000";
+    else if (radiation >= 8000)
+        return "#000000";
 }
 
 void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircle, double xMeteor, double yMeteor) {
     
     if (currentShadowPolygon) {
-        
         imInOrderShadows(shadows, NTgetLeftNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
         void* line = NTgetData(currentShadowPolygon);  //Now has the array of segments
         int intersections = 0;
@@ -366,8 +384,7 @@ void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircl
     }
 }
 
-void imInOrderCircles(tree shadows, node currentCircle, double radiation, double xMeteor, double yMeteor, imSorting_t circlesToSort, int *index) {
-    
+void imInOrderCircles(tree shadows, node currentCircle, double radiation, double xMeteor, double yMeteor, imSorting_t circlesToSort, int* index) {
     if (currentCircle) {
         imInOrderCircles(shadows, KDgetLeftNode(currentCircle), radiation, xMeteor, yMeteor, circlesToSort, index);
         setInsideNShadows(KDgetData(currentCircle), 0);
@@ -384,28 +401,23 @@ void imInOrderCircles(tree shadows, node currentCircle, double radiation, double
         setCircleStroke(KDgetData(currentCircle), colorPicker(getRadiation(KDgetData(currentCircle))));
 
         if (getRadiation(KDgetData(currentCircle)) >= 1000 && getRadiation(KDgetData(currentCircle)) < 8000) {
-            
             strcpy(circlesToSort.data[*(index)].circleName, getCircleId(KDgetData(currentCircle)));
             circlesToSort.data[*(index)].radiation = getRadiation(KDgetData(currentCircle));
             *index = *index + 1;
 
-            
             setCircleMarkedForDeath(KDgetData(currentCircle), true);
 
         } else if (getRadiation(KDgetData(currentCircle)) >= 8000) {
             if (getCircleAlive(KDgetData(currentCircle))) {
-                
                 strcpy(circlesToSort.data[*(index)].circleName, getCircleId(KDgetData(currentCircle)));
                 circlesToSort.data[*(index)].radiation = getRadiation(KDgetData(currentCircle));
                 *index = *index + 1;
-                
+
                 setCircleAlive(KDgetData(currentCircle), false);
             }
         }
 
-
         imInOrderCircles(shadows, KDgetRightNode(currentCircle), radiation, xMeteor, yMeteor, circlesToSort, index);
-
     }
 }
 
@@ -420,21 +432,19 @@ void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, dou
     storeShadowPolygons(shadows, vertexArray, segments, xMeteor, yMeteor);
     fprintf(results, "IM: \n\n");
 
-
     imSorting_t toSortCircles;
     toSortCircles.data = calloc(KDgetSize(circleTree), sizeof(circle_data_t));
     int pos = 0;
     imInOrderCircles(shadows, KDgetRootNode(circleTree), radiation, xMeteor, yMeteor, toSortCircles, &pos);
     qsort(toSortCircles.data, pos, sizeof(circle_data_t), sortingNamesCircle);
-    
-    for(int i = 0; i < pos; i++){
-        if(toSortCircles.data[i].radiation >= 1000 && toSortCircles.data[i].radiation < 8000){
+
+    for (int i = 0; i < pos; i++) {
+        if (toSortCircles.data[i].radiation >= 1000 && toSortCircles.data[i].radiation < 8000) {
             fprintf(results, "%s - Morte Iminente\n", toSortCircles.data[i].circleName);
-        }else if(toSortCircles.data[i].radiation >= 8000){
+        } else if (toSortCircles.data[i].radiation >= 8000) {
             fprintf(results, "%s - Morte Instantanea\n", toSortCircles.data[i].circleName);
         }
     }
-
 
     fprintf(results, "\n========================================================\n");
     free(toSortCircles.data);
@@ -454,7 +464,6 @@ void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, dou
 
 void t30InOrderT30(tree circleTree, node currentCircle, FILE* results) {
     if (currentCircle) {
-
         t30InOrderT30(circleTree, KDgetLeftNode(currentCircle), results);
 
         if (getCircleMarkedForDeath(KDgetData(currentCircle))) {
@@ -463,7 +472,6 @@ void t30InOrderT30(tree circleTree, node currentCircle, FILE* results) {
         }
 
         t30InOrderT30(circleTree, KDgetRightNode(currentCircle), results);
-
     }
 }
 
@@ -494,14 +502,11 @@ void nveUpdateRadiation(void* currentPolygon, double xNve, double yNve, int* ins
             if (xNve != getPointX(point1) && xNve != getPointX(point2) && yNve != getPointY(point1) && yNve != getPointY(point2))
 
                 intersections++;
-
-            
         }
     }
 
     if (intersections % 2 == 1) {
         insideNPolygons++;
-        
     }
 
     *inside_polygons += (insideNPolygons);
@@ -509,7 +514,6 @@ void nveUpdateRadiation(void* currentPolygon, double xNve, double yNve, int* ins
 
 void nveInOrder(tree shadowTree, node currentListPosition, node currentPolygon, int* insideNPolygons, double x, double y, double xMeteor, double yMeteor) {
     if (currentPolygon) {
-
         nveInOrder(shadowTree, currentListPosition, NTgetLeftNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
 
         nveUpdateRadiation(currentPolygon, x, y, insideNPolygons, xMeteor, yMeteor);
@@ -519,7 +523,6 @@ void nveInOrder(tree shadowTree, node currentListPosition, node currentPolygon, 
 }
 
 void nve(dynamicList listOfTreesShadows, path paths, double x, double y) {
-    
     FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
     setvbuf(results, 0, _IONBF, 0);
     FILE* tempFileOfNve = fopen("nveTemp.txt", "a+");
@@ -533,10 +536,11 @@ void nve(dynamicList listOfTreesShadows, path paths, double x, double y) {
         void* treeNodeAux = NTgetRootNode(treeAux);               //I'm getting the root node from the tree that I'm analysing
         nveInOrder(treeAux, posAuxList, treeNodeAux, &inside_n_polygons, x, y, getDataxMeteor(posAuxList), getDatayMeteor(posAuxList));
 
-        if (!inside_n_polygons) radiationAtThePoint += (getDataRadiation(posAuxList));
-        else radiationAtThePoint += (pow(0.8, inside_n_polygons) * getDataRadiation(posAuxList));
+        if (!inside_n_polygons)
+            radiationAtThePoint += (getDataRadiation(posAuxList));
+        else
+            radiationAtThePoint += (pow(0.8, inside_n_polygons) * getDataRadiation(posAuxList));
         posAuxList = getNext(listOfTreesShadows, posAuxList);
-
     }
 
     fprintf(results, "NVE: \n\n(%.6lf, %.6lf) has %.6lf mSv\n", x, y, radiationAtThePoint);
