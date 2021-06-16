@@ -28,7 +28,6 @@ int getNumberOfPeopleInside(node current);
 void allocateVectorOfPeople(node current);
 void freeVectorOfPeople(node current);
 void **getVectorOfPeople(node current);
-void tempFreeVectorOfPeople(node current);
 void setAddresses(node current, void* address, int line);
 
 

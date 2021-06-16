@@ -246,6 +246,8 @@ void storeRectanglesToSort(tree rectangleTree, FILE* results) {
     rectangles_to_sort.data = calloc(KDgetSize(rectangleTree), sizeof(data_s));
     rectangles_to_sort.size = 0;
     int size = 0;
+    FILE* howManyRun = fopen("fgTemp.txt", "a+");
+    setvbuf(howManyRun, 0, _IONBF, 0);
 
     loop_rectangle_tree(rectangles_to_sort, KDgetRootNode(rectangleTree), &size);
 
@@ -280,12 +282,15 @@ void storeRectanglesToSort(tree rectangleTree, FILE* results) {
         }
         free(temp);
 
+        
+
         freeVectorOfPeople(KDgetData(rectangles_to_sort.data[i].originalRect));
         setNumberOfPeopleInside(KDgetData(rectangles_to_sort.data[i].originalRect), 0);
         setVectorOfPeopleStarted(KDgetData(rectangles_to_sort.data[i].originalRect), 0);
 
     }
     free(rectangles_to_sort.data);
+    fclose(howManyRun);
 }
 
 
@@ -447,6 +452,7 @@ void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, dou
 
 void t30InOrderT30(tree circleTree, node currentCircle, FILE* results) {
     if (currentCircle) {
+
         t30InOrderT30(circleTree, KDgetLeftNode(currentCircle), results);
 
         if (getCircleMarkedForDeath(KDgetData(currentCircle))) {
@@ -455,6 +461,7 @@ void t30InOrderT30(tree circleTree, node currentCircle, FILE* results) {
         }
 
         t30InOrderT30(circleTree, KDgetRightNode(currentCircle), results);
+
     }
 }
 
@@ -509,6 +516,7 @@ void nveInOrder(tree shadowTree, node currentListPosition, node currentPolygon, 
 }
 
 void nve(dynamicList listOfTreesShadows, path paths, double x, double y) {
+    
     FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
     setvbuf(results, 0, _IONBF, 0);
     FILE* tempFileOfNve = fopen("nveTemp.txt", "a+");

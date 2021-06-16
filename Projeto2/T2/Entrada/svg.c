@@ -65,6 +65,7 @@ void printNves(FILE* nveTemp, FILE* svg_source) {
         }
 
         fprintf(svg_source, "\t<rect x=\"%.2lf\" y=\"%.2lf\" width=\"5\" height=\"5\"\n  style=\"fill:%s;stroke:%s;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1\" rx=\"1\"/>\n", posX, posY, color, color);
+        fprintf(svg_source, "\t<text x=\"%.2lf\" y=\"%.2lf\" font-size=\"1\">%.2lf</text>\n", posX + 1, posY + 2, radiation);
     }
 }
 
