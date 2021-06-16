@@ -29,21 +29,14 @@ void printCircleInOrder(FILE* svg_source, tree initialTree, node current) {
                 fprintf(svg_source, "\t<circle r=\"%.2lf\" id=\"%s\" stroke=\"%s\" stroke-width=\".5\" fill=\"%s\" fill-opacity = \"0.5\" >\n", getCircleRadius(KDgetData(current)), getCircleId(KDgetData(current)), getCircleStroke(KDgetData(current)), getCircleFill(KDgetData(current)));
                 fprintf(svg_source, "\t\t<animateMotion dur=\"10s\" repeatCount=\"indefinite\" path=\"M%.2lf,%.2lf %.2lf,%.2lf z\"/>\n", getCircleOriginalX(KDgetData(current)), getCircleOriginalY(KDgetData(current)), getRectangleCenterX(KDgetData(getRunTo(KDgetData(current)))), getRectangleCenterY(KDgetData(getRunTo(KDgetData(current)))));
                 fprintf(svg_source, "\t</circle>\n");
-            }  //Aqui o if de cima eh para a pessoa correr apenas se o predio para onde ela correra existe, tem que perguntar isso pro evandro.
-            // if(getFg(KDgetData(current))){
-            //     fprintf(svg_source, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"%.2lf\" id=\"%s\" stroke=\"grey\" stroke-width=\".5\" fill=\"lightgrey\" fill-opacity = \"0.3\" />\n", getCircleOriginalX(KDgetData(current)), getCircleOriginalY(KDgetData(current)), getCircleRadius(KDgetData(current)), getCircleId(KDgetData(current)));
-            //     fprintf(svg_source, "\t<path fill=\"none\" stroke=\"white\" stroke-dasharray=\"2\" d=\"M%.2lf,%.2lf %.2lf,%.2lf z\"/>\n", getCircleOriginalX(KDgetData(current)), getCircleOriginalY(KDgetData(current)), getRectangleCenterX(KDgetData(getRunTo(KDgetData(current)))), getRectangleCenterY(KDgetData(getRunTo(KDgetData(current)))));
-            //     fprintf(svg_source, "\t<circle r=\"%.2lf\" id=\"%s\" stroke=\"%s\" stroke-width=\".5\" fill=\"%s\" fill-opacity = \"0.5\" >\n", getCircleRadius(KDgetData(current)), getCircleId(KDgetData(current)), getCircleStroke(KDgetData(current)), getCircleFill(KDgetData(current)));
-            //     fprintf(svg_source, "\t\t<animateMotion dur=\"10s\" repeatCount=\"indefinite\" path=\"M%.2lf,%.2lf %.2lf,%.2lf z\"/>\n", getCircleOriginalX(KDgetData(current)), getCircleOriginalY(KDgetData(current)), getRectangleCenterX(KDgetData(getRunTo(KDgetData(current)))), getRectangleCenterY(KDgetData(getRunTo(KDgetData(current)))));
-            //     fprintf(svg_source, "\t</circle>\n");
-            // }
+            }
             else {
                 fprintf(svg_source, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"%.2lf\" id=\"%s\" stroke=\"%s\" stroke-width=\".5\" fill=\"%s\" fill-opacity = \"0.5\" />\n", getCircleX(KDgetData(current)), getCircleY(KDgetData(current)), getCircleRadius(KDgetData(current)), getCircleId(KDgetData(current)), getCircleStroke(KDgetData(current)), getCircleFill(KDgetData(current)));
             }
         } else {
             fprintf(svg_source, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"%.2lf\" id=\"%s\" stroke=\"black\" stroke-width=\".5\" fill=\"black\" fill-opacity = \"0.5\" />\n", getCircleX(KDgetData(current)), getCircleY(KDgetData(current)), getCircleRadius(KDgetData(current)), getCircleId(KDgetData(current)));
-            fprintf(svg_source, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" stroke=\"white\" stroke-width=\".6\"/>\n", getCircleX(KDgetData(current)) - getCircleRadius(KDgetData(current)) + 10, getCircleY(KDgetData(current)), getCircleX(KDgetData(current)) + getCircleRadius(KDgetData(current)) - 10, getCircleY(KDgetData(current)));  //Horizontal
-            fprintf(svg_source, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" stroke=\"white\" stroke-width=\".6\"/>\n", getCircleX(KDgetData(current)), getCircleY(KDgetData(current)) - getCircleRadius(KDgetData(current)) + 10, getCircleX(KDgetData(current)), getCircleY(KDgetData(current)) + getCircleRadius(KDgetData(current)) - 10);  //Vertical
+            fprintf(svg_source, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" stroke=\"white\" stroke-width=\".6\"/>\n", getCircleX(KDgetData(current)) - getCircleRadius(KDgetData(current))/2, getCircleY(KDgetData(current)), getCircleX(KDgetData(current)) + getCircleRadius(KDgetData(current))/2, getCircleY(KDgetData(current)));  //Horizontal
+            fprintf(svg_source, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" stroke=\"white\" stroke-width=\".6\"/>\n", getCircleX(KDgetData(current)), getCircleY(KDgetData(current)) - getCircleRadius(KDgetData(current))/2, getCircleX(KDgetData(current)), getCircleY(KDgetData(current)) + getCircleRadius(KDgetData(current))/2 );  //Vertical
         }
         printCircleInOrder(svg_source, initialTree, KDgetRightNode(current));
     }
