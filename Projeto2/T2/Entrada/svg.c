@@ -65,7 +65,7 @@ void printNves(FILE* nveTemp, FILE* svg_source) {
         }
 
         fprintf(svg_source, "\t<rect x=\"%.2lf\" y=\"%.2lf\" width=\"5\" height=\"5\"\n  style=\"fill:%s;stroke:%s;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1\" rx=\"1\"/>\n", posX, posY, color, color);
-        fprintf(svg_source, "\t<text x=\"%.2lf\" y=\"%.2lf\" font-size=\"1\">%.2lf</text>\n", posX + 1, posY + 2, radiation);
+        fprintf(svg_source, "\t<text x=\"%.2lf\" y=\"%.2lf\" fill=\"white\" font-size=\"1\">%.2lf</text>\n", posX + 1, posY + 2, radiation);
     }
 }
 
@@ -73,6 +73,14 @@ void printIms(FILE* imExist, FILE* svg_source) {
     double x, y, radius;
     while (fscanf(imExist, "%lf %lf %lf", &x, &y, &radius) != -1) {
         fprintf(svg_source, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"%.2lf\" stroke=\"dimgrey\" stroke-width=\".5\" fill=\"dimgrey\" fill-opacity = \"0.1\" />\n", x, y, radius);
+    }
+}
+
+void printFgs(FILE* fgExist, FILE* svg_source) {
+    double x, y;
+    int number_of_sheltered;
+    while (fscanf(fgExist, "%lf %lf %d", &x, &y, &number_of_sheltered) != -1) {
+        fprintf(svg_source, "\t<text x=\"%.2lf\" y=\"%.2lf\" font-size=\"5\">%d</text>\n", x, y, number_of_sheltered);
     }
 }
 
@@ -103,6 +111,15 @@ void writeOnSvg(FILE* svg_source, tree rectTree, tree circleTree, path paths) {
         fclose(imExist);
         remove("imTemp.txt");
     }
+
+    FILE* fgExist = fopen("fgTemp.txt", "r");
+    if(fgExist){
+        setvbuf(fgExist, 0, _IONBF, 0);
+        printFgs(fgExist, svg_source);
+        fclose(fgExist);
+        remove("fgTemp.txt");
+    }
+
 
     fprintf(svg_source, "</svg>");
 }

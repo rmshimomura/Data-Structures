@@ -282,7 +282,7 @@ void storeRectanglesToSort(tree rectangleTree, FILE* results) {
         }
         free(temp);
 
-        
+        fprintf(howManyRun, "%.2lf %.2lf %d\n", getRectangleX(KDgetData(rectangles_to_sort.data[i].originalRect)) + 2 , getRectangleY(KDgetData(rectangles_to_sort.data[i].originalRect)) + 5, rectangles_to_sort.data[i].numberOfPeopleInside);
 
         freeVectorOfPeople(KDgetData(rectangles_to_sort.data[i].originalRect));
         setNumberOfPeopleInside(KDgetData(rectangles_to_sort.data[i].originalRect), 0);
