@@ -554,7 +554,7 @@ void imInOrderCircles(tree shadows, node currentCircle, double radiation, double
             }
         }
 
-        
+
         imInOrderCircles(shadows, KDgetRightNode(currentCircle), radiation, xMeteor, yMeteor, circlesToSort, index);
 
     }
@@ -570,7 +570,7 @@ void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, dou
     void* vertexArray = buildVertexArray(segments, xMeteor, yMeteor);
     storeShadowPolygons(shadows, vertexArray, segments, xMeteor, yMeteor);
     fprintf(results, "IM: \n\n");
-    
+
 
     imSorting_t toSortCircles;
     toSortCircles.data = calloc(KDgetSize(circleTree), sizeof(circle_data_t));
