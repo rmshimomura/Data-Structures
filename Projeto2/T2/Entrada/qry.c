@@ -146,6 +146,7 @@ void drInOrder(tree rectangleTree, node current, node foundId, char** names, int
         }
 
         if (level % 2 == 0) {
+
             if (getRectangleX(KDgetData(current)) < getRectangleX(KDgetData(foundId))) {
                 drInOrder(rectangleTree, KDgetRightNode(current), foundId, names, index, level + 1);
 
@@ -155,6 +156,7 @@ void drInOrder(tree rectangleTree, node current, node foundId, char** names, int
             }
 
         } else {
+            
             if (getRectangleY(KDgetData(current)) < getRectangleY(KDgetData(foundId))) {
                 drInOrder(rectangleTree, KDgetRightNode(current), foundId, names, index, level + 1);
 
@@ -356,11 +358,14 @@ char* colorPicker(double radiation) {
 void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircle, double xMeteor, double yMeteor) {
     
     if (currentShadowPolygon) {
+        
         imInOrderShadows(shadows, NTgetLeftNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
+        
         void* line = NTgetData(currentShadowPolygon);  //Now has the array of segments
         int intersections = 0;
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 3; i++) {
+
             void* info = atPosArray(line, i);
             void* point1 = getP1(info);
             void* point2 = getP2(info);

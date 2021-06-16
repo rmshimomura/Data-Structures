@@ -788,7 +788,7 @@ void setAngle(void* point, double angle) {
 
 void freeShadowPolygonsArray(void* array) {
     segment_t* aux = array;
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 3; i++) {
         if (!aux[i].point1 || !aux[i].point2 || !&aux[i]) {
             break;
         } else {
