@@ -328,6 +328,25 @@ void getFunctions(tree rectangleTree, tree circleTree, dynamicList listOfTreesSh
     setvbuf(Svg_Modificado, 0, _IONBF, 0);
     FILE* comandos = fopen(getPathArquivoQryAtual(paths), "r");
     setvbuf(comandos, 0, _IONBF, 0);
+    FILE* imExist = fopen("imTemp.txt", "r");
+    if (imExist) {
+        setvbuf(imExist, 0, _IONBF, 0);
+        fclose(imExist);
+        remove("imTemp.txt");
+    }
+    FILE* nveExist = fopen("nveTemp.txt", "r");
+    if (nveExist) {
+        setvbuf(nveExist, 0, _IONBF, 0);
+        fclose(nveExist);
+        remove("nveTemp.txt");
+    }
+
+    FILE* fgExist = fopen("fgTemp.txt", "r");
+    if(fgExist){
+        setvbuf(fgExist, 0, _IONBF, 0);
+        fclose(fgExist);
+        remove("fgTemp.txt");
+    }
     double x = 0.0;
     double y = 0.0;
     double radius = 0;

@@ -23,7 +23,6 @@ typedef struct point {
 typedef struct segment {
     point_t* point1;
     point_t* point2;
-    bool activated;
 
 } segment_t;
 
@@ -67,13 +66,6 @@ int compareForQSort(const void* a, const void* b) {
     else if (tempA->type == 'e' && tempB->type == 's') return 1;
     
     return 0;
-}
-
-void* radius(point_t* point1, point_t* point2){ //Need to fix!
-    segment_t* aux = calloc(1, sizeof(segment_t));
-    aux->point1->x = point1->x;     aux->point1->y = point1->y;
-    aux->point2->x = point2->x;     aux->point2->y = point2->y;
-    return aux;
 }
 
 void buildSegments(tree rectangleTree, dynamicList segmentsList, void* current_rect) {
@@ -149,105 +141,6 @@ void buildSegments(tree rectangleTree, dynamicList segmentsList, void* current_r
             insert(segmentsList, segment4);
         }
         buildSegments(rectangleTree, segmentsList, KDgetRightNode(current_rect));
-    }
-}
-
-void checkNewDivisions(dynamicList segmentsList, double xMeteor, double yMeteor) {
-    void* posAux = getHead(segmentsList);
-
-    while (posAux) {
-        int removed = 0;
-        segment_t* segmentChecker = getItem(segmentsList, posAux);
-        void* temp = getNext(segmentsList, posAux);
-        if ((segmentChecker->point1->y < yMeteor && segmentChecker->point2->y > yMeteor && segmentChecker->point1->x == segmentChecker->point2->x && segmentChecker->point1->x >= xMeteor) || (segmentChecker->point1->y > yMeteor && segmentChecker->point2->y < yMeteor && segmentChecker->point1->x == segmentChecker->point2->x && segmentChecker->point1->x >= xMeteor)) {
-            if(strcmp(segmentChecker->point1->code, "RE") && strcmp(segmentChecker->point2->code, "RE")){
-
-                segment_t* newSegment1 = calloc(1, sizeof(segment_t));
-                newSegment1->point1 = calloc(1, sizeof(point_t));
-                newSegment1->point2 = calloc(1, sizeof(point_t));
-
-                newSegment1->point1->x = segmentChecker->point1->x;
-                newSegment1->point1->y = segmentChecker->point1->y;
-
-                newSegment1->point2->x = segmentChecker->point1->x;
-                newSegment1->point2->y = yMeteor;
-
-                newSegment1->point1->linkedTo = newSegment1;
-                newSegment1->point2->linkedTo = newSegment1;
-
-                newSegment1->point1->pair = newSegment1->point2;
-                newSegment1->point2->pair = newSegment1->point1;
-
-                strcpy(newSegment1->point1->code, "ORIG");
-                strcpy(newSegment1->point2->code, "DIV");
-
-                if(newSegment1->point1->y > newSegment1->point2->y){
-                    
-                    newSegment1->point1->type = 'e';
-                    newSegment1->point2->type = 's';
-                    
-                    
-                }
-                if(newSegment1->point1->y < newSegment1->point2->y){
-                    newSegment1->point1->type = 's';
-                    newSegment1->point2->type = 'e';
-                    
-                }
-                
-
-                segment_t* newSegment2 = calloc(1, sizeof(segment_t));
-                newSegment2->point1 = calloc(1, sizeof(point_t));
-                newSegment2->point2 = calloc(1, sizeof(point_t));
-
-                newSegment2->point1->x = segmentChecker->point2->x;
-                newSegment2->point1->y = segmentChecker->point2->y;
-
-                newSegment2->point2->x = segmentChecker->point2->x;
-                newSegment2->point2->y = yMeteor;
-
-                newSegment2->point1->linkedTo = newSegment2;
-                newSegment2->point2->linkedTo = newSegment2;
-
-                newSegment2->point1->pair = newSegment2->point2;
-                newSegment2->point2->pair = newSegment2->point1;
-
-                strcpy(newSegment2->point1->code, "ORIG");
-                strcpy(newSegment2->point2->code, "DIV");
-
-                if(newSegment2->point1->y > newSegment2->point2->y){
-                    newSegment2->point1->type = 'e';
-                    newSegment2->point2->type = 's';
-                   
-                }
-                if(newSegment2->point1->y < newSegment2->point2->y){
-                    newSegment2->point1->type = 's';
-                    newSegment2->point2->type = 'e';
-                    
-                }
-
-                if(newSegment1->point1->y > newSegment2->point1->y){
-                    strcpy(newSegment1->point1->code, "SI");
-                    strcpy(newSegment1->point2->code, "SI");
-                    strcpy(newSegment2->point1->code, "SF");
-                    strcpy(newSegment2->point2->code, "SF");
-                }else if(newSegment1->point1->y < newSegment2->point1->y){
-                    strcpy(newSegment2->point1->code, "SI");
-                    strcpy(newSegment2->point2->code, "SI");
-                    strcpy(newSegment1->point1->code, "SF");
-                    strcpy(newSegment1->point2->code, "SF");
-                }
-
-                insert(segmentsList, newSegment1);
-                insert(segmentsList, newSegment2);
-                removeNode(segmentsList, posAux);
-                removed = 1;
-            }
-        }
-        if (removed) {
-            posAux = temp;
-        } else {
-            posAux = getNext(posAux, posAux);
-        }
     }
 }
 

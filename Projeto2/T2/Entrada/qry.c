@@ -84,7 +84,7 @@ void dpiInOrder(tree rectangleTree, node currentNode, double x, double y, char**
 
         if (level % 2 == 0) {
             if (x < getRectangleX(KDgetData(currentNode))) {
-                dpiInOrder(rectangleTree, KDgetRightNode(currentNode), x, y, names, index, level + 1);
+                dpiInOrder(rectangleTree, KDgetLeftNode(currentNode), x, y, names, index, level + 1);
 
             } else if (x >= getRectangleX(KDgetData(currentNode))) {
                 dpiInOrder(rectangleTree, KDgetLeftNode(currentNode), x, y, names, index, level + 1);
@@ -93,7 +93,7 @@ void dpiInOrder(tree rectangleTree, node currentNode, double x, double y, char**
 
         } else if (level % 2 == 1) {
             if (y < getRectangleY(KDgetData(currentNode))) {
-                dpiInOrder(rectangleTree, KDgetRightNode(currentNode), x, y, names, index, level + 1);
+                dpiInOrder(rectangleTree, KDgetLeftNode(currentNode), x, y, names, index, level + 1);
 
             } else if (y >= getRectangleY(KDgetData(currentNode))) {
                 dpiInOrder(rectangleTree, KDgetLeftNode(currentNode), x, y, names, index, level + 1);
@@ -494,7 +494,7 @@ void nveUpdateRadiation(void* currentPolygon, double xNve, double yNve, int* ins
     void* line = NTgetData(currentPolygon);
     int intersections = 0;
 
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 3; i++) {
         void* info = atPosArray(line, i);
         void* point1 = getP1(info);
         void* point2 = getP2(info);
@@ -541,10 +541,9 @@ void nve(dynamicList listOfTreesShadows, path paths, double x, double y) {
         void* treeNodeAux = NTgetRootNode(treeAux);               //I'm getting the root node from the tree that I'm analysing
         nveInOrder(treeAux, posAuxList, treeNodeAux, &inside_n_polygons, x, y, getDataxMeteor(posAuxList), getDatayMeteor(posAuxList));
 
-        if (!inside_n_polygons)
-            radiationAtThePoint += (getDataRadiation(posAuxList));
-        else
-            radiationAtThePoint += (pow(0.8, inside_n_polygons) * getDataRadiation(posAuxList));
+        if (!inside_n_polygons) radiationAtThePoint += (getDataRadiation(posAuxList));
+        else radiationAtThePoint += (pow(0.8, inside_n_polygons) * getDataRadiation(posAuxList));
+
         posAuxList = getNext(listOfTreesShadows, posAuxList);
     }
 

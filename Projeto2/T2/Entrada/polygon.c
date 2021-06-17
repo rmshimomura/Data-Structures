@@ -24,7 +24,6 @@ typedef struct point {
 typedef struct segment {
     point_t* point1;
     point_t* point2;
-    bool activated;
 
 } segment_t;
 
@@ -52,7 +51,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
     for (int i = 0; i < getSize(segmentsList) * 2; i++) {
         if (!strcmp(auxVertex[i].code, "ORIG") && !strcmp(getCode(auxVertex[i].pair), "ORIG") && auxVertex[i].analyzed == false && getAnalyzed(auxVertex[i].pair) == false) {
             segment_t* segment = calloc(1, sizeof(segment_t));
-            segment_t* sidesOfShadowPolygon = calloc(7, sizeof(segment_t));
+            segment_t* sidesOfShadowPolygon = calloc(3, sizeof(segment_t));
 
             int horizontal = 0;
             int vertical = 0;
@@ -286,16 +285,31 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
     free(extremes);
 }
 
-double getMinimumX(dynamicList listOfSegmentsShadowPolygon) {
-    void* aux = getHead(listOfSegmentsShadowPolygon);
-    double min = __DBL_MAX__;
-    for (int i = 0; i < getSize(listOfSegmentsShadowPolygon); i++) {
-        point_t* wow = getItem(listOfSegmentsShadowPolygon, aux);
-        if (wow->x < min) {
-            min = wow->x;
+double getMinimumX(void* listOfSegmentsShadowPolygon) {
+
+    segment_t* polygon = listOfSegmentsShadowPolygon;
+
+    double min = DBL_MAX;
+
+    segment_t originalPoint = polygon[0];
+
+    int vertical = 0;
+
+    for (int i = 0; i < 3; i++) {
+
+        segment_t wow = polygon[i];
+
+        double smaller;
+        if(wow.point1->x < wow.point2->x){
+            smaller = wow.point1->x;
+        }else{
+            smaller = wow.point2->x;
         }
-        aux = getNext(listOfSegmentsShadowPolygon, aux);
+        if (smaller < min) {
+            min = smaller;
+        }
     }
+
     return min;
 }
 
@@ -303,7 +317,7 @@ void getShadows(tree shadows, node current, FILE* aux) {
     if (current) {
         getShadows(shadows, NTgetLeftNode(current), aux);
         segment_t* wow = NTgetData(current);
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 3; i++) {
             if (!wow[i].point1 || !wow[i].point2 || !&wow[i]) {
                 break;
             } else {
