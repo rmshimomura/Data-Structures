@@ -314,7 +314,7 @@ void getShadows(tree shadows, node current, FILE* aux) {
         getShadows(shadows, NTgetLeftNode(current), aux);
         segment_t* wow = NTgetData(current);
         for (int i = 0; i < 3; i++) {
-            fprintf(aux, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" stroke=\"yellow\" stroke-width=\".3\"/>\n", wow[i].point1->x, wow[i].point1->y, wow[i].point2->x, wow[i].point2->y);
+            fprintf(aux, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" stroke=\"red\" stroke-width=\".3\"/>\n", wow[i].point1->x, wow[i].point1->y, wow[i].point2->x, wow[i].point2->y);
             
         }
         getShadows(shadows, NTgetRightNode(current), aux);

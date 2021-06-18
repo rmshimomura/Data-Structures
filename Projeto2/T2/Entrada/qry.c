@@ -423,6 +423,7 @@ void imInOrderCircles(tree shadows, node currentCircle, double radiation, double
 }
 
 void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, double xMeteor, double yMeteor, double radiation, path paths) {
+    
     FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
     setvbuf(results, 0, _IONBF, 0);
     tree shadows = NTcreateTree();
@@ -518,6 +519,27 @@ void nveInOrder(tree shadowTree, node currentListPosition, node currentPolygon, 
         nveInOrder(shadowTree, currentListPosition, NTgetRightNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
     }
 }
+
+/*
+void nveInOrder(tree shadowTree, node currentListPosition, node currentPolygon, int* insideNPolygons, double x, double y, double xMeteor, double yMeteor) {
+    if (currentPolygon) {
+        
+        nveUpdateRadiation(currentPolygon, x, y, insideNPolygons, xMeteor, yMeteor);
+
+        if(x < getMinimumX(currentPolygon)){
+            nveInOrder(shadowTree, currentListPosition, NTgetLeftNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);    
+        }else{
+            nveInOrder(shadowTree, currentListPosition, NTgetLeftNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
+            nveInOrder(shadowTree, currentListPosition, NTgetRightNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
+        }
+
+        // nveInOrder(shadowTree, currentListPosition, NTgetLeftNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
+
+
+        // nveInOrder(shadowTree, currentListPosition, NTgetRightNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
+    }
+}
+*/
 
 void nve(dynamicList listOfTreesShadows, path paths, double x, double y) {
     FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
