@@ -89,8 +89,8 @@ void writeOnSvg(FILE* svg_source, tree rectTree, tree circleTree, path paths) {
         fprintf(svg_source, "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"100%%\" height=\"100%%\">\n \t<svg>");
         fclose(svg_source);
     }
-    fprintf(svg_source, "<!-- Rodrigo Mimura Shimomura -->\n <svg viewBox = \"0 0 %.2lf %.2lf\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n", max(getBiggestX(rectTree), getBiggestX(circleTree)) + 15, max(getBiggestY(rectTree), getBiggestY(circleTree)) + 15);
-    fprintf(svg_source, "\t<rect x=\"0\" y=\"0\" width=\"%.2lf\" height=\"%.2lf\" \n  style=\"fill:lightgrey;stroke:yellow;stroke-width:.5;fill-opacity:0.1;stroke-opacity:1\" />\n", max(getBiggestX(rectTree), getBiggestX(circleTree)) + 15, max(getBiggestY(rectTree), getBiggestY(circleTree)) + 15);
+    fprintf(svg_source, "<!-- Rodrigo Mimura Shimomura -->\n <svg viewBox = \"-100 -100 %.2lf %.2lf\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n", max(getBiggestX(rectTree), getBiggestX(circleTree)) + 15, max(getBiggestY(rectTree), getBiggestY(circleTree)) + 15);
+    fprintf(svg_source, "\t<rect x=\"-100\" y=\"-100\" width=\"%.2lf\" height=\"%.2lf\" \n  style=\"fill:lightgrey;stroke:yellow;stroke-width:.5;fill-opacity:0.1;stroke-opacity:1\" />\n", max(getBiggestX(rectTree), getBiggestX(circleTree)) + 15, max(getBiggestY(rectTree), getBiggestY(circleTree)) + 15);
     if (KDgetSize(rectTree)) {
         printRectangleInOrder(svg_source, rectTree, KDgetRootNode(rectTree));
     }
