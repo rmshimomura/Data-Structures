@@ -291,10 +291,6 @@ double getMinimumX(void* listOfSegmentsShadowPolygon) {
 
     double min = DBL_MAX;
 
-    segment_t originalPoint = polygon[0];
-
-    int vertical = 0;
-
     for (int i = 0; i < 3; i++) {
 
         segment_t wow = polygon[i];
@@ -318,11 +314,8 @@ void getShadows(tree shadows, node current, FILE* aux) {
         getShadows(shadows, NTgetLeftNode(current), aux);
         segment_t* wow = NTgetData(current);
         for (int i = 0; i < 3; i++) {
-            if (!wow[i].point1 || !wow[i].point2 || !&wow[i]) {
-                break;
-            } else {
-                fprintf(aux, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" stroke=\"yellow\" stroke-width=\".3\"/>\n", wow[i].point1->x, wow[i].point1->y, wow[i].point2->x, wow[i].point2->y);
-            }
+            fprintf(aux, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" stroke=\"yellow\" stroke-width=\".3\"/>\n", wow[i].point1->x, wow[i].point1->y, wow[i].point2->x, wow[i].point2->y);
+            
         }
         getShadows(shadows, NTgetRightNode(current), aux);
     }

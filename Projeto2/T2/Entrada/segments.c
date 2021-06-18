@@ -73,7 +73,6 @@ void buildSegments(tree rectangleTree, dynamicList segmentsList, void* current_r
         buildSegments(rectangleTree, segmentsList, KDgetLeftNode(current_rect));
 
         if (KDgetState(current_rect)) {
-            int splitSegment2 = 0, splitSegment4 = 0;
 
             segment_t* segment1 = calloc(1, sizeof(segment_t));
             segment1->point1 = calloc(1, sizeof(point_t));
@@ -531,13 +530,6 @@ void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor)
     }
     
     qsort(aux, 2 * getSize(segmentsList), sizeof(point_t), compareForQSort);
-
-    // puts("=======================================");
-    // for(int i = 0; i < 2 * getSize(segmentsList); i++){
-    //     if(!strcmp(aux[i].code, "DIV")) 
-    //         printf("aux[%d] = (%.2lf, %.2lf) type = %c angle = %.2lf connected to (%.2lf, %.2lf) type = %c angle = %.2lf\n", i, aux[i].x, aux[i].y, aux[i].type, aux[i].angle , getPointX(aux[i].pair), getPointY(aux[i].pair), getPointType(aux[i].pair), getAngle(aux[i].pair));
-    // }
-    // puts("=======================================\n\n\n\n\n");
     
     return aux;
 }
@@ -682,11 +674,9 @@ void setAngle(void* point, double angle) {
 void freeShadowPolygonsArray(void* array) {
     segment_t* aux = array;
     for (int i = 0; i < 3; i++) {
-        if (!aux[i].point1 || !aux[i].point2 || !&aux[i]) {
-            break;
-        } else {
-            free(aux[i].point1);
-            free(aux[i].point2);
-        }
+        
+        free(aux[i].point1);
+        free(aux[i].point2);
+        
     }
 }

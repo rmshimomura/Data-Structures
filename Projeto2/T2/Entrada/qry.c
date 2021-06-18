@@ -370,10 +370,6 @@ void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircl
             void* point1 = getP1(info);
             void* point2 = getP2(info);
 
-            if (!point1 || !point2) {
-                break;
-            }
-
             if (get_line_intersection(getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2), getCircleX(KDgetData(currentCircle)), getCircleY(KDgetData(currentCircle)), xMeteor, yMeteor)) {
                 if (getCircleX(KDgetData(currentCircle)) != getPointX(point1) && getCircleX(KDgetData(currentCircle)) != getPointX(point2) && getCircleY(KDgetData(currentCircle)) != getPointY(point1) && getCircleY(KDgetData(currentCircle)) != getPointY(point2))
 
@@ -498,10 +494,6 @@ void nveUpdateRadiation(void* currentPolygon, double xNve, double yNve, int* ins
         void* info = atPosArray(line, i);
         void* point1 = getP1(info);
         void* point2 = getP2(info);
-
-        if (!point1 || !point2) {
-            break;
-        }
 
         if (get_line_intersection(getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2), xNve, yNve, xMeteor, yMeteor)) {
             if (xNve != getPointX(point1) && xNve != getPointX(point2) && yNve != getPointY(point1) && yNve != getPointY(point2))
