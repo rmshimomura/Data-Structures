@@ -542,7 +542,14 @@ void nve(dynamicList listOfTreesShadows, path paths, double x, double y) {
         nveInOrder(treeAux, posAuxList, treeNodeAux, &inside_n_polygons, x, y, getDataxMeteor(posAuxList), getDatayMeteor(posAuxList));
 
         if (!inside_n_polygons) radiationAtThePoint += (getDataRadiation(posAuxList));
-        else radiationAtThePoint += (pow(0.8, inside_n_polygons) * getDataRadiation(posAuxList));
+        else {
+            double factor = 1;
+            for(int i = 0; i < inside_n_polygons; i++){
+                factor *= 0.8;
+            }
+            radiationAtThePoint += (factor * getDataRadiation(posAuxList));
+            // radiationAtThePoint += (pow(0.8, inside_n_polygons) * getDataRadiation(posAuxList));
+        }
 
         posAuxList = getNext(listOfTreesShadows, posAuxList);
     }

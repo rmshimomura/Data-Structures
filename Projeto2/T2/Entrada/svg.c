@@ -98,21 +98,20 @@ void writeOnSvg(FILE* svg_source, tree rectTree, tree circleTree, path paths) {
         printCircleInOrder(svg_source, circleTree, KDgetRootNode(circleTree));
     }
     
-    
-    FILE* imExist = fopen("imTemp.txt", "r");
-    if (imExist) {
-        setvbuf(imExist, 0, _IONBF, 0);
-        printIms(imExist, svg_source);
-        fclose(imExist);
-        remove("imTemp.txt");
-    }
-
     FILE* nveExist = fopen("nveTemp.txt", "r");
     if (nveExist) {
         setvbuf(nveExist, 0, _IONBF, 0);
         printNves(nveExist, svg_source);
         fclose(nveExist);
         remove("nveTemp.txt");
+    }
+
+    FILE* imExist = fopen("imTemp.txt", "r");
+    if (imExist) {
+        setvbuf(imExist, 0, _IONBF, 0);
+        printIms(imExist, svg_source);
+        fclose(imExist);
+        remove("imTemp.txt");
     }
 
     FILE* fgExist = fopen("fgTemp.txt", "r");
