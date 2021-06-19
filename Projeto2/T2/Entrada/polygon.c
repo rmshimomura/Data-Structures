@@ -288,13 +288,12 @@ double getMinimumX(void* listOfSegmentsShadowPolygon) {
 
     for (int i = 0; i < 3; i++) {
 
-        segment_t wow = polygon[i];
-
         double smaller;
-        if(wow.point1->x < wow.point2->x){
-            smaller = wow.point1->x;
+        
+        if(polygon[i].point1->x < polygon[i].point2->x){
+            smaller = polygon[i].point1->x;
         }else{
-            smaller = wow.point2->x;
+            smaller = polygon[i].point2->x;
         }
         if (smaller < min) {
             min = smaller;

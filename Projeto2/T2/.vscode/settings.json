@@ -20,6 +20,7 @@
         "ostream": "c",
         "cstdio": "cpp",
         "cmath": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "cstdlib": "c"
     }
 }
