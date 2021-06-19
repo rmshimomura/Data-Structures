@@ -566,10 +566,6 @@ double getMinimumX(void* listOfSegmentsShadowPolygon) {
         }
     }
 
-    if(min < polygon[0].point1->x){
-        min = -100;
-    }
-
     return min;
 }
 

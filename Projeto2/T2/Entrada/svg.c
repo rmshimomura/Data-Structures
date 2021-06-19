@@ -4,6 +4,11 @@
 #include "kdTree.h"
 #include "rectangle.h"
 #include "system.h"
+#include "dynamicList.h"
+
+double getTempX(void* node);
+double getTempY(void* node);
+double getTempJoker(void* node);
 
 double max(double x1, double x2) {
     return x2 > x1 ? x2 : x1;
@@ -85,12 +90,24 @@ void printFgs(FILE* fgExist, FILE* svg_source) {
 }
 
 void writeOnSvg(FILE* svg_source, tree rectTree, tree circleTree, path paths) {
-    if (!KDgetSize(rectTree) && !KDgetSize(circleTree)) {
-        fprintf(svg_source, "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"100%%\" height=\"100%%\">\n \t<svg>");
-        fclose(svg_source);
+
+    fprintf(svg_source, "<!-- Rodrigo Mimura Shimomura -->\n <svg viewBox = \"0 0 %.2lf %.2lf\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n", max(getBiggestX(rectTree), getBiggestX(circleTree)) + 15, max(getBiggestY(rectTree), getBiggestY(circleTree)) + 15);
+    // fprintf(svg_source, "\t<rect x=\"-100\" y=\"-100\" width=\"%.2lf\" height=\"%.2lf\" \n  style=\"fill:lightgrey;stroke:yellow;stroke-width:.5;fill-opacity:0.1;stroke-opacity:1\" />\n", max(getBiggestX(rectTree), getBiggestX(circleTree)) + 15, max(getBiggestY(rectTree), getBiggestY(circleTree)) + 15);
+    if (KDgetSize(rectTree)) {
+        printRectangleInOrder(svg_source, rectTree, KDgetRootNode(rectTree));
     }
-    fprintf(svg_source, "<!-- Rodrigo Mimura Shimomura -->\n <svg viewBox = \"-100 -100 %.2lf %.2lf\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n", max(getBiggestX(rectTree), getBiggestX(circleTree)) + 15, max(getBiggestY(rectTree), getBiggestY(circleTree)) + 15);
-    fprintf(svg_source, "\t<rect x=\"-100\" y=\"-100\" width=\"%.2lf\" height=\"%.2lf\" \n  style=\"fill:lightgrey;stroke:yellow;stroke-width:.5;fill-opacity:0.1;stroke-opacity:1\" />\n", max(getBiggestX(rectTree), getBiggestX(circleTree)) + 15, max(getBiggestY(rectTree), getBiggestY(circleTree)) + 15);
+    if (KDgetSize(circleTree)) {
+        printCircleInOrder(svg_source, circleTree, KDgetRootNode(circleTree));
+    }
+
+
+    fprintf(svg_source, "</svg>");
+}
+
+void new_writeOnSvg(FILE* svg_source, tree rectTree, tree circleTree, path paths, dynamicList fgData, dynamicList imData, dynamicList nveData){
+    
+    fprintf(svg_source, "<!-- Rodrigo Mimura Shimomura -->\n <svg viewBox = \"0 0 %.2lf %.2lf\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n", max(getBiggestX(rectTree), getBiggestX(circleTree)) + 15, max(getBiggestY(rectTree), getBiggestY(circleTree)) + 15);
+    // fprintf(svg_source, "\t<rect x=\"-100\" y=\"-100\" width=\"%.2lf\" height=\"%.2lf\" \n  style=\"fill:lightgrey;stroke:yellow;stroke-width:.5;fill-opacity:0.1;stroke-opacity:1\" />\n", max(getBiggestX(rectTree), getBiggestX(circleTree)) + 15, max(getBiggestY(rectTree), getBiggestY(circleTree)) + 15);
     if (KDgetSize(rectTree)) {
         printRectangleInOrder(svg_source, rectTree, KDgetRootNode(rectTree));
     }
@@ -98,30 +115,50 @@ void writeOnSvg(FILE* svg_source, tree rectTree, tree circleTree, path paths) {
         printCircleInOrder(svg_source, circleTree, KDgetRootNode(circleTree));
     }
     
-    FILE* nveExist = fopen("nveTemp.txt", "r");
-    if (nveExist) {
-        setvbuf(nveExist, 0, _IONBF, 0);
-        printNves(nveExist, svg_source);
-        fclose(nveExist);
-        remove("nveTemp.txt");
+    
+    for(void* auxFg = getHead(fgData); auxFg; auxFg = getNext(fgData, auxFg)){
+        double x,y,number_of_sheltered;
+        x = getTempX(getItem(fgData, auxFg));
+        y = getTempY(getItem(fgData, auxFg));
+        number_of_sheltered = getTempJoker(getItem(fgData, auxFg));
+        fprintf(svg_source, "\t<text x=\"%.2lf\" y=\"%.2lf\" font-size=\"5\">%.lf</text>\n", x, y, number_of_sheltered);
     }
 
-    FILE* imExist = fopen("imTemp.txt", "r");
-    if (imExist) {
-        setvbuf(imExist, 0, _IONBF, 0);
-        printIms(imExist, svg_source);
-        fclose(imExist);
-        remove("imTemp.txt");
+    for(void* auxNve = getHead(nveData); auxNve; auxNve = getNext(nveData, auxNve)){
+        double posX, posY, radiation;
+        char color[8];
+        posX = getTempX(getItem(nveData, auxNve));
+        posY = getTempY(getItem(nveData, auxNve));
+        radiation = getTempJoker(getItem(nveData, auxNve));
+        if (radiation < 25) {
+            strcpy(color, "#00ffff");
+        } else if (radiation >= 25 && radiation < 50) {
+            strcpy(color, "#00ff00");
+        } else if (radiation >= 50 && radiation < 100) {
+            strcpy(color, "#ff00ff");
+        } else if (radiation >= 100 && radiation < 250) {
+            strcpy(color, "#0000ff");
+        } else if (radiation >= 250 && radiation < 600) {
+            strcpy(color, "#800080");
+        } else if (radiation >= 600 && radiation < 1000) {
+            strcpy(color, "#000080");
+        } else if (radiation >= 1000 && radiation < 8000) {
+            strcpy(color, "#ff0000");
+        } else if (radiation >= 8000) {
+            strcpy(color, "#000000");
+        }
+
+        fprintf(svg_source, "\t<rect x=\"%.2lf\" y=\"%.2lf\" width=\"5\" height=\"5\"\n  style=\"fill:%s;stroke:%s;stroke-width:.5;fill-opacity:0.5;stroke-opacity:1\" rx=\"1\"/>\n", posX, posY, color, color);
+        fprintf(svg_source, "\t<text x=\"%.2lf\" y=\"%.2lf\" fill=\"white\" font-size=\"1.5\">%.2lf</text>\n", posX + 1, posY + 2, radiation);
     }
 
-    FILE* fgExist = fopen("fgTemp.txt", "r");
-    if(fgExist){
-        setvbuf(fgExist, 0, _IONBF, 0);
-        printFgs(fgExist, svg_source);
-        fclose(fgExist);
-        remove("fgTemp.txt");
+    for(void* auxIm = getHead(imData); auxIm; auxIm = getNext(imData, auxIm)){
+        double x, y, radius;
+        x = getTempX(getItem(imData, auxIm));
+        y = getTempY(getItem(imData, auxIm));
+        radius = getTempJoker(getItem(imData, auxIm));
+        fprintf(svg_source, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"%.2lf\" stroke=\"dimgrey\" stroke-width=\".5\" fill=\"dimgrey\" fill-opacity = \"0.1\" />\n", x, y, radius);
     }
-
 
     fprintf(svg_source, "</svg>");
 }

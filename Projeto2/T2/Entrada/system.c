@@ -7,6 +7,7 @@
 #include "qry.h"
 #include "rectangle.h"
 #include "svg.h"
+#include "dynamicList.h"
 
 //Evitar sets desnecessarios
 
@@ -328,25 +329,9 @@ void getFunctions(tree rectangleTree, tree circleTree, dynamicList listOfTreesSh
     setvbuf(Svg_Modificado, 0, _IONBF, 0);
     FILE* comandos = fopen(getPathArquivoQryAtual(paths), "r");
     setvbuf(comandos, 0, _IONBF, 0);
-    FILE* imExist = fopen("imTemp.txt", "r");
-    if (imExist) {
-        setvbuf(imExist, 0, _IONBF, 0);
-        fclose(imExist);
-        remove("imTemp.txt");
-    }
-    FILE* nveExist = fopen("nveTemp.txt", "r");
-    if (nveExist) {
-        setvbuf(nveExist, 0, _IONBF, 0);
-        fclose(nveExist);
-        remove("nveTemp.txt");
-    }
-
-    FILE* fgExist = fopen("fgTemp.txt", "r");
-    if(fgExist){
-        setvbuf(fgExist, 0, _IONBF, 0);
-        fclose(fgExist);
-        remove("fgTemp.txt");
-    }
+    dynamicList fgData = createList();
+    dynamicList imData = createList();
+    dynamicList nveData = createList();
     double x = 0.0;
     double y = 0.0;
     double radius = 0;
@@ -363,19 +348,22 @@ void getFunctions(tree rectangleTree, tree circleTree, dynamicList listOfTreesSh
 
         } else if (!strcmp(comando, "fg")) {
             fscanf(comandos, "%lf %lf %lf", &x, &y, &radius);
-            fg(rectangleTree, circleTree, x, y, radius, paths);
+            fg(rectangleTree, circleTree, x, y, radius, paths, fgData);
 
         } else if (!strcmp(comando, "im")) {
             fscanf(comandos, "%lf %lf %lf", &x, &y, &radiation);
-            im(rectangleTree, circleTree, listOfTreesShadows, x, y, radiation, paths);
+            im(rectangleTree, circleTree, listOfTreesShadows, x, y, radiation, paths, imData);
         } else if (!strcmp(comando, "t30")) {
             t30(circleTree, paths);
         } else if (!strcmp(comando, "nve")) {
             fscanf(comandos, "%lf %lf", &x, &y);
-            nve(listOfTreesShadows, paths, x, y);
+            nve(listOfTreesShadows, paths, x, y, nveData);
         }
     }
-    writeOnSvg(Svg_Modificado, rectangleTree, circleTree, paths);
+    new_writeOnSvg(Svg_Modificado, rectangleTree, circleTree, paths, fgData, imData, nveData);
+    freeList(fgData);
+    freeList(imData);
+    freeList(nveData);
     fclose(comandos);
     fclose(Svg_Modificado);
 }
