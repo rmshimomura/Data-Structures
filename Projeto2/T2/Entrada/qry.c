@@ -364,40 +364,11 @@ char* colorPicker(double radiation) {
         return "#000000";
 }
 
-void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircle, double xMeteor, double yMeteor) {
-    
-    if (currentShadowPolygon) {
-        
-        imInOrderShadows(shadows, NTgetLeftNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
-        
-        void* line = NTgetData(currentShadowPolygon);  //Now has the array of segments
-        int intersections = 0;
-
-        for (int i = 0; i < 3; i++) {
-
-            void* info = atPosArray(line, i);
-            void* point1 = getP1(info);
-            void* point2 = getP2(info);
-
-            if (get_line_intersection(getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2), getCircleX(KDgetData(currentCircle)), getCircleY(KDgetData(currentCircle)), xMeteor, yMeteor)) {
-                if (getCircleX(KDgetData(currentCircle)) != getPointX(point1) && getCircleX(KDgetData(currentCircle)) != getPointX(point2) && getCircleY(KDgetData(currentCircle)) != getPointY(point1) && getCircleY(KDgetData(currentCircle)) != getPointY(point2))
-
-                    intersections++;
-            }
-        }
-
-        if (intersections % 2 == 1) {
-            setInsideNShadows(KDgetData(currentCircle), getInsideNShadows(KDgetData(currentCircle)) + 1);
-        }
-
-        imInOrderShadows(shadows, NTgetRightNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
-    }
-}
-
-
 // void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircle, double xMeteor, double yMeteor) {
     
 //     if (currentShadowPolygon) {
+        
+//         imInOrderShadows(shadows, NTgetLeftNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
         
 //         void* line = NTgetData(currentShadowPolygon);  //Now has the array of segments
 //         int intersections = 0;
@@ -419,15 +390,45 @@ void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircl
 //             setInsideNShadows(KDgetData(currentCircle), getInsideNShadows(KDgetData(currentCircle)) + 1);
 //         }
 
-//         if(getCircleX(KDgetData(currentCircle)) < getMinimumX(NTgetData(currentShadowPolygon))){
-//             imInOrderShadows(shadows, NTgetLeftNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
-//         }else{
-
-//             imInOrderShadows(shadows, NTgetLeftNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
-//             imInOrderShadows(shadows, NTgetRightNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
-//         }
+//         imInOrderShadows(shadows, NTgetRightNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
 //     }
 // }
+
+
+void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircle, double xMeteor, double yMeteor) {
+    
+    if (currentShadowPolygon) {
+        
+        void* line = NTgetData(currentShadowPolygon);  //Now has the array of segments
+        int intersections = 0;
+
+        for (int i = 0; i < 3; i++) {
+
+            void* info = atPosArray(line, i);
+            void* point1 = getP1(info);
+            void* point2 = getP2(info);
+
+            if (get_line_intersection(getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2), getCircleX(KDgetData(currentCircle)), getCircleY(KDgetData(currentCircle)), xMeteor, yMeteor)) {
+                if (getCircleX(KDgetData(currentCircle)) != getPointX(point1) && getCircleX(KDgetData(currentCircle)) != getPointX(point2) && getCircleY(KDgetData(currentCircle)) != getPointY(point1) && getCircleY(KDgetData(currentCircle)) != getPointY(point2))
+
+                    intersections++;
+            }
+        }
+
+        if (intersections % 2 == 1) {
+            setInsideNShadows(KDgetData(currentCircle), getInsideNShadows(KDgetData(currentCircle)) + 1);
+        }
+
+        if(getCircleX(KDgetData(currentCircle)) < getMinimumX(NTgetData(currentShadowPolygon))){
+            imInOrderShadows(shadows, NTgetLeftNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
+        }else{
+
+            imInOrderShadows(shadows, NTgetLeftNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
+            imInOrderShadows(shadows, NTgetRightNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
+        }
+    }
+}
+
 
 void imInOrderCircles(tree shadows, node currentCircle, double radiation, double xMeteor, double yMeteor, imSorting_t circlesToSort, int* index) {
     
@@ -512,8 +513,7 @@ void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, dou
 
 void t30InOrderT30(tree circleTree, node currentCircle, char** allNames, int* pos) {
     if (currentCircle) {
-        t30InOrderT30(circleTree, KDgetLeftNode(currentCircle), allNames, pos);
-        
+
         if (getCircleMarkedForDeath(KDgetData(currentCircle))) {
 
             allNames[*pos] = calloc(strlen(getCircleId(KDgetData(currentCircle))) + 1, sizeof(char));
@@ -523,7 +523,7 @@ void t30InOrderT30(tree circleTree, node currentCircle, char** allNames, int* po
             setCircleAlive(KDgetData(currentCircle), false);
         }
 
-
+        t30InOrderT30(circleTree, KDgetLeftNode(currentCircle), allNames, pos);
         t30InOrderT30(circleTree, KDgetRightNode(currentCircle), allNames, pos);
 
     }
@@ -572,35 +572,36 @@ void nveUpdateRadiation(void* currentPolygon, double xNve, double yNve, int* ins
     *inside_polygons += (insideNPolygons);
 }
 
+// void nveInOrder(tree shadowTree, node currentListPosition, node currentPolygon, int* insideNPolygons, double x, double y, double xMeteor, double yMeteor) {
+//     if (currentPolygon) {
+//         nveInOrder(shadowTree, currentListPosition, NTgetLeftNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
+
+//         nveUpdateRadiation(currentPolygon, x, y, insideNPolygons, xMeteor, yMeteor);
+
+//         nveInOrder(shadowTree, currentListPosition, NTgetRightNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
+//     }
+// }
+
+
 void nveInOrder(tree shadowTree, node currentListPosition, node currentPolygon, int* insideNPolygons, double x, double y, double xMeteor, double yMeteor) {
     if (currentPolygon) {
-        nveInOrder(shadowTree, currentListPosition, NTgetLeftNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
-
+        
         nveUpdateRadiation(currentPolygon, x, y, insideNPolygons, xMeteor, yMeteor);
 
-        nveInOrder(shadowTree, currentListPosition, NTgetRightNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
+        if(x < getMinimumX(NTgetData(currentPolygon))){
+            nveInOrder(shadowTree, currentListPosition, NTgetLeftNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);    
+        }else{
+            nveInOrder(shadowTree, currentListPosition, NTgetLeftNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
+            nveInOrder(shadowTree, currentListPosition, NTgetRightNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
+        }
+
+        // nveInOrder(shadowTree, currentListPosition, NTgetLeftNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
+
+
+        // nveInOrder(shadowTree, currentListPosition, NTgetRightNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
     }
 }
 
-
-// void nveInOrder(tree shadowTree, node currentListPosition, node currentPolygon, int* insideNPolygons, double x, double y, double xMeteor, double yMeteor) {
-//     if (currentPolygon) {
-        
-//         nveUpdateRadiation(currentPolygon, x, y, insideNPolygons, xMeteor, yMeteor);
-
-//         if(x < getMinimumX(NTgetData(currentPolygon))){
-//             nveInOrder(shadowTree, currentListPosition, NTgetLeftNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);    
-//         }else{
-//             nveInOrder(shadowTree, currentListPosition, NTgetLeftNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
-//             nveInOrder(shadowTree, currentListPosition, NTgetRightNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
-//         }
-
-//         // nveInOrder(shadowTree, currentListPosition, NTgetLeftNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
-
-
-//         // nveInOrder(shadowTree, currentListPosition, NTgetRightNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
-//     }
-// }
 
 
 void nve(dynamicList listOfTreesShadows, path paths, double x, double y, dynamicList tempInfo) {
