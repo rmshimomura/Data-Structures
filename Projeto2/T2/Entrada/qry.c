@@ -381,7 +381,7 @@ void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircl
             }
         }
 
-        if (intersections % 2 == 1) {
+        if (intersections) {
             setInsideNShadows(KDgetData(currentCircle), getInsideNShadows(KDgetData(currentCircle)) + 1);
         }
 
@@ -531,7 +531,7 @@ void nveUpdateRadiation(void* currentPolygon, double xNve, double yNve, int* ins
         }
     }
 
-    if (intersections % 2 == 1) {
+    if (intersections) {
         insideNPolygons++;
     }
 

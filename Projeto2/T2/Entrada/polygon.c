@@ -27,6 +27,16 @@ typedef struct segment {
 
 } segment_t;
 
+int collinear(double x1, double y1, double x2, double y2, double x3, double y3) {
+
+    double a = x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2);
+
+    if (a == 0.0) return 1;
+    else return 0;
+
+}
+
+
 void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList segmentsList, double xMeteor, double yMeteor) {
     point_t* auxVertex = vertexArray;
     point_t* extremes = calloc(4, sizeof(point_t));
@@ -259,11 +269,17 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
             if (!ok1) puts("OK1 fail");
             if (!ok2) puts("OK2 fail");
 
-            sidesOfShadowPolygon[0] = *(segment);
-            sidesOfShadowPolygon[1] = *(wallPointSegPoint1);
-            sidesOfShadowPolygon[2] = *(wallPointSegPoint2);
+            if(!collinear(segment->point1->x, segment->point1->y, wallPointSegPoint1->point2->x, wallPointSegPoint1->point2->y, wallPointSegPoint2->point2->x, wallPointSegPoint2->point2->y)){
+                
+                sidesOfShadowPolygon[0] = *(segment);
+                sidesOfShadowPolygon[1] = *(wallPointSegPoint1);
+                sidesOfShadowPolygon[2] = *(wallPointSegPoint2);
 
-            (!root) ? root = NTinsertShadow(shadowPolygons, root, root, sidesOfShadowPolygon) : NTinsertShadow(shadowPolygons, root, root, sidesOfShadowPolygon);
+
+                (!root) ? root = NTinsertShadow(shadowPolygons, root, root, sidesOfShadowPolygon) : NTinsertShadow(shadowPolygons, root, root, sidesOfShadowPolygon);
+                
+            }
+            
             free(segment);
 
             free(wallPointSegPoint1);
