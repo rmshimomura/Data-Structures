@@ -467,7 +467,6 @@ void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, dou
     imData->y = yMeteor;
     imData->joker = radiation/3;
     insert(tempInfo, imData);
-    // printSvgShadows(shadows, getBiggestX(rectangleTree) > getBiggestX(circleTree) ? getBiggestX(rectangleTree) + 100 : getBiggestX(circleTree) + 100, getBiggestY(rectangleTree) > getBiggestY(circleTree) ? getBiggestY(rectangleTree) + 100 : getBiggestY(circleTree) + 100);
     void* auxNode = insert(listOfTreesShadows, shadows);
     setDataRadiation(auxNode, radiation);
     setDataxMeteor(auxNode, xMeteor);
@@ -559,12 +558,12 @@ void nve(dynamicList listOfTreesShadows, path paths, double x, double y, dynamic
     FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
     setvbuf(results, 0, _IONBF, 0);
     double radiationAtThePoint = 0.0;
-    void* posAuxList = getHead(listOfTreesShadows);  //Now I'm storing the head of the list
+    void* posAuxList = getHead(listOfTreesShadows);
 
     for (int i = 0; i < getSize(listOfTreesShadows); i++) {
         int inside_n_polygons = 0;
-        void* treeAux = getItem(listOfTreesShadows, posAuxList);  //Now I'm getting the address of the whole tree inside node
-        void* treeNodeAux = NTgetRootNode(treeAux);               //I'm getting the root node from the tree that I'm analysing
+        void* treeAux = getItem(listOfTreesShadows, posAuxList);  
+        void* treeNodeAux = NTgetRootNode(treeAux);               
         nveInOrder(treeAux, posAuxList, treeNodeAux, &inside_n_polygons, x, y, getDataxMeteor(posAuxList), getDatayMeteor(posAuxList));
 
         if (!inside_n_polygons) radiationAtThePoint += (getDataRadiation(posAuxList));
@@ -574,7 +573,7 @@ void nve(dynamicList listOfTreesShadows, path paths, double x, double y, dynamic
                 factor *= 0.8;
             }
             radiationAtThePoint += (factor * getDataRadiation(posAuxList));
-            // radiationAtThePoint += (pow(0.8, inside_n_polygons) * getDataRadiation(posAuxList));
+            
         }
 
         posAuxList = getNext(listOfTreesShadows, posAuxList);

@@ -209,12 +209,6 @@ void addWrapAroundRectangle(tree rectangleTree, tree circleTree, dynamicList seg
     insert(segmentsList, aux3);
     insert(segmentsList, aux4);
 
-    // printf("Wrap Aroud Rectangle:\n");
-    // printf("(%.2lf, %.2lf) - (%.2lf, %.2lf) code = [%s]\n", aux1->point1->x, aux1->point1->y, aux1->point2->x, aux1->point2->y, aux1->point1->code);
-    // printf("(%.2lf, %.2lf) - (%.2lf, %.2lf) code = [%s]\n", aux2->point1->x, aux2->point1->y, aux2->point2->x, aux2->point2->y, aux2->point1->code);
-    // printf("(%.2lf, %.2lf) - (%.2lf, %.2lf) code = [%s]\n", aux3->point1->x, aux3->point1->y, aux3->point2->x, aux3->point2->y, aux3->point1->code);
-    // printf("(%.2lf, %.2lf) - (%.2lf, %.2lf) code = [%s]\n", aux4->point1->x, aux4->point1->y, aux4->point2->x, aux4->point2->y, aux4->point1->code);
-    // puts("=============================================\n");
 }
 
 void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor) {
@@ -532,64 +526,6 @@ void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor)
     qsort(aux, 2 * getSize(segmentsList), sizeof(point_t), compareForQSort);
     
     return aux;
-}
-
-void buildLines(void* vertexArray, dynamicList segmentsList, double xMeteor, double yMeteor, double biggestX, double biggestY) {
-    // puts("====================================================================BuildLines====================================================================");
-    FILE* a = fopen("wow.svg", "w+");
-    setvbuf(a, 0, _IONBF, 0);
-    point_t* aux = vertexArray;
-    point_t* extremes = calloc(4, sizeof(point_t));
-    int count = 0;
-
-    for (int i = 0; i < getSize(segmentsList) * 2; i += 2) {
-        if (!strcmp(aux[i].code, "RE")) {
-            extremes[count++] = aux[i];
-        }
-    }
-
-    // printf("Biggest x = %.2lf Biggest y = %.2lf\n", biggestX, biggestY);
-
-    fprintf(a, "<svg>\n");
-    fprintf(a, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"3\" stroke=\"grey\" stroke-width=\".5\" fill=\"red\" fill-opacity = \"0.3\" />\n", xMeteor, yMeteor);
-    for (int i = 0; i < getSize(segmentsList) * 2; i++) {
-        // fprintf(a, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"3\" stroke=\"grey\" stroke-width=\".5\" fill=\"white\" fill-opacity = \"0.3\" />\n", aux[i].x, aux[i].y);
-        // fprintf(a, "\t<text x= \"%.2lf\" y=\"%.2lf\" font-size=\"4\">%d</text>\n", aux[i].x - 1, aux[i].y, i);
-        // printf("\naux[%d]: (%.2lf, %.2lf) angle = %.2lf code = %s type = %c\n", i, aux[i].x, aux[i].y, aux[i].angle, aux[i].code, aux[i].type);
-
-        if (strcmp(aux[i].code, "RE") && strcmp(aux[i].code, "DIV") && strcmp(getCode(aux[i].pair), "DIV")) {
-            if ((aux[i].angle >= 0 && aux[i].angle < extremes[0].angle) || (aux[i].angle >= extremes[3].angle && aux[i].angle < 360)) {
-                double dist = (((aux[i].y - yMeteor) / (aux[i].x - xMeteor)) * (biggestX - aux[i].x)) + aux[i].y;
-                fprintf(a, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" stroke=\"yellow\" stroke-width=\".3\"/>\n", aux[i].x, aux[i].y, biggestX, dist);
-                // printf("new shit = (%.2lf, %.2lf) to (%.2lf, %.2lf)\n", aux[i].x, aux[i].y, biggestX, dist);
-
-            } else if (aux[i].angle >= extremes[0].angle && aux[i].angle < extremes[1].angle) {
-                double dist = ((biggestY - aux[i].y) / ((aux[i].y - yMeteor) / (aux[i].x - xMeteor))) + aux[i].x;
-                fprintf(a, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" stroke=\"yellow\" stroke-width=\".3\"/>\n", aux[i].x, aux[i].y, dist, biggestY);
-                // printf("new shit = (%.2lf, %.2lf) to (%.2lf, %.2lf)\n", aux[i].x, aux[i].y, dist, biggestY);
-
-            } else if (aux[i].angle >= extremes[1].angle && aux[i].angle < extremes[2].angle) {
-                double dist = (((aux[i].y - yMeteor) / (aux[i].x - xMeteor)) * (0 - aux[i].x)) + aux[i].y;
-                fprintf(a, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" stroke=\"yellow\" stroke-width=\".3\"/>\n", aux[i].x, aux[i].y, 0.0, dist);
-                // printf("new shit = (%.2lf, %.2lf) to (%.2lf, %.2lf)\n", aux[i].x, aux[i].y, 0.0, dist);
-
-            } else if (aux[i].angle >= extremes[2].angle && aux[i].angle < extremes[3].angle) {
-                double dist = ((0 - aux[i].y) / ((aux[i].y - yMeteor) / (aux[i].x - xMeteor))) + aux[i].x;
-                fprintf(a, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" stroke=\"yellow\" stroke-width=\".3\"/>\n", aux[i].x, aux[i].y, dist, 0.0);
-                // printf("new shit = (%.2lf, %.2lf) to (%.2lf, %.2lf)\n", aux[i].x, aux[i].y, dist, 0.0);
-            }
-
-        } else if (!strcmp(aux[i].code, "RE")) {
-            fprintf(a, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" stroke=\"red\" stroke-width=\"2\"/>\n", aux[i].x, aux[i].y, getPointX(aux[i].pair), getPointY(aux[i].pair));
-        }
-        fprintf(a, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" stroke=\"white\" stroke-width=\".3\"/>\n", aux[i].x, aux[i].y, getPointX(aux[i].pair), getPointY(aux[i].pair));
-    }
-
-    // puts("====================================================================BuildLines====================================================================");
-
-    fprintf(a, "</svg>");
-    free(extremes);
-    fclose(a);
 }
 
 double getPointX(void* point) {

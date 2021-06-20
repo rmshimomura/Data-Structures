@@ -226,9 +226,6 @@ void circleinorder(node initialNode) {
         if (getRunTo(aux->data)) {
             printf("[Run to = %s] ", getRectangleId(KDgetData(getRunTo(aux->data))));
         }
-        // if(getNearestDistance(aux->data) != __DBL_MAX__){
-        //     printf("[Nearest Distance = %.2lf] ", getNearestDistance(aux->data));
-        // }
         printf("\n");
         circleinorder(aux->right);
     }

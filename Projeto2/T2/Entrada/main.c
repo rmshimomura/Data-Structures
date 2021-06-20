@@ -22,8 +22,8 @@ int main(int argc, char** argv) {
     writeOnSvg(svg_source, rectangles, circles, paths);
     if (consulta) {
         FILE* txt_results = fopen(getPathDoTXTComOQryExecutado(paths), "w+");
-        fprintf(txt_results, "Rodrigo Mimura Shimomura\n");
         setvbuf(txt_results, 0, _IONBF, 0);
+        fprintf(txt_results, "Rodrigo Mimura Shimomura\n");
         getFunctions(rectangles, circles, listOfTreesShadows, paths);
         fclose(txt_results);
     }

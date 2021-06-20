@@ -201,7 +201,7 @@ void removeNode(void* sequence, void* current) {
         aux2 = atPos(listAux, pos);
         data_tdoAux2 = getItem(sequence, current);
 
-        // free(data_tdoAux2);
+        
         destorySegment(data_tdoAux2);
         free(aux2);
         aux1->next = NULL;
@@ -211,7 +211,7 @@ void removeNode(void* sequence, void* current) {
         aux1 = atPos(listAux, 0);
         data_tdoAux1 = getItem(sequence, getHead(sequence));
         listAux->head = listAux->head->next;
-        // free(data_tdoAux1);
+        
         destorySegment(data_tdoAux1);
         free(aux1);
         listAux->size--;
@@ -220,7 +220,7 @@ void removeNode(void* sequence, void* current) {
         data_tdoAux1 = getItem(sequence, getHead(sequence));
         listAux->head = NULL;
         listAux->end = NULL;
-        // free(data_tdoAux1);
+        
         destorySegment(data_tdoAux1);
         free(aux1);
         listAux->size--;
@@ -230,7 +230,7 @@ void removeNode(void* sequence, void* current) {
         data_tdoAux2 = getItem(sequence, current);
         aux1->next = aux2->next;
         aux2->next->prev = aux1;
-        // free(data_tdoAux2);
+        
         destorySegment(data_tdoAux2);
         free(aux2);
         listAux->size--;
@@ -253,7 +253,6 @@ void freeListOfTreesShadows(void* sequence) {
 
         if (auxElement) {
             freeNTTree(auxElement, NTgetRootNode(auxElement));
-            // freePointsInfo(auxElement);
             free(auxElement);
         }
 

@@ -79,7 +79,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                 if (auxVertex[i].y < getPointY(auxVertex[i].pair)) {
                     segment->point1 = calloc(1, sizeof(point_t));
                     *(segment->point1) = auxVertex[i];
-                    // segment->point2 = auxVertex[i].pair;
+                    
                     segment->point2 = calloc(1, sizeof(point_t));
                     segment->point2->x = getPointX(auxVertex[i].pair);
                     segment->point2->y = getPointY(auxVertex[i].pair);
@@ -90,7 +90,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                 } else {
                     segment->point2 = calloc(1, sizeof(point_t));
                     *(segment->point2) = auxVertex[i];
-                    // segment->point1 = auxVertex[i].pair;
+                    
                     segment->point1 = calloc(1, sizeof(point_t));
                     segment->point1->x = getPointX(auxVertex[i].pair);
                     segment->point1->y = getPointY(auxVertex[i].pair);
@@ -102,7 +102,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                 if (auxVertex[i].x < getPointX(auxVertex[i].pair)) {
                     segment->point1 = calloc(1, sizeof(point_t));
                     *(segment->point1) = auxVertex[i];
-                    // segment->point2 = auxVertex[i].pair;
+                    
                     segment->point2 = calloc(1, sizeof(point_t));
                     segment->point2->x = getPointX(auxVertex[i].pair);
                     segment->point2->y = getPointY(auxVertex[i].pair);
@@ -112,7 +112,7 @@ void storeShadowPolygons(tree shadowPolygons, void* vertexArray, dynamicList seg
                 } else {
                     segment->point2 = calloc(1, sizeof(point_t));
                     *(segment->point2) = auxVertex[i];
-                    // segment->point1 = auxVertex[i].pair;
+                    
                     segment->point1 = calloc(1, sizeof(point_t));
                     segment->point1->x = getPointX(auxVertex[i].pair);
                     segment->point1->y = getPointY(auxVertex[i].pair);
