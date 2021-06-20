@@ -207,13 +207,12 @@ void dr(tree rectangleTree, char* id, path paths) {
 
 void fgInOrderRectangle(tree rectangleTree, FILE* results, void* current_rect, void* current_circ) {
     if (current_rect) {
-        fgInOrderRectangle(rectangleTree, results, KDgetLeftNode(current_rect), current_circ);
-
         if (sqrt(pow((getCircleX(KDgetData(current_circ)) - getRectangleCenterX(KDgetData(current_rect))), 2) + (pow((getCircleY(KDgetData(current_circ)) - getRectangleCenterY(KDgetData(current_rect))), 2))) < getNearestDistance(KDgetData(current_circ)) && KDgetState(current_rect)) {
             setNearestDistance(KDgetData(current_circ), sqrt(pow(getCircleX(KDgetData(current_circ)) - getRectangleCenterX(KDgetData(current_rect)), 2) + pow((getCircleY(KDgetData(current_circ)) - getRectangleCenterY(KDgetData(current_rect))), 2)));
             setRunTo(KDgetData(current_circ), current_rect);
             setFg(KDgetData(current_circ), true);
         }
+        fgInOrderRectangle(rectangleTree, results, KDgetLeftNode(current_rect), current_circ);
 
         fgInOrderRectangle(rectangleTree, results, KDgetRightNode(current_rect), current_circ);
     }
@@ -255,8 +254,6 @@ void fgInOrderCircle(tree rectangleTree, tree circleTree, FILE* results, void* c
 
 void loop_rectangle_tree(sorting_t rectangles_to_sort, void* current_rect, int* size) {
     if (current_rect) {
-        loop_rectangle_tree(rectangles_to_sort, KDgetLeftNode(current_rect), size);
-
         if (getVectorOfPeopleStarted(KDgetData(current_rect))) {
             strcpy(rectangles_to_sort.data[*size].rectName, getRectangleId(KDgetData(current_rect)));
             rectangles_to_sort.data[*size].peopleInside = getVectorOfPeople(KDgetData(current_rect));
@@ -264,7 +261,7 @@ void loop_rectangle_tree(sorting_t rectangles_to_sort, void* current_rect, int* 
             rectangles_to_sort.data[*size].originalRect = current_rect;
             *size = *size + 1;
         }
-
+        loop_rectangle_tree(rectangles_to_sort, KDgetLeftNode(current_rect), size);
         loop_rectangle_tree(rectangles_to_sort, KDgetRightNode(current_rect), size);
     }
 }
@@ -322,12 +319,12 @@ void storeRectanglesToSort(tree rectangleTree, FILE* results, dynamicList tempIn
 void updateCirclesNewPositions(tree circleTree, void* current_circ) {
     if (current_circ) {
         
-        updateCirclesNewPositions(circleTree, KDgetLeftNode(current_circ));
-
         if (getRunTo(KDgetData(current_circ))) {
             setCircleX(KDgetData(current_circ), getRectangleCenterX(KDgetData(getRunTo(KDgetData(current_circ)))));
             setCircleY(KDgetData(current_circ), getRectangleCenterY(KDgetData(getRunTo(KDgetData(current_circ)))));
         }
+
+        updateCirclesNewPositions(circleTree, KDgetLeftNode(current_circ));
 
         updateCirclesNewPositions(circleTree, KDgetRightNode(current_circ));
     }
@@ -364,37 +361,6 @@ char* colorPicker(double radiation) {
         return "#000000";
 }
 
-// void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircle, double xMeteor, double yMeteor) {
-    
-//     if (currentShadowPolygon) {
-        
-//         imInOrderShadows(shadows, NTgetLeftNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
-        
-//         void* line = NTgetData(currentShadowPolygon);  //Now has the array of segments
-//         int intersections = 0;
-
-//         for (int i = 0; i < 3; i++) {
-
-//             void* info = atPosArray(line, i);
-//             void* point1 = getP1(info);
-//             void* point2 = getP2(info);
-
-//             if (get_line_intersection(getPointX(point1), getPointY(point1), getPointX(point2), getPointY(point2), getCircleX(KDgetData(currentCircle)), getCircleY(KDgetData(currentCircle)), xMeteor, yMeteor)) {
-//                 if (getCircleX(KDgetData(currentCircle)) != getPointX(point1) && getCircleX(KDgetData(currentCircle)) != getPointX(point2) && getCircleY(KDgetData(currentCircle)) != getPointY(point1) && getCircleY(KDgetData(currentCircle)) != getPointY(point2))
-
-//                     intersections++;
-//             }
-//         }
-
-//         if (intersections % 2 == 1) {
-//             setInsideNShadows(KDgetData(currentCircle), getInsideNShadows(KDgetData(currentCircle)) + 1);
-//         }
-
-//         imInOrderShadows(shadows, NTgetRightNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
-//     }
-// }
-
-
 void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircle, double xMeteor, double yMeteor) {
     
     if (currentShadowPolygon) {
@@ -425,15 +391,15 @@ void imInOrderShadows(tree shadows, node currentShadowPolygon, node currentCircl
 
             imInOrderShadows(shadows, NTgetLeftNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
             imInOrderShadows(shadows, NTgetRightNode(currentShadowPolygon), currentCircle, xMeteor, yMeteor);
+
         }
     }
 }
 
-
 void imInOrderCircles(tree shadows, node currentCircle, double radiation, double xMeteor, double yMeteor, imSorting_t circlesToSort, int* index) {
     
     if (currentCircle) {
-        imInOrderCircles(shadows, KDgetLeftNode(currentCircle), radiation, xMeteor, yMeteor, circlesToSort, index);
+        
         setInsideNShadows(KDgetData(currentCircle), 0);
         imInOrderShadows(shadows, NTgetRootNode(shadows), currentCircle, xMeteor, yMeteor);
 
@@ -463,7 +429,7 @@ void imInOrderCircles(tree shadows, node currentCircle, double radiation, double
                 setCircleAlive(KDgetData(currentCircle), false);
             }
         }
-
+        imInOrderCircles(shadows, KDgetLeftNode(currentCircle), radiation, xMeteor, yMeteor, circlesToSort, index);
         imInOrderCircles(shadows, KDgetRightNode(currentCircle), radiation, xMeteor, yMeteor, circlesToSort, index);
     }
 }
@@ -572,17 +538,6 @@ void nveUpdateRadiation(void* currentPolygon, double xNve, double yNve, int* ins
     *inside_polygons += (insideNPolygons);
 }
 
-// void nveInOrder(tree shadowTree, node currentListPosition, node currentPolygon, int* insideNPolygons, double x, double y, double xMeteor, double yMeteor) {
-//     if (currentPolygon) {
-//         nveInOrder(shadowTree, currentListPosition, NTgetLeftNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
-
-//         nveUpdateRadiation(currentPolygon, x, y, insideNPolygons, xMeteor, yMeteor);
-
-//         nveInOrder(shadowTree, currentListPosition, NTgetRightNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
-//     }
-// }
-
-
 void nveInOrder(tree shadowTree, node currentListPosition, node currentPolygon, int* insideNPolygons, double x, double y, double xMeteor, double yMeteor) {
     if (currentPolygon) {
         
@@ -595,10 +550,6 @@ void nveInOrder(tree shadowTree, node currentListPosition, node currentPolygon, 
             nveInOrder(shadowTree, currentListPosition, NTgetRightNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
         }
 
-        // nveInOrder(shadowTree, currentListPosition, NTgetLeftNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
-
-
-        // nveInOrder(shadowTree, currentListPosition, NTgetRightNode(currentPolygon), insideNPolygons, x, y, xMeteor, yMeteor);
     }
 }
 
