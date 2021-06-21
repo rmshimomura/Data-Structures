@@ -479,7 +479,7 @@ void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, dou
 void t30InOrderT30(tree circleTree, node currentCircle, char** allNames, int* pos) {
     if (currentCircle) {
 
-        if (getCircleMarkedForDeath(KDgetData(currentCircle))) {
+        if (getCircleMarkedForDeath(KDgetData(currentCircle)) && getCircleAlive(KDgetData(currentCircle))) {
 
             allNames[*pos] = calloc(strlen(getCircleId(KDgetData(currentCircle))) + 1, sizeof(char));
             strcpy(allNames[*pos], getCircleId(KDgetData(currentCircle)));

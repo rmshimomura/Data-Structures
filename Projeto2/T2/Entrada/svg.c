@@ -82,6 +82,14 @@ void new_writeOnSvg(FILE* svg_source, tree rectTree, tree circleTree, path paths
         fprintf(svg_source, "\t<text x=\"%.2lf\" y=\"%.2lf\" font-size=\"5\">%.lf</text>\n", x, y, number_of_sheltered);
     }
 
+    for(void* auxIm = getHead(imData); auxIm; auxIm = getNext(imData, auxIm)){
+        double x, y, radius;
+        x = getTempX(getItem(imData, auxIm));
+        y = getTempY(getItem(imData, auxIm));
+        radius = getTempJoker(getItem(imData, auxIm));
+        fprintf(svg_source, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"%.2lf\" stroke=\"dimgrey\" stroke-width=\".5\" fill=\"dimgrey\" fill-opacity = \"0.1\" />\n", x, y, radius);
+    }
+
     for(void* auxNve = getHead(nveData); auxNve; auxNve = getNext(nveData, auxNve)){
         double posX, posY, radiation;
         char color[8];
@@ -110,13 +118,7 @@ void new_writeOnSvg(FILE* svg_source, tree rectTree, tree circleTree, path paths
         fprintf(svg_source, "\t<text x=\"%.2lf\" y=\"%.2lf\" fill=\"white\" font-size=\"1.5\">%.2lf</text>\n", posX + 0.5, posY + 2, radiation);
     }
 
-    for(void* auxIm = getHead(imData); auxIm; auxIm = getNext(imData, auxIm)){
-        double x, y, radius;
-        x = getTempX(getItem(imData, auxIm));
-        y = getTempY(getItem(imData, auxIm));
-        radius = getTempJoker(getItem(imData, auxIm));
-        fprintf(svg_source, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"%.2lf\" stroke=\"dimgrey\" stroke-width=\".5\" fill=\"dimgrey\" fill-opacity = \"0.1\" />\n", x, y, radius);
-    }
+    
 
     fprintf(svg_source, "</svg>");
 }
