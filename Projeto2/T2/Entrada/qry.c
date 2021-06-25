@@ -351,9 +351,9 @@ char* colorPicker(double radiation) {
         return "#ff00ff";
     else if (radiation >= 100 && radiation < 250)
         return "#0000ff";
-    else if (radiation >= 250 && radiation < 600)
+    else if (radiation >= 250 && radiation < 500)
         return "#800080";
-    else if (radiation >= 600 && radiation < 1000)
+    else if (radiation >= 500 && radiation < 1000)
         return "#000080";
     else if (radiation >= 1000 && radiation < 8000)
         return "#ff0000";
