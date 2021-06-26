@@ -2,236 +2,216 @@
 
 #include "bibliotecas.h"
 #include "circle.h"
+#include "dynamicList.h"
 #include "kdTree.h"
 #include "paths.h"
 #include "qry.h"
 #include "rectangle.h"
 #include "svg.h"
-#include "dynamicList.h"
 
 //Evitar sets desnecessarios
-
-void allocateDirbaseDeEntrada(path paths, int size);
-void allocateDirBaseDeSaida(path paths, int size);
-void allocateGeoInicial(path paths, int size);
-void allocateQryConsultas(path paths, int size);
-void allocateNomeQRY(path paths, int size);
-void allocateNomeGEO(path paths, int size);
-void allocateNomeArqSVGFinal(path paths, int size);
-void allocatePathArquivoGeoInicial(path paths, int size);
-void allocatePathArquivoQryAtual(path paths, int size);
-void allocatePathDoSvgDoGeoSemMudanca(path paths, int size);
-void allocatePathDoSvgComOQryExecutado(path paths, int size);
-void allocatePathDoTXTComOQryExecutado(path paths, int size);
-void allocatePathTXTFinal(path paths, int size);
-
-void reallocateDirbaseDeEntrada(path paths, int newSize);
-void reallocateDirBaseDeSaida(path paths, int newSize);
-void reallocateGeoInicial(path paths, int newSize);
-void reallocateQryConsultas(path paths, int newSize);
-void reallocateNomeQRY(path paths, int newSize);
-void reallocateNomeGEO(path paths, int newSize);
-void reallocateNomeArqSVGFinal(path paths, int newSize);
-void reallocatePathArquivoGeoInicial(path paths, int newSize);
-void reallocatePathArquivoQryAtual(path paths, int newSize);
-void reallocatePathDoSvgDoGeoSemMudanca(path paths, int newSize);
-void reallocatePathDoSvgComOQryExecutado(path paths, int newSize);
-void reallocatePathDoTXTComOQryExecutado(path paths, int newSize);
-void reallocatePathTXTFinal(path paths, int newSize);
-
-void strcpyDirbaseDeEntrada(path paths, char* assemble);
-void strcpyDirBaseDeSaida(path paths, char* assemble);
-void strcpyGeoInicial(path paths, char* assemble);
-void strcpyQryConsultas(path paths, char* assemble);
-void strcpyNomeQRY(path paths, char* assemble);
-void strcpyNomeGEO(path paths, char* assemble);
-void strcpyNomeArqSVGFinal(path paths, char* assemble);
-void strcpyPathArquivoGeoInicial(path paths, char* assemble);
-void strcpyPathArquivoQryAtual(path paths, char* assemble);
-void strcpyPathDoSvgDoGeoSemMudanca(path paths, char* assemble);
-void strcpyPathDoSvgComOQryExecutado(path paths, char* assemble);
-void strcpyPathDoTXTComOQryExecutado(path paths, char* assemble);
-void strcpyPathTXTFinal(path paths, char* assemble);
-
-void strcatDirbaseDeEntrada(path paths, char* assemble);
-void strcatDirBaseDeSaida(path paths, char* assemble);
-void strcatGeoInicial(path paths, char* assemble);
-void strcatQryConsultas(path paths, char* assemble);
-void strcatNomeQRY(path paths, char* assemble);
-void strcatNomeGEO(path paths, char* assemble);
-void strcatNomeArqSVGFinal(path paths, char* assemble);
-void strcatPathArquivoGeoInicial(path paths, char* assemble);
-void strcatPathArquivoQryAtual(path paths, char* assemble);
-void strcatPathDoSvgDoGeoSemMudanca(path paths, char* assemble);
-void strcatPathDoSvgComOQryExecutado(path paths, char* assemble);
-void strcatPathDoTXTComOQryExecutado(path paths, char* assemble);
-void strcatPathTXTFinal(path paths, char* assemble);
+void setDirBaseDeEntrada(path paths, char* newSet);
+void setDirBaseDeSaida(path paths, char* newSet);
+void setGeoInicial(path paths, char* newSet);
+void setQryConsultas(path paths, char* newSet);
+void setNomeQRY(path paths, char* newSet);
+void setNomeGEO(path paths, char* newSet);
+void setNomeArqSVGFinal(path paths, char* newSet);
+void setPathArquivoGeoInicial(path paths, char* newSet);
+void setPathArquivoQryAtual(path paths, char* newSet);
+void setPathDoSvgDoGeoSemMudanca(path paths, char* newSet);
+void setPathDoSvgComOQryExecutado(path paths, char* newSet);
+void setPathDoTXTComOQryExecutado(path paths, char* newSet);
+void setPathSVGFinalGrafico(path paths, char* newSet);
+void setPathTXTFinal(path paths, char* newSet);
 
 int getArguments(int argc, char** argv, path paths) {
-    if (argc < 2) {
-        puts("Argumentos faltando.");
-        return -1;
-    }
+    
+    if (argc < 2) return -1;
+
     bool pathEntrada = false;
-    bool qryvalido = true;
     bool consultaFeita = false;
 
     for (int i = 1; i < argc; i++) {
+
         if (!strcmp(argv[i], "-e")) {  //Diretório-base de entrada (BED)
-            allocateDirbaseDeEntrada(paths, strlen(argv[i + 1]) + 1);
-            strcpyDirbaseDeEntrada(paths, argv[i + 1]);
-            if (getDirBaseDeEntrada(paths)[strlen(getDirBaseDeEntrada(paths)) - 1] != '/') {
-                reallocateDirbaseDeEntrada(paths, strlen(getDirBaseDeEntrada(paths)) + 2);
-                strcatDirbaseDeEntrada(paths, "/");
+
+            char* baseDeEntrada = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
+            strcpy(baseDeEntrada, argv[i + 1]);
+            
+            if(baseDeEntrada[strlen(baseDeEntrada) - 1] != '/'){
+            
+                baseDeEntrada = realloc(baseDeEntrada, strlen(baseDeEntrada) + 2);
+                strcat(baseDeEntrada, "/");
+            
             }
+
             pathEntrada = true;
+            setDirBaseDeEntrada(paths, baseDeEntrada);
 
         } else if (!strcmp(argv[i], "-f")) {  //Arquivo .geo inicial. Este arquivo deve estar sob o diretório BED.
-            char* temp = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
-            char* tempNomeGEO = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
-            allocateGeoInicial(paths, strlen(argv[i + 1]) + 1);
-            allocateNomeGEO(paths, strlen(argv[i + 1]) + 1);
+            
+            char* geoInicial = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
+            char* nomeGeo = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             int index = 0;
             int posNome = 0;
             bool found = false;
-            strcpy(temp, argv[i + 1]);
-            strcpyGeoInicial(paths, argv[i + 1]);
-            for (int i = 0; i < strlen(temp); i++) {  //Se for passado um caminho relativo na localizacao do .geo inicial
-                if (temp[i] == '/') {
+            strcpy(geoInicial, argv[i + 1]);
+            setGeoInicial(paths, geoInicial);
+
+            for (int i = 0; i < strlen(geoInicial); i++) {  //Se for passado um caminho relativo na localizacao do .geo inicial
+                
+                if (geoInicial[i] == '/') {
                     index = i;
                     found = true;
                 }
-            }
-            if (found) {
-                for (int i = index + 1; i < strlen(temp); i++) {
-                    if (temp[i] == '.') {
-                        tempNomeGEO[posNome] = '\0';
-                        break;
-                    } else {
-                        tempNomeGEO[posNome] = temp[i];
-                        posNome++;
-                    }
-                }
-                strcpyNomeGEO(paths, tempNomeGEO);
-            } else {
-                strcpy(tempNomeGEO, argv[i + 1]);
-                for (int i = 0; i < strlen(tempNomeGEO); i++) {
-                    if (tempNomeGEO[i] == '.') {
-                        tempNomeGEO[i] = '\0';
-                    }
-                }
-                strcpyNomeGEO(paths, tempNomeGEO);
-            }
-            free(temp);
-            free(tempNomeGEO);
-        } else if (!strcmp(argv[i], "-o")) {  //Diretório-base de saída (BSD)
-            allocateDirBaseDeSaida(paths, strlen(argv[i + 1]) + 1);
-            strcpyDirBaseDeSaida(paths, argv[i + 1]);
-            if (getDirBaseDeSaida(paths)[strlen(getDirBaseDeSaida(paths)) - 1] != '/') {
-                reallocateDirBaseDeSaida(paths, strlen(getDirBaseDeSaida(paths)) + 2);
-                strcatDirBaseDeSaida(paths, "/");
+
             }
 
+            if (found) {
+
+                for (int i = index + 1; i < strlen(geoInicial); i++) {
+
+                    if (geoInicial[i] == '.') {
+
+                        nomeGeo[posNome] = '\0';
+                        break;
+
+                    } else {
+
+                        nomeGeo[posNome] = geoInicial[i];
+                        posNome++;
+
+                    }
+
+                }
+
+                setNomeGEO(paths, nomeGeo);
+
+            } else {
+
+                strcpy(nomeGeo, argv[i + 1]);
+
+                for (int i = 0; i < strlen(nomeGeo); i++) {
+                
+                    if (nomeGeo[i] == '.') {
+                        nomeGeo[i] = '\0';
+                    }
+
+                }
+
+                setNomeGEO(paths, nomeGeo);
+            }
+
+        } else if (!strcmp(argv[i], "-o")) {  //Diretório-base de saída (BSD)
+
+            char* baseDeSaida = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
+            strcpy(baseDeSaida, argv[i+1]);
+            
+            if(baseDeSaida[strlen(baseDeSaida) - 1] != '/'){
+
+                baseDeSaida = realloc(baseDeSaida, strlen(baseDeSaida) + 2);
+                strcat(baseDeSaida, "/");
+            
+            }
+
+            setDirBaseDeSaida(paths, baseDeSaida);
+
         } else if (!strcmp(argv[i], "-q")) {  //Arquivo com consultas. Este arquivo deve estar sob o diretório BED.
-            char* temp = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
-            char* tempNomeQRY = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
-            allocateQryConsultas(paths, strlen(argv[i + 1]) + 1);
-            allocateNomeQRY(paths, strlen(argv[i + 1]) + 1);
-            strcpyQryConsultas(paths, argv[i + 1]);
-            strcpy(temp, argv[i + 1]);
-            int index;
+            
+            char* qryConsultas = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
+            char* nomeQry = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
+            strcpy(qryConsultas, argv[i + 1]);
+            setQryConsultas(paths, qryConsultas);
+            int index = 0;
             int posNome = 0;
             bool found = false;
-            for (int i = 0; i < strlen(temp); i++) {  //Se for passado um caminho relativo na localizacao do .geo inicial
-                if (temp[i] == '/') {
+
+            for (int i = 0; i < strlen(qryConsultas); i++) {  //Se for passado um caminho relativo na localizacao do .geo inicial
+            
+                if (qryConsultas[i] == '/') {
+            
                     index = i;
                     found = true;
+            
                 }
+            
             }
+            
             if (found) {
-                for (int i = index + 1; i < strlen(temp); i++) {
-                    if (temp[i] == '.') {
-                        tempNomeQRY[posNome] = '\0';
+                for (int i = index + 1; i < strlen(qryConsultas); i++) {
+                    if (qryConsultas[i] == '.') {
+                        nomeQry[posNome] = '\0';
                         break;
                     } else {
-                        tempNomeQRY[posNome] = temp[i];
+                        nomeQry[posNome] = qryConsultas[i];
                         posNome++;
                     }
                 }
-                strcpyNomeQRY(paths, tempNomeQRY);
+                
+                setNomeQRY(paths, nomeQry);
             } else {
-                strcpy(tempNomeQRY, argv[i + 1]);
-                for (int i = 0; i < strlen(tempNomeQRY); i++) {
-                    if (tempNomeQRY[i] == '.') {
-                        tempNomeQRY[i] = '\0';
+                strcpy(nomeQry, argv[i + 1]);
+                for (int i = 0; i < strlen(nomeQry); i++) {
+                    if (nomeQry[i] == '.') {
+                        nomeQry[i] = '\0';
                     }
                 }
-                strcpyNomeQRY(paths, tempNomeQRY);
+                
+                setNomeQRY(paths, nomeQry);
             }
-            free(temp);
-            free(tempNomeQRY);
             consultaFeita = true;
         }
     }
 
     //Apos coletar todas as informacoes, esta na hora de arrumar e organizar todos os dados reunidos, nomes autoexplicativos
-    char* tempPathDoSvgDoGeoSemMudanca = calloc(strlen(getDirBaseDeSaida(paths)) + strlen(getNomeGEO(paths)) + 10, sizeof(char));
-    sprintf(tempPathDoSvgDoGeoSemMudanca, "%s%s.svg", getDirBaseDeSaida(paths), getNomeGEO(paths));
-    allocatePathDoSvgDoGeoSemMudanca(paths, strlen(tempPathDoSvgDoGeoSemMudanca) + 1);
-    strcpyPathDoSvgDoGeoSemMudanca(paths, tempPathDoSvgDoGeoSemMudanca);
+    char* pathDoSvgDoGeoSemMudanca = calloc(strlen(getDirBaseDeSaida(paths)) + strlen(getNomeGEO(paths)) + 10, sizeof(char));
+    sprintf(pathDoSvgDoGeoSemMudanca, "%s%s.svg", getDirBaseDeSaida(paths), getNomeGEO(paths));
+    setPathDoSvgDoGeoSemMudanca(paths, pathDoSvgDoGeoSemMudanca);
+
     if (pathEntrada) {
-        allocatePathArquivoGeoInicial(paths, strlen(getDirBaseDeEntrada(paths)) + strlen(getGeoInicial(paths)) + 2);
-        strcpyPathArquivoGeoInicial(paths, getDirBaseDeEntrada(paths));
-        strcatPathArquivoGeoInicial(paths, getGeoInicial(paths));
+
+        char* pathArquivoGeoInicial = calloc(strlen(getDirBaseDeEntrada(paths)) + strlen(getGeoInicial(paths)) + 2, sizeof(char));
+        strcpy(pathArquivoGeoInicial, getDirBaseDeEntrada(paths));
+        strcat(pathArquivoGeoInicial, getGeoInicial(paths));
+        setPathArquivoGeoInicial(paths, pathArquivoGeoInicial);
+
     } else {
-        allocateDirbaseDeEntrada(paths, 3);
-        strcpyDirbaseDeEntrada(paths, "./");
-        char* tempElse = calloc(strlen(getDirBaseDeEntrada(paths)) + strlen(getGeoInicial(paths)) + 2, sizeof(char));
-        allocatePathArquivoGeoInicial(paths, strlen(getDirBaseDeEntrada(paths)) + strlen(getGeoInicial(paths)) + 2);
-        strcpy(tempElse, getDirBaseDeEntrada(paths));
-        strcat(tempElse, getGeoInicial(paths));
-        strcpyPathArquivoGeoInicial(paths, tempElse);
-        free(tempElse);
+
+        char* baseDeEntrada = calloc(3, sizeof(char));
+        strcpy(baseDeEntrada, "./");
+        setDirBaseDeEntrada(paths,baseDeEntrada);
+        char* pathArquivoGeoInicial = calloc(strlen(getDirBaseDeEntrada(paths)) + strlen(getGeoInicial(paths)) + 2, sizeof(char));
+        strcpy(pathArquivoGeoInicial, getDirBaseDeEntrada(paths));
+        strcat(pathArquivoGeoInicial, getGeoInicial(paths));
+        setPathArquivoGeoInicial(paths, pathArquivoGeoInicial);
+
     }
 
     if (consultaFeita) {
-        char* tempp = calloc(strlen(getDirBaseDeEntrada(paths)) + strlen(getQryConsultas(paths)) + 10, sizeof(char));
-        allocatePathArquivoQryAtual(paths, strlen(getDirBaseDeEntrada(paths)) + strlen(getQryConsultas(paths)) + 2);
 
-        sprintf(tempp, "%s%s", getDirBaseDeEntrada(paths), getQryConsultas(paths));
-        strcpyPathArquivoQryAtual(paths, tempp);
-        allocatePathDoSvgComOQryExecutado(paths, strlen(getDirBaseDeSaida(paths)) + strlen(getNomeGEO(paths)) + strlen(getNomeQRY(paths)) + 9);
-        allocatePathDoTXTComOQryExecutado(paths, strlen(getDirBaseDeSaida(paths)) + strlen(getNomeGEO(paths)) + strlen(getNomeQRY(paths)) + 9);
-        char* temp1 = calloc(strlen(getDirBaseDeSaida(paths)) + strlen(getNomeGEO(paths)) + strlen(getNomeQRY(paths)) + 10, sizeof(char));
-        char* temp2 = calloc(strlen(getDirBaseDeSaida(paths)) + strlen(getNomeGEO(paths)) + strlen(getNomeQRY(paths)) + 10, sizeof(char));
-        sprintf(temp1, "%s%s-%s.txt", getDirBaseDeSaida(paths), getNomeGEO(paths), getNomeQRY(paths));
-        strcpyPathDoTXTComOQryExecutado(paths, temp1);
-        sprintf(temp2, "%s%s-%s.svg", getDirBaseDeSaida(paths), getNomeGEO(paths), getNomeQRY(paths));
-        strcpyPathDoSvgComOQryExecutado(paths, temp2);
-        free(tempp);
-        free(temp1);
-        free(temp2);
-        free(tempPathDoSvgDoGeoSemMudanca);
+        char* pathArquivoQryAtual = calloc(strlen(getDirBaseDeEntrada(paths)) + strlen(getQryConsultas(paths)) + 10, sizeof(char));
+        sprintf(pathArquivoQryAtual, "%s%s", getDirBaseDeEntrada(paths), getQryConsultas(paths));
+        setPathArquivoQryAtual(paths, pathArquivoQryAtual);
+        char* pathDoTXTComOQryExecutado = calloc(strlen(getDirBaseDeSaida(paths)) + strlen(getNomeGEO(paths)) + strlen(getNomeQRY(paths)) + 10, sizeof(char));
+        char* pathDoSvgComOQryExecutado = calloc(strlen(getDirBaseDeSaida(paths)) + strlen(getNomeGEO(paths)) + strlen(getNomeQRY(paths)) + 10, sizeof(char));
+        sprintf(pathDoTXTComOQryExecutado, "%s%s-%s.txt", getDirBaseDeSaida(paths), getNomeGEO(paths), getNomeQRY(paths));
+        setPathDoTXTComOQryExecutado(paths, pathDoTXTComOQryExecutado);
+        sprintf(pathDoSvgComOQryExecutado, "%s%s-%s.svg", getDirBaseDeSaida(paths), getNomeGEO(paths), getNomeQRY(paths));
+        setPathDoSvgComOQryExecutado(paths, pathDoSvgComOQryExecutado);
         return 1;
+
     }
-    free(tempPathDoSvgDoGeoSemMudanca);
+
     return 0;
+
 }
 
 void getData(tree rectangleTree, tree circleTree, path paths) {
     FILE* arq = fopen(getPathArquivoGeoInicial(paths), "r");
     setvbuf(arq, 0, _IONBF, 0);
-    double x;
-    double y;
-    double width;
-    double height;
-    double radius;
-    char id[100];
-    char rectStroke[100];
-    char rectFill[100];
-    char circStroke[100];
-    char circFill[100];
-    char command[20];
+    double x, y, width, height, radius;
+    char id[100], rectStroke[100], rectFill[100], circStroke[100], circFill[100], command[20];
     bool firstRet = true;
     bool firstCir = true;
     node rectangleRoot = KDgetRootNode(rectangleTree);
