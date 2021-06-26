@@ -26,31 +26,27 @@ void set_final_graphic_SVG(path paths, char* newSet);
 void set_path_final_TXT(path paths, char* newSet);
 
 int get_arguments(int argc, char** argv, path paths) {
-    
     if (argc < 2) return -1;
 
     bool input_directory_inserted = false;
     bool qry_executed = false;
 
     for (int i = 1; i < argc; i++) {
-
         if (!strcmp(argv[i], "-e")) {  //Diretório-base de entrada (BED)
 
             char* input_directory = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             strcpy(input_directory, argv[i + 1]);
-            
-            if(input_directory[strlen(input_directory) - 1] != '/'){
-            
+
+            if (input_directory[strlen(input_directory) - 1] != '/') {
                 input_directory = realloc(input_directory, strlen(input_directory) + 2);
                 strcat(input_directory, "/");
-            
             }
 
             input_directory_inserted = true;
             set_input_directory(paths, input_directory);
 
         } else if (!strcmp(argv[i], "-f")) {  //Arquivo .geo inicial. Este arquivo deve estar sob o diretório BED.
-            
+
             char* initial_geo_file = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             char* geo_name = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             int index = 0;
@@ -60,44 +56,34 @@ int get_arguments(int argc, char** argv, path paths) {
             set_initial_geo_file(paths, initial_geo_file);
 
             for (int i = 0; i < strlen(initial_geo_file); i++) {  //Se for passado um caminho relativo na localizacao do .geo inicial
-                
+
                 if (initial_geo_file[i] == '/') {
                     index = i;
                     found = true;
                 }
-
             }
 
             if (found) {
-
                 for (int i = index + 1; i < strlen(initial_geo_file); i++) {
-
                     if (initial_geo_file[i] == '.') {
-
                         geo_name[name_position] = '\0';
                         break;
 
                     } else {
-
                         geo_name[name_position] = initial_geo_file[i];
                         name_position++;
-
                     }
-
                 }
 
                 set_geo_name(paths, geo_name);
 
             } else {
-
                 strcpy(geo_name, argv[i + 1]);
 
                 for (int i = 0; i < strlen(geo_name); i++) {
-                
                     if (geo_name[i] == '.') {
                         geo_name[i] = '\0';
                     }
-
                 }
 
                 set_geo_name(paths, geo_name);
@@ -106,19 +92,17 @@ int get_arguments(int argc, char** argv, path paths) {
         } else if (!strcmp(argv[i], "-o")) {  //Diretório-base de saída (BSD)
 
             char* output_directory = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
-            strcpy(output_directory, argv[i+1]);
-            
-            if(output_directory[strlen(output_directory) - 1] != '/'){
+            strcpy(output_directory, argv[i + 1]);
 
+            if (output_directory[strlen(output_directory) - 1] != '/') {
                 output_directory = realloc(output_directory, strlen(output_directory) + 2);
                 strcat(output_directory, "/");
-            
             }
 
             set_output_directory(paths, output_directory);
 
         } else if (!strcmp(argv[i], "-q")) {  //Arquivo com consultas. Este arquivo deve estar sob o diretório BED.
-            
+
             char* qry_file = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             char* qry_name = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             strcpy(qry_file, argv[i + 1]);
@@ -128,16 +112,13 @@ int get_arguments(int argc, char** argv, path paths) {
             bool found = false;
 
             for (int i = 0; i < strlen(qry_file); i++) {  //Se for passado um caminho relativo na localizacao do .geo inicial
-            
+
                 if (qry_file[i] == '/') {
-            
                     index = i;
                     found = true;
-            
                 }
-            
             }
-            
+
             if (found) {
                 for (int i = index + 1; i < strlen(qry_file); i++) {
                     if (qry_file[i] == '.') {
@@ -148,7 +129,7 @@ int get_arguments(int argc, char** argv, path paths) {
                         name_position++;
                     }
                 }
-                
+
                 set_qry_name(paths, qry_name);
             } else {
                 strcpy(qry_name, argv[i + 1]);
@@ -157,7 +138,7 @@ int get_arguments(int argc, char** argv, path paths) {
                         qry_name[i] = '\0';
                     }
                 }
-                
+
                 set_qry_name(paths, qry_name);
             }
             qry_executed = true;
@@ -170,26 +151,22 @@ int get_arguments(int argc, char** argv, path paths) {
     set_path_original_SVG(paths, path_original_SVG);
 
     if (input_directory_inserted) {
-
         char* path_initial_geo_file = calloc(strlen(get_input_directory(paths)) + strlen(get_initial_geo_file(paths)) + 2, sizeof(char));
         strcpy(path_initial_geo_file, get_input_directory(paths));
         strcat(path_initial_geo_file, get_initial_geo_file(paths));
         set_initial_geo_file(paths, path_initial_geo_file);
 
     } else {
-
         char* input_directory = calloc(3, sizeof(char));
         strcpy(input_directory, "./");
-        set_input_directory(paths,input_directory);
+        set_input_directory(paths, input_directory);
         char* path_intial_geo_file = calloc(strlen(get_input_directory(paths)) + strlen(get_initial_geo_file(paths)) + 2, sizeof(char));
         strcpy(path_intial_geo_file, get_input_directory(paths));
         strcat(path_intial_geo_file, get_initial_geo_file(paths));
         set_initial_geo_file(paths, path_intial_geo_file);
-
     }
 
     if (qry_executed) {
-
         char* path_current_qry_file = calloc(strlen(get_input_directory(paths)) + strlen(get_current_qry_file(paths)) + 10, sizeof(char));
         sprintf(path_current_qry_file, "%s%s", get_input_directory(paths), get_current_qry_file(paths));
         set_current_qry_file(paths, path_current_qry_file);
@@ -200,11 +177,9 @@ int get_arguments(int argc, char** argv, path paths) {
         sprintf(path_modified_svg, "%s%s-%s.svg", get_output_directory(paths), get_geo_name(paths), get_qry_name(paths));
         set_path_modified_SVG(paths, path_modified_svg);
         return 1;
-
     }
 
     return 0;
-
 }
 
 void get_data(tree rectangleTree, tree circleTree, path paths) {
@@ -214,8 +189,8 @@ void get_data(tree rectangleTree, tree circleTree, path paths) {
     char id[100], rectStroke[100], rectFill[100], circStroke[100], circFill[100], command[20];
     bool firstRet = true;
     bool firstCir = true;
-    node rectangleRoot = KDgetRootNode(rectangleTree);
-    node circleRoot = KDgetRootNode(circleTree);
+    node rectangleRoot = KD_get_root_node(rectangleTree);
+    node circleRoot = KD_get_root_node(circleTree);
 
     while (fscanf(arq, "%s", command) != -1) {
         if (!strcmp(command, "cc")) {
@@ -239,67 +214,67 @@ void get_data(tree rectangleTree, tree circleTree, path paths) {
                 strcpy(circFill, "none");
             }
         } else if (!strcmp(command, "c")) {
-            setType(circleTree, 'c');
-            void* aux_circle = createCircle();
-            setRunTo(aux_circle, NULL);
-            setFg(aux_circle, false);
-            setNearestDistance(aux_circle, __DBL_MAX__);
-            setCircleStroke(aux_circle, circStroke);
-            setCircleFill(aux_circle, circFill);
+            set_type(circleTree, 'c');
+            void* aux_circle = create_circle();
+            set_run_to(aux_circle, NULL);
+            set_fg(aux_circle, false);
+            set_nearest_distance(aux_circle, __DBL_MAX__);
+            set_circle_stroke(aux_circle, circStroke);
+            set_circle_fill(aux_circle, circFill);
             fscanf(arq, "%s %lf %lf %lf", id, &x, &y, &radius);
-            setCircleId(aux_circle, id);
-            setCircleX(aux_circle, x);
-            setCircleY(aux_circle, y);
-            setCircleOriginalX(aux_circle, x);
-            setCircleOriginalY(aux_circle, y);
-            setCircleRadius(aux_circle, radius);
-            setRadiation(aux_circle, 0.0);
-            setCircleAlive(aux_circle, true);
-            setCircleMarkedForDeath(aux_circle, false);
-            if (getBiggestX(circleTree) < x + radius) {
-                setBiggestX(circleTree, x + radius);
+            set_circle_id(aux_circle, id);
+            set_circle_x(aux_circle, x);
+            set_circle_y(aux_circle, y);
+            set_circle_original_x(aux_circle, x);
+            set_circle_original_y(aux_circle, y);
+            set_circle_radius(aux_circle, radius);
+            set_radiation(aux_circle, 0.0);
+            set_circle_alive(aux_circle, true);
+            set_circle_marked_for_death(aux_circle, false);
+            if (get_biggest_x(circleTree) < x + radius) {
+                set_biggest_x(circleTree, x + radius);
             }
-            if (getBiggestY(circleTree) < y + radius) {
-                setBiggestY(circleTree, y + radius);
+            if (get_biggest_y(circleTree) < y + radius) {
+                set_biggest_y(circleTree, y + radius);
             }
             if (firstCir) {
-                circleRoot = KDinsertCirc(circleTree, circleRoot, circleRoot, aux_circle, 0);
+                circleRoot = KD_insert_circ(circleTree, circleRoot, circleRoot, aux_circle, 0);
                 firstCir = false;
             } else {
-                KDinsertCirc(circleTree, circleRoot, circleRoot, aux_circle, 0);
+                KD_insert_circ(circleTree, circleRoot, circleRoot, aux_circle, 0);
             }
         } else if (!strcmp(command, "r")) {
-            setType(rectangleTree, 'r');
-            void* aux_rect = createRectangle();
-            setRectangleStroke(aux_rect, rectStroke);
-            setRectangleFill(aux_rect, rectFill);
+            set_type(rectangleTree, 'r');
+            void* aux_rect = create_rectangle();
+            set_rectangle_stroke(aux_rect, rectStroke);
+            set_rectangle_fill(aux_rect, rectFill);
             fscanf(arq, "%s %lf %lf %lf %lf", id, &x, &y, &width, &height);
-            setRectangleId(aux_rect, id);
-            setRectangleX(aux_rect, x);
-            setRectangleY(aux_rect, y);
-            setRectangleWidth(aux_rect, width);
-            setRectangleHeight(aux_rect, height);
-            setRectangleCenterX(aux_rect, getRectangleX(aux_rect) + (getRectangleWidth(aux_rect)) / 2);
-            setRectangleCenterY(aux_rect, getRectangleY(aux_rect) + (getRectangleHeight(aux_rect)) / 2);
-            setVectorOfPeopleStarted(aux_rect, 0);
-            setNumberOfPeopleInside(aux_rect, 0);
-            if (getBiggestX(rectangleTree) < x + width) {
-                setBiggestX(rectangleTree, x + width);
+            set_rectangle_id(aux_rect, id);
+            set_rectangle_x(aux_rect, x);
+            set_rectangle_y(aux_rect, y);
+            set_rectangle_width(aux_rect, width);
+            set_rectangle_height(aux_rect, height);
+            set_rectangle_center_x(aux_rect, get_rectangle_x(aux_rect) + (get_rectangle_width(aux_rect)) / 2);
+            set_rectangle_center_y(aux_rect, get_rectangle_y(aux_rect) + (get_rectangle_height(aux_rect)) / 2);
+            set_vector_of_people_started(aux_rect, 0);
+            set_number_of_people_inside(aux_rect, 0);
+            if (get_biggest_x(rectangleTree) < x + width) {
+                set_biggest_x(rectangleTree, x + width);
             }
-            if (getBiggestY(rectangleTree) < y + height) {
-                setBiggestY(rectangleTree, y + height);
+            if (get_biggest_y(rectangleTree) < y + height) {
+                set_biggest_y(rectangleTree, y + height);
             }
 
             if (firstRet) {
-                rectangleRoot = KDinsertRect(rectangleTree, rectangleRoot, rectangleRoot, aux_rect, 0);
+                rectangleRoot = KD_insert_rect(rectangleTree, rectangleRoot, rectangleRoot, aux_rect, 0);
                 firstRet = false;
             } else {
-                KDinsertRect(rectangleTree, rectangleRoot, rectangleRoot, aux_rect, 0);
+                KD_insert_rect(rectangleTree, rectangleRoot, rectangleRoot, aux_rect, 0);
             }
         }
     }
-    KDsetRootNode(rectangleTree, rectangleRoot);
-    KDsetRootNode(circleTree, circleRoot);
+    KD_set_root_node(rectangleTree, rectangleRoot);
+    KD_set_root_node(circleTree, circleRoot);
 
     fclose(arq);
 }
@@ -309,9 +284,9 @@ void get_functions(tree rectangleTree, tree circleTree, dynamicList listOfTreesS
     setvbuf(Svg_Modificado, 0, _IONBF, 0);
     FILE* comandos = fopen(get_path_current_qry_file(paths), "r");
     setvbuf(comandos, 0, _IONBF, 0);
-    dynamicList fgData = createList();
-    dynamicList imData = createList();
-    dynamicList nveData = createList();
+    dynamicList fgData = create_list();
+    dynamicList imData = create_list();
+    dynamicList nveData = create_list();
     double x = 0.0;
     double y = 0.0;
     double radius = 0;
@@ -341,9 +316,9 @@ void get_functions(tree rectangleTree, tree circleTree, dynamicList listOfTreesS
         }
     }
     new_write_on_svg(Svg_Modificado, rectangleTree, circleTree, paths, fgData, imData, nveData);
-    freeList(fgData);
-    freeList(imData);
-    freeList(nveData);
+    free_list(fgData);
+    free_list(imData);
+    free_list(nveData);
     fclose(comandos);
     fclose(Svg_Modificado);
 }

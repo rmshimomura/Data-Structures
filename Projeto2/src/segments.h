@@ -2,36 +2,27 @@
 #ifndef SEGMENTS_H
 #define SEGMENTS_H
 
-void* createSegment();
-void constructPoints(tree rectangleTree, node current_rect, dynamicList vertexList);
-void calculateAngles(tree rectangleTree, dynamicList vertexList, double xMeteor, double yMeteor);
-void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor);
-void buildSegments(tree rectangleTree, dynamicList segmentsList, void* current_rect);
-void checkNewDivisions(dynamicList segmentsList, double xMeteor, double yMeteor);
-void* buildArrayOfPoints(tree rectangleTree, dynamicList vertexList);
-void resetAngles(dynamicList vertexList);
-void freePointsInfo(void* segment);
-void* getOrigin(void* point);
-void* getLinkedTo(void* point);
-double getPointX(void* point);
-double getPointY(void* point);
-double getAngle(void* point);
-void* getP1(void* segment);
-void* getP2(void* segment);
-void* atPosArray(void* array, int pos);
-void setAngle(void* point, double angle);
-int getQuadrant(void* point);
-char* getCode(void* point);
-char getPointType(void* point);
-bool getAnalyzed(void* point);
-void setAnalyzed(void* point, bool state);
-void freeShadowPolygonsArray(void* array);
-void* getPair(void* point);
-int determinant(void* node1, void* node2);
-void constructTempSVG(void* vertexArray, dynamicList segmentsList);  //Debug
-void buildLines(void* vertexArray, dynamicList segmentsList, double xMeteor, double yMeteor, double biggestX, double biggestY);
-void addWrapAroundRectangle(tree rectangleTree, tree circleTree, dynamicList segmentsList);
-void destorySegment(void* segment);
-void visibility(tree visibilityPolygon, dynamicList listOfSegments, double xMeteor, double yMeteor);
+void* create_segment();
+void* build_vertex_array(dynamicList segmentsList, double xMeteor, double yMeteor);
+void build_segments(tree rectangleTree, dynamicList segmentsList, void* current_rect);
+void free_points_info(void* segment);
+void* get_origin(void* point);
+void* get_linked_to(void* point);
+double get_point_x(void* point);
+double get_point_y(void* point);
+double get_angle(void* point);
+void* get_P1(void* segment);
+void* get_P2(void* segment);
+void* at_pos_array(void* array, int pos);
+void set_angle(void* point, double angle);
+int get_quadrant(void* point);
+char* get_code(void* point);
+char get_point_type(void* point);
+bool get_analyzed(void* point);
+void set_analyzed(void* point, bool state);
+void free_shadow_polygons_array(void* array);
+void* get_pair(void* point);
+void add_wrap_around_rectangle(tree rectangleTree, tree circleTree, dynamicList segmentsList);
+void destory_segment(void* segment);
 
 #endif

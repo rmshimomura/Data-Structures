@@ -2,37 +2,37 @@
 #ifndef CIRCLE_H
 #define CIRCLE_H
 
-item createCircle();
-void setCircleX(node current, double x);
-void setCircleY(node current, double y);
-void setCircleId(node current, char* idValue);
-void setCircleFill(node current, char* fillValue);
-void setCircleStroke(node current, char* strokeValue);
-void setCircleRadius(node current, double radius);
-double getCircleX(node current);
-double getCircleY(node current);
-char* getCircleId(node current);
-char* getCircleFill(node current);
-char* getCircleStroke(node current);
-double getCircleRadius(node current);
-void* getRunTo(node current);
-void setRunTo(node current, void* building);
-void setNearestDistance(node current, double distance);
-double getNearestDistance(node current);
-void setFg(node current, bool state);
-bool getFg(node current);
-void setCircleOriginalX(node current, double x);
-double getCircleOriginalX(node current);
-void setCircleOriginalY(node current, double y);
-double getCircleOriginalY(node current);
-double getRadiation(node current);
-void setRadiation(node current, double newRadiation);
-void setInsideNShadows(node current, int numberOfShadows);
-int getInsideNShadows(node current);
-void setCircleAlive(node current, bool isAlive);
-bool getCircleAlive(node current);
-void setCircleMarkedForDeath(node current, bool goingToDie);
-bool getCircleMarkedForDeath(node current);
+item create_circle();
+void set_circle_x(node current, double x);
+void set_circle_y(node current, double y);
+void set_circle_id(node current, char* idValue);
+void set_circle_fill(node current, char* fillValue);
+void set_circle_stroke(node current, char* strokeValue);
+void set_circle_radius(node current, double radius);
+double get_circle_x(node current);
+double get_circle_y(node current);
+char* get_circle_id(node current);
+char* get_circle_fill(node current);
+char* get_circle_stroke(node current);
+double get_circle_radius(node current);
+void* get_run_to(node current);
+void set_run_to(node current, void* building);
+void set_nearest_distance(node current, double distance);
+double get_nearest_distance(node current);
+void set_fg(node current, bool state);
+bool get_fg(node current);
+void set_circle_original_x(node current, double x);
+double get_circle_original_x(node current);
+void set_circle_original_y(node current, double y);
+double get_circle_original_y(node current);
+double get_radiation(node current);
+void set_radiation(node current, double newRadiation);
+void set_inside_n_shadows(node current, int numberOfShadows);
+int get_inside_n_shadows(node current);
+void set_circle_alive(node current, bool isAlive);
+bool get_circle_alive(node current);
+void set_circle_marked_for_death(node current, bool goingToDie);
+bool get_circle_marked_for_death(node current);
 
 
 #endif

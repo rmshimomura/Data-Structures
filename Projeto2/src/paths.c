@@ -1,20 +1,20 @@
 #include "paths.h"
 
 typedef struct generalPaths {
-    char* input_directory;              //Diretorio de entrada
-    char* output_directory;             //Diretorio de saida
-    char* initial_geo_file;             //Arquivo .geo (sem diretorio)
-    char* current_qry_file;             //Arquivo .qry (sem diretorio)
-    char* qry_name;                     //Nome do .qry sem o .qry
-    char* geo_name;                     //Nome do .geo sem o .geo
-    char* final_SVG_file_name;          //Nome do .svg final sem o .svg
-    char* path_initial_geo_file;        //Path ate o .geo inicial
-    char* path_current_qry_file;        //Path ate o .qry que esta sendo usado
-    char* path_original_SVG;            //Path ate o svg que sera gerado sem alteracoes
-    char* path_modified_SVG;            //Path ate o svg com as alteracoes do qry
-    char* path_TXT_with_qry;            //Path ate o txt com as alteracoes do qry
-    char* path_final_graphic_SVG;       //Path ate o .svg final com o grafico
-    char* path_final_TXT;               //Path ate o .txt final
+    char* input_directory;         //Diretorio de entrada
+    char* output_directory;        //Diretorio de saida
+    char* initial_geo_file;        //Arquivo .geo (sem diretorio)
+    char* current_qry_file;        //Arquivo .qry (sem diretorio)
+    char* qry_name;                //Nome do .qry sem o .qry
+    char* geo_name;                //Nome do .geo sem o .geo
+    char* final_SVG_file_name;     //Nome do .svg final sem o .svg
+    char* path_initial_geo_file;   //Path ate o .geo inicial
+    char* path_current_qry_file;   //Path ate o .qry que esta sendo usado
+    char* path_original_SVG;       //Path ate o svg que sera gerado sem alteracoes
+    char* path_modified_SVG;       //Path ate o svg com as alteracoes do qry
+    char* path_TXT_with_qry;       //Path ate o txt com as alteracoes do qry
+    char* path_final_graphic_SVG;  //Path ate o .svg final com o grafico
+    char* path_final_TXT;          //Path ate o .txt final
 
 } generalPaths;
 
@@ -94,102 +94,73 @@ char* get_path_final_TXT(path paths) {
 }
 
 void set_input_directory(path paths, char* newSet) {
-    
     generalPaths* aux = paths;
     aux->input_directory = newSet;
-    
 }
 
 void set_output_directory(path paths, char* newSet) {
-    
     generalPaths* aux = paths;
     aux->output_directory = newSet;
-
 }
 
 void set_initial_geo_file(path paths, char* newSet) {
-   
     generalPaths* aux = paths;
     aux->initial_geo_file = newSet;
-    
 }
 
 void set_current_qry_file(path paths, char* newSet) {
-   
     generalPaths* aux = paths;
     aux->current_qry_file = newSet;
-    
 }
 
 void set_qry_name(path paths, char* newSet) {
-   
     generalPaths* aux = paths;
     aux->qry_name = newSet;
-    
 }
 
 void set_geo_name(path paths, char* newSet) {
-   
     generalPaths* aux = paths;
     aux->geo_name = newSet;
-    
 }
 
 void set_final_SVG_file_name(path paths, char* newSet) {
-   
     generalPaths* aux = paths;
     aux->final_SVG_file_name = newSet;
-    
 }
 
 void set_path_initial_geo_file(path paths, char* newSet) {
-   
     generalPaths* aux = paths;
     aux->path_initial_geo_file = newSet;
-
-    
 }
 
 void set_path_current_qry_file(path paths, char* newSet) {
-   
     generalPaths* aux = paths;
     aux->path_current_qry_file = newSet;
-    
 }
 
 void set_path_original_SVG(path paths, char* newSet) {
-   
     generalPaths* aux = paths;
     aux->path_original_SVG = newSet;
-
 }
 
 void set_path_modified_SVG(path paths, char* newSet) {
-   
     generalPaths* aux = paths;
     aux->path_modified_SVG = newSet;
-    
 }
 
 void set_path_TXT_with_qry(path paths, char* newSet) {
-   
     generalPaths* aux = paths;
     aux->path_TXT_with_qry = newSet;
-    
 }
 
 void set_final_graphic_SVG(path paths, char* newSet) {
-   
     generalPaths* aux = paths;
     aux->path_final_graphic_SVG = newSet;
-
 }
 
 void set_path_final_TXT(path paths, char* newSet) {
-   
     generalPaths* aux = paths;
     aux->path_final_TXT = newSet;
-    
 }
 
 void showPaths(path paths) {
@@ -310,6 +281,6 @@ void freePaths(path paths) {
     if (aux->current_qry_file) {
         free(aux->current_qry_file);
     }
-    
+
     free(paths);
 }

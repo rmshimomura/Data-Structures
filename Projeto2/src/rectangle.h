@@ -2,34 +2,32 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
-item createRectangle();
-void setRectangleX(node current, double x);
-void setRectangleY(node current, double y);
-void setRectangleWidth(node current, double width);
-void setRectangleHeight(node current, double height);
-void setRectangleId(node current, char* idValue);
-void setRectangleFill(node current, char* fillValue);
-void setRectangleStroke(node current, char* strokeValue);
-void setRectangleCenterX(node current, double centerX);
-void setRectangleCenterY(node current, double centerY);
-double getRectangleX(node current);
-double getRectangleY(node current);
-double getRectangleWidth(node current);
-double getRectangleHeight(node current);
-char* getRectangleId(node current);
-char* getRectangleFill(node current);
-char* getRectangleStroke(node current);
-double getRectangleCenterX(node current);
-double getRectangleCenterY(node current);
-void setVectorOfPeopleStarted(node current, bool state);
-bool getVectorOfPeopleStarted(node current);
-void setNumberOfPeopleInside(node current, int people);
-int getNumberOfPeopleInside(node current);
-void allocateVectorOfPeople(node current);
-void freeVectorOfPeople(node current);
-void **getVectorOfPeople(node current);
-void setAddresses(node current, void* address, int line);
-
-
+item create_rectangle();
+void set_rectangle_x(node current, double x);
+void set_rectangle_y(node current, double y);
+void set_rectangle_width(node current, double width);
+void set_rectangle_height(node current, double height);
+void set_rectangle_id(node current, char* idValue);
+void set_rectangle_fill(node current, char* fillValue);
+void set_rectangle_stroke(node current, char* strokeValue);
+void set_rectangle_center_x(node current, double centerX);
+void set_rectangle_center_y(node current, double centerY);
+double get_rectangle_x(node current);
+double get_rectangle_y(node current);
+double get_rectangle_width(node current);
+double get_rectangle_height(node current);
+char* get_rectangle_id(node current);
+char* get_rectangle_fill(node current);
+char* get_rectangle_stroke(node current);
+double get_rectangle_center_x(node current);
+double get_rectangle_center_y(node current);
+void set_vector_of_people_started(node current, bool state);
+bool get_vector_of_people_started(node current);
+void set_number_of_people_inside(node current, int people);
+int get_number_of_people_inside(node current);
+void allocate_vector_of_people(node current);
+void free_vector_of_people(node current);
+void** get_vector_of_people(node current);
+void set_addresses(node current, void* address, int line);
 
 #endif

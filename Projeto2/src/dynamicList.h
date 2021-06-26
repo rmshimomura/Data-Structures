@@ -2,25 +2,24 @@
 #ifndef DYNAMICLIST_H_INCLUDED
 #define DYNAMICLIST_H_INCLUDED
 
-void* createList();
-int getSize(void* sequence);
+void* create_list();
+int get_size(void* sequence);
 void* insert(void* sequence, void* element);
-void removeNode(void* sequence, void* current);
-void* getItem(void* sequence, void* current);
-void* getHead(void* sequence);
-void* getNext(void* sequence, void* current);
+void remove_node(void* sequence, void* current);
+void* get_item(void* sequence, void* current);
+void* get_head(void* sequence);
+void* get_next(void* sequence, void* current);
 void* getLast(void* sequence);
-void* getPrevious(void* sequence, void* current);
-void freeList(void* sequence);
-void* atPos(void* sequence, int index);
-void freeListOfSegments(void* sequence);
-void freeListOfTreesShadows(void* sequence);
-double getDataRadiation(void* node);
-void setDataRadiation(void* node, double radiation);
-double getDataxMeteor(void* node);
-void setDataxMeteor(void* node, double xMeteor);
-double getDatayMeteor(void* node);
-void setDatayMeteor(void* node, double yMeteor);
-
+void* get_previous(void* sequence, void* current);
+void free_list(void* sequence);
+void* at_pos(void* sequence, int index);
+void free_list_of_segments(void* sequence);
+void free_list_of_trees_shadows(void* sequence);
+double get_data_radiation(void* node);
+void set_data_radiation(void* node, double radiation);
+double get_data_x_meteor(void* node);
+void set_data_x_meteor(void* node, double xMeteor);
+double get_data_y_meteor(void* node);
+void set_data_y_meteor(void* node, double yMeteor);
 
 #endif

@@ -1,230 +1,167 @@
 #include "circle.h"
 
 typedef struct data_c {
-    
-    double x, y, radius, radiation, nearestDistance, originalX, originalY;
-    int insideNShadows;
+    double x, y, radius, radiation, nearest_distance, original_x, original_y;
+    int inside_n_shadows;
     char id[100], fill[100], stroke[100];
-    void* runTo;
+    void* run_to;
     bool fg;
     bool alive;
-    bool markedForDeath;
+    bool marked_for_death;
 
 } data_c;
 
-void* createCircle() {
-    
-    data_c* aux = (data_c*)calloc(1, sizeof(data_c));
+void* create_circle() {
+    data_c* aux = calloc(1, sizeof(data_c));
     return aux;
-
 }
 
-void setCircleX(node current, double x) {
-    
+void set_circle_x(node current, double x) {
     data_c* aux = current;
     aux->x = x;
-
 }
 
-void setCircleY(node current, double y) {
-    
+void set_circle_y(node current, double y) {
     data_c* aux = current;
     aux->y = y;
-
 }
 
-void setCircleId(node current, char* idValue) {
-    
+void set_circle_id(node current, char* idValue) {
     data_c* aux = current;
     strcpy(aux->id, idValue);
-
 }
 
-void setCircleFill(node current, char* fillValue) {
-
+void set_circle_fill(node current, char* fillValue) {
     data_c* aux = current;
     strcpy(aux->fill, fillValue);
-
 }
 
-void setCircleStroke(node current, char* strokeValue) {
-    
+void set_circle_stroke(node current, char* strokeValue) {
     data_c* aux = current;
     strcpy(aux->stroke, strokeValue);
-
 }
 
-void setCircleRadius(node current, double radius) {
-    
+void set_circle_radius(node current, double radius) {
     data_c* aux = current;
     aux->radius = radius;
-
 }
 
-double getRadiation(node current) {
-    
+double get_radiation(node current) {
     data_c* aux = current;
     return aux->radiation;
-
 }
 
-void setRadiation(node current, double newRadiation) {
-    
+void set_radiation(node current, double newRadiation) {
     data_c* aux = current;
     aux->radiation = newRadiation;
-
 }
 
-void setInsideNShadows(node current, int numberOfShadows) {
-    
+void set_inside_n_shadows(node current, int numberOfShadows) {
     data_c* aux = current;
-    aux->insideNShadows = numberOfShadows;
-
+    aux->inside_n_shadows = numberOfShadows;
 }
 
-int getInsideNShadows(node current) {
-    
+int get_inside_n_shadows(node current) {
     data_c* aux = current;
-    return aux->insideNShadows;
-
+    return aux->inside_n_shadows;
 }
 
-double getCircleX(node current) {
-   
+double get_circle_x(node current) {
     data_c* aux = current;
     return aux->x;
-
 }
 
-double getCircleY(node current) {
-   
+double get_circle_y(node current) {
     data_c* aux = current;
     return aux->y;
-
 }
 
-char* getCircleId(node current) {
-   
+char* get_circle_id(node current) {
     data_c* aux = current;
     return aux->id;
-
 }
 
-char* getCircleFill(node current) {
-    
+char* get_circle_fill(node current) {
     data_c* aux = current;
     return aux->fill;
-
 }
 
-char* getCircleStroke(node current) {
-    
+char* get_circle_stroke(node current) {
     data_c* aux = current;
     return aux->stroke;
-
 }
 
-double getCircleRadius(node current) {
-   
+double get_circle_radius(node current) {
     data_c* aux = current;
     return aux->radius;
-
 }
 
-void* getRunTo(node current) {
-    
+void* get_run_to(node current) {
     data_c* aux = current;
-    return aux->runTo;
-
+    return aux->run_to;
 }
 
-void setRunTo(node current, void* building) {
-    
+void set_run_to(node current, void* building) {
     data_c* aux = current;
-    aux->runTo = building;
-
+    aux->run_to = building;
 }
 
-void setNearestDistance(node current, double distance) {
-
+void set_nearest_distance(node current, double distance) {
     data_c* aux = current;
-    aux->nearestDistance = distance;
-
+    aux->nearest_distance = distance;
 }
 
-double getNearestDistance(node current) {
-
+double get_nearest_distance(node current) {
     data_c* aux = current;
-    return aux->nearestDistance;
-
+    return aux->nearest_distance;
 }
 
-void setFg(node current, bool state) {
-
+void set_fg(node current, bool state) {
     data_c* aux = current;
     aux->fg = state;
-
 }
 
-bool getFg(node current) {
-
+bool get_fg(node current) {
     data_c* aux = current;
     return aux->fg;
-
 }
 
-void setCircleOriginalX(node current, double x) {
-
+void set_circle_original_x(node current, double x) {
     data_c* aux = current;
-    aux->originalX = x;
-
+    aux->original_x = x;
 }
 
-double getCircleOriginalX(node current) {
-
+double get_circle_original_x(node current) {
     data_c* aux = current;
-    return aux->originalX;
-
+    return aux->original_x;
 }
 
-void setCircleOriginalY(node current, double y) {
-
+void set_circle_original_y(node current, double y) {
     data_c* aux = current;
-    aux->originalY = y;
-
+    aux->original_y = y;
 }
 
-double getCircleOriginalY(node current) {
-
+double get_circle_original_y(node current) {
     data_c* aux = current;
-    return aux->originalY;
-
+    return aux->original_y;
 }
 
-void setCircleAlive(node current, bool isAlive) {
-
+void set_circle_alive(node current, bool isAlive) {
     data_c* aux = current;
     aux->alive = isAlive;
-
 }
 
-bool getCircleAlive(node current) {
-
+bool get_circle_alive(node current) {
     data_c* aux = current;
     return aux->alive;
-
 }
 
-void setCircleMarkedForDeath(node current, bool goingToDie) {
-
+void set_circle_marked_for_death(node current, bool goingToDie) {
     data_c* aux = current;
-    aux->markedForDeath = goingToDie;
-
+    aux->marked_for_death = goingToDie;
 }
 
-bool getCircleMarkedForDeath(node current) {
-
+bool get_circle_marked_for_death(node current) {
     data_c* aux = current;
-    return aux->markedForDeath;
-
+    return aux->marked_for_death;
 }
