@@ -1,6 +1,6 @@
 # Data-Structures-Projects
 
-Here, I'll be saving some of the projects I made through Data structures, from second semester and third semester on CS course of UEL. (State University of Londrina).
+Here, I'll be saving some of the projects I made through Data structures, from second semester and third semester on Computer Science course of UEL. (State University of Londrina).
 
 Concepts used:
 
