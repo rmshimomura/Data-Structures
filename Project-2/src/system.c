@@ -9,7 +9,7 @@
 #include "rectangle.h"
 #include "svg.h"
 
-//Evitar sets desnecessarios
+// Avoid unnecessary sets
 void set_input_directory(path paths, char* newSet);
 void set_output_directory(path paths, char* newSet);
 void set_initial_geo_file(path paths, char* newSet);
@@ -32,7 +32,7 @@ int get_arguments(int argc, char** argv, path paths) {
     bool qry_executed = false;
 
     for (int i = 1; i < argc; i++) {
-        if (!strcmp(argv[i], "-e")) {  //Diretório-base de entrada (BED)
+        if (!strcmp(argv[i], "-e")) { 
 
             char* input_directory = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             strcpy(input_directory, argv[i + 1]);
@@ -45,7 +45,7 @@ int get_arguments(int argc, char** argv, path paths) {
             input_directory_inserted = true;
             set_input_directory(paths, input_directory);
 
-        } else if (!strcmp(argv[i], "-f")) {  //Arquivo .geo inicial. Este arquivo deve estar sob o diretório BED.
+        } else if (!strcmp(argv[i], "-f")) {  
 
             char* initial_geo_file = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             char* geo_name = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
@@ -55,7 +55,7 @@ int get_arguments(int argc, char** argv, path paths) {
             strcpy(initial_geo_file, argv[i + 1]);
             set_initial_geo_file(paths, initial_geo_file);
 
-            for (int i = 0; i < strlen(initial_geo_file); i++) {  //Se for passado um caminho relativo na localizacao do .geo inicial
+            for (int i = 0; i < strlen(initial_geo_file); i++) {  
 
                 if (initial_geo_file[i] == '/') {
                     index = i;
@@ -89,7 +89,7 @@ int get_arguments(int argc, char** argv, path paths) {
                 set_geo_name(paths, geo_name);
             }
 
-        } else if (!strcmp(argv[i], "-o")) {  //Diretório-base de saída (BSD)
+        } else if (!strcmp(argv[i], "-o")) {  
 
             char* output_directory = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             strcpy(output_directory, argv[i + 1]);
@@ -101,7 +101,7 @@ int get_arguments(int argc, char** argv, path paths) {
 
             set_output_directory(paths, output_directory);
 
-        } else if (!strcmp(argv[i], "-q")) {  //Arquivo com consultas. Este arquivo deve estar sob o diretório BED.
+        } else if (!strcmp(argv[i], "-q")) {  
 
             char* qry_file = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             char* qry_name = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
@@ -111,7 +111,7 @@ int get_arguments(int argc, char** argv, path paths) {
             int name_position = 0;
             bool found = false;
 
-            for (int i = 0; i < strlen(qry_file); i++) {  //Se for passado um caminho relativo na localizacao do .geo inicial
+            for (int i = 0; i < strlen(qry_file); i++) {  
 
                 if (qry_file[i] == '/') {
                     index = i;
@@ -145,7 +145,8 @@ int get_arguments(int argc, char** argv, path paths) {
         }
     }
 
-    //Apos coletar todas as informacoes, esta na hora de arrumar e organizar todos os dados reunidos, nomes autoexplicativos
+    // After collecting all data from argv, we're going to organize for building correct paths
+
     char* path_original_SVG = calloc(strlen(get_output_directory(paths)) + strlen(get_geo_name(paths)) + 10, sizeof(char));
     sprintf(path_original_SVG, "%s%s.svg", get_output_directory(paths), get_geo_name(paths));
     set_path_original_SVG(paths, path_original_SVG);
@@ -280,10 +281,10 @@ void get_data(tree rectangleTree, tree circleTree, path paths) {
 }
 
 void get_functions(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, path paths) {  //Leitura do .qry
-    FILE* Svg_Modificado = fopen(get_path_modified_SVG(paths), "w+");
-    setvbuf(Svg_Modificado, 0, _IONBF, 0);
-    FILE* comandos = fopen(get_path_current_qry_file(paths), "r");
-    setvbuf(comandos, 0, _IONBF, 0);
+    FILE* modified_SVG = fopen(get_path_modified_SVG(paths), "w+");
+    setvbuf(modified_SVG, 0, _IONBF, 0);
+    FILE* arq = fopen(get_path_current_qry_file(paths), "r");
+    setvbuf(arq, 0, _IONBF, 0);
     dynamicList fgData = create_list();
     dynamicList imData = create_list();
     dynamicList nveData = create_list();
@@ -291,34 +292,34 @@ void get_functions(tree rectangleTree, tree circleTree, dynamicList listOfTreesS
     double y = 0.0;
     double radius = 0;
     char id[100];
-    char comando[5];
+    char commands[5];
     double radiation = 0.0;
-    while (fscanf(comandos, "%s", comando) != -1) {
-        if (!strcmp(comando, "dpi")) {
-            fscanf(comandos, "%lf %lf", &x, &y);
+    while (fscanf(arq, "%s", commands) != -1) {
+        if (!strcmp(commands, "dpi")) {
+            fscanf(arq, "%lf %lf", &x, &y);
             dpi(rectangleTree, x, y, paths);
-        } else if (!strcmp(comando, "dr")) {
-            fscanf(comandos, "%s", id);
+        } else if (!strcmp(commands, "dr")) {
+            fscanf(arq, "%s", id);
             dr(rectangleTree, id, paths);
 
-        } else if (!strcmp(comando, "fg")) {
-            fscanf(comandos, "%lf %lf %lf", &x, &y, &radius);
+        } else if (!strcmp(commands, "fg")) {
+            fscanf(arq, "%lf %lf %lf", &x, &y, &radius);
             fg(rectangleTree, circleTree, x, y, radius, paths, fgData);
 
-        } else if (!strcmp(comando, "im")) {
-            fscanf(comandos, "%lf %lf %lf", &x, &y, &radiation);
+        } else if (!strcmp(commands, "im")) {
+            fscanf(arq, "%lf %lf %lf", &x, &y, &radiation);
             im(rectangleTree, circleTree, listOfTreesShadows, x, y, radiation, paths, imData);
-        } else if (!strcmp(comando, "t30")) {
+        } else if (!strcmp(commands, "t30")) {
             t30(circleTree, paths);
-        } else if (!strcmp(comando, "nve")) {
-            fscanf(comandos, "%lf %lf", &x, &y);
+        } else if (!strcmp(commands, "nve")) {
+            fscanf(arq, "%lf %lf", &x, &y);
             nve(listOfTreesShadows, paths, x, y, nveData);
         }
     }
-    new_write_on_svg(Svg_Modificado, rectangleTree, circleTree, paths, fgData, imData, nveData);
+    new_write_on_svg(modified_SVG, rectangleTree, circleTree, paths, fgData, imData, nveData);
     free_list(fgData);
     free_list(imData);
     free_list(nveData);
-    fclose(comandos);
-    fclose(Svg_Modificado);
+    fclose(arq);
+    fclose(modified_SVG);
 }
