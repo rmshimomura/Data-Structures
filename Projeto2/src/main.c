@@ -11,6 +11,7 @@
 #include "system.h"
 
 int main(int argc, char** argv) {
+
     path paths = createPathsGerais();
     tree rectangles = KDcreateTree();
     tree circles = KDcreateTree();
@@ -20,13 +21,17 @@ int main(int argc, char** argv) {
     FILE* svg_source = fopen(getPathDoSvgDoGeoSemMudanca(paths), "w+");
     setvbuf(svg_source, 0, _IONBF, 0);
     writeOnSvg(svg_source, rectangles, circles, paths);
+
     if (consulta) {
+
         FILE* txt_results = fopen(getPathDoTXTComOQryExecutado(paths), "w+");
         setvbuf(txt_results, 0, _IONBF, 0);
         fprintf(txt_results, "Rodrigo Mimura Shimomura\n");
         getFunctions(rectangles, circles, listOfTreesShadows, paths);
         fclose(txt_results);
+
     }
+
     KDdestroyRectTree(rectangles, KDgetRootNode(rectangles));
     KDdestroyCircTree(circles, KDgetRootNode(circles));
     freePaths(paths);
@@ -34,4 +39,5 @@ int main(int argc, char** argv) {
     free(circles);
     freeListOfTreesShadows(listOfTreesShadows);
     fclose(svg_source);
+    
 }

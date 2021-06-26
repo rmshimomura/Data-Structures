@@ -9,6 +9,7 @@
 #include "system.h"
 
 typedef struct point {
+
     double x, y, angle;
     void* linkedTo;
     void* pair;
@@ -21,40 +22,52 @@ typedef struct point {
 } point_t;
 
 typedef struct segment {
+
     point_t* point1;
     point_t* point2;
 
 } segment_t;
 
 void* getP1(void* segment) {
+
     segment_t* aux = segment;
     return aux->point1;
+
 }
 
 void* getP2(void* segment) {
+
     segment_t* aux = segment;
     return aux->point2;
+
 }
 
 void* createSegment() {
+
     segment_t* aux = calloc(1, sizeof(segment_t));
     return aux;
+
 }
 
 void* createPoint() {
+
     point_t* aux = calloc(1, sizeof(point_t));
     aux->angle = 0;
     aux->linkedTo = NULL;
     aux->analyzed = false;
     return aux;
+
 }
 
 void* getLinkedTo(void* point) {
+
     point_t* aux = point;
     return aux->linkedTo;
+
 }
 
 int compareForQSort(const void* a, const void* b) {
+
     const point_t* tempA = (point_t*)a;
     const point_t* tempB = (point_t*)b;
 
@@ -66,13 +79,17 @@ int compareForQSort(const void* a, const void* b) {
     else if (tempA->type == 'e' && tempB->type == 's') return 1;
     
     return 0;
+
 }
 
 void buildSegments(tree rectangleTree, dynamicList segmentsList, void* current_rect) {
+
     if (current_rect) {
+
         buildSegments(rectangleTree, segmentsList, KDgetLeftNode(current_rect));
 
         if (KDgetState(current_rect)) {
+
 
             segment_t* segment1 = calloc(1, sizeof(segment_t));
             segment1->point1 = calloc(1, sizeof(point_t));
@@ -138,12 +155,16 @@ void buildSegments(tree rectangleTree, dynamicList segmentsList, void* current_r
             insert(segmentsList, segment2);
             insert(segmentsList, segment3);
             insert(segmentsList, segment4);
+        
         }
         buildSegments(rectangleTree, segmentsList, KDgetRightNode(current_rect));
+    
     }
+
 }
 
 void addWrapAroundRectangle(tree rectangleTree, tree circleTree, dynamicList segmentsList) {
+
     segment_t* aux1 = calloc(1, sizeof(segment_t));
     aux1->point1 = calloc(1, sizeof(point_t));
     aux1->point2 = calloc(1, sizeof(point_t));
@@ -209,114 +230,169 @@ void addWrapAroundRectangle(tree rectangleTree, tree circleTree, dynamicList seg
     insert(segmentsList, aux3);
     insert(segmentsList, aux4);
 
+
 }
 
 void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor) {
+
     point_t* aux = calloc(2 * getSize(segmentsList), sizeof(point_t));
     void* pos = getHead(segmentsList);
     for (int i = 0; i < getSize(segmentsList) * 2; i += 2) {
+
         segment_t* dataAux = getItem(segmentsList, pos);
         pos = getNext(segmentsList, pos);
 
         if (fabs(xMeteor - dataAux->point1->x) == 0) {
+
             dataAux->point1->angle = 0;
+        
         } else {
+
             dataAux->point1->angle = (atan(fabs(yMeteor - dataAux->point1->y) / fabs(xMeteor - dataAux->point1->x))) * (180 / PI);
+        
         }
 
         dataAux->point1->distance = sqrt(pow(dataAux->point1->x - xMeteor, 2) + pow(dataAux->point1->y - yMeteor, 2));
 
         if (fabs(xMeteor - dataAux->point2->x) == 0) {
+
             dataAux->point2->angle = 0;
+        
         } else {
+
             dataAux->point2->angle = (atan(fabs(yMeteor - dataAux->point2->y) / fabs(xMeteor - dataAux->point2->x))) * (180 / PI);
+        
         }
 
         dataAux->point2->distance = sqrt(pow(dataAux->point2->x - xMeteor, 2) + pow(dataAux->point2->y - yMeteor, 2));
 
         if (dataAux->point1->x < xMeteor) {
-            if (dataAux->point1->y < yMeteor) {  //Third quadrant
+
+            if (dataAux->point1->y < yMeteor) {
+                  //Third quadrant
 
                 dataAux->point1->angle += 180;
                 dataAux->point1->quadrant = 3;
 
-            } else if (dataAux->point1->y > yMeteor) {  //Second quadrant
+            
+            } else if (dataAux->point1->y > yMeteor) {
+                  //Second quadrant
 
                 dataAux->point1->angle = 180 - dataAux->point1->angle;
                 dataAux->point1->quadrant = 2;
+            
             }
 
+        
         } else if (dataAux->point1->x >= xMeteor) {
-            if (dataAux->point1->y < yMeteor) {  //Fourth quadrant
+
+            if (dataAux->point1->y < yMeteor) {
+                  //Fourth quadrant
 
                 dataAux->point1->angle = 360 - dataAux->point1->angle;
                 dataAux->point1->quadrant = 4;
 
-            } else if (dataAux->point1->y >= yMeteor) {  //First quadrant
+            
+            } else if (dataAux->point1->y >= yMeteor) {
+                  //First quadrant
 
                 dataAux->point1->quadrant = 1;
+            
             }
+        
         }
 
         if (dataAux->point2->x < xMeteor) {
-            if (dataAux->point2->y < yMeteor) {  //Third quadrant
+
+            if (dataAux->point2->y < yMeteor) {
+                  //Third quadrant
 
                 dataAux->point2->angle += 180;
                 dataAux->point2->quadrant = 3;
 
-            } else if (dataAux->point2->y > yMeteor) {  //Second quadrant
+            
+            } else if (dataAux->point2->y > yMeteor) {
+                  //Second quadrant
 
                 dataAux->point2->angle = 180 - dataAux->point2->angle;
                 dataAux->point2->quadrant = 2;
+            
             }
 
+        
         } else if (dataAux->point2->x >= xMeteor) {
-            if (dataAux->point2->y < yMeteor) {  //Fourth quadrant
+
+            if (dataAux->point2->y < yMeteor) {
+                  //Fourth quadrant
 
                 dataAux->point2->angle = 360 - dataAux->point2->angle;
                 dataAux->point2->quadrant = 4;
 
-            } else if (dataAux->point2->y >= yMeteor) {  //First quadrant
+            
+            } else if (dataAux->point2->y >= yMeteor) {
+                  //First quadrant
 
                 dataAux->point2->quadrant = 1;
+            
             }
+        
         }
        
         switch (dataAux->point1->quadrant) {
+
             case 1:
 
                 switch (dataAux->point2->quadrant) {
+
                     case 1:
 
                         if (dataAux->point1->angle > dataAux->point2->angle) {
+
                             dataAux->point1->type = 'e';
                             dataAux->point2->type = 's';
+                        
                         } else if (dataAux->point1->angle < dataAux->point2->angle) {
+
                             dataAux->point1->type = 's';
                             dataAux->point2->type = 'e';
+                        
                         } else if (dataAux->point1->angle == dataAux->point2->angle) {
+
                             if (dataAux->point1->distance > dataAux->point2->distance) {
+
                                 dataAux->point1->type = 's';
                                 dataAux->point2->type = 'e';
+                            
                             } else if (dataAux->point1->distance < dataAux->point2->distance) {
+
                                 dataAux->point1->type = 'e';
                                 dataAux->point2->type = 's';
+                            
                             }
+                        
                         }
                         break;
 
                     case 2:
                         if (dataAux->point1->angle < dataAux->point2->angle) {
+
                             dataAux->point1->type = 's';
                             dataAux->point2->type = 'e';
+                        
                         } else if (dataAux->point1->angle == dataAux->point2->angle) {
+
                             if (dataAux->point1->distance > dataAux->point2->distance) {
+
                                 dataAux->point1->type = 's';
                                 dataAux->point2->type = 'e';
+                            
                             } else if (dataAux->point1->distance < dataAux->point2->distance) {
+
                                 dataAux->point1->type = 'e';
                                 dataAux->point2->type = 's';
+                            
                             }
+                        
                         }
                         break;
 
@@ -326,18 +402,27 @@ void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor)
 
                     case 4:
                         if (dataAux->point1->angle < dataAux->point2->angle) {
+
                             dataAux->point1->type = 'e';
                             dataAux->point2->type = 's';
+                        
                         } else if (dataAux->point1->angle == dataAux->point2->angle) {
+
                             if (dataAux->point1->distance > dataAux->point2->distance) {
+
                                 dataAux->point1->type = 's';
                                 dataAux->point2->type = 'e';
+                            
                             } else if (dataAux->point1->distance < dataAux->point2->distance) {
+
                                 dataAux->point1->type = 'e';
                                 dataAux->point2->type = 's';
+                            
                             }
+                        
                         }
                         break;
+                
                 }
 
                 break;
@@ -345,57 +430,85 @@ void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor)
             case 2:
 
                 switch (dataAux->point2->quadrant) {
+
                     case 1:
                         if (dataAux->point1->angle > dataAux->point2->angle) {
+
                             dataAux->point1->type = 'e';
                             dataAux->point2->type = 's';
+                        
                         } else if (dataAux->point1->angle == dataAux->point2->angle) {
+
                             if (dataAux->point1->distance > dataAux->point2->distance) {
+
                                 dataAux->point1->type = 's';
                                 dataAux->point2->type = 'e';
+                            
                             } else if (dataAux->point1->distance < dataAux->point2->distance) {
+
                                 dataAux->point1->type = 'e';
                                 dataAux->point2->type = 's';
+                            
                             }
+                        
                         }
                         break;
 
                     case 2:
                         if (dataAux->point1->angle > dataAux->point2->angle) {
+
                             dataAux->point1->type = 'e';
                             dataAux->point2->type = 's';
+                        
                         } else if (dataAux->point1->angle < dataAux->point2->angle) {
+
                             dataAux->point1->type = 's';
                             dataAux->point2->type = 'e';
+                        
                         } else if (dataAux->point1->angle == dataAux->point2->angle) {
+
                             if (dataAux->point1->distance > dataAux->point2->distance) {
+
                                 dataAux->point1->type = 's';
                                 dataAux->point2->type = 'e';
+                            
                             } else if (dataAux->point1->distance < dataAux->point2->distance) {
+
                                 dataAux->point1->type = 'e';
                                 dataAux->point2->type = 's';
+                            
                             }
+                        
                         }
                         break;
 
                     case 3:
                         if (dataAux->point1->angle < dataAux->point2->angle) {
+
                             dataAux->point1->type = 's';
                             dataAux->point2->type = 'e';
+                        
                         } else if (dataAux->point1->angle == dataAux->point2->angle) {
+
                             if (dataAux->point1->distance > dataAux->point2->distance) {
+
                                 dataAux->point1->type = 's';
                                 dataAux->point2->type = 'e';
+                            
                             } else if (dataAux->point1->distance < dataAux->point2->distance) {
+
                                 dataAux->point1->type = 'e';
                                 dataAux->point2->type = 's';
+                            
                             }
+                        
                         }
                         break;
 
                     case 4:
                         //Impossible !
                         break;
+                
                 }
 
                 break;
@@ -403,57 +516,85 @@ void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor)
             case 3:
 
                 switch (dataAux->point2->quadrant) {
+
                     case 1:
                         //Impossible !
                         break;
 
                     case 2:
                         if (dataAux->point1->angle > dataAux->point2->angle) {
+
                             dataAux->point1->type = 'e';
                             dataAux->point2->type = 's';
+                        
                         } else if (dataAux->point1->angle == dataAux->point2->angle) {
+
                             if (dataAux->point1->distance > dataAux->point2->distance) {
+
                                 dataAux->point1->type = 's';
                                 dataAux->point2->type = 'e';
+                            
                             } else if (dataAux->point1->distance < dataAux->point2->distance) {
+
                                 dataAux->point1->type = 'e';
                                 dataAux->point2->type = 's';
+                            
                             }
+                        
                         }
                         break;
 
                     case 3:
                         if (dataAux->point1->angle > dataAux->point2->angle) {
+
                             dataAux->point1->type = 'e';
                             dataAux->point2->type = 's';
+                        
                         } else if (dataAux->point1->angle < dataAux->point2->angle) {
+
                             dataAux->point1->type = 's';
                             dataAux->point2->type = 'e';
+                        
                         } else if (dataAux->point1->angle == dataAux->point2->angle) {
+
                             if (dataAux->point1->distance > dataAux->point2->distance) {
+
                                 dataAux->point1->type = 's';
                                 dataAux->point2->type = 'e';
+                            
                             } else if (dataAux->point1->distance < dataAux->point2->distance) {
+
                                 dataAux->point1->type = 'e';
                                 dataAux->point2->type = 's';
+                            
                             }
+                        
                         }
                         break;
 
                     case 4:
                         if (dataAux->point1->angle < dataAux->point2->angle) {
+
                             dataAux->point1->type = 's';
                             dataAux->point2->type = 'e';
+                        
                         } else if (dataAux->point1->angle == dataAux->point2->angle) {
+
                             if (dataAux->point1->distance > dataAux->point2->distance) {
+
                                 dataAux->point1->type = 's';
                                 dataAux->point2->type = 'e';
+                            
                             } else if (dataAux->point1->distance < dataAux->point2->distance) {
+
                                 dataAux->point1->type = 'e';
                                 dataAux->point2->type = 's';
+                            
                             }
+                        
                         }
                         break;
+                
                 }
 
                 break;
@@ -461,18 +602,27 @@ void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor)
             case 4:
 
                 switch (dataAux->point2->quadrant) {
+
                     case 1:
                         if (dataAux->point1->angle > dataAux->point2->angle) {
+
                             dataAux->point1->type = 's';
                             dataAux->point2->type = 'e';
+                        
                         } else if (dataAux->point1->angle == dataAux->point2->angle) {
+
                             if (dataAux->point1->distance > dataAux->point2->distance) {
+
                                 dataAux->point1->type = 's';
                                 dataAux->point2->type = 'e';
+                            
                             } else if (dataAux->point1->distance < dataAux->point2->distance) {
+
                                 dataAux->point1->type = 'e';
                                 dataAux->point2->type = 's';
+                            
                             }
+                        
                         }
                         break;
 
@@ -482,137 +632,197 @@ void* buildVertexArray(dynamicList segmentsList, double xMeteor, double yMeteor)
 
                     case 3:
                         if (dataAux->point1->angle > dataAux->point2->angle) {
+
                             dataAux->point1->type = 'e';
                             dataAux->point2->type = 's';
+                        
                         } else if (dataAux->point1->angle == dataAux->point2->angle) {
+
                             if (dataAux->point1->distance > dataAux->point2->distance) {
+
                                 dataAux->point1->type = 's';
                                 dataAux->point2->type = 'e';
+                            
                             } else if (dataAux->point1->distance < dataAux->point2->distance) {
+
                                 dataAux->point1->type = 'e';
                                 dataAux->point2->type = 's';
+                            
                             }
+                        
                         }
                         break;
 
                     case 4:
                         if (dataAux->point1->angle > dataAux->point2->angle) {
+
                             dataAux->point1->type = 'e';
                             dataAux->point2->type = 's';
+                        
                         } else if (dataAux->point1->angle < dataAux->point2->angle) {
+
                             dataAux->point1->type = 's';
                             dataAux->point2->type = 'e';
+                        
                         } else if (dataAux->point1->angle == dataAux->point2->angle) {
+
                             if (dataAux->point1->distance > dataAux->point2->distance) {
+
                                 dataAux->point1->type = 's';
                                 dataAux->point2->type = 'e';
+                            
                             } else if (dataAux->point1->distance < dataAux->point2->distance) {
+
                                 dataAux->point1->type = 'e';
                                 dataAux->point2->type = 's';
+                            
                             }
+                        
                         }
                         break;
+                
                 }
 
                 break;
+        
         }
         //============================================================================
         
         aux[i] = *(dataAux->point1);
         aux[i + 1] = *(dataAux->point2);
         
+    
     }
     
     qsort(aux, 2 * getSize(segmentsList), sizeof(point_t), compareForQSort);
     
     return aux;
+
 }
 
 double getPointX(void* point) {
+
     point_t* aux = point;
     return aux->x;
+
 }
 
 double getPointY(void* point) {
+
     point_t* aux = point;
     return aux->y;
+
 }
 
 char* getCode(void* point) {
+
     point_t* aux = point;
     return aux->code;
+
 }
 
 char getPointType(void* point) {
+
     point_t* aux = point;
     return aux->type;
+
 }
 
 double getAngle(void* point) {
+
     point_t* aux = point;
     return aux->angle;
+
 }
 
 int getQuadrant(void* point) {
+
     point_t* aux = point;
     return aux->quadrant;
+
 }
 
 void* getOrigin(void* point) {
+
     point_t* aux = point;
     return aux->linkedTo;
+
 }
 
 bool getAnalyzed(void* point) {
+
     point_t* aux = point;
     return aux->analyzed;
+
 }
 
 void* atPosArray(void* array, int pos) {
+
     segment_t* aux = array;
     return &aux[pos];
+
 }
 
 void* getPair(void* point) {
+
     point_t* aux = point;
     return aux->pair;
+
 }
 
 void setAnalyzed(void* point, bool state) {
+
     point_t* aux = point;
     aux->analyzed = state;
+
 }
 
 void freePointsInfo(void* segment) {
+
     if (segment != NULL) {
+
         segment_t* aux = segment;
         if (aux->point1) {
+
             free(aux->point1);
+        
         }
         if (aux->point2) {
+
             free(aux->point2);
+        
         }
+    
     }
+
 }
 
 void destorySegment(void* segment) {
+
     segment_t* aux = segment;
     free(aux->point1);
     free(aux->point2);
     free(aux);
+
 }
 
 void setAngle(void* point, double angle) {
+
     point_t* aux = point;
     aux->angle = angle;
+
 }
 
 void freeShadowPolygonsArray(void* array) {
+
     segment_t* aux = array;
     for (int i = 0; i < 3; i++) {
+
         
         free(aux[i].point1);
         free(aux[i].point2);
         
+    
     }
+
 }
