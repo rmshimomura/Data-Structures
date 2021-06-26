@@ -122,107 +122,108 @@ void KDsetRootNode(tree current, node modifyRoot) {
 
 node KDinsertRect(tree initialTree, node initialNode, node generator, item element, int level) {
 
-    tree_kd *arvore = initialTree;
-    node_kd *noh = initialNode;
-    node_kd *nohPai = generator;
+    tree_kd *tree_aux = initialTree;
+    node_kd *node_aux = initialNode;
+    node_kd *father_node = generator;
 
     if (level % 2 == 0) {
-          //Comparar direita e esquerda
+        // Compare left and right (X axis)
 
-        if (!noh) {
+        if (!node_aux) {
 
-            noh = KDcreateNewNode(element);
-            arvore->size++;
+            node_aux = KDcreateNewNode(element);
+            tree_aux->size++;
             
         
-        } else if (getRectangleX(element) >= getRectangleX(noh->data)) {
+        } else if (getRectangleX(element) >= getRectangleX(node_aux->data)) {
 
-            noh->right = KDinsertRect(initialTree, noh->right, noh, element, level + 1);
+            node_aux->right = KDinsertRect(initialTree, node_aux->right, node_aux, element, level + 1);
 
         
-        } else if (getRectangleX(element) < getRectangleX(noh->data)) {
+        } else if (getRectangleX(element) < getRectangleX(node_aux->data)) {
 
-            noh->left = KDinsertRect(initialTree, noh->left, noh, element, level + 1);
+            node_aux->left = KDinsertRect(initialTree, node_aux->left, node_aux, element, level + 1);
         
         }
 
     
     } else if (level % 2 == 1) {
-          //Comparar cima e baixo
+        
+        // Compare up and down (Y axis)
 
-        if (!noh) {
+        if (!node_aux) {
 
-            noh = KDcreateNewNode(element);
-            arvore->size++;
+            node_aux = KDcreateNewNode(element);
+            tree_aux->size++;
             
 
         
-        } else if (getRectangleY(element) >= getRectangleY(noh->data)) {
+        } else if (getRectangleY(element) >= getRectangleY(node_aux->data)) {
 
-            noh->right = KDinsertRect(initialTree, noh->right, noh, element, level + 1);
+            node_aux->right = KDinsertRect(initialTree, node_aux->right, node_aux, element, level + 1);
 
         
-        } else if (getRectangleY(element) < getRectangleY(noh->data)) {
+        } else if (getRectangleY(element) < getRectangleY(node_aux->data)) {
 
-            noh->left = KDinsertRect(initialTree, noh->left, noh, element, level + 1);
+            node_aux->left = KDinsertRect(initialTree, node_aux->left, node_aux, element, level + 1);
         
         }
     
     }
-    return noh;
+    return node_aux;
 
 }
 
 node KDinsertCirc(tree initialTree, node initialNode, node generator, item element, int level) {
 
-    tree_kd *arvore = initialTree;
-    node_kd *noh = initialNode;
-    node_kd *nohPai = generator;
+    tree_kd *tree_aux = initialTree;
+    node_kd *node_aux = initialNode;
+    node_kd *father_node = generator;
 
     if (level % 2 == 0) {
-          //Comparar direita e esquerda
+          // Compare left and right (X axis) 
 
-        if (!noh) {
+        if (!node_aux) {
 
-            noh = KDcreateNewNode(element);
-            arvore->size++;
+            node_aux = KDcreateNewNode(element);
+            tree_aux->size++;
             
         
-        } else if (getCircleX(element) >= getCircleX(noh->data)) {
+        } else if (getCircleX(element) >= getCircleX(node_aux->data)) {
 
-            noh->right = KDinsertCirc(initialTree, noh->right, noh, element, level + 1);
+            node_aux->right = KDinsertCirc(initialTree, node_aux->right, node_aux, element, level + 1);
 
         
-        } else if (getCircleX(element) < getCircleX(noh->data)) {
+        } else if (getCircleX(element) < getCircleX(node_aux->data)) {
 
-            noh->left = KDinsertCirc(initialTree, noh->left, noh, element, level + 1);
+            node_aux->left = KDinsertCirc(initialTree, node_aux->left, node_aux, element, level + 1);
         
         }
 
     
     } else if (level % 2 == 1) {
-          //Comparar cima e baixo
+          // Compare up and down (Y axis)
 
-        if (!noh) {
+        if (!node_aux) {
 
-            noh = KDcreateNewNode(element);
-            arvore->size++;
+            node_aux = KDcreateNewNode(element);
+            tree_aux->size++;
             
 
         
-        } else if (getCircleY(element) >= getCircleY(noh->data)) {
+        } else if (getCircleY(element) >= getCircleY(node_aux->data)) {
 
-            noh->right = KDinsertCirc(initialTree, noh->right, noh, element, level + 1);
+            node_aux->right = KDinsertCirc(initialTree, node_aux->right, node_aux, element, level + 1);
 
         
-        } else if (getCircleY(element) < getCircleY(noh->data)) {
+        } else if (getCircleY(element) < getCircleY(node_aux->data)) {
 
-            noh->left = KDinsertCirc(initialTree, noh->left, noh, element, level + 1);
+            node_aux->left = KDinsertCirc(initialTree, node_aux->left, node_aux, element, level + 1);
         
         }
     
     }
-    return noh;
+    return node_aux;
 
 }
 
@@ -353,6 +354,7 @@ void KDdestroyRectTree(tree initialTree, node initialRoot) {
     if (auxRoot != NULL) {
 
         KDdestroyRectTree(auxTree, auxRoot->left);
+        
         if (auxRoot->data != NULL) {
 
             if (getVectorOfPeopleStarted(auxRoot->data)) {

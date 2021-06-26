@@ -39,32 +39,33 @@ void* createList() {
 
 }
 
-void* insert(void* sequence, void* elemento) {
+void* insert(void* sequence, void* element) {
 
-    list_t* listaAux = sequence;
+    list_t* listAux = sequence;
     data_t* pontAux = calloc(1, sizeof(data_t));
-    pontAux->element = elemento;
+    pontAux->element = element;
     pontAux->radiation = 0;
     pontAux->xMeteor = 0;
     pontAux->yMeteor = 0;
 
-    if (listaAux->size == 0) {
+    if (listAux->size == 0) {
 
         pontAux->next = NULL;
         pontAux->prev = NULL;
-        listaAux->head = pontAux;
-        listaAux->end = pontAux;
+        listAux->head = pontAux;
+        listAux->end = pontAux;
 
     
     } else {
 
         pontAux->next = NULL;
-        listaAux->end->next = pontAux;
-        pontAux->prev = listaAux->end;
-        listaAux->end = pontAux;
+        listAux->end->next = pontAux;
+        pontAux->prev = listAux->end;
+        listAux->end = pontAux;
     
     }
-    listaAux->size++;
+
+    listAux->size++;
 
     return pontAux;
 
@@ -130,15 +131,10 @@ void* getNext(void* sequence, void* current) {
 
     list_t* listAux = sequence;
     data_t* aux = current;
-    if (aux == NULL) {
 
-        return NULL;
-    
-    } else {
+    if (aux) return aux->next;
 
-        return aux->next;
-    
-    }
+    return NULL;
 
 }
 
@@ -147,15 +143,11 @@ void* getPrevious(void* sequence, void* current) {
     list_t* listAux = sequence;
     data_t* aux = current;
 
-    if (aux->prev) {
-
-        return aux->prev;
+    if (aux->prev) return aux->prev;
     
-    } else {
-
-        return NULL;
+    return NULL;
     
-    }
+    
 
 }
 
@@ -177,17 +169,17 @@ void freeList(void* sequence) {
     
     }
 
-    data_t* auxCelula = listAux->head;
-    data_t* auxElemento = listAux->head->element;
+    data_t* auxNode = listAux->head;
+    data_t* auxElement = listAux->head->element;
 
     while (listAux->head != NULL) {
 
-        auxCelula = listAux->head;
-        auxElemento = listAux->head->element;
+        auxNode = listAux->head;
+        auxElement = listAux->head->element;
         listAux->head = listAux->head->next;
 
-        free(auxElemento);
-        free(auxCelula);
+        free(auxElement);
+        free(auxNode);
     
     }
 
@@ -206,23 +198,23 @@ void freeListOfSegments(void* sequence) {
     
     }
 
-    data_t* auxCelula = listAux->head;
-    data_t* auxElemento = listAux->head->element;
+    data_t* auxNode = listAux->head;
+    data_t* auxElement = listAux->head->element;
 
     while (listAux->head != NULL) {
 
-        auxCelula = listAux->head;
-        auxElemento = listAux->head->element;
+        auxNode = listAux->head;
+        auxElement = listAux->head->element;
         listAux->head = listAux->head->next;
 
-        if (auxElemento) {
+        if (auxElement) {
 
-            freePointsInfo(auxElemento);
-            free(auxElemento);
+            freePointsInfo(auxElement);
+            free(auxElement);
         
         }
 
-        free(auxCelula);
+        free(auxNode);
     
     }
 
@@ -249,8 +241,8 @@ void removeNode(void* sequence, void* current) {
     list_t* listAux = sequence;
     data_t* aux1;
     data_t* aux2;
-    void* data_tdoAux1;
-    void* data_tdoAux2;
+    void* get_item_aux1;
+    void* get_item_aux2;
     data_t* posToRemove = listAux->head;
     int pos = 0;
 
@@ -258,6 +250,7 @@ void removeNode(void* sequence, void* current) {
 
         posToRemove = posToRemove->next;
         pos++;
+        
         if (pos > listAux->size) {
 
             puts("Nao encontrado.");
@@ -267,47 +260,43 @@ void removeNode(void* sequence, void* current) {
     
     }
 
-    if (pos < 0) {
+    if (pos < 0) return;
 
-        puts("RIP!");
-        return;
+    else if (pos > listAux->size) return;
     
-    } else if (pos > listAux->size) {
+    else if (pos == listAux->size - 1 && listAux->size > 1) {
 
-        puts("pos maior do que a lista!");
-        return;
-    
-    } else if (pos == listAux->size - 1 && listAux->size > 1) {
-          //Se for o ultimo da lista
+        // If its the last position from the list
+
         aux1 = atPos(listAux, pos - 1);
         aux2 = atPos(listAux, pos);
-        data_tdoAux2 = getItem(sequence, current);
-
-        
-        destorySegment(data_tdoAux2);
+        get_item_aux2 = getItem(sequence, current);
+        destorySegment(get_item_aux2);
         free(aux2);
         aux1->next = NULL;
         listAux->end = aux1;
         listAux->size--;
     
     } else if (pos == 0 && listAux->size > 1) {
-          //Se for remover o primeiro, mas ha mais de 1 elemento na lista
+
+        // Remove first element from list
+
         aux1 = atPos(listAux, 0);
-        data_tdoAux1 = getItem(sequence, getHead(sequence));
+        get_item_aux1 = getItem(sequence, getHead(sequence));
         listAux->head = listAux->head->next;
-        
-        destorySegment(data_tdoAux1);
+        destorySegment(get_item_aux1);
         free(aux1);
         listAux->size--;
     
     } else if (pos == 0 && listAux->size == 1) {
-          //Se for o UNICO na lista
+
+        // Remove the only element of the list
+
         aux1 = atPos(listAux, 0);
-        data_tdoAux1 = getItem(sequence, getHead(sequence));
+        get_item_aux1 = getItem(sequence, getHead(sequence));
         listAux->head = NULL;
         listAux->end = NULL;
-        
-        destorySegment(data_tdoAux1);
+        destorySegment(get_item_aux1);
         free(aux1);
         listAux->size--;
     
@@ -315,11 +304,10 @@ void removeNode(void* sequence, void* current) {
 
         aux1 = atPos(listAux, pos - 1);
         aux2 = atPos(listAux, pos);
-        data_tdoAux2 = getItem(sequence, current);
+        get_item_aux2 = getItem(sequence, current);
         aux1->next = aux2->next;
         aux2->next->prev = aux1;
-        
-        destorySegment(data_tdoAux2);
+        destorySegment(get_item_aux2);
         free(aux2);
         listAux->size--;
     

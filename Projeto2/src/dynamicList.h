@@ -4,7 +4,7 @@
 
 void* createList();
 int getSize(void* sequence);
-void* insert(void* sequence, void* elemento);
+void* insert(void* sequence, void* element);
 void removeNode(void* sequence, void* current);
 void* getItem(void* sequence, void* current);
 void* getHead(void* sequence);

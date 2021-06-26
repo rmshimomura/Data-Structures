@@ -148,7 +148,7 @@ void dpiInOrder(tree rectangleTree, node currentNode, double x, double y, char**
 
 void dpi(tree rectangleTree, double x, double y, path paths) {
 
-    FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
+    FILE* results = fopen(get_path_TXT_with_qry(paths), "a+");
     setvbuf(results, 0, _IONBF, 0);
     int size = KDgetSize(rectangleTree);
 
@@ -239,7 +239,7 @@ void drInOrder(tree rectangleTree, node current, node foundId, char** names, int
 
 void dr(tree rectangleTree, char* id, path paths) {
 
-    FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
+    FILE* results = fopen(get_path_TXT_with_qry(paths), "a+");
     setvbuf(results, 0, _IONBF, 0);
     char** names = calloc(KDgetSize(rectangleTree), sizeof(char*));
     int size = KDgetSize(rectangleTree);
@@ -457,7 +457,7 @@ void updateCirclesNewPositions(tree circleTree, void* current_circ) {
 
 void fg(tree rectangleTree, tree circleTree, double x, double y, double radius, path paths, dynamicList tempInfo) {
 
-    FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
+    FILE* results = fopen(get_path_TXT_with_qry(paths), "a+");
     setvbuf(results, 0, _IONBF, 0);
     fgInOrderCircle(rectangleTree, circleTree, results, KDgetRootNode(rectangleTree), KDgetRootNode(circleTree), x, y, radius);
     fprintf(results, "FG: \n\n");
@@ -594,7 +594,7 @@ void imInOrderCircles(tree shadows, node currentCircle, double radiation, double
 void im(tree rectangleTree, tree circleTree, dynamicList listOfTreesShadows, double xMeteor, double yMeteor, double radiation, path paths, dynamicList tempInfo) {
 
     
-    FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
+    FILE* results = fopen(get_path_TXT_with_qry(paths), "a+");
     setvbuf(results, 0, _IONBF, 0);
     tree shadows = NTcreateTree();
     dynamicList segments = createList();
@@ -667,7 +667,7 @@ void t30InOrderT30(tree circleTree, node currentCircle, char** allNames, int* po
 
 void t30(tree circleTree, path paths) {
 
-    FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
+    FILE* results = fopen(get_path_TXT_with_qry(paths), "a+");
     setvbuf(results, 0, _IONBF, 0);
     char** allNames = calloc(KDgetSize(circleTree), sizeof(char*));
     int pos = 0;
@@ -753,7 +753,7 @@ void nveInOrder(tree shadowTree, node currentListPosition, node currentPolygon, 
 
 void nve(dynamicList listOfTreesShadows, path paths, double x, double y, dynamicList tempInfo) {
 
-    FILE* results = fopen(getPathDoTXTComOQryExecutado(paths), "a+");
+    FILE* results = fopen(get_path_TXT_with_qry(paths), "a+");
     setvbuf(results, 0, _IONBF, 0);
     double radiationAtThePoint = 0.0;
     void* posAuxList = getHead(listOfTreesShadows);

@@ -12,22 +12,22 @@
 
 int main(int argc, char** argv) {
 
-    path paths = createPathsGerais();
+    path paths = create_general_paths();
     tree rectangles = KDcreateTree();
     tree circles = KDcreateTree();
     dynamicList listOfTreesShadows = createList();
-    int consulta = getArguments(argc, argv, paths);
-    getData(rectangles, circles, paths);
-    FILE* svg_source = fopen(getPathDoSvgDoGeoSemMudanca(paths), "w+");
+    int qryExecuted = get_arguments(argc, argv, paths);
+    get_data(rectangles, circles, paths);
+    FILE* svg_source = fopen(get_path_original_SVG(paths), "w+");
     setvbuf(svg_source, 0, _IONBF, 0);
-    writeOnSvg(svg_source, rectangles, circles, paths);
+    write_on_svg(svg_source, rectangles, circles, paths);
 
-    if (consulta) {
+    if (qryExecuted) {
 
-        FILE* txt_results = fopen(getPathDoTXTComOQryExecutado(paths), "w+");
+        FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "w+");
         setvbuf(txt_results, 0, _IONBF, 0);
         fprintf(txt_results, "Rodrigo Mimura Shimomura\n");
-        getFunctions(rectangles, circles, listOfTreesShadows, paths);
+        get_functions(rectangles, circles, listOfTreesShadows, paths);
         fclose(txt_results);
 
     }

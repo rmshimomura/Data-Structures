@@ -1,323 +1,315 @@
 #include "paths.h"
 
-typedef struct pathsGerais {
-    char* DirBaseDeEntrada;           //Diretorio de entrada
-    char* DirBaseDeSaida;             //Diretorio de saida
-    char* GeoInicial;                 //Arquivo .geo (sem diretorio)
-    char* QryConsultas;               //Arquivo .qry (sem diretorio)
-    char* NomeQRY;                    //Nome do .qry sem o .qry
-    char* NomeGEO;                    //Nome do .geo sem o .geo
-    char* NomeArqSVGFinal;            //Nome do .svg final sem o .svg
-    char* TituloGrafFinal;            //Titulo do grafico final
-    char* PathArquivoGeoInicial;      //Path ate o .geo inicial
-    char* PathArquivoQryAtual;        //Path ate o .qry que esta sendo usado
-    char* PathDoSvgDoGeoSemMudanca;   //Path ate o svg que sera gerado sem alteracoes
-    char* PathDoSvgComOQryExecutado;  //Path ate o svg com as alteracoes do qry
-    char* PathDoTXTComOQryExecutado;  //Path ate o txt com as alteracoes do qry
-    char* PathSVGFinalGrafico;        //Path ate o .svg final com o grafico
-    char* PathTXTFinal;               //Path ate o .txt final
+typedef struct generalPaths {
+    char* input_directory;              //Diretorio de entrada
+    char* output_directory;             //Diretorio de saida
+    char* initial_geo_file;             //Arquivo .geo (sem diretorio)
+    char* current_qry_file;             //Arquivo .qry (sem diretorio)
+    char* qry_name;                     //Nome do .qry sem o .qry
+    char* geo_name;                     //Nome do .geo sem o .geo
+    char* final_SVG_file_name;          //Nome do .svg final sem o .svg
+    char* path_initial_geo_file;        //Path ate o .geo inicial
+    char* path_current_qry_file;        //Path ate o .qry que esta sendo usado
+    char* path_original_SVG;            //Path ate o svg que sera gerado sem alteracoes
+    char* path_modified_SVG;            //Path ate o svg com as alteracoes do qry
+    char* path_TXT_with_qry;            //Path ate o txt com as alteracoes do qry
+    char* path_final_graphic_SVG;       //Path ate o .svg final com o grafico
+    char* path_final_TXT;               //Path ate o .txt final
 
-} pathsGerais;
+} generalPaths;
 
-path createPathsGerais() {
-    pathsGerais* aux = calloc(1, sizeof(pathsGerais));
+path create_general_paths() {
+    generalPaths* aux = calloc(1, sizeof(generalPaths));
     return aux;
 }
 
-char* getDirBaseDeEntrada(path paths) {
-    pathsGerais* aux = paths;
-    return aux->DirBaseDeEntrada;
+char* get_input_directory(path paths) {
+    generalPaths* aux = paths;
+    return aux->input_directory;
 }
 
-char* getDirBaseDeSaida(path paths) {
-    pathsGerais* aux = paths;
-    return aux->DirBaseDeSaida;
+char* get_output_directory(path paths) {
+    generalPaths* aux = paths;
+    return aux->output_directory;
 }
 
-char* getGeoInicial(path paths) {
-    pathsGerais* aux = paths;
-    return aux->GeoInicial;
+char* get_initial_geo_file(path paths) {
+    generalPaths* aux = paths;
+    return aux->initial_geo_file;
 }
 
-char* getQryConsultas(path paths) {
-    pathsGerais* aux = paths;
-    return aux->QryConsultas;
+char* get_current_qry_file(path paths) {
+    generalPaths* aux = paths;
+    return aux->current_qry_file;
 }
 
-char* getNomeQRY(path paths) {
-    pathsGerais* aux = paths;
-    return aux->NomeQRY;
+char* get_qry_name(path paths) {
+    generalPaths* aux = paths;
+    return aux->qry_name;
 }
 
-char* getNomeGEO(path paths) {
-    pathsGerais* aux = paths;
-    return aux->NomeGEO;
+char* get_geo_name(path paths) {
+    generalPaths* aux = paths;
+    return aux->geo_name;
 }
 
-char* getNomeArqSVGFinal(path paths) {
-    pathsGerais* aux = paths;
-    return aux->NomeArqSVGFinal;
+char* get_final_SVG_file_name(path paths) {
+    generalPaths* aux = paths;
+    return aux->final_SVG_file_name;
 }
 
-char* getPathArquivoGeoInicial(path paths) {
-    pathsGerais* aux = paths;
-    return aux->PathArquivoGeoInicial;
+char* get_path_initial_geo_file(path paths) {
+    generalPaths* aux = paths;
+    return aux->path_initial_geo_file;
 }
 
-char* getPathArquivoQryAtual(path paths) {
-    pathsGerais* aux = paths;
-    return aux->PathArquivoQryAtual;
+char* get_path_current_qry_file(path paths) {
+    generalPaths* aux = paths;
+    return aux->path_current_qry_file;
 }
 
-char* getPathDoSvgDoGeoSemMudanca(path paths) {
-    pathsGerais* aux = paths;
-    return aux->PathDoSvgDoGeoSemMudanca;
+char* get_path_original_SVG(path paths) {
+    generalPaths* aux = paths;
+    return aux->path_original_SVG;
 }
 
-char* getPathDoSvgComOQryExecutado(path paths) {
-    pathsGerais* aux = paths;
-    return aux->PathDoSvgComOQryExecutado;
+char* get_path_modified_SVG(path paths) {
+    generalPaths* aux = paths;
+    return aux->path_modified_SVG;
 }
 
-char* getPathDoTXTComOQryExecutado(path paths) {
-    pathsGerais* aux = paths;
-    return aux->PathDoTXTComOQryExecutado;
+char* get_path_TXT_with_qry(path paths) {
+    generalPaths* aux = paths;
+    return aux->path_TXT_with_qry;
 }
 
-char* getPathSVGFinalGrafico(path paths) {
-    pathsGerais* aux = paths;
-    return aux->PathSVGFinalGrafico;
+char* get_final_graphic_SVG(path paths) {
+    generalPaths* aux = paths;
+    return aux->path_final_graphic_SVG;
 }
 
-char* getPathTXTFinal(path paths) {
-    pathsGerais* aux = paths;
-    return aux->PathTXTFinal;
+char* get_path_final_TXT(path paths) {
+    generalPaths* aux = paths;
+    return aux->path_final_TXT;
 }
 
-void setDirBaseDeEntrada(path paths, char* newSet) {
+void set_input_directory(path paths, char* newSet) {
     
-    pathsGerais* aux = paths;
-    aux->DirBaseDeEntrada = newSet;
-    
-}
-
-void setDirBaseDeSaida(path paths, char* newSet) {
-    
-    pathsGerais* aux = paths;
-    aux->DirBaseDeSaida = newSet;
-
-}
-
-void setGeoInicial(path paths, char* newSet) {
-   
-    pathsGerais* aux = paths;
-    aux->GeoInicial = newSet;
+    generalPaths* aux = paths;
+    aux->input_directory = newSet;
     
 }
 
-void setQryConsultas(path paths, char* newSet) {
+void set_output_directory(path paths, char* newSet) {
+    
+    generalPaths* aux = paths;
+    aux->output_directory = newSet;
+
+}
+
+void set_initial_geo_file(path paths, char* newSet) {
    
-    pathsGerais* aux = paths;
-    aux->QryConsultas = newSet;
+    generalPaths* aux = paths;
+    aux->initial_geo_file = newSet;
     
 }
 
-void setNomeQRY(path paths, char* newSet) {
+void set_current_qry_file(path paths, char* newSet) {
    
-    pathsGerais* aux = paths;
-    aux->NomeQRY = newSet;
+    generalPaths* aux = paths;
+    aux->current_qry_file = newSet;
     
 }
 
-void setNomeGEO(path paths, char* newSet) {
+void set_qry_name(path paths, char* newSet) {
    
-    pathsGerais* aux = paths;
-    aux->NomeGEO = newSet;
+    generalPaths* aux = paths;
+    aux->qry_name = newSet;
     
 }
 
-void setNomeArqSVGFinal(path paths, char* newSet) {
+void set_geo_name(path paths, char* newSet) {
    
-    pathsGerais* aux = paths;
-    aux->NomeArqSVGFinal = newSet;
+    generalPaths* aux = paths;
+    aux->geo_name = newSet;
     
 }
 
-void setPathArquivoGeoInicial(path paths, char* newSet) {
+void set_final_SVG_file_name(path paths, char* newSet) {
    
-    pathsGerais* aux = paths;
-    aux->PathArquivoGeoInicial = newSet;
+    generalPaths* aux = paths;
+    aux->final_SVG_file_name = newSet;
+    
+}
+
+void set_path_initial_geo_file(path paths, char* newSet) {
+   
+    generalPaths* aux = paths;
+    aux->path_initial_geo_file = newSet;
 
     
 }
 
-void setPathArquivoQryAtual(path paths, char* newSet) {
+void set_path_current_qry_file(path paths, char* newSet) {
    
-    pathsGerais* aux = paths;
-    aux->PathArquivoQryAtual = newSet;
+    generalPaths* aux = paths;
+    aux->path_current_qry_file = newSet;
     
 }
 
-void setPathDoSvgDoGeoSemMudanca(path paths, char* newSet) {
+void set_path_original_SVG(path paths, char* newSet) {
    
-    pathsGerais* aux = paths;
-    aux->PathDoSvgDoGeoSemMudanca = newSet;
+    generalPaths* aux = paths;
+    aux->path_original_SVG = newSet;
 
 }
 
-void setPathDoSvgComOQryExecutado(path paths, char* newSet) {
+void set_path_modified_SVG(path paths, char* newSet) {
    
-    pathsGerais* aux = paths;
-    aux->PathDoSvgComOQryExecutado = newSet;
+    generalPaths* aux = paths;
+    aux->path_modified_SVG = newSet;
     
 }
 
-void setPathDoTXTComOQryExecutado(path paths, char* newSet) {
+void set_path_TXT_with_qry(path paths, char* newSet) {
    
-    pathsGerais* aux = paths;
-    aux->PathDoTXTComOQryExecutado = newSet;
+    generalPaths* aux = paths;
+    aux->path_TXT_with_qry = newSet;
     
 }
 
-void setPathSVGFinalGrafico(path paths, char* newSet) {
+void set_final_graphic_SVG(path paths, char* newSet) {
    
-    pathsGerais* aux = paths;
-    aux->PathSVGFinalGrafico = newSet;
+    generalPaths* aux = paths;
+    aux->path_final_graphic_SVG = newSet;
 
 }
 
-void setPathTXTFinal(path paths, char* newSet) {
+void set_path_final_TXT(path paths, char* newSet) {
    
-    pathsGerais* aux = paths;
-    aux->PathTXTFinal = newSet;
+    generalPaths* aux = paths;
+    aux->path_final_TXT = newSet;
     
 }
 
 void showPaths(path paths) {
-    pathsGerais* aux = paths;
-    if (aux->DirBaseDeEntrada) {
+    generalPaths* aux = paths;
+    if (aux->input_directory) {
         puts("DirBaseDeEntrada :");
-        puts(aux->DirBaseDeEntrada);
+        puts(aux->input_directory);
         puts("====================");
     }
-    if (aux->DirBaseDeSaida) {
+    if (aux->output_directory) {
         puts("DirBaseDeSaida : ");
-        puts(aux->DirBaseDeSaida);
+        puts(aux->output_directory);
         puts("====================");
     }
-    if (aux->GeoInicial) {
+    if (aux->initial_geo_file) {
         puts("GeoInicial : ");
-        puts(aux->GeoInicial);
+        puts(aux->initial_geo_file);
         puts("====================");
     }
-    if (aux->NomeArqSVGFinal) {
+    if (aux->final_SVG_file_name) {
         puts("NomeArqSVGFinal : ");
-        puts(aux->NomeArqSVGFinal);
+        puts(aux->final_SVG_file_name);
         puts("====================");
     }
-    if (aux->NomeGEO) {
+    if (aux->geo_name) {
         puts("NomeGEO : ");
-        puts(aux->NomeGEO);
+        puts(aux->geo_name);
         puts("====================");
     }
-    if (aux->NomeQRY) {
+    if (aux->qry_name) {
         puts("NomeQRY : ");
-        puts(aux->NomeQRY);
+        puts(aux->qry_name);
         puts("====================");
     }
-    if (aux->PathArquivoGeoInicial) {
+    if (aux->path_initial_geo_file) {
         puts("PathArquivoGeoInicial : ");
-        puts(aux->PathArquivoGeoInicial);
+        puts(aux->path_initial_geo_file);
         puts("====================");
     }
-    if (aux->PathArquivoQryAtual) {
+    if (aux->path_current_qry_file) {
         puts("PathArquivoQryAtual : ");
-        puts(aux->PathArquivoQryAtual);
+        puts(aux->path_current_qry_file);
         puts("====================");
     }
-    if (aux->PathDoSvgComOQryExecutado) {
+    if (aux->path_modified_SVG) {
         puts("PathDoSvgComOQryExecutado : ");
-        puts(aux->PathDoSvgComOQryExecutado);
+        puts(aux->path_modified_SVG);
         puts("====================");
     }
-    if (aux->PathDoSvgDoGeoSemMudanca) {
+    if (aux->path_original_SVG) {
         puts("PathDoSvgDoGeoSemMudanca : ");
-        puts(aux->PathDoSvgDoGeoSemMudanca);
+        puts(aux->path_original_SVG);
         puts("====================");
     }
-    if (aux->PathDoTXTComOQryExecutado) {
+    if (aux->path_TXT_with_qry) {
         puts("PathDoTXTComOQryExecutado : ");
-        puts(aux->PathDoTXTComOQryExecutado);
+        puts(aux->path_TXT_with_qry);
         puts("====================");
     }
-    if (aux->PathSVGFinalGrafico) {
+    if (aux->path_final_graphic_SVG) {
         puts("PathSVGFinalGrafico : ");
-        puts(aux->PathSVGFinalGrafico);
+        puts(aux->path_final_graphic_SVG);
         puts("====================");
     }
-    if (aux->PathTXTFinal) {
+    if (aux->path_final_TXT) {
         puts("PathTXTFinal : ");
-        puts(aux->PathTXTFinal);
+        puts(aux->path_final_TXT);
         puts("====================");
     }
-    if (aux->QryConsultas) {
+    if (aux->current_qry_file) {
         puts("QryConsultas : ");
-        puts(aux->QryConsultas);
-        puts("====================");
-    }
-    if (aux->TituloGrafFinal) {
-        puts("TituloGrafFinal : ");
-        puts(aux->TituloGrafFinal);
+        puts(aux->current_qry_file);
         puts("====================");
     }
 }
 
 void freePaths(path paths) {
-    pathsGerais* aux = paths;
-    if (aux->DirBaseDeEntrada) {
-        free(aux->DirBaseDeEntrada);
+    generalPaths* aux = paths;
+    if (aux->input_directory) {
+        free(aux->input_directory);
     }
-    if (aux->DirBaseDeSaida) {
-        free(aux->DirBaseDeSaida);
+    if (aux->output_directory) {
+        free(aux->output_directory);
     }
-    if (aux->GeoInicial) {
-        free(aux->GeoInicial);
+    if (aux->initial_geo_file) {
+        free(aux->initial_geo_file);
     }
-    if (aux->NomeArqSVGFinal) {
-        free(aux->NomeArqSVGFinal);
+    if (aux->final_SVG_file_name) {
+        free(aux->final_SVG_file_name);
     }
-    if (aux->NomeGEO) {
-        free(aux->NomeGEO);
+    if (aux->geo_name) {
+        free(aux->geo_name);
     }
-    if (aux->NomeQRY) {
-        free(aux->NomeQRY);
+    if (aux->qry_name) {
+        free(aux->qry_name);
     }
-    if (aux->PathArquivoGeoInicial) {
-        free(aux->PathArquivoGeoInicial);
+    if (aux->path_initial_geo_file) {
+        free(aux->path_initial_geo_file);
     }
-    if (aux->PathArquivoQryAtual) {
-        free(aux->PathArquivoQryAtual);
+    if (aux->path_current_qry_file) {
+        free(aux->path_current_qry_file);
     }
-    if (aux->PathDoSvgComOQryExecutado) {
-        free(aux->PathDoSvgComOQryExecutado);
+    if (aux->path_modified_SVG) {
+        free(aux->path_modified_SVG);
     }
-    if (aux->PathDoSvgDoGeoSemMudanca) {
-        free(aux->PathDoSvgDoGeoSemMudanca);
+    if (aux->path_original_SVG) {
+        free(aux->path_original_SVG);
     }
-    if (aux->PathDoTXTComOQryExecutado) {
-        free(aux->PathDoTXTComOQryExecutado);
+    if (aux->path_TXT_with_qry) {
+        free(aux->path_TXT_with_qry);
     }
-    if (aux->PathSVGFinalGrafico) {
-        free(aux->PathSVGFinalGrafico);
+    if (aux->path_final_graphic_SVG) {
+        free(aux->path_final_graphic_SVG);
     }
-    if (aux->PathTXTFinal) {
-        free(aux->PathTXTFinal);
+    if (aux->path_final_TXT) {
+        free(aux->path_final_TXT);
     }
-    if (aux->QryConsultas) {
-        free(aux->QryConsultas);
+    if (aux->current_qry_file) {
+        free(aux->current_qry_file);
     }
-    if (aux->TituloGrafFinal) {
-        free(aux->TituloGrafFinal);
-    }
+    
     free(paths);
 }
