@@ -35,7 +35,7 @@ On every project, it is ***strictly prohibited*** declaring structs on headers f
   - FG: Given a point and a radius, every circle that is inside the FG circle, needs to find and run to the closest building, to shelter itself against the meteors. Also, in the SVG file the circles running to the closest building **should** be animated using *animateMotion*.
   - IM: Meteor with radiation *s* mSv impacted *point (x,y)*. Calculate the exposition class of every circle in the village, change its color to the designed class. The level of radiation each circle has is accumulative, if the person dies (radiation level > 8000), put a black fill and a cross on the circle.
   - T30: 30 minutes passed, circles with imminent death, dies.
-  - NVE: Calculate the level of radiation of the given *point (x,y)*. For this, is important to consider every meteor that IM created (and fall in the village), every single shadow that every meteor created for this function.
+  - NVE: Calculate the level of radiation of the given *point (x,y)*. For this, is important to consider every meteor that IM created (and fell in the village), every single shadow that every meteor created for this function.
   
   
   
