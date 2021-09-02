@@ -5,11 +5,11 @@
 /*Double linked list*/
 
 typedef struct data {
+
     struct data* next;
     struct data* prev;
     void* element;
-    double radiation;
-    double xMeteor, yMeteor;
+
 
 } data_t;
 
@@ -34,9 +34,7 @@ void* insert(void* sequence, void* element) {
     list_t* listAux = sequence;
     data_t* pontAux = calloc(1, sizeof(data_t));
     pontAux->element = element;
-    pontAux->radiation = 0;
-    pontAux->xMeteor = 0;
-    pontAux->yMeteor = 0;
+
 
     if (listAux->size == 0) {
         pontAux->next = NULL;
@@ -88,45 +86,143 @@ void* get_item(void* current) {
     return aux->element;
 }
 
-void free_list(void* sequence) {
-    list_t* listAux = sequence;
+// void free_list(void* sequence) {
+//     list_t* listAux = sequence;
 
-    if (listAux->size == 0) {
-        free(sequence);
+//     if (listAux->size == 0) {
+//         free(sequence);
+//         return;
+//     }
+
+//     data_t* auxNode = listAux->head;
+//     data_t* auxElement = listAux->head->element;
+
+//     while (listAux->head != NULL) {
+//         auxNode = listAux->head;
+//         auxElement = listAux->head->element;
+//         listAux->head = listAux->head->next;
+
+//         free(auxElement);
+//         free(auxNode);
+//     }
+
+//     free(sequence);
+// }
+
+void free_list(void* sequence, void (*free_data)(void*)){
+    
+    if(!sequence){
         return;
     }
 
-    data_t* auxNode = listAux->head;
-    data_t* auxElement = listAux->head->element;
+    list_t* list_aux = sequence;
 
-    while (listAux->head != NULL) {
-        auxNode = listAux->head;
-        auxElement = listAux->head->element;
-        listAux->head = listAux->head->next;
+    if(!list_aux->size){
+        free(list_aux);
+        return;
+    }
 
-        free(auxElement);
+    data_t* auxNode = list_aux->head;
+    data_t* auxElement = list_aux->head->element;
+
+    while(list_aux->head != NULL) {
+        
+        auxNode = list_aux->head;
+        auxElement = list_aux->head->element;
+        list_aux->head = list_aux->head->next;
+        free_data(auxElement);
         free(auxNode);
     }
 
     free(sequence);
+
+
 }
 
 void* at_pos(void* sequence, int index) {
     list_t* listAux = sequence;
     data_t* aux = listAux->head;
 
-    for (int i = 0; i < index; i++) {
-        aux = get_next(aux);
-    }
+    for (int i = 0; i < index; i++) aux = get_next(aux);
+
     return aux;
 }
 
-void remove_node(void* sequence, void* current) {
+// void remove_node(void* sequence, void* current) {
+//     list_t* listAux = sequence;
+//     data_t* aux1;
+//     data_t* aux2;
+//     void* get_item_aux1;
+//     void* get_item_aux2;
+//     data_t* posToRemove = listAux->head;
+//     int pos = 0;
+
+//     while (posToRemove != current) {
+//         posToRemove = posToRemove->next;
+//         pos++;
+
+//         if (pos > listAux->size) {
+//             puts("Nao encontrado.");
+//             return;
+//         }
+//     }
+
+//     if (pos < 0)
+//         return;
+
+//     else if (pos > listAux->size)
+//         return;
+
+//     else if (pos == listAux->size - 1 && listAux->size > 1) {
+//         // If its the last position from the list
+
+//         aux1 = at_pos(listAux, pos - 1);
+//         aux2 = at_pos(listAux, pos);
+//         get_item_aux2 = get_item(current);
+//         destory_segment(get_item_aux2);
+//         free(aux2);
+//         aux1->next = NULL;
+//         listAux->end = aux1;
+//         listAux->size--;
+
+//     } else if (pos == 0 && listAux->size > 1) {
+//         // Remove first element from list
+
+//         aux1 = at_pos(listAux, 0);
+//         get_item_aux1 = get_item(get_head(sequence));
+//         listAux->head = listAux->head->next;
+//         destory_segment(get_item_aux1);
+//         free(aux1);
+//         listAux->size--;
+
+//     } else if (pos == 0 && listAux->size == 1) {
+//         // Remove the only element of the list
+
+//         aux1 = at_pos(listAux, 0);
+//         get_item_aux1 = get_item(get_head(sequence));
+//         listAux->head = NULL;
+//         listAux->end = NULL;
+//         destory_segment(get_item_aux1);
+//         free(aux1);
+//         listAux->size--;
+
+//     } else {
+//         aux1 = at_pos(listAux, pos - 1);
+//         aux2 = at_pos(listAux, pos);
+//         get_item_aux2 = get_item(current);
+//         aux1->next = aux2->next;
+//         aux2->next->prev = aux1;
+//         destory_segment(get_item_aux2);
+//         free(aux2);
+//         listAux->size--;
+//     }
+// }
+
+void remove_node(void* sequence, void* current, void (free_data)(void*)) {
     list_t* listAux = sequence;
     data_t* aux1;
     data_t* aux2;
-    void* get_item_aux1;
-    void* get_item_aux2;
+
     data_t* posToRemove = listAux->head;
     int pos = 0;
 
@@ -147,12 +243,11 @@ void remove_node(void* sequence, void* current) {
         return;
 
     else if (pos == listAux->size - 1 && listAux->size > 1) {
-        // If its the last position from the list
+        // If it is the last position from the list
 
         aux1 = at_pos(listAux, pos - 1);
         aux2 = at_pos(listAux, pos);
-        get_item_aux2 = get_item(current);
-        destory_segment(get_item_aux2);
+        free_data(aux2->element);
         free(aux2);
         aux1->next = NULL;
         listAux->end = aux1;
@@ -162,9 +257,8 @@ void remove_node(void* sequence, void* current) {
         // Remove first element from list
 
         aux1 = at_pos(listAux, 0);
-        get_item_aux1 = get_item(get_head(sequence));
+        free_data(aux1->element);
         listAux->head = listAux->head->next;
-        destory_segment(get_item_aux1);
         free(aux1);
         listAux->size--;
 
@@ -172,21 +266,36 @@ void remove_node(void* sequence, void* current) {
         // Remove the only element of the list
 
         aux1 = at_pos(listAux, 0);
-        get_item_aux1 = get_item(get_head(sequence));
+        
         listAux->head = NULL;
         listAux->end = NULL;
-        destory_segment(get_item_aux1);
+        
+        free_data(aux1->element);
         free(aux1);
         listAux->size--;
 
     } else {
         aux1 = at_pos(listAux, pos - 1);
         aux2 = at_pos(listAux, pos);
-        get_item_aux2 = get_item(current);
+        free_data(aux2->element);
         aux1->next = aux2->next;
         aux2->next->prev = aux1;
-        destory_segment(get_item_aux2);
         free(aux2);
         listAux->size--;
     }
+}
+
+void* findItem(void* sequence, void* match){
+    
+    list_t* list_aux = sequence;
+    data_t* node_aux = list_aux->head;
+
+    for(int i = 0; i < list_aux->size; i++){
+
+        if(match == node_aux->element) return match;
+    
+        node_aux = node_aux->next;
+
+    }
+    return NULL;
 }

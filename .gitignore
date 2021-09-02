@@ -1,5 +1,6 @@
 *.out
 *.o
+.vscode
 LEIA-ME.txt
 rhuanmaker.c
 gettesSetters.txt
