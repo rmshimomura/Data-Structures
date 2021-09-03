@@ -2,3 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+void* create_tree();
+void* insert(void* initial_tree, void* initial_node, void* element, int (*compare_nodes)(void*, void*));
+void* get_left(void* node);
+void* get_right(void* node);
+void* get_node_data(void* node);
+void* get_root(void* initial_tree);
+void* delete_node(void* initial_tree, void* initial_node, void* element, int (*compare_nodes)(void*, void*), void (*free_data)(void*));

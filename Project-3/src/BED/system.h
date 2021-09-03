@@ -3,10 +3,11 @@
 #ifndef SYSTEM_H_INCLUDED
 #define SYSTEM_H_INCLUDED
 
-int get_arguments(int argc, char** argv, path paths);            
+void get_arguments(int argc, char** argv, path paths, flag flags);    
+void get_data(tree blocks, hash residents, hash location, path paths, flag flags);        
+int find_nx(path paths);
 
 path create_general_paths(); 
-
 
 char* get_input_directory(path paths);
 char* get_output_directory(path paths);

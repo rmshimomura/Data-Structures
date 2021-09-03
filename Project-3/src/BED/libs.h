@@ -14,5 +14,8 @@ typedef void* item;
 typedef void* data;
 typedef void* path;
 typedef void* dynamicList;
+typedef void* hash;
+typedef void* flag;
+
 
 #endif

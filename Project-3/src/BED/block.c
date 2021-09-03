@@ -7,10 +7,28 @@ typedef struct block {
     double w;
     double h;
     double sw;
-    char* cfill;
-    char* cstroke;
+    char cfill[30];
+	char cep[20];
+    char cstroke[30];
 
 } block;
+
+void set_block_properties(void* block_to_set, char* cep, double x, double y, double w, double h, double sw, char* cfill, char* cstroke){
+	block* aux = block_to_set;
+	aux->x = x;
+	aux->y = y;
+	aux->w = w;
+	aux->h = h;
+	aux->sw = sw;
+	strcpy(aux->cep, cep);
+	strcpy(aux->cfill, cfill);
+	strcpy(aux->cstroke, cstroke);
+}
+
+void* create_block(){
+	block* new_block = calloc(1, sizeof(block));
+	return new_block;
+}
 
 double get_x(void* current_block){
 	block* aux = current_block;
@@ -69,7 +87,7 @@ char* get_cfill(void* current_block){
 
 void set_cfill(void* current_block, char* newValue){
 	block* aux = current_block;
-	aux->cfill = newValue;
+	strcpy(aux->cfill, newValue);
 }
 
 char* get_cstroke(void* current_block){
@@ -79,6 +97,15 @@ char* get_cstroke(void* current_block){
 
 void set_cstroke(void* current_block, char* newValue){
 	block* aux = current_block;
-	aux->cstroke = newValue;
+	strcpy(aux->cstroke, newValue);
 }
 
+char* get_cep(void* current_block){
+	block* aux = current_block;
+	return aux->cep; 
+}
+
+void set_cep(void* current_block, char* newValue){
+	block* aux = current_block;
+	strcpy(aux->cep, newValue);
+}

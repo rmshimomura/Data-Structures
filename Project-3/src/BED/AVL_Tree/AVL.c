@@ -28,6 +28,7 @@ void* create_tree(){
     tree_t* new_tree = calloc(1, sizeof(tree_t));
     new_tree->root = NULL;
     new_tree->size = 0;
+    return new_tree;
 }
 
 void* new_node(void* data) {
@@ -170,7 +171,7 @@ void* get_right(void* node) {
     return ((node_t*)(node))->right;
 }
 
-void* get_data(void* node) {
+void* get_node_data(void* node) {
     return ((node_t*)(node))->data;
 }
 
@@ -272,4 +273,8 @@ void pre_order(void* initial_node) {
         pre_order(aux->left);
         pre_order(aux->right);
     }
+}
+
+void* get_root(void* initial_tree){
+    return ((tree_t*)initial_tree)->root;
 }

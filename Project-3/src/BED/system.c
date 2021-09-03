@@ -1,4 +1,7 @@
 #include "system.h"
+#include "AVL_Tree/AVL.h"
+#include "block.h"
+#include "checks.h"
 
 void set_input_directory(path paths, char* newSet);
 void set_output_directory(path paths, char* newSet);
@@ -17,7 +20,7 @@ void set_path_TXT_with_qry(path paths, char* newSet);
 void set_final_graphic_SVG(path paths, char* newSet);
 void set_path_final_TXT(path paths, char* newSet);
 
-int get_arguments(int argc, char** argv, path paths) {
+void get_arguments(int argc, char** argv, path paths, flag flags) {
     
     if (argc < 2) return -1;
 
@@ -134,6 +137,7 @@ int get_arguments(int argc, char** argv, path paths) {
                 }
 
                 set_qry_name(paths, qry_name);
+                set_qry_inserted(flags, true);
             }
             qry_executed = true;
         } else if(!strcmp(argv[i], "-pm")){
@@ -141,6 +145,7 @@ int get_arguments(int argc, char** argv, path paths) {
             strcpy(pm_file, argv[i + 1]);
             set_people_file(paths, pm_file);
             pm_inserted = true;
+            set_pm_inserted(flags, true);
         }
     }
 
@@ -182,9 +187,61 @@ int get_arguments(int argc, char** argv, path paths) {
         set_path_TXT_with_qry(paths, path_txt_with_qry);
         sprintf(path_modified_svg, "%s%s-%s.svg", get_output_directory(paths), get_geo_name(paths), get_qry_name(paths));
         set_path_modified_SVG(paths, path_modified_svg);
-        return 1;
+        
     }
+
+}
+
+int find_nx(path paths){
+    
+    FILE* arq = fopen(get_path_initial_geo_file(paths), "r");
+    setvbuf(arq, 0, _IONBF, 0);
+    char command[5];
+    int size;
+
+    while(fscanf(arq, "%s", command) != -1){
+    
+        if(!strcmp(command, "nx")){
+            
+            fscanf(arq, "%d", &size); 
+            break;
+        }
+    }
+
+    return size;
+
+}
+
+void get_data(tree blocks, hash residents, hash location, path paths, flag flags){
+    
+    FILE* file_blocks = fopen(get_path_initial_geo_file(paths), "r");
+    setvbuf(file_blocks, 0, _IONBF, 0);
+
+    void* blocks_root = get_root(blocks);
+
+    char command[20], cep[11], cfill[30], cstroke[30];
+    double x,y,w,h, sw;
+
+    while(fscanf(file_blocks, "%s", command) != -1){
+
+        if(!strcmp(command, "cq")){
+            fscanf(file_blocks, "%lf %s %s", &sw, cfill, cstroke);
+        }
+
+        if(!strcmp(command, "q")){
+
+            fscanf(file_blocks, "%s %lf %lf %lf %lf", cep, &x, &y, &w, &h);
+            void* new_block = create_block();
+            set_block_properties(new_block, cep, x, y, w, h, sw, cfill, cstroke);
+            blocks_root = insert(blocks, blocks_root, new_block, );
+        }
+    }
+
+    if(get_pm_inserted(flags)){
+        FILE* file_people
+    }
+
     
 
-    return 0;
+
 }
