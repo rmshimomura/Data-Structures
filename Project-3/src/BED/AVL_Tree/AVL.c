@@ -1,4 +1,5 @@
 #include "AVL.h"
+#include "../DynamicList/dynamicList.h"
 
 typedef struct node {
     struct node* left;
@@ -33,7 +34,8 @@ void* create_tree(){
 
 void* new_node(void* data) {
     node_t* node_aux = calloc(1, sizeof(node_t));
-    node_aux->data = data;
+    node_aux->data = create_list();
+    insert_list(node_aux->data, data);
     node_aux->left = NULL;
     node_aux->right = NULL;
     node_aux->height = 1;
@@ -52,6 +54,7 @@ int get_balance(void* initial_node) {
 }
 
 void* right_rotate(void* initial_node) {
+    
     if (initial_node) {
         node_t* main_node = initial_node;
 
@@ -102,37 +105,37 @@ void* insert(void* initial_tree, void* initial_node, void* element, int (*compar
         tree_aux->size++;
         return new_node(element);
     }
-    if (compare_nodes(node_aux, element) == 1) {
+    if (compare_nodes(get_list_element(get_head(node_aux)), element) == 1) {
         node_aux->right = insert(tree_aux, node_aux->right, element, compare_nodes);
 
     } else if (compare_nodes(node_aux, element) == -1) {
         node_aux->left = insert(tree_aux, node_aux->left, element, compare_nodes);
 
     } else {
-        return initial_node;
+        insert_list(get_node_data(node_aux), element);
     }
 
     node_aux->height = 1 + max(height(node_aux->left), height(node_aux->right));
 
     int balance = get_balance(initial_node);
 
-    if (balance > 1 && compare_nodes(node_aux->left, element) == -1) {
+    if (balance > 1 && compare_nodes(get_list_element(get_head(node_aux->left)), element) == -1) {
         //LL
         return right_rotate(initial_node);
     }
 
-    if (balance < -1 && compare_nodes(node_aux->right, element) == 1) {
+    if (balance < -1 && compare_nodes(get_list_element(get_head(node_aux->right)), element) == 1) {
         //RR
         return left_rotate(initial_node);
     }
 
-    if (balance > 1 && compare_nodes(node_aux->left, element) == 1) {
+    if (balance > 1 && compare_nodes(get_list_element(get_head(node_aux->left)), element) == 1) {
         //LR
         node_aux->left = left_rotate(node_aux->left);
         return right_rotate(initial_node);
     }
 
-    if (balance < -1 && compare_nodes(node_aux->right, element) == -1) {
+    if (balance < -1 && compare_nodes(get_list_element(get_head(node_aux->right)), element) == -1) {
         //RL
         node_aux->right = right_rotate(node_aux->right);
         return left_rotate(initial_node);

@@ -62,11 +62,11 @@ int hash_table_insert_data(void* HT, char* key, void* data){
     if(!hash_table_list_exist(HT, key)){
 
         aux->registers[pos_at_hash_table].list = create_list();
-        insert(aux->registers[pos_at_hash_table].list, data);
+        insert_list(aux->registers[pos_at_hash_table].list, data);
                 
     }else{
 
-        insert(aux->registers[pos_at_hash_table].list, data);
+        insert_list(aux->registers[pos_at_hash_table].list, data);
     }
 
     return 0;

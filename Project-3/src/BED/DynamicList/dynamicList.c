@@ -30,7 +30,7 @@ void* create_list() {
     return newList;
 }
 
-void* insert(void* sequence, void* element) {
+void* insert_list(void* sequence, void* element) {
     list_t* listAux = sequence;
     data_t* pontAux = calloc(1, sizeof(data_t));
     pontAux->element = element;
@@ -81,7 +81,7 @@ void* get_previous(void* current) {
     return NULL;
 }
 
-void* get_item(void* current) {
+void* get_list_element(void* current) {
     data_t* aux = current;
     return aux->element;
 }
