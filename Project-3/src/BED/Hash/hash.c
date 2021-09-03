@@ -76,6 +76,7 @@ int hash_table_insert_data(void* HT, char* key, void* data){
 void hash_table_remove_key(void* HT, char* key, void (*free_data)(void*)){
     
     if(!hash_table_list_exist(HT, key)){
+        puts("Key passed does not match any data in the hash table...");
         return;
     }
 
