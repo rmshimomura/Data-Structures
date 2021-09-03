@@ -4,7 +4,7 @@
 #define SYSTEM_H_INCLUDED
 
 void get_arguments(int argc, char** argv, path paths, flag flags);    
-void get_data(tree blocks, hash residents, hash location, path paths, flag flags);        
+void get_data(tree blocks, hash residents, path paths, flag flags);        
 int find_nx(path paths);
 
 path create_general_paths(); 

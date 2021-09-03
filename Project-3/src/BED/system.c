@@ -1,7 +1,9 @@
 #include "system.h"
+
 #include "AVL_Tree/AVL.h"
 #include "block.h"
 #include "checks.h"
+#include "person.h"
 
 void set_input_directory(path paths, char* newSet);
 void set_output_directory(path paths, char* newSet);
@@ -21,7 +23,6 @@ void set_final_graphic_SVG(path paths, char* newSet);
 void set_path_final_TXT(path paths, char* newSet);
 
 void get_arguments(int argc, char** argv, path paths, flag flags) {
-    
     if (argc < 2) return -1;
 
     bool input_directory_inserted = false;
@@ -29,8 +30,7 @@ void get_arguments(int argc, char** argv, path paths, flag flags) {
     bool pm_inserted = false;
 
     for (int i = 1; i < argc; i++) {
-        if (!strcmp(argv[i], "-e")) { 
-
+        if (!strcmp(argv[i], "-e")) {
             char* input_directory = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             strcpy(input_directory, argv[i + 1]);
 
@@ -42,8 +42,7 @@ void get_arguments(int argc, char** argv, path paths, flag flags) {
             input_directory_inserted = true;
             set_input_directory(paths, input_directory);
 
-        } else if (!strcmp(argv[i], "-f")) {  
-
+        } else if (!strcmp(argv[i], "-f")) {
             char* initial_geo_file = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             char* geo_name = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             int index = 0;
@@ -52,8 +51,7 @@ void get_arguments(int argc, char** argv, path paths, flag flags) {
             strcpy(initial_geo_file, argv[i + 1]);
             set_initial_geo_file(paths, initial_geo_file);
 
-            for (int i = 0; i < strlen(initial_geo_file); i++) {  
-
+            for (int i = 0; i < strlen(initial_geo_file); i++) {
                 if (initial_geo_file[i] == '/') {
                     index = i;
                     found = true;
@@ -86,8 +84,7 @@ void get_arguments(int argc, char** argv, path paths, flag flags) {
                 set_geo_name(paths, geo_name);
             }
 
-        } else if (!strcmp(argv[i], "-o")) {  
-
+        } else if (!strcmp(argv[i], "-o")) {
             char* output_directory = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             strcpy(output_directory, argv[i + 1]);
 
@@ -98,8 +95,7 @@ void get_arguments(int argc, char** argv, path paths, flag flags) {
 
             set_output_directory(paths, output_directory);
 
-        } else if (!strcmp(argv[i], "-q")) {  
-
+        } else if (!strcmp(argv[i], "-q")) {
             char* qry_file = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             char* qry_name = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             strcpy(qry_file, argv[i + 1]);
@@ -108,8 +104,7 @@ void get_arguments(int argc, char** argv, path paths, flag flags) {
             int name_position = 0;
             bool found = false;
 
-            for (int i = 0; i < strlen(qry_file); i++) {  
-
+            for (int i = 0; i < strlen(qry_file); i++) {
                 if (qry_file[i] == '/') {
                     index = i;
                     found = true;
@@ -140,7 +135,7 @@ void get_arguments(int argc, char** argv, path paths, flag flags) {
                 set_qry_inserted(flags, true);
             }
             qry_executed = true;
-        } else if(!strcmp(argv[i], "-pm")){
+        } else if (!strcmp(argv[i], "-pm")) {
             char* pm_file = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             strcpy(pm_file, argv[i + 1]);
             set_people_file(paths, pm_file);
@@ -171,7 +166,7 @@ void get_arguments(int argc, char** argv, path paths, flag flags) {
         set_path_initial_geo_file(paths, path_intial_geo_file);
     }
 
-    if(pm_inserted){
+    if (pm_inserted) {
         char* path_people_file = calloc(strlen(get_input_directory(paths)) + strlen(get_people_file(paths)) + 10, sizeof(char));
         sprintf(path_people_file, "%s%s", get_input_directory(paths), get_people_file(paths));
         set_path_people_file(paths, path_people_file);
@@ -187,61 +182,55 @@ void get_arguments(int argc, char** argv, path paths, flag flags) {
         set_path_TXT_with_qry(paths, path_txt_with_qry);
         sprintf(path_modified_svg, "%s%s-%s.svg", get_output_directory(paths), get_geo_name(paths), get_qry_name(paths));
         set_path_modified_SVG(paths, path_modified_svg);
-        
     }
-
 }
 
-int find_nx(path paths){
-    
+int find_nx(path paths) {
     FILE* arq = fopen(get_path_initial_geo_file(paths), "r");
     setvbuf(arq, 0, _IONBF, 0);
     char command[5];
     int size;
 
-    while(fscanf(arq, "%s", command) != -1){
-    
-        if(!strcmp(command, "nx")){
-            
-            fscanf(arq, "%d", &size); 
+    while (fscanf(arq, "%s", command) != -1) {
+        if (!strcmp(command, "nx")) {
+            fscanf(arq, "%d", &size);
             break;
         }
     }
 
     return size;
-
 }
 
-void get_data(tree blocks, hash residents, hash location, path paths, flag flags){
-    
+void get_data(tree blocks, hash residents, path paths, flag flags) {
     FILE* file_blocks = fopen(get_path_initial_geo_file(paths), "r");
     setvbuf(file_blocks, 0, _IONBF, 0);
 
     void* blocks_root = get_root(blocks);
 
     char command[20], cep[11], cfill[30], cstroke[30];
-    double x,y,w,h, sw;
+    double x, y, w, h, sw;
 
-    while(fscanf(file_blocks, "%s", command) != -1){
-
-        if(!strcmp(command, "cq")){
+    while (fscanf(file_blocks, "%s", command) != -1) {
+        if (!strcmp(command, "cq")) {
             fscanf(file_blocks, "%lf %s %s", &sw, cfill, cstroke);
         }
 
-        if(!strcmp(command, "q")){
-
+        if (!strcmp(command, "q")) {
             fscanf(file_blocks, "%s %lf %lf %lf %lf", cep, &x, &y, &w, &h);
             void* new_block = create_block();
             set_block_properties(new_block, cep, x, y, w, h, sw, cfill, cstroke);
-            blocks_root = insert(blocks, blocks_root, new_block, );
+            blocks_root = insert(blocks, blocks_root, new_block, compare_cep);
         }
     }
 
-    if(get_pm_inserted(flags)){
-        FILE* file_people
+    if (get_pm_inserted(flags)) {
+        FILE* file_people = fopen(get_path_people_file(paths), "r");
+        setvbuf(file_blocks, 0, _IONBF, 0);
+
+        create_people_data(residents, file_people);
+
+        fclose(file_blocks);
     }
 
-    
-
-
+    fclose(file_blocks);
 }
