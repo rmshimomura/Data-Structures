@@ -15,4 +15,4 @@ void* getLast(void* sequence);
 void* get_previous(void* current);
 void free_list(void* sequence, void (*freeList)(void*));
 void* at_pos(void* sequence, int index);
-void* findItem(void* sequence, void* match);
+void* findItem(void* sequence, void* match, int (*compare_info)(void*, void*));

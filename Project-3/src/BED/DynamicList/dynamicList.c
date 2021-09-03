@@ -285,14 +285,14 @@ void remove_node(void* sequence, void* current, void (free_data)(void*)) {
     }
 }
 
-void* findItem(void* sequence, void* match){
+void* findItem(void* sequence, void* match, int (*compare_info)(void*, void*)){
     
     list_t* list_aux = sequence;
     data_t* node_aux = list_aux->head;
 
     for(int i = 0; i < list_aux->size; i++){
 
-        if(match == node_aux->element) return match;
+        if(compare_info(node_aux->element, match)) return match;
     
         node_aux = node_aux->next;
 

@@ -31,8 +31,10 @@ int hash_table_create_key(void* HT, char* key){
 }
 
 int hash_table_size(void* HT){
+
     hashTable* aux = HT;
     return aux->size;
+
 }
 
 int hash_table_list_exist(void* HT, char* key){
@@ -73,7 +75,7 @@ int hash_table_insert_data(void* HT, char* key, void* data){
 
 }
 
-void hash_table_remove_key(void* HT, char* key, void (*free_data)(void*)){
+void hash_table_remove_key(void* HT, char* key, void (*free_data)(void*), int (*compare_nodes)(void*, void*)){
     
     if(!hash_table_list_exist(HT, key)){
         puts("Key passed does not match any data in the hash table...");
@@ -84,8 +86,8 @@ void hash_table_remove_key(void* HT, char* key, void (*free_data)(void*)){
 
     hashTable* aux = HT;
 
-    if(findItem(aux->registers[pos_created_by_the_key].list, key)){
-        remove_node(aux->registers[pos_created_by_the_key].list, findItem(aux->registers[pos_created_by_the_key].list, key), free_data);
+    if(findItem(aux->registers[pos_created_by_the_key].list, key, compare_nodes)){
+        remove_node(aux->registers[pos_created_by_the_key].list, findItem(aux->registers[pos_created_by_the_key].list, key, compare_nodes), free_data);
     }
 
 }
