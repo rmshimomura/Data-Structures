@@ -292,7 +292,7 @@ void* findItem(void* sequence, void* match, int (*compare_info)(void*, void*)){
 
     for(int i = 0; i < list_aux->size; i++){
 
-        if(compare_info(node_aux->element, match)) return match;
+        if(compare_info(node_aux->element, match)) return node_aux->element;
     
         node_aux = node_aux->next;
 

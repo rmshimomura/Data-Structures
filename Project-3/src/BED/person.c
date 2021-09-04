@@ -20,33 +20,38 @@ typedef struct person {
     char name[50];
     char surname[50];
     char sex;
-    char birthDate[11];
+    char birthDate[12];
     char cpf[15];
     int houseState;
-    livingPlace place;
+    livingPlace* place;
 
 } person;
 
 void* create_new_person(char* name, char* surname, char* birthDate, char* cpf, char sex) {
+    
     person* new_person = calloc(1, sizeof(person));
+    new_person->place = calloc(1, sizeof(livingPlace));
     strcpy(new_person->name, name);
     strcpy(new_person->surname, surname);
     strcpy(new_person->birthDate, birthDate);
     strcpy(new_person->cpf, cpf);
     new_person->sex = sex;
     return new_person;
+
 }
 
 void update_person(void* HT, char* cpf, char* cep, char face, int num, char* complement) {
-    
+
     if (hash_table_list_exist(HT, cpf)) {
+
         if (findItem(hash_table_get_register_list(HT, cpf), cpf, compare_CPF)) {
+
             person* person_to_update = findItem(hash_table_get_register_list(HT, cpf), cpf, compare_CPF);
             person_to_update->houseState = OWN;
-            strcpy(person_to_update->place.cep, cep);
-            person_to_update->place.face = face;
-            person_to_update->place.num = num;
-            strcpy(person_to_update->place.complement, complement);
+            person_to_update->place->face = face;
+            person_to_update->place->num = num;
+            strcpy(person_to_update->place->cep, cep);
+            strcpy(person_to_update->place->complement, complement);
         }
 
     } else {
@@ -67,12 +72,12 @@ void create_people_data(void* HT, FILE* file_people) {  //TODO
 
     while (fscanf(file_people, "%s", command) != -1) {
         if (!strcmp(command, "p")) {
-            fscanf(file_people, "%s %s %s %c %s", cpf, name, surname, sex, birthDate);
+            fscanf(file_people, "%s %s %s %c %s", cpf, name, surname, &sex, birthDate);
             void* person = create_new_person(name, surname, birthDate, cpf, sex);
             hash_table_insert_data(HT, cpf, person);
 
         } else if (!strcmp(command, "m")) {
-            fscanf(file_people, "%s %s %s %c %s", cpf, cep, face, &num, compl );
+            fscanf(file_people, "%s %s %c %d %s", cpf, cep, &face, &num, compl);
             update_person(HT, cpf, cep, face, num, compl);
         }
     }
@@ -82,4 +87,11 @@ int compare_CPF(void* element_node_from_list, void* target_node) {
     if (!strcmp(get_cpf(element_node_from_list), target_node)) return 1;
 
     return 0;
+}
+
+void print_person_info(void* person_to_analyze){
+    person* aux = person_to_analyze;
+    printf("Data found : \nName: %s\nSurname: %s\nSex: %c\nBirthDate: %s\nCPF: %s\nHouseState %d\n", aux->name, aux->surname, aux->sex, aux->birthDate, aux->cpf, aux->houseState);
+    printf("HouseStyle:\n CEP:%s\tFace: %c\tNum: %d\tComplement: %s\n", aux->place->cep, aux->place->face, aux->place->num, aux->place->complement);
+
 }
