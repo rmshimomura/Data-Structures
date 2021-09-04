@@ -64,7 +64,7 @@ char* get_cpf(void* person_data) {
     return aux->cpf;
 }
 
-void create_people_data(void* HT, FILE* file_people) {  //TODO
+void create_people_data(void* HT, FILE* file_people) {
 
     char command[20], cpf[15], name[50], surname[50], sex, birthDate[11];
     char cep[20], face, compl [30];

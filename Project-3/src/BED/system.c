@@ -4,6 +4,7 @@
 #include "block.h"
 #include "checks.h"
 #include "person.h"
+#include "qry.h"
 
 void set_input_directory(path paths, char* newSet);
 void set_output_directory(path paths, char* newSet);
@@ -202,6 +203,7 @@ int find_nx(path paths) {
 }
 
 void get_data(tree blocks, hash residents, path paths, flag flags) {
+
     FILE* file_blocks = fopen(get_path_initial_geo_file(paths), "r");
     setvbuf(file_blocks, 0, _IONBF, 0);
 
@@ -211,19 +213,25 @@ void get_data(tree blocks, hash residents, path paths, flag flags) {
     double x, y, w, h, sw;
 
     while (fscanf(file_blocks, "%s", command) != -1) {
+        
         if (!strcmp(command, "cq")) {
+
             fscanf(file_blocks, "%lf %s %s", &sw, cfill, cstroke);
+
         }
 
         if (!strcmp(command, "q")) {
+
             fscanf(file_blocks, "%s %lf %lf %lf %lf", cep, &x, &y, &w, &h);
             void* new_block = create_block();
             set_block_properties(new_block, cep, x, y, w, h, sw, cfill, cstroke);
             blocks_root = insert(blocks, blocks_root, new_block, compare_cep);
+
         }
     }
 
     if (get_pm_inserted(flags)) {
+
         FILE* file_people = fopen(get_path_people_file(paths), "r");
         setvbuf(file_blocks, 0, _IONBF, 0);
 
@@ -233,4 +241,89 @@ void get_data(tree blocks, hash residents, path paths, flag flags) {
     }
 
     fclose(file_blocks);
+}
+
+void get_functions(tree blocks, hash residents, hash locations, path paths, flag flags){
+    
+    FILE* modified_SVG = fopen(get_path_modified_SVG(paths), "w+");
+    setvbuf(modified_SVG, 0, _IONBF, 0);
+    FILE* functions_file = fopen(get_path_current_qry_file(paths), "r");
+    setvbuf(functions_file, 0, _IONBF, 0);
+    
+    char command[6], cep[20], cpf[15], face, compl[30], id[30];
+    double ar, v, x, y, h, w;
+    int num;
+
+
+    while (fscanf(functions_file, "%s", command) != -1) {
+
+        if(!strcmp(command, "del")){
+
+            fscanf(functions_file, "%s", cep);
+            del(blocks, residents, locations, cep, paths);            
+
+        }else if(!strcmp(command, "m?")){
+            
+            fscanf(functions_file, "%s", cep);
+            m_who(residents, cep, paths);
+
+        }else if(!strcmp(command, "dm?")){
+
+            fscanf(functions_file, "%s", cpf);
+            dm_who(residents, cpf, paths);
+            
+        }else if(!strcmp(command, "mud")){
+            
+            fscanf(functions_file, "%s %s %c %d %s", cpf, cep, &face, &num, compl);
+            mud(residents, cpf, cep, face, num, compl, paths);
+
+        }else if(!strcmp(command, "oloc")){
+
+            fscanf(functions_file,"%s %s %c %d %s %lf %lf", id, cep, &face, &num, compl, &ar, &v);
+            oloc(locations, id, cep, face, num, compl, ar, v, paths);
+            
+        }else if(!strcmp(command, "oloc?")){
+            
+            fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
+            oloc_who(locations, x, y, w, h, paths);
+            
+        }else if(!strcmp(command, "loc")){
+            
+            fscanf(functions_file, "%s %s", id, cpf);
+            loc(residents, locations, id, cpf, paths);
+
+        }else if(!strcmp(command, "loc?")){
+            
+            fscanf(functions_file, "%s", id);
+            loc_who(locations, id, paths);
+
+        }else if(!strcmp(command, "dloc")){
+
+            fscanf(functions_file, "%s", id);
+            dloc(locations, id, paths);
+            
+        }else if(!strcmp(command, "hom")){
+
+            fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
+            hom(residents, x, y, w, h, paths);
+            
+        }else if(!strcmp(command, "mul")){
+
+            fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
+            mul(residents, x, y, w, h, paths);
+            
+        }else if(!strcmp(command, "dmpt")){
+
+            // ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 
+            
+        }else if(!strcmp(command, "catac")){
+            
+            fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
+            catac(blocks, residents, x, y, w, h, paths);
+
+        }
+
+    }
+
+
 }
