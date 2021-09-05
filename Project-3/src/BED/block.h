@@ -1,5 +1,8 @@
 #include "libs.h"
 
+#ifndef BLOCK_H
+#define BLOCK_H
+
 void* create_block();
 void set_block_properties(void* block_to_set, char* cep, double x, double y, double w, double h, double sw, char* cfill, char* cstroke);
 int compare_cep(void* node, void* element);
@@ -17,3 +20,5 @@ void set_h(void* current_block, double newValue);
 void set_sw(void* current_block, double newValue);
 void set_cfill(void* current_block, char* newValue);
 void set_cstroke(void* current_block, char* newValue);
+
+#endif

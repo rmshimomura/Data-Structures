@@ -5,6 +5,7 @@
 
 void get_arguments(int argc, char** argv, path paths, flag flags);    
 void get_data(tree blocks, hash residents, path paths, flag flags);        
+void get_functions(tree blocks, hash residents, hash locations, path paths, flag flags);
 int find_nx(path paths);
 
 path create_general_paths(); 

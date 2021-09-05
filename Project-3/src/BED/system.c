@@ -22,7 +22,7 @@ void set_path_modified_SVG(path paths, char* newSet);
 void set_path_TXT_with_qry(path paths, char* newSet);
 
 void get_arguments(int argc, char** argv, path paths, flag flags) {
-    if (argc < 2) return -1;
+    if (argc < 2) return ;
 
     bool input_directory_inserted = false;
     bool qry_executed = false;
@@ -235,7 +235,7 @@ void get_data(tree blocks, hash residents, path paths, flag flags) {
 
         create_people_data(residents, file_people);
 
-        fclose(file_blocks);
+        fclose(file_people);
     }
 
     fclose(file_blocks);
@@ -255,73 +255,82 @@ void get_functions(tree blocks, hash residents, hash locations, path paths, flag
 
     while (fscanf(functions_file, "%s", command) != -1) {
 
-        if(!strcmp(command, "del")){
-
-            fscanf(functions_file, "%s", cep);
-            del(blocks, residents, locations, cep, paths);            
-
-        }else if(!strcmp(command, "m?")){
-            
-            fscanf(functions_file, "%s", cep);
-            m_who(residents, cep, paths);
-
-        }else if(!strcmp(command, "dm?")){
+        if(!strcmp(command, "dm?")){
 
             fscanf(functions_file, "%s", cpf);
             dm_who(residents, cpf, paths);
             
-        }else if(!strcmp(command, "mud")){
-            
-            fscanf(functions_file, "%s %s %c %d %s", cpf, cep, &face, &num, compl);
-            mud(residents, cpf, cep, face, num, compl, paths);
-
-        }else if(!strcmp(command, "oloc")){
-
-            fscanf(functions_file,"%s %s %c %d %s %lf %lf", id, cep, &face, &num, compl, &ar, &v);
-            oloc(locations, id, cep, face, num, compl, ar, v, paths);
-            
-        }else if(!strcmp(command, "oloc?")){
-            
-            fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
-            oloc_who(locations, x, y, w, h, paths);
-            
-        }else if(!strcmp(command, "loc")){
-            
-            fscanf(functions_file, "%s %s", id, cpf);
-            loc(residents, locations, id, cpf, paths);
-
-        }else if(!strcmp(command, "loc?")){
-            
-            fscanf(functions_file, "%s", id);
-            loc_who(locations, id, paths);
-
-        }else if(!strcmp(command, "dloc")){
-
-            fscanf(functions_file, "%s", id);
-            dloc(locations, id, paths);
-            
-        }else if(!strcmp(command, "hom")){
-
-            fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
-            hom(residents, x, y, w, h, paths);
-            
-        }else if(!strcmp(command, "mul")){
-
-            fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
-            mul(residents, x, y, w, h, paths);
-            
-        }else if(!strcmp(command, "dmpt")){
-
-            // ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 
-            
-        }else if(!strcmp(command, "catac")){
-            
-            fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
-            catac(blocks, residents, x, y, w, h, paths);
-
         }
+
+        // if(!strcmp(command, "del")){
+
+        //     fscanf(functions_file, "%s", cep);
+        //     del(blocks, residents, locations, cep, paths);            
+
+        // }else if(!strcmp(command, "m?")){
+            
+        //     fscanf(functions_file, "%s", cep);
+        //     m_who(residents, cep, paths);
+
+        // }else if(!strcmp(command, "dm?")){
+
+        //     fscanf(functions_file, "%s", cpf);
+        //     dm_who(residents, cpf, paths);
+            
+        // }else if(!strcmp(command, "mud")){
+            
+        //     fscanf(functions_file, "%s %s %c %d %s", cpf, cep, &face, &num, compl);
+        //     mud(residents, cpf, cep, face, num, compl, paths);
+
+        // }else if(!strcmp(command, "oloc")){
+
+        //     fscanf(functions_file,"%s %s %c %d %s %lf %lf", id, cep, &face, &num, compl, &ar, &v);
+        //     oloc(locations, id, cep, face, num, compl, ar, v, paths);
+            
+        // }else if(!strcmp(command, "oloc?")){
+            
+        //     fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
+        //     oloc_who(locations, x, y, w, h, paths);
+            
+        // }else if(!strcmp(command, "loc")){
+            
+        //     fscanf(functions_file, "%s %s", id, cpf);
+        //     loc(residents, locations, id, cpf, paths);
+
+        // }else if(!strcmp(command, "loc?")){
+            
+        //     fscanf(functions_file, "%s", id);
+        //     loc_who(locations, id, paths);
+
+        // }else if(!strcmp(command, "dloc")){
+
+        //     fscanf(functions_file, "%s", id);
+        //     dloc(locations, id, paths);
+            
+        // }else if(!strcmp(command, "hom")){
+
+        //     fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
+        //     hom(residents, x, y, w, h, paths);
+            
+        // }else if(!strcmp(command, "mul")){
+
+        //     fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
+        //     mul(residents, x, y, w, h, paths);
+            
+        // }else if(!strcmp(command, "dmpt")){
+
+        //     // ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 
+            
+        // }else if(!strcmp(command, "catac")){
+            
+        //     fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
+        //     catac(blocks, residents, x, y, w, h, paths);
+
+        // }
 
     }
 
+    fclose(functions_file);
+    fclose(modified_SVG);
 
 }

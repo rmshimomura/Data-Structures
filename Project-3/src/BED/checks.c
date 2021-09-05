@@ -32,7 +32,3 @@ void set_pm_inserted(void* current_flags, bool newValue){
 	flags* aux = current_flags;
 	aux->pm_inserted = newValue;
 }
-
-
-
-

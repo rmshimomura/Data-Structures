@@ -103,10 +103,16 @@ void debug_print_person_info(void* person_to_analyze){
 void print_person_info(void* person_to_analyze, FILE* txt_qry){
     
     person* aux = person_to_analyze;
-    fprintf(txt_qry, "====================================================");
+    fprintf(txt_qry, "====================================================\n\n\n");
     fprintf(txt_qry, "dm?(%s):\n\n", aux->cpf);
-    fprintf(txt_qry, "Data found: \nName: %s\nSurname: %s\nSex: %c\nBirthDate: %s\nCPF: %s\nHouseState %s\n", aux->name, aux->surname, aux->sex, aux->birthDate, aux->cpf, aux->houseState == OWN ? "Own" : "Rent");
+    fprintf(txt_qry, "Data found: \nName: %s\nSurname: %s\nSex: %c\nBirthDate: %s\nCPF: %s\n\nHouseState: %s\n", aux->name, aux->surname, aux->sex, aux->birthDate, aux->cpf, aux->houseState == OWN ? "Own" : "Rent");
     fprintf(txt_qry, "CEP:%s Face: %c Num: %d Complement: %s\n\n\n", aux->place->cep, aux->place->face, aux->place->num, aux->place->complement);
-    fprintf(txt_qry, "====================================================");
+    fprintf(txt_qry, "====================================================\n");
 
+}
+
+void free_person(void* person_to_free){
+    person* aux = person_to_free;
+    free(aux->place);
+    free(aux); 
 }
