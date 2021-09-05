@@ -21,7 +21,7 @@ int main(int argc, char** argv){
     void* teste = create_new_person("rodrigo", "shimomura", "18/08/2002", "6546", 'M');
     hash_table_insert_data(residents, get_cpf(teste), teste);
     update_person(residents, get_cpf(teste), "6123", 'N', 3214, "APTO");
-    print_person_info(teste);
+    debug_print_person_info(teste);
     // hash locations = hash_table_create_table(find_nx(paths));
     //=======================================================//
     // get_data(blocks, residents, paths, flags);

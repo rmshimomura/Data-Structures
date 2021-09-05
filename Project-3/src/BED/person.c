@@ -52,6 +52,7 @@ void update_person(void* HT, char* cpf, char* cep, char face, int num, char* com
             person_to_update->place->num = num;
             strcpy(person_to_update->place->cep, cep);
             strcpy(person_to_update->place->complement, complement);
+            
         }
 
     } else {
@@ -89,9 +90,23 @@ int compare_CPF(void* element_node_from_list, void* target_node) {
     return 0;
 }
 
-void print_person_info(void* person_to_analyze){
+void debug_print_person_info(void* person_to_analyze){
     person* aux = person_to_analyze;
-    printf("Data found : \nName: %s\nSurname: %s\nSex: %c\nBirthDate: %s\nCPF: %s\nHouseState %d\n", aux->name, aux->surname, aux->sex, aux->birthDate, aux->cpf, aux->houseState);
-    printf("HouseStyle:\n CEP:%s\tFace: %c\tNum: %d\tComplement: %s\n", aux->place->cep, aux->place->face, aux->place->num, aux->place->complement);
+    printf("====================================================\n\n\n");
+    printf("DEBUG with CPF = %s:\n\n", aux->cpf);
+    printf("Data found: \nName: %s\nSurname: %s\nSex: %c\nBirthDate: %s\nCPF: %s\n\nHouseState: %s\n", aux->name, aux->surname, aux->sex, aux->birthDate, aux->cpf, aux->houseState == OWN ? "Own" : "Rent");
+    printf("CEP:%s Face: %c Num: %d Complement: %s\n\n\n", aux->place->cep, aux->place->face, aux->place->num, aux->place->complement);
+    printf("====================================================\n");
+
+}
+
+void print_person_info(void* person_to_analyze, FILE* txt_qry){
+    
+    person* aux = person_to_analyze;
+    fprintf(txt_qry, "====================================================");
+    fprintf(txt_qry, "dm?(%s):\n\n", aux->cpf);
+    fprintf(txt_qry, "Data found: \nName: %s\nSurname: %s\nSex: %c\nBirthDate: %s\nCPF: %s\nHouseState %s\n", aux->name, aux->surname, aux->sex, aux->birthDate, aux->cpf, aux->houseState == OWN ? "Own" : "Rent");
+    fprintf(txt_qry, "CEP:%s Face: %c Num: %d Complement: %s\n\n\n", aux->place->cep, aux->place->face, aux->place->num, aux->place->complement);
+    fprintf(txt_qry, "====================================================");
 
 }
