@@ -20,8 +20,6 @@ void set_path_people_file(path paths, char* newSet);
 void set_path_original_SVG(path paths, char* newSet);
 void set_path_modified_SVG(path paths, char* newSet);
 void set_path_TXT_with_qry(path paths, char* newSet);
-void set_final_graphic_SVG(path paths, char* newSet);
-void set_path_final_TXT(path paths, char* newSet);
 
 void get_arguments(int argc, char** argv, path paths, flag flags) {
     if (argc < 2) return -1;

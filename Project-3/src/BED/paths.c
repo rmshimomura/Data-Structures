@@ -15,8 +15,6 @@ typedef struct generalPaths {
     char* path_original_SVG;       //Path ate o svg que sera gerado sem alteracoes
     char* path_modified_SVG;       //Path ate o svg com as alteracoes do qry
     char* path_TXT_with_qry;       //Path ate o txt com as alteracoes do qry
-    char* path_final_graphic_SVG;  //Path ate o .svg final com o grafico
-    char* path_final_TXT;          //Path ate o .txt final
 
 } generalPaths;
 
@@ -95,16 +93,6 @@ char* get_path_TXT_with_qry(path paths) {
     return aux->path_TXT_with_qry;
 }
 
-char* get_final_graphic_SVG(path paths) {
-    generalPaths* aux = paths;
-    return aux->path_final_graphic_SVG;
-}
-
-char* get_path_final_TXT(path paths) {
-    generalPaths* aux = paths;
-    return aux->path_final_TXT;
-}
-
 void set_input_directory(path paths, char* newSet) {
     generalPaths* aux = paths;
     aux->input_directory = newSet;
@@ -173,16 +161,6 @@ void set_path_modified_SVG(path paths, char* newSet) {
 void set_path_TXT_with_qry(path paths, char* newSet) {
     generalPaths* aux = paths;
     aux->path_TXT_with_qry = newSet;
-}
-
-void set_final_graphic_SVG(path paths, char* newSet) {
-    generalPaths* aux = paths;
-    aux->path_final_graphic_SVG = newSet;
-}
-
-void set_path_final_TXT(path paths, char* newSet) {
-    generalPaths* aux = paths;
-    aux->path_final_TXT = newSet;
 }
 
 void showPaths(path paths) {
@@ -260,16 +238,6 @@ void showPaths(path paths) {
         puts(aux->path_TXT_with_qry);
         puts("====================");
     }
-    if (aux->path_final_graphic_SVG) {
-        puts("PathSVGFinalGrafico : ");
-        puts(aux->path_final_graphic_SVG);
-        puts("====================");
-    }
-    if (aux->path_final_TXT) {
-        puts("PathTXTFinal : ");
-        puts(aux->path_final_TXT);
-        puts("====================");
-    }
     
 }
 
@@ -316,12 +284,6 @@ void freePaths(path paths) {
     }
     if (aux->path_TXT_with_qry) {
         free(aux->path_TXT_with_qry);
-    }
-    if (aux->path_final_graphic_SVG) {
-        free(aux->path_final_graphic_SVG);
-    }
-    if (aux->path_final_TXT) {
-        free(aux->path_final_TXT);
     }
     
 
