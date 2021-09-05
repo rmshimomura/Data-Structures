@@ -5,3 +5,7 @@ LEIA-ME.txt
 rhuanmaker.c
 gettesSetters.txt
 *.txt
+*.geo
+*.qry
+*.pm
+*.svg
