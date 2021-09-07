@@ -5,6 +5,7 @@
 #include "checks.h"
 #include "person.h"
 #include "qry.h"
+#include "location.h"
 
 void set_input_directory(path paths, char* newSet);
 void set_output_directory(path paths, char* newSet);

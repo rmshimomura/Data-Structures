@@ -1,5 +1,6 @@
 #include "qry.h"
 #include "person.h"
+#include "location.h"
 #include "paths.h"
 #include "Hash/hash.h"
 #include "DynamicList/dynamicList.h"
@@ -56,5 +57,13 @@ void mud(hash residents, char* cpf, char* cep, char face, int num, char* compl, 
     }
 
     fclose(file_TXT_with_qry_executed);
+
+}
+
+void oloc(hash locations, char* id, char* cep, char face, int num, char* compl, double ar, double v, path paths){
+   
+    void* new_location = create_location();
+    set_location_properties(new_location, id, cep, face, num, compl, ar, v);
+    hash_table_insert_data(locations, cep, new_location);
 
 }
