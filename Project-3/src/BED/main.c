@@ -16,8 +16,8 @@ int main(int argc, char** argv){
     get_arguments(argc, argv, paths, flags);
     // =======================================================//
     tree blocks = create_tree();
-    hash residents = hash_table_create_table(10);
-    hash locations = hash_table_create_table(10);
+    hash residents = hash_table_create_table(find_nx(paths));
+    hash locations = hash_table_create_table(find_nx(paths));
     get_data(blocks, residents, paths, flags);
 
         
@@ -29,13 +29,6 @@ int main(int argc, char** argv){
         get_functions(blocks, residents, locations, paths, flags);
         fclose(txt_results);
     }
-
-    // void* teste = create_new_person("rodrigo", "shimomura", "18/08/2002", "6546", 'M');
-    // hash_table_insert_data(residents, get_cpf(teste), teste);
-    // find_and_update_person(residents, get_cpf(teste), "6123", 'N', 3214, "APTO");
-    // debug_print_person_info(teste);
-    //=======================================================//
-    
 
     freePaths(paths);
     hash_table_destroy(residents, free_person);

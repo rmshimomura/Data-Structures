@@ -199,7 +199,9 @@ int find_nx(path paths) {
         }
     }
 
+    fclose(arq);
     return size;
+
 }
 
 void get_data(tree blocks, hash residents, path paths, flag flags) {
@@ -225,7 +227,7 @@ void get_data(tree blocks, hash residents, path paths, flag flags) {
             fscanf(file_blocks, "%s %lf %lf %lf %lf", cep, &x, &y, &w, &h);
             void* new_block = create_block();
             set_block_properties(new_block, cep, x, y, w, h, sw, cfill, cstroke);
-            blocks_root = insert(blocks, blocks_root, new_block, compare_cep);
+            blocks_root = insert(blocks, blocks_root, new_block, compare_x);
 
         }
     }

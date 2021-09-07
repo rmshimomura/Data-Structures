@@ -110,14 +110,14 @@ void set_cep(void* current_block, char* newValue){
 	strcpy(aux->cep, newValue);
 }
 
-int compare_cep(void* node, void* element)	{
+int compare_x(void* node, void* element)	{
 	
 	block* aux1 = node;
 	block* aux2 = element;
 
-	if(aux2->cep > aux1->cep) return 1;
+	if(aux2->x > aux1->x) return 1;
 
-	else if(aux2->cep < aux1->cep) return -1;
+	else if(aux2->x < aux1->x) return -1;
 
 	else return 0;
 
