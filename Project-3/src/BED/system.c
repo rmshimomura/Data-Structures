@@ -22,6 +22,7 @@ void set_path_modified_SVG(path paths, char* newSet);
 void set_path_TXT_with_qry(path paths, char* newSet);
 
 void get_arguments(int argc, char** argv, path paths, flag flags) {
+    
     if (argc < 2) return ;
 
     bool input_directory_inserted = false;
@@ -95,6 +96,7 @@ void get_arguments(int argc, char** argv, path paths, flag flags) {
             set_output_directory(paths, output_directory);
 
         } else if (!strcmp(argv[i], "-q")) {
+
             char* qry_file = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             char* qry_name = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             strcpy(qry_file, argv[i + 1]);
@@ -131,8 +133,8 @@ void get_arguments(int argc, char** argv, path paths, flag flags) {
                 }
 
                 set_qry_name(paths, qry_name);
-                set_qry_inserted(flags, true);
             }
+            set_qry_inserted(flags, true);
             qry_executed = true;
         } else if (!strcmp(argv[i], "-pm")) {
             char* pm_file = calloc(strlen(argv[i + 1]) + 1, sizeof(char));

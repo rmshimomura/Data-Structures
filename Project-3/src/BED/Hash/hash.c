@@ -55,6 +55,11 @@ void* hash_table_get_register_list(void* HT, char* key){
     return aux->registers[pos_at_hash_table].list;
 }
 
+void* hash_table_get_list_by_index(void* HT, int index){
+    hashTable* aux = HT;
+    return aux->registers[index].list;
+}
+
 int hash_table_insert_data(void* HT, char* key, void* data){
     
     int pos_at_hash_table = hash_table_create_key(HT, key);

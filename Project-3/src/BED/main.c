@@ -20,6 +20,7 @@ int main(int argc, char** argv){
     hash locations = hash_table_create_table(10);
     get_data(blocks, residents, paths, flags);
 
+        
     if(get_qry_inserted(flags)){
         FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "w+");
         setvbuf(txt_results, 0, _IONBF, 0);
