@@ -228,9 +228,11 @@ void get_data(tree blocks, hash residents, path paths, flag flags) {
             void* new_block = create_block();
             set_block_properties(new_block, cep, x, y, w, h, sw, cfill, cstroke);
             blocks_root = insert(blocks, blocks_root, new_block, compare_x);
-
+            
         }
     }
+
+    set_root(blocks, blocks_root);
 
     if (get_pm_inserted(flags)) {
 
@@ -281,12 +283,12 @@ void get_functions(tree blocks, hash residents, hash locations, path paths, flag
             fscanf(functions_file, "%s %s %c %d %s", cpf, cep, &face, &num, compl);
             mud(residents, cpf, cep, face, num, compl, paths);
 
-        }/*else if(!strcmp(command, "oloc")){
+        }else if(!strcmp(command, "oloc")){
 
             fscanf(functions_file,"%s %s %c %d %s %lf %lf", id, cep, &face, &num, compl, &ar, &v);
             oloc(locations, id, cep, face, num, compl, ar, v, paths);
             
-        }*//*else if(!strcmp(command, "oloc?")){
+        }/*else if(!strcmp(command, "oloc?")){
             
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
             oloc_who(locations, x, y, w, h, paths);
@@ -332,4 +334,15 @@ void get_functions(tree blocks, hash residents, hash locations, path paths, flag
     fclose(functions_file);
     fclose(modified_SVG);
 
+}
+
+void format_qry_results(hash blocks, hash residents, hash locations, path paths, flag flags) {
+
+    FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "w+");
+    setvbuf(txt_results, 0, _IONBF, 0);
+    fprintf(txt_results, "Rodrigo Mimura Shimomura\n");
+    fprintf(txt_results, "FUNCTIONS EXECUTED:\n\n====================================================\n");
+    get_functions(blocks, residents, locations, paths, flags);
+    fclose(txt_results);
+    
 }

@@ -266,6 +266,7 @@ void* delete_node(void* initial_tree, void* initial_node, void* element, int (*c
 void destroy_AVL_tree(void* initial_tree, void* initial_node, void (*free_data)(void*)) {
     tree_t* aux_tree = initial_tree;
     node_t* aux_node = initial_node;
+
     if (aux_node) {
         destroy_AVL_tree(aux_tree, aux_node->left, free_data);
         destroy_AVL_tree(aux_tree, aux_node->right, free_data);
@@ -285,4 +286,9 @@ void pre_order(void* initial_node) {
 
 void* get_root(void* initial_tree){
     return ((tree_t*)initial_tree)->root;
+}
+
+void set_root(void* initialTree, void* new_root){
+    tree_t* aux = initialTree;
+    aux->root = new_root;
 }

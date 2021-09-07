@@ -23,7 +23,7 @@ typedef struct list {
 /*===============================*/
 
 void* create_list() {
-    list_t* newList = malloc(sizeof(list_t));
+    list_t* newList = calloc(1, sizeof(list_t));
     newList->head = NULL;
     newList->end = NULL;
     newList->size = 0;
@@ -131,6 +131,36 @@ void free_list(void* sequence, void (*free_data)(void*)){
         auxElement = list_aux->head->element;
         list_aux->head = list_aux->head->next;
         free_data(auxElement);
+        free(auxNode);
+    }
+
+    free(sequence);
+
+
+}
+
+void free_block_list(void* sequence){
+
+    if(!sequence){
+        return;
+    }
+
+    list_t* list_aux = sequence;
+
+    if(!list_aux->size){
+        free(list_aux);
+        return;
+    }
+
+    data_t* auxNode = list_aux->head;
+    data_t* auxElement = list_aux->head->element;
+
+    while(list_aux->head != NULL) {
+        
+        auxNode = list_aux->head;
+        auxElement = list_aux->head->element;
+        list_aux->head = list_aux->head->next;
+        free(auxElement);
         free(auxNode);
     }
 
