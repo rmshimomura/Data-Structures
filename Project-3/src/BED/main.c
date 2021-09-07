@@ -21,19 +21,15 @@ int main(int argc, char** argv){
     get_data(blocks, residents, paths, flags);
 
         
-    if(get_qry_inserted(flags)){
-        FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "w+");
-        setvbuf(txt_results, 0, _IONBF, 0);
-        fprintf(txt_results, "Rodrigo Mimura Shimomura\n");
-        fprintf(txt_results, "FUNCTIONS EXECUTED:\n\n====================================================\n");
-        get_functions(blocks, residents, locations, paths, flags);
-        fclose(txt_results);
-    }
-
+    if(get_qry_inserted(flags))
+        format_qry_results(blocks, residents, locations, paths, flags);
+        
     freePaths(paths);
     hash_table_destroy(residents, free_person);
-    free(blocks);
     hash_table_destroy(locations, free);
+    destroy_AVL_tree(blocks, get_root(blocks), free_block_list);
+    free(blocks);
     free(flags);
+    
 
 }
