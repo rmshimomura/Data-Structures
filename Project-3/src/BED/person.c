@@ -40,24 +40,35 @@ void* create_new_person(char* name, char* surname, char* birthDate, char* cpf, c
 
 }
 
-void update_person(void* HT, char* cpf, char* cep, char face, int num, char* complement) {
+void find_and_update_person(void* HT, char* cpf, char* cep, char face, int num, char* complement) {
 
     if (hash_table_list_exist(HT, cpf)) {
 
-        if (findItem(hash_table_get_register_list(HT, cpf), cpf, compare_CPF)) {
+        person* person_to_update = find_item(hash_table_get_register_list(HT, cpf), cpf, compare_CPF);
 
-            person* person_to_update = findItem(hash_table_get_register_list(HT, cpf), cpf, compare_CPF);
+        if (person_to_update) {
+
+            update_person(person_to_update, cep, face, num , complement);
             person_to_update->houseState = OWN;
-            person_to_update->place->face = face;
-            person_to_update->place->num = num;
-            strcpy(person_to_update->place->cep, cep);
-            strcpy(person_to_update->place->complement, complement);
             
         }
 
     } else {
+
         printf("Couldn't find person with cpf : %s on the hash table.\n", cpf);
+
     }
+
+}
+
+void update_person(void* person_to_update, char* cep, char face, int num, char* complement) {
+    
+    person* aux = person_to_update;
+    aux->place->face = face;
+    aux->place->num = num;
+    strcpy(aux->place->cep, cep);
+    strcpy(aux->place->complement, complement);
+
 }
 
 char* get_cpf(void* person_data) {
@@ -79,7 +90,7 @@ void create_people_data(void* HT, FILE* file_people) {
 
         } else if (!strcmp(command, "m")) {
             fscanf(file_people, "%s %s %c %d %s", cpf, cep, &face, &num, compl);
-            update_person(HT, cpf, cep, face, num, compl);
+            find_and_update_person(HT, cpf, cep, face, num, compl);
         }
     }
 }
@@ -103,11 +114,10 @@ void debug_print_person_info(void* person_to_analyze){
 void print_person_info(void* person_to_analyze, FILE* txt_qry){
     
     person* aux = person_to_analyze;
-    fprintf(txt_qry, "====================================================\n\n\n");
-    fprintf(txt_qry, "dm?(%s):\n\n", aux->cpf);
+    
     fprintf(txt_qry, "Data found: \nName: %s\nSurname: %s\nSex: %c\nBirthDate: %s\nCPF: %s\n\nHouseState: %s\n", aux->name, aux->surname, aux->sex, aux->birthDate, aux->cpf, aux->houseState == OWN ? "Own" : "Rent");
     fprintf(txt_qry, "CEP:%s Face: %c Num: %d Complement: %s\n\n\n", aux->place->cep, aux->place->face, aux->place->num, aux->place->complement);
-    fprintf(txt_qry, "====================================================\n");
+   
 
 }
 

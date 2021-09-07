@@ -91,8 +91,8 @@ void hash_table_remove_key(void* HT, char* key, void (*free_data)(void*), int (*
 
     hashTable* aux = HT;
 
-    if(findItem(aux->registers[pos_created_by_the_key].list, key, compare_nodes)){
-        remove_node(aux->registers[pos_created_by_the_key].list, findItem(aux->registers[pos_created_by_the_key].list, key, compare_nodes), free_data);
+    if(find_item(aux->registers[pos_created_by_the_key].list, key, compare_nodes)){
+        remove_node(aux->registers[pos_created_by_the_key].list, find_item(aux->registers[pos_created_by_the_key].list, key, compare_nodes), free_data);
     }
 
 }
