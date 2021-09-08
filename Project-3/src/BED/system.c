@@ -1,11 +1,13 @@
 #include "system.h"
 
 #include "AVL_Tree/AVL.h"
+#include "Hash/hash.h"
 #include "block.h"
 #include "checks.h"
 #include "person.h"
 #include "qry.h"
 #include "location.h"
+#include "DynamicList/dynamicList.h"
 
 void set_input_directory(path paths, char* newSet);
 void set_output_directory(path paths, char* newSet);
@@ -205,7 +207,7 @@ int find_nx(path paths) {
 
 }
 
-void get_data(tree blocks, hash residents, path paths, flag flags) {
+void get_data(tree blocks, hash blocks_hash, hash residents, path paths, flag flags) {
 
     FILE* file_blocks = fopen(get_path_initial_geo_file(paths), "r");
     setvbuf(file_blocks, 0, _IONBF, 0);
@@ -229,6 +231,7 @@ void get_data(tree blocks, hash residents, path paths, flag flags) {
             void* new_block = create_block();
             set_block_properties(new_block, cep, x, y, w, h, sw, cfill, cstroke);
             blocks_root = insert(blocks, blocks_root, new_block, compare_x);
+            hash_table_insert_data(blocks_hash, cep, new_block);
             
         }
     }
@@ -240,7 +243,7 @@ void get_data(tree blocks, hash residents, path paths, flag flags) {
         FILE* file_people = fopen(get_path_people_file(paths), "r");
         setvbuf(file_blocks, 0, _IONBF, 0);
 
-        create_people_data(residents, file_people);
+        create_people_data(residents, blocks_hash, file_people);
 
         fclose(file_people);
     }
@@ -248,7 +251,7 @@ void get_data(tree blocks, hash residents, path paths, flag flags) {
     fclose(file_blocks);
 }
 
-void get_functions(tree blocks, hash residents, hash locations, path paths, flag flags){
+void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations, path paths, flag flags){
     
     FILE* modified_SVG = fopen(get_path_modified_SVG(paths), "w+");
     setvbuf(modified_SVG, 0, _IONBF, 0);
@@ -274,12 +277,12 @@ void get_functions(tree blocks, hash residents, hash locations, path paths, flag
             fscanf(functions_file, "%s", cep);
             del(blocks, residents, locations, cep, paths);            
 
-        }*//*else if(!strcmp(command, "m?")){
+        }*/else if(!strcmp(command, "m?")){
             
             fscanf(functions_file, "%s", cep);
-            m_who(residents, cep, paths);
+            m_who(residents, blocks_hash, cep, paths);
 
-        }*/else if(!strcmp(command, "mud")){
+        }else if(!strcmp(command, "mud")){
             
             fscanf(functions_file, "%s %s %c %d %s", cpf, cep, &face, &num, compl);
             mud(residents, cpf, cep, face, num, compl, paths);
@@ -337,13 +340,13 @@ void get_functions(tree blocks, hash residents, hash locations, path paths, flag
 
 }
 
-void format_qry_results(hash blocks, hash residents, hash locations, path paths, flag flags) {
+void format_qry_results(tree blocks, hash blocks_hash, hash residents, hash locations, path paths, flag flags) {
 
     FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "w+");
     setvbuf(txt_results, 0, _IONBF, 0);
     fprintf(txt_results, "Rodrigo Mimura Shimomura\n");
     fprintf(txt_results, "FUNCTIONS EXECUTED:\n\n====================================================\n");
-    get_functions(blocks, residents, locations, paths, flags);
+    get_functions(blocks, blocks_hash, residents, locations, paths, flags);
     fclose(txt_results);
     
 }

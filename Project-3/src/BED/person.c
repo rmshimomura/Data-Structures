@@ -2,6 +2,7 @@
 
 #include "DynamicList/dynamicList.h"
 #include "Hash/hash.h"
+#include "block.h"
 
 enum {
     OWN,
@@ -76,11 +77,12 @@ char* get_cpf(void* person_data) {
     return aux->cpf;
 }
 
-void create_people_data(void* HT, FILE* file_people) {
+void create_people_data(void* HT, void* blocks_hash,FILE* file_people) {
 
     char command[20], cpf[15], name[50], surname[50], sex, birthDate[11];
     char cep[20], face, compl [30];
     int num = 0;
+    
 
     while (fscanf(file_people, "%s", command) != -1) {
         if (!strcmp(command, "p")) {
@@ -89,8 +91,12 @@ void create_people_data(void* HT, FILE* file_people) {
             hash_table_insert_data(HT, cpf, person);
 
         } else if (!strcmp(command, "m")) {
+            
             fscanf(file_people, "%s %s %c %d %s", cpf, cep, &face, &num, compl);
             find_and_update_person(HT, cpf, cep, face, num, compl);
+            void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
+            add_resident(square, find_item(hash_table_get_register_list(HT, cpf), cpf, compare_CPF));
+            
         }
     }
 }

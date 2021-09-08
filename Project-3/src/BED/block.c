@@ -1,4 +1,5 @@
 #include "block.h"
+#include "DynamicList/dynamicList.h"
 
 typedef struct block {
 
@@ -10,6 +11,7 @@ typedef struct block {
     char cfill[30];
 	char cep[20];
     char cstroke[30];
+	void* persons_living;
 
 } block;
 
@@ -27,7 +29,15 @@ void set_block_properties(void* block_to_set, char* cep, double x, double y, dou
 
 void* create_block(){
 	block* new_block = calloc(1, sizeof(block));
+	new_block->persons_living = create_list();
 	return new_block;
+}
+
+void add_resident(void* block_data, void* person){
+	
+	block* new_block = block_data;
+	insert_list(new_block->persons_living, person);
+	
 }
 
 double get_x(void* current_block){
@@ -120,5 +130,17 @@ int compare_x(void* node, void* element)	{
 	else if(aux2->x < aux1->x) return -1;
 
 	else return 0;
+
+}
+
+int compare_cep(void* node, void* element){
+	
+	block* aux1 = node;
+	block* aux2 = element;
+
+	if(!strcmp(aux1->cep, aux2->cep)) return 1;
+
+	return 0;
+	
 
 }
