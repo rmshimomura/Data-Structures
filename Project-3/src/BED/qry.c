@@ -91,6 +91,7 @@ void loc(hash residents, hash locations, char* id, char* cpf, path paths){
         location_set_available(location, false);
         location_info(location, file_TXT_with_qry_executed);
         print_person_info(person, file_TXT_with_qry_executed);
+        set_person_living_here(location, person);
 
         fprintf(file_TXT_with_qry_executed, "====================================================\n");
     }
@@ -99,4 +100,38 @@ void loc(hash residents, hash locations, char* id, char* cpf, path paths){
 
 }
 
+void loc_who(hash locations, char* id, path paths){
 
+    FILE* file_TXT_with_qry_executed = fopen(get_path_TXT_with_qry(paths), "a+");
+    setvbuf(file_TXT_with_qry_executed, 0, _IONBF, 0);
+
+    void* location = NULL;
+
+    for(int i = 0; i < hash_table_size(locations); i++){
+
+        location = find_item(hash_table_get_list_by_index(locations, i), id, compare_id);
+
+        if(location) break;
+
+    }
+
+    fprintf(file_TXT_with_qry_executed, "loc?:\n\n");
+
+    if(location){
+        if(location_get_available(location)){
+
+            location_info(location, file_TXT_with_qry_executed);
+            fprintf(file_TXT_with_qry_executed, "====================================================\n");
+        }else{
+            location_info(location, file_TXT_with_qry_executed);
+            print_person_info(get_person_living_here(location), file_TXT_with_qry_executed);
+            fprintf(file_TXT_with_qry_executed, "====================================================\n");
+        }
+    } else {
+        fprintf(file_TXT_with_qry_executed, "\tSorry, id = %s not found on hash table...\n\n", id);
+        fprintf(file_TXT_with_qry_executed, "====================================================\n");
+    }
+
+    fclose(file_TXT_with_qry_executed);
+
+}

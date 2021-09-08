@@ -1,10 +1,11 @@
 #include "location.h"
 
-typedef struct loction {
+typedef struct location {
 
     char id[30], cep[20], face, complement[30];
     int num;
     double ar, v;
+    void* person_living_here;
     bool available;
 
 }location;
@@ -82,4 +83,26 @@ void location_set_available(void* location_data, bool state){
     location* aux = location_data;
     aux->available = state;
     
+}
+
+bool location_get_available(void* location_data){
+
+    location* aux = location_data;
+    return aux->available;
+
+}
+
+void set_person_living_here(void* location_data, void* person){
+
+    location* aux = location_data;
+    aux->person_living_here = person;
+
+
+}
+
+void* get_person_living_here(void* location_data){
+
+    location* aux = location_data;
+    return aux->person_living_here;
+
 }
