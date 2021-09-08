@@ -67,3 +67,36 @@ void oloc(hash locations, char* id, char* cep, char face, int num, char* compl, 
     hash_table_insert_data(locations, cep, new_location);
 
 }
+
+void loc(hash residents, hash locations, char* id, char* cpf, path paths){
+
+    FILE* file_TXT_with_qry_executed = fopen(get_path_TXT_with_qry(paths), "a+");
+    setvbuf(file_TXT_with_qry_executed, 0, _IONBF, 0);
+
+    void* person = find_item(hash_table_get_register_list(residents, cpf), cpf, compare_CPF);
+    
+    void* location = NULL;
+
+    for(int i = 0; i < hash_table_size(locations); i++){
+        location = find_item(hash_table_get_list_by_index(locations, i), id, compare_id);
+        if(location) break;
+    }
+
+    fprintf(file_TXT_with_qry_executed, "loc:\n\n");
+
+    if(person && location){
+
+
+        update_person(person, location_get_cep(location), location_get_face(location), location_get_num(location), location_get_complement(location));
+        location_set_available(location, false);
+        location_info(location, file_TXT_with_qry_executed);
+        print_person_info(person, file_TXT_with_qry_executed);
+
+        fprintf(file_TXT_with_qry_executed, "====================================================\n");
+    }
+
+    fclose(file_TXT_with_qry_executed);
+
+}
+
+

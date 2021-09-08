@@ -294,12 +294,12 @@ void get_functions(tree blocks, hash residents, hash locations, path paths, flag
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
             oloc_who(locations, x, y, w, h, paths);
             
-        }*//*else if(!strcmp(command, "loc")){
+        }*/else if(!strcmp(command, "loc")){
             
             fscanf(functions_file, "%s %s", id, cpf);
             loc(residents, locations, id, cpf, paths);
 
-        }*//*else if(!strcmp(command, "loc?")){
+        }/*else if(!strcmp(command, "loc?")){
             
             fscanf(functions_file, "%s", id);
             loc_who(locations, id, paths);
