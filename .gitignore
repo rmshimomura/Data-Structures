@@ -9,3 +9,4 @@ gettesSetters.txt
 *.qry
 *.pm
 *.svg
+test.c
