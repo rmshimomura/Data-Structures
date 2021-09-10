@@ -2,6 +2,7 @@
 #include "paths.h"
 #include "checks.h"
 #include "system.h"
+#include "location.h"
 #include "person.h"
 #include "DynamicList/dynamicList.h"
 #include "Hash/hash.h"
@@ -25,9 +26,11 @@ int main(int argc, char** argv){
         format_qry_results(blocks, blocks_hash, residents, locations, paths, flags);
         
     freePaths(paths);
+
+    
     hash_table_destroy(residents, free_person);
-    hash_table_destroy(blocks_hash, free);
-    hash_table_destroy(locations, free);
+    hash_table_destroy_blocks(blocks_hash);
+    hash_table_destroy(locations, location_free);
 
     destroy_AVL_tree(blocks, get_root(blocks), free_block_list);
     free(blocks);

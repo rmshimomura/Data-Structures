@@ -11,6 +11,7 @@ void* create_list();
 int get_size(void* sequence);
 void* insert_list(void* sequence, void* element);
 void remove_node(void* sequence, void* current, void (free_data)(void*));
+void free_list_hash(void* sequence);
 void* get_list_element(void* current);
 void* get_head(void* sequence);
 void* get_next(void* current);

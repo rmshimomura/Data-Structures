@@ -1,5 +1,6 @@
 #include "AVL.h"
 #include "../DynamicList/dynamicList.h"
+#include "../block.h"
 
 typedef struct node {
     struct node* left;
@@ -268,6 +269,7 @@ void destroy_AVL_tree(void* initial_tree, void* initial_node, void (*free_data)(
     node_t* aux_node = initial_node;
 
     if (aux_node) {
+
         destroy_AVL_tree(aux_tree, aux_node->left, free_data);
         destroy_AVL_tree(aux_tree, aux_node->right, free_data);
 

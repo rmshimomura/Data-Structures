@@ -15,6 +15,7 @@ double get_h(void* current_block);
 double get_sw(void* current_block);
 char* get_cfill(void* current_block);
 char* get_cstroke(void* current_block);
+void** get_residents(void* block_data);
 void set_x(void* current_block, double newValue);
 void set_y(void* current_block, double newValue);
 void set_w(void* current_block, double newValue);

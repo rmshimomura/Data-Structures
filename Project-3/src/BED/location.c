@@ -106,3 +106,11 @@ void* get_person_living_here(void* location_data){
     return aux->person_living_here;
 
 }
+
+void location_free(void* location_data){
+
+    location* aux = location_data;
+    aux->person_living_here = NULL;
+    free(aux);
+
+}

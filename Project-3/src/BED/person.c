@@ -85,7 +85,9 @@ void create_people_data(void* HT, void* blocks_hash,FILE* file_people) {
     
 
     while (fscanf(file_people, "%s", command) != -1) {
+        
         if (!strcmp(command, "p")) {
+
             fscanf(file_people, "%s %s %s %c %s", cpf, name, surname, &sex, birthDate);
             void* person = create_new_person(name, surname, birthDate, cpf, sex);
             hash_table_insert_data(HT, cpf, person);
@@ -94,6 +96,7 @@ void create_people_data(void* HT, void* blocks_hash,FILE* file_people) {
             
             fscanf(file_people, "%s %s %c %d %s", cpf, cep, &face, &num, compl);
             find_and_update_person(HT, cpf, cep, face, num, compl);
+            
             void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
             add_resident(square, find_item(hash_table_get_register_list(HT, cpf), cpf, compare_CPF));
             

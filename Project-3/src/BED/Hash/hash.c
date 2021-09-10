@@ -107,3 +107,13 @@ void hash_table_destroy(void* HT, void (*free_function)(void*)) {
     free(aux->registers);
     free(aux);
 }
+
+void hash_table_destroy_blocks(void* HT) {
+    
+    hashTable* aux = HT;
+
+    for(int i = 0; i < aux->size; i++) free_list_hash(aux->registers[i].list);
+
+    free(aux->registers);
+    free(aux);
+}

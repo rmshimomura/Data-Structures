@@ -15,5 +15,6 @@ void location_set_available(void* location_data, bool state);
 bool location_get_available(void* location_data);
 void set_person_living_here(void* location_data, void* person);
 void* get_person_living_here(void* location_data);
+void location_free(void* location_data);
 
 #endif

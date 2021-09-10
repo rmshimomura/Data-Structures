@@ -11,7 +11,8 @@ typedef struct block {
     char cfill[30];
 	char cep[20];
     char cstroke[30];
-	void* persons_living;
+	void** persons_living;
+	int number_of_persons_living;
 
 } block;
 
@@ -29,15 +30,36 @@ void set_block_properties(void* block_to_set, char* cep, double x, double y, dou
 
 void* create_block(){
 	block* new_block = calloc(1, sizeof(block));
-	new_block->persons_living = create_list();
+	new_block->number_of_persons_living = 0;
 	return new_block;
 }
 
 void add_resident(void* block_data, void* person){
 	
 	block* new_block = block_data;
-	insert_list(new_block->persons_living, person);
 	
+	if(!new_block->persons_living) {
+
+		new_block->persons_living = calloc(1, sizeof(void*));
+		new_block->persons_living[0] = person;
+		new_block->number_of_persons_living++;
+
+	}else{
+		
+		new_block->persons_living = realloc(new_block->persons_living, (new_block->number_of_persons_living + 1) * sizeof(void*));
+		new_block->persons_living[new_block->number_of_persons_living] = person;
+		new_block->number_of_persons_living++;
+
+	}
+	
+}
+
+void** get_residents(void* block_data){
+
+	block* aux = block_data;
+
+	return aux->persons_living ? aux->persons_living : NULL;
+
 }
 
 double get_x(void* current_block){
@@ -136,9 +158,10 @@ int compare_x(void* node, void* element)	{
 int compare_cep(void* node, void* element){
 	
 	block* aux1 = node;
-	block* aux2 = element;
+	
 
-	if(!strcmp(aux1->cep, aux2->cep)) return 1;
+
+	if(!strcmp(aux1->cep, element)) return 1;
 
 	return 0;
 	
