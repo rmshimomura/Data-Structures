@@ -2,7 +2,7 @@
 
 typedef struct location {
 
-    char id[30], cep[20], face, complement[30];
+    char id[50], cep[50], face, complement[50];
     int num;
     double ar, v;
     void* person_living_here;

@@ -10,10 +10,10 @@ enum {
 };
 
 typedef struct livingPlace {
-    char cep[20];
+    char cep[50];
     char face;
     int num;
-    char complement[30];
+    char complement[50];
 
 } livingPlace;
 
@@ -21,8 +21,8 @@ typedef struct person {
     char name[50];
     char surname[50];
     char sex;
-    char birthDate[12];
-    char cpf[15];
+    char birthDate[20];
+    char cpf[50];
     int houseState;
     livingPlace* place;
 
@@ -79,8 +79,8 @@ char* get_cpf(void* person_data) {
 
 void create_people_data(void* HT, void* blocks_hash,FILE* file_people) {
 
-    char command[20], cpf[15], name[50], surname[50], sex, birthDate[11];
-    char cep[20], face, compl [30];
+    char command[20], cpf[50], name[50], surname[50], sex, birthDate[20];
+    char cep[50], face, compl[50];
     int num = 0;
     
 

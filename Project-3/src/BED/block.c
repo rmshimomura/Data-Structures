@@ -9,7 +9,7 @@ typedef struct block {
     double h;
     double sw;
     char cfill[30];
-	char cep[20];
+	char cep[50];
     char cstroke[30];
 	void** persons_living;
 	void** locations_available;
@@ -203,12 +203,9 @@ int compare_x(void* node, void* element)	{
 int compare_cep(void* node, void* element){
 	
 	block* aux1 = node;
-	
-
 
 	if(!strcmp(aux1->cep, element)) return 1;
 
-	return 0;
-	
+	return 0;	
 
 }

@@ -214,7 +214,7 @@ void get_data(tree blocks, hash blocks_hash, hash residents, path paths, flag fl
 
     void* blocks_root = get_root(blocks);
 
-    char command[20], cep[11], cfill[30], cstroke[30];
+    char command[20], cep[50], cfill[30], cstroke[30];
     double x, y, w, h, sw;
 
     while (fscanf(file_blocks, "%s", command) != -1) {
@@ -258,7 +258,7 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
     FILE* functions_file = fopen(get_path_current_qry_file(paths), "r");
     setvbuf(functions_file, 0, _IONBF, 0);
     
-    char command[6], cep[20], cpf[15], face, compl[30], id[30];
+    char command[6], cep[50], cpf[50], face, compl[50], id[50];
     double ar, v, x, y, h, w;
     int num;
 
