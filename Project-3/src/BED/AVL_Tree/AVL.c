@@ -175,7 +175,7 @@ void* get_node_data(void* node) {
 
 void* delete_node(void* initial_tree, void* initial_node, void* element, int (*compare_nodes)(void*, void*), void (*free_data)(void*)) {
     if (!initial_node || !initial_tree) return initial_node;
-
+    //TODO need to fix min_x and max_x !!
     tree_t* tree_aux = initial_tree;
     node_t* node_aux = initial_node;
 
