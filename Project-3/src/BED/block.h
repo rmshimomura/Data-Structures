@@ -18,6 +18,8 @@ char* get_cfill(void* current_block);
 char* get_cstroke(void* current_block);
 void** get_residents(void* block_data);
 void** get_locations(void* block_data);
+int get_number_of_persons_living(void* block_data);
+int get_number_of_locations_available(void* block_data);
 void set_x(void* current_block, double newValue);
 void set_y(void* current_block, double newValue);
 void set_w(void* current_block, double newValue);

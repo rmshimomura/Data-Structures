@@ -34,7 +34,7 @@ void location_info(void* location_data, FILE* txt_results){
     location* aux = location_data;
 
     if(aux)        
-        fprintf(txt_results, "\tLocation data found: \n\n\tID: %s CEP:%s Face: %c Num: %d Complement: %s\n\tPrice: %.2lf Area: %.2lf\n\tAvailable: %s\n\n", aux->id ,aux->cep, aux->face, aux->num, aux->complement, aux->v, aux->ar, aux->available ? "YES" : "NO");
+        fprintf(txt_results, "\tLocation data found: \n\n\tID: %s CEP: %s Face: %c Num: %d Complement: %s\n\tPrice: %.2lf Area: %.2lf\n\tAvailable: %s\n\n", aux->id ,aux->cep, aux->face, aux->num, aux->complement, aux->v, aux->ar, aux->available ? "YES" : "NO");
 
 
 }

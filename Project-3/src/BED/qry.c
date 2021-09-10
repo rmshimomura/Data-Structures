@@ -8,56 +8,98 @@
 
 void dm_who(hash residents, char* cpf, path paths){
 
-    FILE* file_TXT_with_qry_executed = fopen(get_path_TXT_with_qry(paths), "a+");
-    setvbuf(file_TXT_with_qry_executed, 0, _IONBF, 0);
+    FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
+    setvbuf(txt_results, 0, _IONBF, 0);
 
     if(find_item(hash_table_get_register_list(residents, cpf), cpf, compare_CPF)){
 
         void* person_to_print = find_item(hash_table_get_register_list(residents, cpf), cpf, compare_CPF);
         
-        fprintf(file_TXT_with_qry_executed, "dm?:\n\n");
-        print_person_info(person_to_print, file_TXT_with_qry_executed);
-        fprintf(file_TXT_with_qry_executed, "====================================================\n");
+        fprintf(txt_results, "dm?:\n\n");
+        print_person_info(person_to_print, txt_results);
+        fprintf(txt_results, "====================================================\n");
 
     }else{
         
-        fprintf(file_TXT_with_qry_executed, "dm?:\n\n");
-        fprintf(file_TXT_with_qry_executed, "\tSorry, CPF = %s not found...\n\n", cpf);
-        fprintf(file_TXT_with_qry_executed, "====================================================\n");
+        fprintf(txt_results, "dm?:\n\n");
+        fprintf(txt_results, "\tSorry, CPF = %s not found...\n\n", cpf);
+        fprintf(txt_results, "====================================================\n");
 
     }
 
-    fclose(file_TXT_with_qry_executed);
+    fclose(txt_results);
 
 }
 
-void mud(hash residents, char* cpf, char* cep, char face, int num, char* compl, path paths) {
-
-    FILE* file_TXT_with_qry_executed = fopen(get_path_TXT_with_qry(paths), "a+");
-    setvbuf(file_TXT_with_qry_executed, 0, _IONBF, 0);
+void mud(hash residents, hash blocks_hash, char* cpf, char* cep, char face, int num, char* compl, path paths) {
+    //TODO pergunta evandro
+    FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
+    setvbuf(txt_results, 0, _IONBF, 0);
 
     if (hash_table_list_exist(residents, cpf)) {
 
-        void* person_to_update = find_item(hash_table_get_register_list(residents, cpf), cpf, compare_CPF);
+        void* person_to_update = find_item(hash_table_get_register_list(residents, cpf), cpf, compare_CPF); //Find person on hash table of residents
+
+        void* old_square = find_item(hash_table_get_register_list(blocks_hash, get_person_cep(person_to_update)), get_person_cep(person_to_update), compare_cep); //Find new square where this person will live
+
+        void* new_square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep); //Find new square where this person will live
 
         if (person_to_update) {
 
-            fprintf(file_TXT_with_qry_executed, "mud:\n\n");
-            fprintf(file_TXT_with_qry_executed, "BEFORE::\n\n");
-            print_person_info(person_to_update, file_TXT_with_qry_executed);
-            fprintf(file_TXT_with_qry_executed, "AFTER::\n\n");
+            fprintf(txt_results, "mud:\n\n");
+            fprintf(txt_results, "BEFORE::\n\n");
+            print_person_info(person_to_update, txt_results);
+
+            if(!strcmp(get_person_cep(person_to_update), cep)){  // Check if this person stayed on the same CEP, but wasn't included on the residents list
+                
+                void** residents = get_residents(new_square);
+
+                int included = 0;
+
+                for(int i = 0; i < get_number_of_persons_living(new_square); i++){
+                
+                    if(residents[i] == person_to_update){
+                        included = 1;
+                        break;
+                    }
+
+                }
+
+                if(!included){
+                    add_resident(new_square, person_to_update);
+                }
+
+            }   else   { // This person moved to other CEP, now I need to remove the person from the void* vector of residents of the old block
+                
+                void** old_residents = get_residents(old_square);
+
+                for(int i = 0; i < get_number_of_persons_living(old_square); i++){
+                
+                    if(old_residents[i] == person_to_update){
+                        
+                        old_residents[i] = NULL;
+                        break;
+                    }
+
+                }
+
+                add_resident(new_square, person_to_update);
+
+            }
+
+            fprintf(txt_results, "AFTER::\n\n");
             update_person(person_to_update, cep, face, num, compl);
-            print_person_info(person_to_update, file_TXT_with_qry_executed);
-            fprintf(file_TXT_with_qry_executed, "====================================================\n");
+            print_person_info(person_to_update, txt_results);
+            fprintf(txt_results, "====================================================\n");
             
         }
 
     } else {
-        fprintf(file_TXT_with_qry_executed ,"mud:\n\n\tCouldn't find person with cpf : %s on the hash table.\n\n", cpf);
-        fprintf(file_TXT_with_qry_executed, "====================================================\n");
+        fprintf(txt_results ,"mud:\n\n\tCouldn't find person with cpf : %s on the hash table.\n\n", cpf);
+        fprintf(txt_results, "====================================================\n");
     }
 
-    fclose(file_TXT_with_qry_executed);
+    fclose(txt_results);
 
 }
 
@@ -71,10 +113,10 @@ void oloc(hash locations, hash blocks_hash, char* id, char* cep, char face, int 
 
 }
 
-void loc(hash residents, hash locations, char* id, char* cpf, path paths){
+void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, path paths) {
 
-    FILE* file_TXT_with_qry_executed = fopen(get_path_TXT_with_qry(paths), "a+");
-    setvbuf(file_TXT_with_qry_executed, 0, _IONBF, 0);
+    FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
+    setvbuf(txt_results, 0, _IONBF, 0);
 
     void* person = find_item(hash_table_get_register_list(residents, cpf), cpf, compare_CPF);
     
@@ -85,28 +127,68 @@ void loc(hash residents, hash locations, char* id, char* cpf, path paths){
         if(location) break;
     }
 
-    fprintf(file_TXT_with_qry_executed, "loc:\n\n");
+    fprintf(txt_results, "loc:\n\n");
 
     if(person && location){
 
+        void* old_square = find_item(hash_table_get_register_list(blocks_hash, get_person_cep(person)), get_person_cep(person), compare_cep); //Find new square where this person will live
+
+        void* new_square = find_item(hash_table_get_register_list(blocks_hash, location_get_cep(location)), location_get_cep(location), compare_cep); //Find new square where this person will live
+
+        if(!strcmp(get_person_cep(person), location_get_cep(location))){  // Check if this person stayed on the same CEP, but wasn't included on the residents list
+            
+            void** residents = get_residents(new_square);
+
+            int included = 0;
+
+            for(int i = 0; i < get_number_of_persons_living(new_square); i++){
+            
+                if(residents[i] == person){
+                    included = 1;
+                    break;
+                }
+
+            }
+
+            if(!included){
+                add_resident(new_square, person);
+            }
+
+        }   else   { // This person moved to other CEP, now I need to remove the person from the void* vector of residents of the old block
+            
+            void** old_residents = get_residents(old_square);
+
+            for(int i = 0; i < get_number_of_persons_living(old_square); i++){
+            
+                if(old_residents[i] == person){
+                    
+                    old_residents[i] = NULL;
+                    break;
+                }
+
+            }
+
+            add_resident(new_square, person);
+
+        }
 
         update_person(person, location_get_cep(location), location_get_face(location), location_get_num(location), location_get_complement(location));
         location_set_available(location, false);
-        location_info(location, file_TXT_with_qry_executed);
-        print_person_info(person, file_TXT_with_qry_executed);
+        location_info(location, txt_results);
+        print_person_info(person, txt_results);
         set_person_living_here(location, person);
 
-        fprintf(file_TXT_with_qry_executed, "====================================================\n");
+        fprintf(txt_results, "====================================================\n");
     }
 
-    fclose(file_TXT_with_qry_executed);
+    fclose(txt_results);
 
 }
 
 void loc_who(hash locations, char* id, path paths){
 
-    FILE* file_TXT_with_qry_executed = fopen(get_path_TXT_with_qry(paths), "a+");
-    setvbuf(file_TXT_with_qry_executed, 0, _IONBF, 0);
+    FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
+    setvbuf(txt_results, 0, _IONBF, 0);
 
     void* location = NULL;
 
@@ -118,24 +200,69 @@ void loc_who(hash locations, char* id, path paths){
 
     }
 
-    fprintf(file_TXT_with_qry_executed, "loc?:\n\n");
+    fprintf(txt_results, "loc?:\n\n");
 
     if(location){
         if(location_get_available(location)){
 
-            location_info(location, file_TXT_with_qry_executed);
-            fprintf(file_TXT_with_qry_executed, "====================================================\n");
+            location_info(location, txt_results);
+            fprintf(txt_results, "====================================================\n");
         }else{
-            location_info(location, file_TXT_with_qry_executed);
-            print_person_info(get_person_living_here(location), file_TXT_with_qry_executed);
-            fprintf(file_TXT_with_qry_executed, "====================================================\n");
+            location_info(location, txt_results);
+            print_person_info(get_person_living_here(location), txt_results);
+            fprintf(txt_results, "====================================================\n");
         }
     } else {
-        fprintf(file_TXT_with_qry_executed, "\tSorry, id = %s not found on hash table...\n\n", id);
-        fprintf(file_TXT_with_qry_executed, "====================================================\n");
+        fprintf(txt_results, "\tSorry, id = %s not found on hash table...\n\n", id);
+        fprintf(txt_results, "====================================================\n");
     }
 
-    fclose(file_TXT_with_qry_executed);
+    fclose(txt_results);
 
 }
 
+void m_who(hash residents, hash blocks_hash, char* cep, path paths){
+
+    FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
+    setvbuf(txt_results, 0, _IONBF, 0);
+
+    void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
+
+    if(square){
+
+        if(!get_number_of_persons_living(square)) {
+
+            fprintf(txt_results, "m?:\n\n");
+            fprintf(txt_results, "\tNobody lives here on cep = %s... \n\n", cep);
+            fprintf(txt_results, "====================================================\n");
+            fclose(txt_results);
+            return;
+
+        }
+
+        fprintf(txt_results, "m?:\n\n");
+
+        for(int i = 0; i < get_number_of_persons_living(square); i++){
+
+            if(get_residents(square)[i]){
+
+                print_person_info(get_residents(square)[i], txt_results);
+
+            }
+
+        }
+
+        fprintf(txt_results, "====================================================\n");
+        
+    }else{
+
+        fprintf(txt_results, "m?:\n\n");
+        fprintf(txt_results, "\tSorry, CEP = %s not found...\n\n", cep);
+        fprintf(txt_results, "====================================================\n");
+
+    }
+
+
+    fclose(txt_results);
+
+}

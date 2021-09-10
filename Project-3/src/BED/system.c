@@ -277,15 +277,15 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
             fscanf(functions_file, "%s", cep);
             del(blocks, residents, locations, cep, paths);            
 
-        }*//*else if(!strcmp(command, "m?")){
+        }*/else if(!strcmp(command, "m?")){
             
             fscanf(functions_file, "%s", cep);
             m_who(residents, blocks_hash, cep, paths);
 
-        }*/else if(!strcmp(command, "mud")){
+        }else if(!strcmp(command, "mud")){
             
             fscanf(functions_file, "%s %s %c %d %s", cpf, cep, &face, &num, compl);
-            mud(residents, cpf, cep, face, num, compl, paths);
+            mud(residents, blocks_hash, cpf, cep, face, num, compl, paths);
 
         }else if(!strcmp(command, "oloc")){
 
@@ -300,7 +300,7 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
         }*/else if(!strcmp(command, "loc")){
             
             fscanf(functions_file, "%s %s", id, cpf);
-            loc(residents, locations, id, cpf, paths);
+            loc(residents, blocks_hash, locations, id, cpf, paths);
 
         }else if(!strcmp(command, "loc?")){
             

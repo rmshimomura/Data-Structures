@@ -2,7 +2,7 @@
 #include "../DynamicList/dynamicList.h"
 
 typedef struct regist {
-    dynamic_list list;
+    void* list;
 }regist_t;
 
 typedef struct hashTable {

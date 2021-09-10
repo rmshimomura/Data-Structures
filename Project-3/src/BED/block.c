@@ -93,6 +93,20 @@ void** get_locations(void* block_data){
 
 }
 
+int get_number_of_persons_living(void* block_data){
+	
+	block* aux = block_data;
+	return aux->number_of_persons_living;
+
+}
+
+int get_number_of_locations_available(void* block_data){
+	
+	block* aux = block_data;
+	return aux->number_of_locations_available;
+
+}
+
 double get_x(void* current_block){
 	block* aux = current_block;
 	return aux->x; 

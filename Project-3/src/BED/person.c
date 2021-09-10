@@ -56,7 +56,7 @@ void find_and_update_person(void* HT, char* cpf, char* cep, char face, int num, 
 
     } else {
 
-        printf("Couldn't find person with cpf : %s on the hash table.\n", cpf);
+        printf("Couldn't find person with cpf: %s on the hash table.\n", cpf);
 
     }
 
@@ -135,4 +135,12 @@ void free_person(void* person_to_free){
     person* aux = person_to_free;
     free(aux->place);
     free(aux); 
+}
+
+char* get_person_cep(void* person_data){
+    
+    person* aux = person_data;
+
+    return aux->place->cep;
+
 }
