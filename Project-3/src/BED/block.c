@@ -12,7 +12,9 @@ typedef struct block {
 	char cep[20];
     char cstroke[30];
 	void** persons_living;
+	void** locations_available;
 	int number_of_persons_living;
+	int number_of_locations_available;
 
 } block;
 
@@ -31,6 +33,7 @@ void set_block_properties(void* block_to_set, char* cep, double x, double y, dou
 void* create_block(){
 	block* new_block = calloc(1, sizeof(block));
 	new_block->number_of_persons_living = 0;
+	new_block->number_of_locations_available = 0;
 	return new_block;
 }
 
@@ -59,6 +62,34 @@ void** get_residents(void* block_data){
 	block* aux = block_data;
 
 	return aux->persons_living ? aux->persons_living : NULL;
+
+}
+
+void add_location(void* block_data, void* new_location){
+	
+	block* new_block = block_data;
+	
+	if(!new_block->locations_available) {
+
+		new_block->locations_available = calloc(1, sizeof(void*));
+		new_block->locations_available[0] = new_location;
+		new_block->number_of_locations_available++;
+
+	}else{
+		
+		new_block->locations_available = realloc(new_block->locations_available, (new_block->number_of_locations_available + 1) * sizeof(void*));
+		new_block->locations_available[new_block->number_of_locations_available] = new_location;
+		new_block->number_of_locations_available++;
+
+	}
+	
+}
+
+void** get_locations(void* block_data){
+
+	block* aux = block_data;
+
+	return aux->locations_available ? aux->locations_available : NULL;
 
 }
 

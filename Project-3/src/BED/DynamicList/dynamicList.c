@@ -169,6 +169,10 @@ void free_block_list(void* sequence){
         if(residents){
             free(residents);
         }
+        void** locations = get_locations(auxElement);
+        if(locations){
+            free(locations);
+        }
         free(auxElement);
         free(auxNode);
     }

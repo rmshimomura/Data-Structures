@@ -290,7 +290,7 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
         }else if(!strcmp(command, "oloc")){
 
             fscanf(functions_file,"%s %s %c %d %s %lf %lf", id, cep, &face, &num, compl, &ar, &v);
-            oloc(locations, id, cep, face, num, compl, ar, v, paths);
+            oloc(locations, blocks_hash, id, cep, face, num, compl, ar, v, paths);
             
         }/*else if(!strcmp(command, "oloc?")){
             

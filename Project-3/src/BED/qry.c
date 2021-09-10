@@ -4,6 +4,7 @@
 #include "paths.h"
 #include "Hash/hash.h"
 #include "DynamicList/dynamicList.h"
+#include "block.h"
 
 void dm_who(hash residents, char* cpf, path paths){
 
@@ -60,11 +61,13 @@ void mud(hash residents, char* cpf, char* cep, char face, int num, char* compl, 
 
 }
 
-void oloc(hash locations, char* id, char* cep, char face, int num, char* compl, double ar, double v, path paths){
+void oloc(hash locations, hash blocks_hash, char* id, char* cep, char face, int num, char* compl, double ar, double v, path paths){
    
     void* new_location = create_location();
     set_location_properties(new_location, id, cep, face, num, compl, ar, v);
     hash_table_insert_data(locations, cep, new_location);
+    void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
+    add_location(square, new_location);
 
 }
 
@@ -135,3 +138,4 @@ void loc_who(hash locations, char* id, path paths){
     fclose(file_TXT_with_qry_executed);
 
 }
+
