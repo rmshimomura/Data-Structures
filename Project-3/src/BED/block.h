@@ -5,7 +5,6 @@
 
 void* create_block();
 void set_block_properties(void* block_to_set, char* cep, double x, double y, double w, double h, double sw, char* cfill, char* cstroke);
-int compare_x(void* node, void* element);
 int compare_cep(void* node, void* element);
 void add_resident(void* block_data, void* person);
 void add_location(void* block_data, void* new_location);

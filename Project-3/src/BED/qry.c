@@ -3,6 +3,7 @@
 #include "location.h"
 #include "paths.h"
 #include "Hash/hash.h"
+#include "AVL_Tree/AVL.h"
 #include "DynamicList/dynamicList.h"
 #include "block.h"
 
@@ -262,6 +263,75 @@ void m_who(hash residents, hash blocks_hash, char* cep, path paths){
 
     }
 
+
+    fclose(txt_results);
+
+}
+
+void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* cep, path paths){
+
+    FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
+    setvbuf(txt_results, 0, _IONBF, 0);
+
+    fprintf(txt_results, "del:\n\n");
+
+    void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
+
+    if(square){
+
+        void** residents_list = get_residents(square);
+
+        if(residents_list) {
+
+            // puts("Residents");
+
+            for(int i = 0; i < get_number_of_persons_living(square); i++){
+
+                if(residents_list[i]){
+
+                    print_person_info(residents_list[i], txt_results);
+                    
+                    hash_table_remove_key(residents, get_cpf(residents_list[i]), free_person, compare_CPF);
+
+                }
+
+            }
+
+            // puts("Residents END\n\n");
+
+        }
+
+        void** locations_list = get_locations(square);
+
+        if(locations_list){
+
+            // puts("Locations");
+
+            for(int i = 0; i < get_number_of_locations_available(square); i++){
+
+                if(locations_list[i]){
+                    location_info(locations_list[i], txt_results);
+                    
+                    hash_table_remove_key(locations, location_get_cep(locations_list[i]), location_free, compare_cep);
+
+                }
+
+            }
+
+            // puts("Locations END\n\n");
+
+        }
+
+    }else   {
+        
+        fprintf(txt_results, "\tSorry, CEP = %s not found...\n\n", cep);
+        fprintf(txt_results, "====================================================\n");
+
+    }
+
+    void* blocks_root = get_root(blocks);
+
+    blocks_root = delete_node(blocks, blocks_root, square, compare_x, free_block_list);
 
     fclose(txt_results);
 

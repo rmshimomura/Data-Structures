@@ -192,6 +192,9 @@ void* at_pos(void* sequence, int index) {
 }
 
 void remove_node(void* sequence, void* current, void (free_data)(void*)) {
+    
+    if(!sequence) return;
+    
     list_t* listAux = sequence;
     data_t* aux1;
     data_t* aux2;
@@ -199,7 +202,7 @@ void remove_node(void* sequence, void* current, void (free_data)(void*)) {
     data_t* posToRemove = listAux->head;
     int pos = 0;
 
-    while (posToRemove != current) {
+    while (posToRemove->element != current) {
         posToRemove = posToRemove->next;
         pos++;
 

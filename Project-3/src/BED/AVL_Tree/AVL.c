@@ -7,6 +7,8 @@ typedef struct node {
     struct node* right;
     void* data;
     int height;
+    double min_x;
+    double max_x;
 
 } node_t;
 
@@ -37,11 +39,17 @@ void* create_tree(){
 void* new_node(void* data) {
 
     node_t* node_aux = calloc(1, sizeof(node_t));
+
     node_aux->data = create_list();
+
     insert_list(node_aux->data, data);
+
     node_aux->left = NULL;
     node_aux->right = NULL;
     node_aux->height = 1;
+    node_aux->min_x = get_x(data);
+    node_aux->max_x = get_x(data) + get_w(data);
+
     return node_aux;
     
 }
@@ -61,6 +69,7 @@ int get_balance(void* initial_node) {
 void* right_rotate(void* initial_node) {
     
     if (initial_node) {
+
         node_t* main_node = initial_node;
 
         node_t* aux1 = main_node->left;
@@ -77,7 +86,9 @@ void* right_rotate(void* initial_node) {
 }
 
 void* left_rotate(void* initial_node) {
+    
     if (initial_node) {
+
         node_t* main_node = initial_node;
 
         node_t* aux1 = main_node->right;
@@ -148,28 +159,6 @@ void* insert(void* initial_tree, void* initial_node, void* element, int (*compar
     }
 
     return node_aux;
-}
-
-void printing_tree(void* initial_node, int space) {
-    node_t* aux = initial_node;
-
-    if (!aux) return;
-
-    space += 10;
-
-    printing_tree(aux->right, space);
-    puts(" ");
-
-    for (int i = 10; i < space; i++) printf(" ");
-
-    printf("[%d]/-/[%d]\n", *((int*)aux->data), aux->height);
-
-    printing_tree(aux->left, space);
-}
-
-void recursive_print_tree(void* initial_tree) {
-    tree_t* tree_to_print = initial_tree;
-    printing_tree(tree_to_print->root, 0);
 }
 
 void* get_left(void* node) {
@@ -278,14 +267,6 @@ void destroy_AVL_tree(void* initial_tree, void* initial_node, void (*free_data)(
     }
 }
 
-void pre_order(void* initial_node) {
-    if (initial_node) {
-        node_t* aux = initial_node;
-        pre_order(aux->left);
-        pre_order(aux->right);
-    }
-}
-
 void* get_root(void* initial_tree){
     return ((tree_t*)initial_tree)->root;
 }
@@ -293,4 +274,39 @@ void* get_root(void* initial_tree){
 void set_root(void* initialTree, void* new_root){
     tree_t* aux = initialTree;
     aux->root = new_root;
+}
+
+int compare_x_and_update(void* node, void* element)	{
+
+	//Node is going to be a node from the tree
+    //Element is going to be a block from .geo file
+
+	node_t* aux1 = node; 
+
+    if(get_x(element) + get_w(element) > aux1->max_x) aux1->max_x = get_x(element) + get_w(element);
+
+	if(get_x(element) > aux1->min_x) return 1; //Go to right
+
+	else if(get_x(element) < aux1->min_x){
+        aux1->min_x = get_x(element);
+        return -1; //Go to left
+    }
+
+	else return 0;
+
+}
+
+int compare_x(void* node, void* element) {
+
+	//Node is going to be a node from the tree
+    //Element is going to be a block from .geo file
+
+	node_t* aux1 = node; 
+
+	if(get_x(element) > aux1->min_x) return 1; //Go to right
+
+	else if(get_x(element) < aux1->min_x) return -1; //Go to left
+
+	else return 0;
+
 }

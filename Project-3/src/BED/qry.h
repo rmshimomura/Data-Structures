@@ -9,5 +9,6 @@ void oloc(hash locations, hash blocks_hash, char* id, char* cep, char face, int 
 void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, path paths);
 void loc_who(hash locations, char* id, path paths);
 void m_who(hash residents, hash blocks_hash, char* cep, path paths);
+void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* cep, path paths);
 
 #endif
