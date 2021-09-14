@@ -307,12 +307,12 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
             fscanf(functions_file, "%s", id);
             loc_who(locations, id, paths);
 
-        }/*else if(!strcmp(command, "dloc")){
+        }else if(!strcmp(command, "dloc")){
 
             fscanf(functions_file, "%s", id);
-            dloc(locations, id, paths);
+            dloc(locations, blocks_hash, id, paths);
             
-        }*//*else if(!strcmp(command, "hom")){
+        }/*else if(!strcmp(command, "hom")){
 
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
             hom(residents, x, y, w, h, paths);

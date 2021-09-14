@@ -174,6 +174,7 @@ void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, 
         }
 
         update_person(person, location_get_cep(location), location_get_face(location), location_get_num(location), location_get_complement(location));
+        set_house_state(person, 1);
         location_set_available(location, false);
         location_info(location, txt_results);
         print_person_info(person, txt_results);
@@ -268,6 +269,68 @@ void m_who(hash residents, hash blocks_hash, char* cep, path paths){
 
 }
 
+void dloc(hash locations, hash blocks_hash, char* id, path paths){
+
+    FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
+    setvbuf(txt_results, 0, _IONBF, 0);
+
+    void* location = NULL;
+
+    fprintf(txt_results, "dloc:\n\n");
+
+    for(int i = 0; i < hash_table_size(locations); i++){ //This loop looks for the location in the locations hash table
+        
+        location = find_item(hash_table_get_list_by_index(locations, i), id, compare_id);
+
+        if(location) break;
+    }
+
+    if(!get_person_living_here(location)){ //Nobody lives on target location
+
+        fprintf(txt_results, "\tNobody is living on location with ID = %s...\n\n", id);
+        location_info(location, txt_results);
+        fprintf(txt_results, "====================================================\n");
+        fclose(txt_results);
+        return;
+    }
+
+    if(location) {  //Someone lives on this location and this person exists 
+        
+        char* cep = location_get_cep(location); //Gather location's cep to search on the blocks_hash hash table
+
+        void* person_on_this_location = get_person_living_here(location); //Gather the person's living here info
+
+        print_person_info(person_on_this_location, txt_results);
+        update_person(person_on_this_location, " ", ' ', -1, " ");
+        set_house_state(person_on_this_location, 2);
+        location_info(location, txt_results);
+
+        void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep); //Find the block that this location belongs to
+
+        set_person_living_here(location, NULL);
+
+        for(int i = 0; i < get_number_of_locations_available(square); i++){
+
+            if(get_locations(square)[i] == location){ //Find the location data on the locations available on that cep
+                get_locations(square)[i] == NULL;
+                break;
+            }
+
+        }
+
+        hash_table_remove_key(locations, cep, location_free, compare_cep);
+
+    }else{ 
+
+        fprintf(txt_results, "\tSorry, location ID = %s not found...\n\n", id);
+
+    }
+
+    fprintf(txt_results, "====================================================\n");
+
+    fclose(txt_results);
+}
+
 void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* cep, path paths){
 
     FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
@@ -332,6 +395,8 @@ void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* ce
     void* blocks_root = get_root(blocks);
 
     blocks_root = delete_node(blocks, blocks_root, square, compare_x, free_block_list);
+
+    fprintf(txt_results, "====================================================\n");
 
     fclose(txt_results);
 

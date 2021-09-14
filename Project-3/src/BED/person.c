@@ -4,9 +4,10 @@
 #include "Hash/hash.h"
 #include "block.h"
 
-enum {
+enum homeType{
     OWN,
-    RENT
+    RENT,
+    HOMELESS
 };
 
 typedef struct livingPlace {
@@ -23,7 +24,7 @@ typedef struct person {
     char sex;
     char birthDate[20];
     char cpf[50];
-    int houseState;
+    enum homeType houseState;
     livingPlace* place;
 
 } person;
@@ -119,12 +120,38 @@ void debug_print_person_info(void* person_to_analyze){
     printf("====================================================\n");
 
 }
-
+/*
 void print_person_info(void* person_to_analyze, FILE* txt_qry){
     
     person* aux = person_to_analyze;
     if(aux){
         fprintf(txt_qry, "\tPerson data found: \n\n\tName: %s\n\tSurname: %s\n\tSex: %c\n\tBirthDate: %s\n\tCPF: %s\n\n\tHouseState: %s\n", aux->name, aux->surname, aux->sex, aux->birthDate, aux->cpf, aux->houseState == OWN ? "Own" : "Rent");
+        fprintf(txt_qry, "\tCEP: %s Face: %c Num: %d Complement: %s\n\n", aux->place->cep, aux->place->face, aux->place->num, aux->place->complement);
+    }
+   
+
+}*/
+
+void print_person_info(void* person_to_analyze, FILE* txt_qry){
+    
+    person* aux = person_to_analyze;
+    if(aux){
+        fprintf(txt_qry, "\tPerson data found: \n\n\tName: %s\n\tSurname: %s\n\tSex: %c\n\tBirthDate: %s\n\tCPF: %s\n\n", aux->name, aux->surname, aux->sex, aux->birthDate, aux->cpf);
+        switch(aux->houseState){
+            case 0:
+                fprintf(txt_qry, "\tHouseState: OWN\n");
+                break; 
+            case 1:
+                fprintf(txt_qry, "\tHouseState: RENT\n");
+                break;
+            case 2:
+                fprintf(txt_qry, "\tHouseState: HOMELESS\n");
+                break;
+            default:
+                fprintf(txt_qry, "\tHouseState: Quantum? (BUG)\n");
+                break;
+        }
+        
         fprintf(txt_qry, "\tCEP: %s Face: %c Num: %d Complement: %s\n\n", aux->place->cep, aux->place->face, aux->place->num, aux->place->complement);
     }
    
@@ -143,4 +170,9 @@ char* get_person_cep(void* person_data){
 
     return aux->place->cep;
 
+}
+
+void set_house_state(void* person_data, int state){
+    person* aux = person_data;
+    aux->houseState = state;
 }

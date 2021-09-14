@@ -103,14 +103,18 @@ void set_person_living_here(void* location_data, void* person){
 void* get_person_living_here(void* location_data){
 
     location* aux = location_data;
-    return aux->person_living_here;
+    return aux->person_living_here ? aux->person_living_here : NULL;
 
 }
 
 void location_free(void* location_data){
 
     location* aux = location_data;
-    aux->person_living_here = NULL;
-    free(aux);
+    if(aux){
+        aux->person_living_here = NULL;
+        free(aux);
+    }else{
+        puts("Location not found!!!");
+    }
 
 }

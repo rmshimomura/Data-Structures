@@ -13,5 +13,6 @@
     void print_person_info(void* person_to_analyze, FILE* txt_qry);
     void free_person(void* person_to_free);
     char* get_person_cep(void* person_data);
+    void set_house_state(void* person_data, int state);
 
 #endif
