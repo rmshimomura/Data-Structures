@@ -286,12 +286,21 @@ void dloc(hash locations, hash blocks_hash, char* id, path paths){
     }
 
     if(!get_person_living_here(location)){ //Nobody lives on target location
+        
+        char* cep = location_get_cep(location); //Gather location's cep to search on the blocks_hash hash table
 
         fprintf(txt_results, "\tNobody is living on location with ID = %s...\n\n", id);
+
         location_info(location, txt_results);
+
         fprintf(txt_results, "====================================================\n");
+
+        hash_table_remove_key(locations, cep, location_free, compare_cep);
+
         fclose(txt_results);
+        
         return;
+
     }
 
     if(location) {  //Someone lives on this location and this person exists 
@@ -346,7 +355,6 @@ void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* ce
 
         if(residents_list) {
 
-            // puts("Residents");
 
             for(int i = 0; i < get_number_of_persons_living(square); i++){
 
@@ -360,7 +368,6 @@ void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* ce
 
             }
 
-            // puts("Residents END\n\n");
 
         }
 
@@ -368,11 +375,10 @@ void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* ce
 
         if(locations_list){
 
-            // puts("Locations");
-
             for(int i = 0; i < get_number_of_locations_available(square); i++){
 
                 if(locations_list[i]){
+
                     location_info(locations_list[i], txt_results);
                     
                     hash_table_remove_key(locations, location_get_cep(locations_list[i]), location_free, compare_cep);
@@ -381,14 +387,14 @@ void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* ce
 
             }
 
-            // puts("Locations END\n\n");
-
         }
 
-    }else   {
+    }else{
         
         fprintf(txt_results, "\tSorry, CEP = %s not found...\n\n", cep);
         fprintf(txt_results, "====================================================\n");
+        fclose(txt_results);
+        return;
 
     }
 
