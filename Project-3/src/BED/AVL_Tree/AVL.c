@@ -283,7 +283,9 @@ int compare_x_and_update(void* node, void* element)	{
 
 	node_t* aux1 = node; 
 
-    if(get_x(element) + get_w(element) > aux1->max_x) aux1->max_x = get_x(element) + get_w(element);
+    if(get_x(element) + get_w(element) > aux1->max_x){
+        aux1->max_x = get_x(element) + get_w(element);
+    }
 
 	if(get_x(element) > aux1->min_x) return 1; //Go to right
 

@@ -33,7 +33,9 @@ void dm_who(hash residents, char* cpf, path paths){
 }
 
 void mud(hash residents, hash blocks_hash, char* cpf, char* cep, char face, int num, char* compl, path paths) {
-    //TODO pergunta evandro
+
+    //Update September, 14th. mud only makes the person buy a house, so house state = OWN
+
     FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
     setvbuf(txt_results, 0, _IONBF, 0);
 
@@ -45,7 +47,7 @@ void mud(hash residents, hash blocks_hash, char* cpf, char* cep, char face, int 
 
         void* new_square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep); //Find new square where this person will live
 
-        if (person_to_update) {
+        if (person_to_update) { //If the person with cpf passed as argument exists, we're going to update the date
 
             fprintf(txt_results, "mud:\n\n");
             fprintf(txt_results, "BEFORE::\n\n");
@@ -90,6 +92,7 @@ void mud(hash residents, hash blocks_hash, char* cpf, char* cep, char face, int 
 
             fprintf(txt_results, "AFTER::\n\n");
             update_person(person_to_update, cep, face, num, compl);
+            set_house_state(person_to_update, 0);
             print_person_info(person_to_update, txt_results);
             fprintf(txt_results, "====================================================\n");
             
