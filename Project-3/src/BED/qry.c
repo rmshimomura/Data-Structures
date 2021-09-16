@@ -429,7 +429,7 @@ void hom(tree blocks, double x, double y, double w, double h, path paths) {
 
     void* blocks_root = get_root(blocks);
 
-    recursive_print_tree(blocks);
+    // recursive_print_tree(blocks);
 
     hom_search(blocks_root, x, y, w, h, txt_results);
 
@@ -501,7 +501,7 @@ void mul(tree blocks, double x, double y, double w, double h, path paths) {
 
     void* blocks_root = get_root(blocks);
 
-    recursive_print_tree(blocks);
+    // recursive_print_tree(blocks);
 
     mul_search(blocks_root, x, y, w, h, txt_results);
 
@@ -554,6 +554,77 @@ void mul_search(void* blocks_root, double x, double y, double w, double h, FILE*
                             if(get_person_sex(person) == 'F') {
 
                                 print_person_info(person, txt_results);
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void oloc_who(tree blocks, double x, double y, double w, double h, path paths){
+
+    FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
+    setvbuf(txt_results, 0, _IONBF, 0);
+
+    void* blocks_root = get_root(blocks);
+
+    fprintf(txt_results, "oloc?(%.2lf, %.2lf, %.2lf, %.2lf):\n\n", x,y,w,h);
+
+
+    oloc_who_search(blocks_root, x,y, w, h, txt_results);
+
+    fprintf(txt_results, "====================================================\n");
+
+    fclose(txt_results);
+
+}
+
+void oloc_who_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results){
+
+    if(blocks_root){
+        
+        if(get_left(blocks_root)){
+
+            if(get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w){
+                
+                oloc_who_search(get_left(blocks_root), x, y, w, h, txt_results);
+
+            }
+
+        }
+
+        if(get_right(blocks_root)){
+
+            if (get_max_x(get_right(blocks_root)) >= x && get_min_x(get_right(blocks_root)) <= x + w){
+
+                oloc_who_search(get_right(blocks_root), x, y, w, h, txt_results);
+
+            }
+
+        }
+
+        if(get_min_x(blocks_root) >= x && get_max_x(blocks_root) <= x + w) {
+
+            void* list_of_blocks = get_node_data(blocks_root);
+            
+            for(void* aux = get_head(list_of_blocks); aux; aux = get_next(aux)){
+                
+                void* element = get_list_element(aux);
+                
+                if(inside(get_x(element), get_y(element), get_w(element), get_h(element), x, y, w, h)){
+                    
+                    for(int i = 0; i < get_number_of_locations_available(element); i++){
+                        
+                        void* location = get_locations(element)[i];
+
+                        if(location){
+
+                            if(location_get_available(location)) {
+
+                                location_info(location, txt_results);
                                 
                             }
                         }

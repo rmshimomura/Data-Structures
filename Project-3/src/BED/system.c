@@ -292,12 +292,12 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
             fscanf(functions_file,"%s %s %c %d %s %lf %lf", id, cep, &face, &num, compl, &ar, &v);
             oloc(locations, blocks_hash, id, cep, face, num, compl, ar, v, paths);
             
-        }/*else if(!strcmp(command, "oloc?")){
+        }else if(!strcmp(command, "oloc?")){
             
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
-            oloc_who(locations, x, y, w, h, paths);
+            oloc_who(blocks, x, y, w, h, paths);
             
-        }*/else if(!strcmp(command, "loc")){
+        }else if(!strcmp(command, "loc")){
             
             fscanf(functions_file, "%s %s", id, cpf);
             loc(residents, blocks_hash, locations, id, cpf, paths);
@@ -317,12 +317,12 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
             hom(blocks, x, y, w, h, paths);
             
-        }/*else if(!strcmp(command, "mul")){
+        }else if(!strcmp(command, "mul")){
 
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
             mul(residents, x, y, w, h, paths);
             
-        }*//*else if(!strcmp(command, "dmpt")){
+        }/*else if(!strcmp(command, "dmpt")){
 
             // ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 
             
