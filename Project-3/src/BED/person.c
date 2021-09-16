@@ -176,3 +176,8 @@ void set_house_state(void* person_data, int state){
     person* aux = person_data;
     aux->houseState = state;
 }
+
+char get_person_sex(void* person_to_analyze){
+    person* aux = person_to_analyze;
+    return aux->sex;
+}
