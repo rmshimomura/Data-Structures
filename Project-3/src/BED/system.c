@@ -312,12 +312,12 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
             fscanf(functions_file, "%s", id);
             dloc(locations, blocks_hash, id, paths);
             
-        }/*else if(!strcmp(command, "hom")){
+        }else if(!strcmp(command, "hom")){
 
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
             hom(blocks, x, y, w, h, paths);
             
-        }*//*else if(!strcmp(command, "mul")){
+        }/*else if(!strcmp(command, "mul")){
 
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
             mul(residents, x, y, w, h, paths);

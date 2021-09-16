@@ -7,6 +7,13 @@
 #include "DynamicList/dynamicList.h"
 #include "block.h"
 
+int inside(double x1, double y1, double p1Width, double p1Height, double x2, double y2, double p2Width, double p2Height) {
+    if ((x1 >= x2 && x1 <= x2 + p2Width && y1 >= y2 && y1 <= y2 + p2Height && x1 + p1Width <= x2 + p2Width && y1 + p1Height <= y2 + p2Height)) return 1;
+    //Fix the search on the p2 and vary on p1
+    return 0;
+}
+
+
 void dm_who(hash residents, char* cpf, path paths){
 
     FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
@@ -408,5 +415,78 @@ void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* ce
     fprintf(txt_results, "====================================================\n");
 
     fclose(txt_results);
+
+}
+
+void hom(tree blocks, double x, double y, double w, double h, path paths) {
+
+    FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
+    setvbuf(txt_results, 0, _IONBF, 0);
+
+    fprintf(txt_results, "hom(%.2lf, %.2lf, %.2lf, %.2lf):\n\n", x,y,w,h);
+
+    void* blocks_root = get_root(blocks);
+
+    recursive_print_tree(blocks);
+
+    hom_search(blocks_root, x, y, w, h, txt_results);
+
+    fprintf(txt_results, "====================================================\n");
+
+    fclose(txt_results);
+
+}
+
+void hom_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results){
+
+    if(blocks_root){
+        
+        if(get_left(blocks_root)){
+
+            if(get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w){
+                
+                hom_search(get_left(blocks_root), x, y, w, h, txt_results);
+
+            }
+
+        }
+
+        if(get_right(blocks_root)){
+
+            if (get_max_x(get_right(blocks_root)) >= x && get_min_x(get_right(blocks_root)) <= x + w){
+
+                hom_search(get_right(blocks_root), x, y, w, h, txt_results);
+
+            }
+
+        }
+
+        if(get_min_x(blocks_root) >= x && get_max_x(blocks_root) <= x + w) {
+
+            void* list_of_blocks = get_node_data(blocks_root);
+            
+            for(void* aux = get_head(list_of_blocks); aux; aux = get_next(aux)){
+                
+                void* element = get_list_element(aux);
+                
+                if(inside(get_x(element), get_y(element), get_w(element), get_h(element), x, y, w, h)){
+                    
+                    for(int i = 0; i < get_number_of_persons_living(element); i++){
+                        
+                        void* person = get_residents(element)[i];
+
+                        if(person){
+
+                            if(get_person_sex(person) == 'M') {
+
+                                print_person_info(person, txt_results);
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 }
