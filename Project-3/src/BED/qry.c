@@ -19,17 +19,17 @@ void dm_who(hash residents, char* cpf, path paths){
     FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
     setvbuf(txt_results, 0, _IONBF, 0);
 
+    fprintf(txt_results, "dm?(%s):\n\n", cpf);
+
     if(find_item(hash_table_get_register_list(residents, cpf), cpf, compare_CPF)){
 
         void* person_to_print = find_item(hash_table_get_register_list(residents, cpf), cpf, compare_CPF);
         
-        fprintf(txt_results, "dm?:\n\n");
         print_person_info(person_to_print, txt_results);
         fprintf(txt_results, "====================================================\n");
 
     }else{
         
-        fprintf(txt_results, "dm?:\n\n");
         fprintf(txt_results, "\tSorry, CPF = %s not found...\n\n", cpf);
         fprintf(txt_results, "====================================================\n");
 
@@ -56,7 +56,7 @@ void mud(hash residents, hash blocks_hash, char* cpf, char* cep, char face, int 
 
         if (person_to_update) { //If the person with cpf passed as argument exists, we're going to update the date
 
-            fprintf(txt_results, "mud:\n\n");
+            fprintf(txt_results, "mud(%s, %s, %c, %d, %s):\n\n", cpf, cep, face, num, compl);
             fprintf(txt_results, "BEFORE::\n\n");
             print_person_info(person_to_update, txt_results);
 
@@ -106,7 +106,7 @@ void mud(hash residents, hash blocks_hash, char* cpf, char* cep, char face, int 
         }
 
     } else {
-        fprintf(txt_results ,"mud:\n\n\tCouldn't find person with cpf : %s on the hash table.\n\n", cpf);
+        fprintf(txt_results ,"mud(%s, %s, %c, %d, %s):\n\n\tCouldn't find person with cpf : %s on the hash table.\n\n", cpf, cep, face, num, compl, cpf);
         fprintf(txt_results, "====================================================\n");
     }
 
@@ -138,7 +138,7 @@ void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, 
         if(location) break;
     }
 
-    fprintf(txt_results, "loc:\n\n");
+    fprintf(txt_results, "loc(%s, %s):\n\n", id, cpf);
 
     if(person && location){
 
@@ -212,7 +212,7 @@ void loc_who(hash locations, char* id, path paths){
 
     }
 
-    fprintf(txt_results, "loc?:\n\n");
+    fprintf(txt_results, "loc?(%s):\n\n", id);
 
     if(location){
         if(location_get_available(location)){
@@ -240,11 +240,13 @@ void m_who(hash residents, hash blocks_hash, char* cep, path paths){
 
     void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
 
+    fprintf(txt_results, "m?(%s):\n\n", cep);
+
     if(square){
 
         if(!get_number_of_persons_living(square)) {
 
-            fprintf(txt_results, "m?:\n\n");
+            
             fprintf(txt_results, "\tNobody lives here on cep = %s... \n\n", cep);
             fprintf(txt_results, "====================================================\n");
             fclose(txt_results);
@@ -252,7 +254,7 @@ void m_who(hash residents, hash blocks_hash, char* cep, path paths){
 
         }
 
-        fprintf(txt_results, "m?:\n\n");
+        
 
         for(int i = 0; i < get_number_of_persons_living(square); i++){
 
@@ -268,7 +270,7 @@ void m_who(hash residents, hash blocks_hash, char* cep, path paths){
         
     }else{
 
-        fprintf(txt_results, "m?:\n\n");
+        
         fprintf(txt_results, "\tSorry, CEP = %s not found...\n\n", cep);
         fprintf(txt_results, "====================================================\n");
 
@@ -286,7 +288,7 @@ void dloc(hash locations, hash blocks_hash, char* id, path paths){
 
     void* location = NULL;
 
-    fprintf(txt_results, "dloc:\n\n");
+    fprintf(txt_results, "dloc(%s):\n\n", id);
 
     for(int i = 0; i < hash_table_size(locations); i++){ //This loop looks for the location in the locations hash table
         
@@ -355,7 +357,7 @@ void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* ce
     FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
     setvbuf(txt_results, 0, _IONBF, 0);
 
-    fprintf(txt_results, "del:\n\n");
+    fprintf(txt_results, "del(%s):\n\n", cep);
 
     void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
 
