@@ -13,6 +13,121 @@ int inside(double x1, double y1, double p1Width, double p1Height, double x2, dou
     return 0;
 }
 
+void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* cep, path paths){
+
+    FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
+    setvbuf(txt_results, 0, _IONBF, 0);
+
+    fprintf(txt_results, "del(%s):\n\n", cep);
+
+    void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
+
+    if(square){
+
+        void** residents_list = get_residents(square);
+
+        if(residents_list) {
+
+
+            for(int i = 0; i < get_number_of_persons_living(square); i++){
+
+                if(residents_list[i]){
+
+                    print_person_info(residents_list[i], txt_results);
+                    
+                    hash_table_remove_key(residents, get_cpf(residents_list[i]), free_person, compare_CPF);
+
+                }
+
+            }
+
+
+        }
+
+        void** locations_list = get_locations(square);
+
+        if(locations_list){
+
+            for(int i = 0; i < get_number_of_locations_available(square); i++){
+
+                if(locations_list[i]){
+
+                    location_info(locations_list[i], txt_results);
+                    
+                    hash_table_remove_key(locations, location_get_cep(locations_list[i]), location_free, compare_cep);
+
+                }
+
+            }
+
+        }
+
+    }else{
+        
+        fprintf(txt_results, "\tSorry, CEP = %s not found...\n\n", cep);
+        fprintf(txt_results, "====================================================\n");
+        fclose(txt_results);
+        return;
+
+    }
+
+    void* blocks_root = get_root(blocks);
+
+    blocks_root = delete_node(blocks, blocks_root, square, compare_x, free_block_list);
+
+    fprintf(txt_results, "====================================================\n");
+
+    fclose(txt_results);
+
+}
+
+void m_who(hash residents, hash blocks_hash, char* cep, path paths){
+
+    FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
+    setvbuf(txt_results, 0, _IONBF, 0);
+
+    void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
+
+    fprintf(txt_results, "m?(%s):\n\n", cep);
+
+    if(square){
+
+        if(!get_number_of_persons_living(square)) {
+
+            
+            fprintf(txt_results, "\tNobody lives here on cep = %s... \n\n", cep);
+            fprintf(txt_results, "====================================================\n");
+            fclose(txt_results);
+            return;
+
+        }
+
+        
+
+        for(int i = 0; i < get_number_of_persons_living(square); i++){
+
+            if(get_residents(square)[i]){
+
+                print_person_info(get_residents(square)[i], txt_results);
+
+            }
+
+        }
+
+        fprintf(txt_results, "====================================================\n");
+        
+    }else{
+
+        
+        fprintf(txt_results, "\tSorry, CEP = %s not found...\n\n", cep);
+        fprintf(txt_results, "====================================================\n");
+
+    }
+
+
+    fclose(txt_results);
+
+}
 
 void dm_who(hash residents, char* cpf, path paths){
 
@@ -124,6 +239,77 @@ void oloc(hash locations, hash blocks_hash, char* id, char* cep, char face, int 
 
 }
 
+void oloc_who(tree blocks, double x, double y, double w, double h, path paths){
+
+    FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
+    setvbuf(txt_results, 0, _IONBF, 0);
+
+    void* blocks_root = get_root(blocks);
+
+    fprintf(txt_results, "oloc?(%.2lf, %.2lf, %.2lf, %.2lf):\n\n", x,y,w,h);
+
+
+    oloc_who_search(blocks_root, x,y, w, h, txt_results);
+
+    fprintf(txt_results, "====================================================\n");
+
+    fclose(txt_results);
+
+}
+
+void oloc_who_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results){
+
+    if(blocks_root){
+        
+        if(get_left(blocks_root)){
+
+            if(get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w){
+                
+                oloc_who_search(get_left(blocks_root), x, y, w, h, txt_results);
+
+            }
+
+        }
+
+        if(get_right(blocks_root)){
+
+            if (get_max_x(get_right(blocks_root)) >= x && get_min_x(get_right(blocks_root)) <= x + w){
+
+                oloc_who_search(get_right(blocks_root), x, y, w, h, txt_results);
+
+            }
+
+        }
+
+        if(get_min_x(blocks_root) >= x && get_max_x(blocks_root) <= x + w) {
+
+            void* list_of_blocks = get_node_data(blocks_root);
+            
+            for(void* aux = get_head(list_of_blocks); aux; aux = get_next(aux)){
+                
+                void* element = get_list_element(aux);
+                
+                if(inside(get_x(element), get_y(element), get_w(element), get_h(element), x, y, w, h)){
+                    
+                    for(int i = 0; i < get_number_of_locations_available(element); i++){
+                        
+                        void* location = get_locations(element)[i];
+
+                        if(location){
+
+                            if(location_get_available(location)) {
+
+                                location_info(location, txt_results);
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, path paths) {
 
     FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
@@ -233,54 +419,6 @@ void loc_who(hash locations, char* id, path paths){
 
 }
 
-void m_who(hash residents, hash blocks_hash, char* cep, path paths){
-
-    FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
-    setvbuf(txt_results, 0, _IONBF, 0);
-
-    void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
-
-    fprintf(txt_results, "m?(%s):\n\n", cep);
-
-    if(square){
-
-        if(!get_number_of_persons_living(square)) {
-
-            
-            fprintf(txt_results, "\tNobody lives here on cep = %s... \n\n", cep);
-            fprintf(txt_results, "====================================================\n");
-            fclose(txt_results);
-            return;
-
-        }
-
-        
-
-        for(int i = 0; i < get_number_of_persons_living(square); i++){
-
-            if(get_residents(square)[i]){
-
-                print_person_info(get_residents(square)[i], txt_results);
-
-            }
-
-        }
-
-        fprintf(txt_results, "====================================================\n");
-        
-    }else{
-
-        
-        fprintf(txt_results, "\tSorry, CEP = %s not found...\n\n", cep);
-        fprintf(txt_results, "====================================================\n");
-
-    }
-
-
-    fclose(txt_results);
-
-}
-
 void dloc(hash locations, hash blocks_hash, char* id, path paths){
 
     FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
@@ -352,74 +490,6 @@ void dloc(hash locations, hash blocks_hash, char* id, path paths){
     fclose(txt_results);
 }
 
-void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* cep, path paths){
-
-    FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
-    setvbuf(txt_results, 0, _IONBF, 0);
-
-    fprintf(txt_results, "del(%s):\n\n", cep);
-
-    void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
-
-    if(square){
-
-        void** residents_list = get_residents(square);
-
-        if(residents_list) {
-
-
-            for(int i = 0; i < get_number_of_persons_living(square); i++){
-
-                if(residents_list[i]){
-
-                    print_person_info(residents_list[i], txt_results);
-                    
-                    hash_table_remove_key(residents, get_cpf(residents_list[i]), free_person, compare_CPF);
-
-                }
-
-            }
-
-
-        }
-
-        void** locations_list = get_locations(square);
-
-        if(locations_list){
-
-            for(int i = 0; i < get_number_of_locations_available(square); i++){
-
-                if(locations_list[i]){
-
-                    location_info(locations_list[i], txt_results);
-                    
-                    hash_table_remove_key(locations, location_get_cep(locations_list[i]), location_free, compare_cep);
-
-                }
-
-            }
-
-        }
-
-    }else{
-        
-        fprintf(txt_results, "\tSorry, CEP = %s not found...\n\n", cep);
-        fprintf(txt_results, "====================================================\n");
-        fclose(txt_results);
-        return;
-
-    }
-
-    void* blocks_root = get_root(blocks);
-
-    blocks_root = delete_node(blocks, blocks_root, square, compare_x, free_block_list);
-
-    fprintf(txt_results, "====================================================\n");
-
-    fclose(txt_results);
-
-}
-
 void hom(tree blocks, double x, double y, double w, double h, path paths) {
 
     FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
@@ -428,8 +498,6 @@ void hom(tree blocks, double x, double y, double w, double h, path paths) {
     fprintf(txt_results, "hom(%.2lf, %.2lf, %.2lf, %.2lf):\n\n", x,y,w,h);
 
     void* blocks_root = get_root(blocks);
-
-    // recursive_print_tree(blocks);
 
     hom_search(blocks_root, x, y, w, h, txt_results);
 
@@ -501,8 +569,6 @@ void mul(tree blocks, double x, double y, double w, double h, path paths) {
 
     void* blocks_root = get_root(blocks);
 
-    // recursive_print_tree(blocks);
-
     mul_search(blocks_root, x, y, w, h, txt_results);
 
     fprintf(txt_results, "====================================================\n");
@@ -554,77 +620,6 @@ void mul_search(void* blocks_root, double x, double y, double w, double h, FILE*
                             if(get_person_sex(person) == 'F') {
 
                                 print_person_info(person, txt_results);
-                                
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-void oloc_who(tree blocks, double x, double y, double w, double h, path paths){
-
-    FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
-    setvbuf(txt_results, 0, _IONBF, 0);
-
-    void* blocks_root = get_root(blocks);
-
-    fprintf(txt_results, "oloc?(%.2lf, %.2lf, %.2lf, %.2lf):\n\n", x,y,w,h);
-
-
-    oloc_who_search(blocks_root, x,y, w, h, txt_results);
-
-    fprintf(txt_results, "====================================================\n");
-
-    fclose(txt_results);
-
-}
-
-void oloc_who_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results){
-
-    if(blocks_root){
-        
-        if(get_left(blocks_root)){
-
-            if(get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w){
-                
-                oloc_who_search(get_left(blocks_root), x, y, w, h, txt_results);
-
-            }
-
-        }
-
-        if(get_right(blocks_root)){
-
-            if (get_max_x(get_right(blocks_root)) >= x && get_min_x(get_right(blocks_root)) <= x + w){
-
-                oloc_who_search(get_right(blocks_root), x, y, w, h, txt_results);
-
-            }
-
-        }
-
-        if(get_min_x(blocks_root) >= x && get_max_x(blocks_root) <= x + w) {
-
-            void* list_of_blocks = get_node_data(blocks_root);
-            
-            for(void* aux = get_head(list_of_blocks); aux; aux = get_next(aux)){
-                
-                void* element = get_list_element(aux);
-                
-                if(inside(get_x(element), get_y(element), get_w(element), get_h(element), x, y, w, h)){
-                    
-                    for(int i = 0; i < get_number_of_locations_available(element); i++){
-                        
-                        void* location = get_locations(element)[i];
-
-                        if(location){
-
-                            if(location_get_available(location)) {
-
-                                location_info(location, txt_results);
                                 
                             }
                         }
