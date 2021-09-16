@@ -14,7 +14,8 @@ void loc_who(hash locations, char* id, path paths);
 void dloc(hash locations, hash blocks_hash, char* id, path paths);
 void hom(tree blocks, double x, double y, double w, double h, path paths);
 void hom_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results);
-//void mul
+void mul(tree blocks, double x, double y, double w, double h, path paths) ;
+void mul_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results);
 //void dmpt
 //void catac
 
