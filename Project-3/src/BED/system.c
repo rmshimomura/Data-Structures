@@ -230,7 +230,7 @@ void get_data(tree blocks, hash blocks_hash, hash residents, path paths, flag fl
             fscanf(file_blocks, "%s %lf %lf %lf %lf", cep, &x, &y, &w, &h);
             void* new_block = create_block();
             set_block_properties(new_block, cep, x, y, w, h, sw, cfill, cstroke);
-            blocks_root = insert(blocks, blocks_root, new_block, compare_x_and_update);
+            blocks_root = insert(blocks, blocks_root, new_block, compare_x);
             hash_table_insert_data(blocks_hash, cep, new_block);
             
         }
@@ -315,7 +315,7 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
         }/*else if(!strcmp(command, "hom")){
 
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
-            hom(residents, x, y, w, h, paths);
+            hom(blocks, x, y, w, h, paths);
             
         }*//*else if(!strcmp(command, "mul")){
 

@@ -85,10 +85,31 @@ void* right_rotate(void* initial_node) {
             aux1->max_x = main_node->max_x;
         }
 
-        main_node->min_x = main_node->left->min_x; //min_x value of the now rotate node is going to be the value of his left child
-        main_node->max_x = main_node->left->max_x > main_node->right->max_x ? main_node->left->max_x : main_node->right->max_x; //Check which one of its children has a greater max_x
+        if(main_node->left){
+            
+            main_node->min_x = main_node->left->min_x; //min_x value of the now rotate node is going to be the value of his left child
 
-        aux1->min_x = aux1->left->min_x;
+        }else{
+
+            main_node->min_x = get_x(get_list_element(get_head(main_node->data))); //If there's no left child get the x coordinate from the first position on the list
+
+        }
+
+        if(main_node->left || main_node->right){
+
+            main_node->max_x = main_node->left->max_x > main_node->right->max_x ? main_node->left->max_x : main_node->right->max_x; //Check which one of its children has a greater max_x
+
+        }else{
+            
+            main_node->max_x = get_list_max_x(main_node->data); //If there's no child, search on the list of blocks this node has
+
+        }
+
+        if(main_node->left){
+
+            aux1->min_x = aux1->left->min_x;
+
+        }
 
         main_node->height = max(height(main_node->left), height(main_node->right)) + 1;
         aux1->height = max(height(aux1->left), height(aux1->right)) + 1;
@@ -108,14 +129,39 @@ void* left_rotate(void* initial_node) {
         aux1->left = initial_node;
         main_node->right = aux2;
 
-        if(aux1->max_x < main_node->max_x){
+        if(aux1->max_x < main_node->max_x) { 
+            /*
+            Here we're checking if the max_x value is on the left or right side of the old root.
+            If this conditional evaluates true, then the max value is on the right of the old root, else is on the left.
+            */
             aux1->max_x = main_node->max_x;
         }
 
-        main_node->min_x = main_node->left->min_x;
-        main_node->max_x = main_node->left->max_x > main_node->right->max_x ? main_node->left->max_x : main_node->right->max_x;
+        if(main_node->left){
+            
+            main_node->min_x = main_node->left->min_x; //min_x value of the now rotate node is going to be the value of his left child
 
-        aux1->min_x = aux1->left->min_x;
+        }else{
+
+            main_node->min_x = get_x(get_list_element(get_head(main_node->data))); //If there's no left child get the x coordinate from the first position on the list
+
+        }
+
+        if(main_node->left || main_node->right){
+
+            main_node->max_x = main_node->left->max_x > main_node->right->max_x ? main_node->left->max_x : main_node->right->max_x; //Check which one of its children has a greater max_x
+
+        }else{
+            
+            main_node->max_x = get_list_max_x(main_node->data); //If there's no child, search on the list of blocks this node has
+
+        }
+
+        if(main_node->left){
+
+            aux1->min_x = aux1->left->min_x;
+
+        }
 
         main_node->height = max(height(main_node->left), height(main_node->right)) + 1;
         aux1->height = max(height(aux1->left), height(aux1->right)) + 1;
@@ -142,13 +188,24 @@ void* insert(void* initial_tree, void* initial_node, void* element, int (*compar
         tree_aux->size++;
         return new_node(element);
     }
-    if (compare_nodes(get_list_element(get_head(node_aux->data)), element) == 1) {
+    if (compare_nodes(node_aux, element) == 1) {
+
+        if(get_x(element) < node_aux->min_x) node_aux->min_x = get_x(element);
+        
+        if(get_x(element) + get_w(element) > node_aux->max_x) node_aux->max_x = get_x(element) + get_w(element);
+        
         node_aux->right = insert(tree_aux, node_aux->right, element, compare_nodes);
 
     } else if (compare_nodes(node_aux, element) == -1) {
+
+        if(get_x(element) < node_aux->min_x) node_aux->min_x = get_x(element);
+        
+        if(get_x(element) + get_w(element) > node_aux->max_x) node_aux->max_x = get_x(element) + get_w(element);
+
         node_aux->left = insert(tree_aux, node_aux->left, element, compare_nodes);
 
     } else {
+    
         insert_list(get_node_data(node_aux), element);
     }
 
@@ -156,23 +213,23 @@ void* insert(void* initial_tree, void* initial_node, void* element, int (*compar
     
     int balance = get_balance(initial_node);
 
-    if (balance > 1 && compare_nodes(get_list_element(get_head(node_aux->left->data)), element) == -1) {
+    if (balance > 1 && compare_nodes(node_aux->left, element) == -1) {
         //LL
         return right_rotate(initial_node);
     }
 
-    if (balance < -1 && compare_nodes(get_list_element(get_head(node_aux->right->data)), element) == 1) {
+    if (balance < -1 && compare_nodes(node_aux->right, element) == 1) {
         //RR
         return left_rotate(initial_node);
     }
 
-    if (balance > 1 && compare_nodes(get_list_element(get_head(node_aux->left->data)), element) == 1) {
+    if (balance > 1 && compare_nodes(node_aux->left, element) == 1) {
         //LR
         node_aux->left = left_rotate(node_aux->left);
         return right_rotate(initial_node);
     }
 
-    if (balance < -1 && compare_nodes(get_list_element(get_head(node_aux->right->data)), element) == -1) {
+    if (balance < -1 && compare_nodes(node_aux->right, element) == -1) {
         //RL
         node_aux->right = right_rotate(node_aux->right);
         return left_rotate(initial_node);
@@ -296,28 +353,6 @@ void set_root(void* initialTree, void* new_root){
     aux->root = new_root;
 }
 
-int compare_x_and_update(void* node, void* element)	{
-
-	//Node is going to be a node from the tree
-    //Element is going to be a block from .geo file
-
-	node_t* aux1 = node; 
-
-    if(get_x(element) + get_w(element) > aux1->max_x){
-        aux1->max_x = get_x(element) + get_w(element);
-    }
-
-	if(get_x(element) > aux1->min_x) return 1; //Go to right
-
-	else if(get_x(element) < aux1->min_x){
-        aux1->min_x = get_x(element);
-        return -1; //Go to left
-    }
-
-	else return 0;
-
-}
-
 int compare_x(void* node, void* element) {
 
 	//Node is going to be a node from the tree
@@ -325,10 +360,57 @@ int compare_x(void* node, void* element) {
 
 	node_t* aux1 = node; 
 
-	if(get_x(element) > aux1->min_x) return 1; //Go to right
+	if(get_x(element) > get_x(get_list_element(get_head(aux1->data)))) return 1; //Go to right
 
-	else if(get_x(element) < aux1->min_x) return -1; //Go to left
+	else if(get_x(element) < get_x(get_list_element(get_head(aux1->data)))) return -1; //Go to left
 
 	else return 0;
 
+}
+
+double get_min_x(void* node){
+    node_t* aux = node;
+    return aux->min_x;
+}
+
+double get_max_x(void* node){
+    node_t* aux = node;
+    return aux->max_x;
+}
+
+double get_list_max_x(void* sequence){
+    double biggest_x = 0;
+    for(void* aux = get_head(sequence); aux; aux = get_next(aux)){
+
+        if(get_x(get_list_element(aux)) + get_w(get_list_element(aux)) > biggest_x) {
+            
+            biggest_x = get_x(get_list_element(aux)) + get_w(get_list_element(aux));
+
+        }
+
+    }
+
+    return biggest_x;
+}
+
+void printing_tree(void* initial_node, int space) {
+    node_t* aux = initial_node;
+
+    if (!aux) return;
+
+    space += 10;
+
+    printing_tree(aux->right, space);
+    puts(" ");
+
+    for (int i = 10; i < space; i++) printf(" ");
+
+    printf("[%.2lf][%.2lf]\n", aux->min_x, aux->max_x);
+
+    printing_tree(aux->left, space);
+}
+
+void recursive_print_tree(void* initial_tree) {
+    tree_t* tree_to_print = initial_tree;
+    printing_tree(tree_to_print->root, 0);
 }
