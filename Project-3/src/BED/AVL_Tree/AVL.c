@@ -71,12 +71,24 @@ void* right_rotate(void* initial_node) {
     if (initial_node) {
 
         node_t* main_node = initial_node;
-
         node_t* aux1 = main_node->left;
         node_t* aux2 = aux1->right;
 
         aux1->right = initial_node;
         main_node->left = aux2;
+
+        if(aux1->max_x < main_node->max_x) { 
+            /*
+            Here we're checking if the max_x value is on the left or right side of the old root.
+            If this conditional evaluates true, then the max value is on the right of the old root, else is on the left.
+            */
+            aux1->max_x = main_node->max_x;
+        }
+
+        main_node->min_x = main_node->left->min_x; //min_x value of the now rotate node is going to be the value of his left child
+        main_node->max_x = main_node->left->max_x > main_node->right->max_x ? main_node->left->max_x : main_node->right->max_x; //Check which one of its children has a greater max_x
+
+        aux1->min_x = aux1->left->min_x;
 
         main_node->height = max(height(main_node->left), height(main_node->right)) + 1;
         aux1->height = max(height(aux1->left), height(aux1->right)) + 1;
@@ -90,12 +102,20 @@ void* left_rotate(void* initial_node) {
     if (initial_node) {
 
         node_t* main_node = initial_node;
-
         node_t* aux1 = main_node->right;
         node_t* aux2 = aux1->left;
 
         aux1->left = initial_node;
         main_node->right = aux2;
+
+        if(aux1->max_x < main_node->max_x){
+            aux1->max_x = main_node->max_x;
+        }
+
+        main_node->min_x = main_node->left->min_x;
+        main_node->max_x = main_node->left->max_x > main_node->right->max_x ? main_node->left->max_x : main_node->right->max_x;
+
+        aux1->min_x = aux1->left->min_x;
 
         main_node->height = max(height(main_node->left), height(main_node->right)) + 1;
         aux1->height = max(height(aux1->left), height(aux1->right)) + 1;
