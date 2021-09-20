@@ -320,7 +320,7 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
         }else if(!strcmp(command, "mul")){
 
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
-            mul(residents, x, y, w, h, paths);
+            mul(blocks, x, y, w, h, paths);
             
         }/*else if(!strcmp(command, "dmpt")){
 
