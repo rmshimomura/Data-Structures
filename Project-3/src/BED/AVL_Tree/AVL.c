@@ -22,6 +22,10 @@ int max(int a, int b) {
     return (a > b) ? a : b;
 }
 
+int min(int a, int b) {
+    return (a < b) ? a : b;
+}
+
 int height(void* node) {
     
     if (!node) return 0;
@@ -105,10 +109,23 @@ void* right_rotate(void* initial_node) {
 
         }
 
-        if(main_node->left){
+        if(aux1->left){
+            if(aux1->right){
+                if(aux1->min_x > aux1->left->min_x || aux1->min_x > aux1->right->min_x ){
 
-            aux1->min_x = aux1->left->min_x;
+                    aux1->min_x = min(aux1->left->min_x, aux1->right->min_x);
+                }
+            }
+            if(aux1->min_x > aux1->left->min_x) {
+                aux1->min_x = aux1->left->min_x;
+            }
+        }
 
+        if(aux1->right) {
+
+            if(aux1->right->min_x < aux1->min_x){
+                aux1->min_x = aux1->right->min_x;
+            }
         }
 
         main_node->height = max(height(main_node->left), height(main_node->right)) + 1;
@@ -157,10 +174,23 @@ void* left_rotate(void* initial_node) {
 
         }
 
-        if(main_node->left){
+        if(aux1->left){
+            if(aux1->right){
+                if(aux1->min_x > aux1->left->min_x || aux1->min_x > aux1->right->min_x ){
 
-            aux1->min_x = aux1->left->min_x;
+                    aux1->min_x = min(aux1->left->min_x, aux1->right->min_x);
+                }
+            }
+            if(aux1->min_x > aux1->left->min_x) {
+                aux1->min_x = aux1->left->min_x;
+            }
+        }
 
+        if(aux1->right) {
+
+            if(aux1->right->min_x < aux1->min_x){
+                aux1->min_x = aux1->right->min_x;
+            }
         }
 
         main_node->height = max(height(main_node->left), height(main_node->right)) + 1;
@@ -205,7 +235,6 @@ void* insert(void* initial_tree, void* initial_node, void* element, int (*compar
         node_aux->left = insert(tree_aux, node_aux->left, element, compare_nodes);
 
     } else {
-    
         insert_list(get_node_data(node_aux), element);
     }
 
@@ -263,40 +292,61 @@ void* delete_node(void* initial_tree, void* initial_node, void* element, int (*c
         node_aux->left = delete_node(tree_aux, node_aux->left, element, compare_nodes, free_data);
 
     } else {
-        if (!(node_aux->left) || !(node_aux->right)) {  //One or no child
 
-            node_t* temp = node_aux->left ? node_aux->left : node_aux->right;
+        /*TESTING AREA, DANGEROUS BEHAVIOR :P */
 
-            if (!temp) {
+        if(get_size(node_aux->data) > 1){
 
-                free(node_aux);
-                free_data(node_aux->data);
-                return temp;
+            int flag = 0; //Check if the node that is going to be removed is the node that gives the maximun value to the node
 
-            } else {  
-
-                if (!node_aux->left) {
-                    node_t* aux = node_aux->right;
-                    free_data(node_aux->data);
-                    
-                    free(node_aux);
-                    return aux;
-                } else if (!node_aux->right) {
-                    node_t* aux = node_aux->left;
-                    free_data(node_aux->data);
-                    free(node_aux);
-                    return aux;
-                }
+            if(get_x(element) + get_w(element) == node_aux->max_x){
+                //TODO
             }
+
+            remove_node(node_aux->data, element, free);
+            //TODO update min and max
 
         } else {
 
-            node_t* temp = smallest_node(node_aux->right);
+            if (!(node_aux->left) || !(node_aux->right)) {  //One or no child
 
-            node_aux->data = temp->data;
+                node_t* temp = node_aux->left ? node_aux->left : node_aux->right;
 
-            node_aux->right = delete_node(tree_aux, node_aux->right, temp->data, compare_nodes, free_data);
+                if (!temp) {
+
+                    free(node_aux);
+                    free_data(node_aux->data);
+                    return temp;
+
+                } else {  
+
+                    if (!node_aux->left) {
+                        node_t* aux = node_aux->right;
+                        free_data(node_aux->data);
+
+                        free(node_aux);
+                        return aux;
+                    } else if (!node_aux->right) {
+                        node_t* aux = node_aux->left;
+                        free_data(node_aux->data);
+                        free(node_aux);
+                        return aux;
+                    }
+                }
+
+            } else {
+
+                node_t* temp = smallest_node(node_aux->right);
+
+                node_aux->data = temp->data;
+
+                node_aux->right = delete_node(tree_aux, node_aux->right, temp->data, compare_nodes, free_data);
+                
+            }
         }
+
+        /*END OF THE TESTING AREA*/
+
     }
 
     if (!node_aux) return initial_node;
