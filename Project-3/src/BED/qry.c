@@ -632,8 +632,8 @@ void mul_search(void* blocks_root, double x, double y, double w, double h, FILE*
 
 void dmpt(tree blocks, char* sfx, path paths){
 
-    char* temp = calloc(strlen(get_geo_name(paths)) + strlen(sfx) + 20, sizeof(char));
-    sprintf(temp, "%s-%s.dot", get_geo_name(paths), sfx);
+    char* temp = calloc(strlen(get_geo_name(paths)) + strlen(sfx) + strlen(get_output_directory(paths)) + 20, sizeof(char));
+    sprintf(temp, "%s%s-%s.dot", get_output_directory(paths), get_geo_name(paths), sfx);
     FILE* dot_file = fopen(temp, "w+");
     setvbuf(dot_file, 0, _IONBF, 0);
 
