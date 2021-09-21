@@ -17,7 +17,8 @@ void hom(tree blocks, double x, double y, double w, double h, path paths);
 void hom_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results);
 void mul(tree blocks, double x, double y, double w, double h, path paths) ;
 void mul_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results);
-//void dmpt
+void dmpt(tree blocks, char* sfx, path paths);
+void dmpt_recursive(void* current_node, FILE* dot_file);
 //void catac
 
 #endif

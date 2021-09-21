@@ -258,7 +258,7 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
     FILE* functions_file = fopen(get_path_current_qry_file(paths), "r");
     setvbuf(functions_file, 0, _IONBF, 0);
     
-    char command[6], cep[50], cpf[50], face, compl[50], id[50];
+    char command[6], cep[50], cpf[50], face, compl[50], id[50], sfx[50];
     double ar, v, x, y, h, w;
     int num;
 
@@ -322,11 +322,12 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
             mul(blocks, x, y, w, h, paths);
             
-        }/*else if(!strcmp(command, "dmpt")){
+        }else if(!strcmp(command, "dmpt")){
 
-            // ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 
+            fscanf(functions_file, "%s", sfx);
+            dmpt(blocks, sfx, paths);
             
-        }*//*else if(!strcmp(command, "catac")){
+        }/*else if(!strcmp(command, "catac")){
             
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
             catac(blocks, residents, x, y, w, h, paths);

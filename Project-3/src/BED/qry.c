@@ -629,3 +629,56 @@ void mul_search(void* blocks_root, double x, double y, double w, double h, FILE*
         }
     }
 }
+
+void dmpt(tree blocks, char* sfx, path paths){
+
+    char* temp = calloc(strlen(get_geo_name(paths)) + strlen(sfx) + 20, sizeof(char));
+    sprintf(temp, "%s-%s.dot", get_geo_name(paths), sfx);
+    FILE* dot_file = fopen(temp, "w+");
+    setvbuf(dot_file, 0, _IONBF, 0);
+
+    void* blocks_root = get_root(blocks);
+
+    fprintf(dot_file, "digraph ARV{\n");
+
+    dmpt_recursive(blocks_root, dot_file);
+
+    fprintf(dot_file, "}\n");
+    free(temp);
+    fclose(dot_file);
+    
+
+}
+
+void dmpt_recursive(void* current_node, FILE* dot_file){
+
+    if(!current_node) return;
+
+    dmpt_recursive(get_left(current_node), dot_file);
+    dmpt_recursive(get_right(current_node), dot_file);
+
+    if(get_left(current_node)){
+        fprintf(dot_file, "%lf->%lf;\n", get_x(get_list_element(get_head(get_node_data(current_node)))), get_x(get_list_element(get_head(get_node_data(get_left(current_node))))));
+    }
+
+    if(get_right(current_node)){
+        fprintf(dot_file, "%lf->%lf;\n", get_x(get_list_element(get_head(get_node_data(current_node)))), get_x(get_list_element(get_head(get_node_data(get_right(current_node))))));
+    }
+
+    fprintf(dot_file, "%lf[label = \"", get_x(get_list_element(get_head(get_node_data(current_node)))));
+
+    void* list_aux = get_node_data(current_node);
+
+    for(void* list_node = get_head(list_aux); list_node; list_node = get_next(list_node)){
+
+        void* block_data = get_list_element(list_node);
+
+        fprintf(dot_file, "CEP: %s\n", get_cep(block_data));
+        fprintf(dot_file, "X = %.2lf \t Y = %.2lf \t W = %.2lf \t H = %.2lf\n", get_x(block_data), get_y(block_data), get_w(block_data), get_h(block_data));
+
+    }
+
+    fprintf(dot_file, "Altura = %d \t\t Fator de balanceamento = %d\n", height(current_node), get_balance(current_node));
+
+    fprintf(dot_file, "\"]\n");
+}
