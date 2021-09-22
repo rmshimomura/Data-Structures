@@ -235,7 +235,7 @@ void oloc(hash locations, hash blocks_hash, char* id, char* cep, char face, int 
    
     void* new_location = create_location();
     set_location_properties(new_location, id, cep, face, num, compl, ar, v);
-    hash_table_insert_data(locations, cep, new_location);
+    hash_table_insert_data(locations, id, new_location);
     void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
     add_location(square, new_location);
 
@@ -319,12 +319,7 @@ void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, 
 
     void* person = find_item(hash_table_get_register_list(residents, cpf), cpf, compare_CPF);
     
-    void* location = NULL;
-
-    for(int i = 0; i < hash_table_size(locations); i++){
-        location = find_item(hash_table_get_list_by_index(locations, i), id, compare_id);
-        if(location) break;
-    }
+    void* location = find_item(hash_table_get_register_list(locations, id), id, compare_id);
 
     fprintf(txt_results, "loc(%s, %s):\n\n", id, cpf);
 
@@ -393,15 +388,9 @@ void loc_who(hash locations, char* id, path paths){
     FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
     setvbuf(txt_results, 0, _IONBF, 0);
 
-    void* location = NULL;
+    void* location = find_item(hash_table_get_register_list(locations, id), id, compare_id);
 
-    for(int i = 0; i < hash_table_size(locations); i++){
-
-        location = find_item(hash_table_get_list_by_index(locations, i), id, compare_id);
-
-        if(location) break;
-
-    }
+        
 
     fprintf(txt_results, "loc?(%s):\n\n", id);
 
@@ -429,16 +418,10 @@ void dloc(hash locations, hash blocks_hash, char* id, path paths){
     FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "a+");
     setvbuf(txt_results, 0, _IONBF, 0);
 
-    void* location = NULL;
-
     fprintf(txt_results, "dloc(%s):\n\n", id);
 
-    for(int i = 0; i < hash_table_size(locations); i++){ //This loop looks for the location in the locations hash table
-        
-        location = find_item(hash_table_get_list_by_index(locations, i), id, compare_id);
+    void* location = find_item(hash_table_get_register_list(locations, id), id, compare_id);
 
-        if(location) break;
-    }
 
     if(!get_person_living_here(location)){ //Nobody lives on target location
         
