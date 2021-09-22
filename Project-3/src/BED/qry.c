@@ -638,12 +638,14 @@ void dmpt(tree blocks, char* sfx, path paths){
 
     char* temp = calloc(strlen(get_geo_name(paths)) + strlen(sfx) + strlen(get_output_directory(paths)) + 20, sizeof(char));
     sprintf(temp, "%s%s-%s.dot", get_output_directory(paths), get_geo_name(paths), sfx);
+    
     FILE* dot_file = fopen(temp, "w+");
     setvbuf(dot_file, 0, _IONBF, 0);
 
     void* blocks_root = get_root(blocks);
 
     fprintf(dot_file, "digraph ARV{\n");
+    fprintf(dot_file, "graph [pad=\"0.5\", nodesep=\"2\", ranksep=\"2\"];");
 
     dmpt_recursive(blocks_root, dot_file);
 
@@ -658,8 +660,7 @@ void dmpt_recursive(void* current_node, FILE* dot_file){
 
     if(!current_node) return;
 
-    dmpt_recursive(get_left(current_node), dot_file);
-    dmpt_recursive(get_right(current_node), dot_file);
+
 
     if(get_left(current_node)){
         fprintf(dot_file, "\t%lf->\t%lf;\n", get_x(get_list_element(get_head(get_node_data(current_node)))), get_x(get_list_element(get_head(get_node_data(get_left(current_node))))));
@@ -685,4 +686,7 @@ void dmpt_recursive(void* current_node, FILE* dot_file){
     fprintf(dot_file, "Altura = %d \t\t Fator de balanceamento = %d\n", height(current_node), get_balance(current_node));
 
     fprintf(dot_file, "\"]\n");
+
+    dmpt_recursive(get_left(current_node), dot_file);
+    dmpt_recursive(get_right(current_node), dot_file);
 }
