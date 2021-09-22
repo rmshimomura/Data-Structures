@@ -669,7 +669,7 @@ void dmpt_recursive(void* current_node, FILE* dot_file){
         fprintf(dot_file, "\t%lf->\t%lf;\n", get_x(get_list_element(get_head(get_node_data(current_node)))), get_x(get_list_element(get_head(get_node_data(get_right(current_node))))));
     }
 
-    fprintf(dot_file, "\t%lf[label = \"", get_x(get_list_element(get_head(get_node_data(current_node)))));
+    fprintf(dot_file, "\t%lf[label = \" MIN_X = %lf\tMAX_X = %lf\n\n", get_x(get_list_element(get_head(get_node_data(current_node)))), get_min_x(current_node), get_max_x(current_node));
 
     void* list_aux = get_node_data(current_node);
 
