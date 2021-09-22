@@ -5,7 +5,7 @@
 
 void get_arguments(int argc, char** argv, path paths, flag flags);    
 void get_data(tree blocks, hash block_hash, hash residents, path paths, flag flags);        
-void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations, path paths, flag flags);
+void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations, path paths, flag flags, FILE* txt_results);
 void format_qry_results(tree blocks, hash blocks_hash, hash residents, hash locations, path paths, flag flags);
 int find_nx(path paths);
 

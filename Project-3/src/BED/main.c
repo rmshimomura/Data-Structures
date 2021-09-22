@@ -14,11 +14,11 @@ int main(int argc, char** argv){
     path paths = create_general_paths();
     flag flags = create_checkers();
     get_arguments(argc, argv, paths, flags);
-    
+    int nx = find_nx(paths);
     tree blocks = create_tree();
-    hash residents = hash_table_create_table(find_nx(paths));
-    hash blocks_hash = hash_table_create_table(find_nx(paths));
-    hash locations = hash_table_create_table(find_nx(paths));
+    hash residents = hash_table_create_table(nx);
+    hash blocks_hash = hash_table_create_table(nx);
+    hash locations = hash_table_create_table(nx);
 
     get_data(blocks, blocks_hash, residents, paths, flags);
         

@@ -236,22 +236,24 @@ void get_data(tree blocks, hash blocks_hash, hash residents, path paths, flag fl
         }
     }
 
+    fclose(file_blocks);
+    
     set_root(blocks, blocks_root);
 
     if (get_pm_inserted(flags)) {
 
         FILE* file_people = fopen(get_path_people_file(paths), "r");
-        setvbuf(file_blocks, 0, _IONBF, 0);
+        setvbuf(file_people, 0, _IONBF, 0);
 
         create_people_data(residents, blocks_hash, file_people);
 
         fclose(file_people);
     }
 
-    fclose(file_blocks);
+    
 }
 
-void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations, path paths, flag flags){
+void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations, path paths, flag flags, FILE* txt_results){
     
     FILE* modified_SVG = fopen(get_path_modified_SVG(paths), "w+");
     setvbuf(modified_SVG, 0, _IONBF, 0);
@@ -268,59 +270,59 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
         if(!strcmp(command, "dm?")){
 
             fscanf(functions_file, "%s", cpf);
-            dm_who(residents, cpf, paths);
+            dm_who(residents, cpf, txt_results, modified_SVG);
             
         }
 
         else if(!strcmp(command, "del")){
 
             fscanf(functions_file, "%s", cep);
-            del(blocks, blocks_hash, residents, locations, cep, paths);            
+            del(blocks, blocks_hash, residents, locations, cep, txt_results, modified_SVG);            
 
         }else if(!strcmp(command, "m?")){
             
             fscanf(functions_file, "%s", cep);
-            m_who(residents, blocks_hash, cep, paths);
+            m_who(residents, blocks_hash, cep, txt_results, modified_SVG);
 
         }else if(!strcmp(command, "mud")){
             
             fscanf(functions_file, "%s %s %c %d %s", cpf, cep, &face, &num, compl);
-            mud(residents, blocks_hash, cpf, cep, face, num, compl, paths);
+            mud(residents, blocks_hash, cpf, cep, face, num, compl, txt_results, modified_SVG);
 
         }else if(!strcmp(command, "oloc")){
 
             fscanf(functions_file,"%s %s %c %d %s %lf %lf", id, cep, &face, &num, compl, &ar, &v);
-            oloc(locations, blocks_hash, id, cep, face, num, compl, ar, v, paths);
+            oloc(locations, blocks_hash, id, cep, face, num, compl, ar, v, txt_results, modified_SVG);
             
         }else if(!strcmp(command, "oloc?")){
             
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
-            oloc_who(blocks, x, y, w, h, paths);
+            oloc_who(blocks, x, y, w, h, txt_results, modified_SVG);
             
         }else if(!strcmp(command, "loc")){
             
             fscanf(functions_file, "%s %s", id, cpf);
-            loc(residents, blocks_hash, locations, id, cpf, paths);
+            loc(residents, blocks_hash, locations, id, cpf, txt_results, modified_SVG);
 
         }else if(!strcmp(command, "loc?")){
             
             fscanf(functions_file, "%s", id);
-            loc_who(locations, id, paths);
+            loc_who(locations, id, txt_results, modified_SVG);
 
         }else if(!strcmp(command, "dloc")){
 
             fscanf(functions_file, "%s", id);
-            dloc(locations, blocks_hash, id, paths);
+            dloc(locations, blocks_hash, id, txt_results, modified_SVG);
             
         }else if(!strcmp(command, "hom")){
 
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
-            hom(blocks, x, y, w, h, paths);
+            hom(blocks, x, y, w, h, txt_results, modified_SVG);
             
         }else if(!strcmp(command, "mul")){
 
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
-            mul(blocks, x, y, w, h, paths);
+            mul(blocks, x, y, w, h, txt_results, modified_SVG);
             
         }else if(!strcmp(command, "dmpt")){
 
@@ -330,7 +332,7 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
         }/*else if(!strcmp(command, "catac")){
             
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
-            catac(blocks, residents, x, y, w, h, paths);
+            catac(blocks, residents, x, y, w, h, txt_results, modified_SVG);
 
         }*/
 
@@ -339,15 +341,18 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
     fclose(functions_file);
     fclose(modified_SVG);
 
+
 }
 
 void format_qry_results(tree blocks, hash blocks_hash, hash residents, hash locations, path paths, flag flags) {
 
     FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "w+");
     setvbuf(txt_results, 0, _IONBF, 0);
+
     fprintf(txt_results, "Rodrigo Mimura Shimomura\n");
     fprintf(txt_results, "FUNCTIONS EXECUTED:\n\n====================================================\n");
-    get_functions(blocks, blocks_hash, residents, locations, paths, flags);
+    get_functions(blocks, blocks_hash, residents, locations, paths, flags, txt_results);
+    
     fclose(txt_results);
     
 }
