@@ -262,26 +262,6 @@ void oloc_who_search(void* blocks_root, double x, double y, double w, double h, 
 
     if(blocks_root){
         
-        if(get_left(blocks_root)){
-
-            if(get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w){
-
-                oloc_who_search(get_left(blocks_root), x, y, w, h, txt_results);
-
-            }
-
-        }
-
-        if(get_right(blocks_root)){
-
-            if (get_max_x(get_right(blocks_root)) >= x && get_min_x(get_right(blocks_root)) <= x + w){
-
-                oloc_who_search(get_right(blocks_root), x, y, w, h, txt_results);
-
-            }
-
-        }
-
         if(get_min_x(blocks_root) >= x && get_max_x(blocks_root) <= x + w) {
 
             void* list_of_blocks = get_node_data(blocks_root);
@@ -308,6 +288,27 @@ void oloc_who_search(void* blocks_root, double x, double y, double w, double h, 
                 }
             }
         }
+
+        if(get_left(blocks_root)){
+
+            if(get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w){
+
+                oloc_who_search(get_left(blocks_root), x, y, w, h, txt_results);
+
+            }
+
+        }
+
+        if(get_right(blocks_root)){
+
+            if (get_max_x(get_right(blocks_root)) >= x && get_min_x(get_right(blocks_root)) <= x + w){
+
+                oloc_who_search(get_right(blocks_root), x, y, w, h, txt_results);
+
+            }
+
+        }
+
     }
 }
 
@@ -515,26 +516,6 @@ void hom_search(void* blocks_root, double x, double y, double w, double h, FILE*
 
     if(blocks_root){
         
-        if(get_left(blocks_root)){
-
-            if(get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w){
-                
-                hom_search(get_left(blocks_root), x, y, w, h, txt_results);
-
-            }
-
-        }
-
-        if(get_right(blocks_root)){
-
-            if (get_max_x(get_right(blocks_root)) >= x && get_min_x(get_right(blocks_root)) <= x + w){
-
-                hom_search(get_right(blocks_root), x, y, w, h, txt_results);
-
-            }
-
-        }
-
         if(get_min_x(blocks_root) >= x && get_max_x(blocks_root) <= x + w) {
 
             void* list_of_blocks = get_node_data(blocks_root);
@@ -561,6 +542,28 @@ void hom_search(void* blocks_root, double x, double y, double w, double h, FILE*
                 }
             }
         }
+
+        if(get_left(blocks_root)){
+
+            if(get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w){
+                
+                hom_search(get_left(blocks_root), x, y, w, h, txt_results);
+
+            }
+
+        }
+
+        if(get_right(blocks_root)){
+
+            if (get_max_x(get_right(blocks_root)) >= x && get_min_x(get_right(blocks_root)) <= x + w){
+
+                hom_search(get_right(blocks_root), x, y, w, h, txt_results);
+
+            }
+
+        }
+
+        
     }
 }
 
@@ -585,26 +588,6 @@ void mul_search(void* blocks_root, double x, double y, double w, double h, FILE*
 
     if(blocks_root){
         
-        if(get_left(blocks_root)){
-
-            if(get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w){
-                
-                mul_search(get_left(blocks_root), x, y, w, h, txt_results);
-
-            }
-
-        }
-
-        if(get_right(blocks_root)){
-
-            if (get_max_x(get_right(blocks_root)) >= x && get_min_x(get_right(blocks_root)) <= x + w){
-
-                mul_search(get_right(blocks_root), x, y, w, h, txt_results);
-
-            }
-
-        }
-
         if(get_min_x(blocks_root) >= x && get_max_x(blocks_root) <= x + w) {
 
             void* list_of_blocks = get_node_data(blocks_root);
@@ -631,6 +614,27 @@ void mul_search(void* blocks_root, double x, double y, double w, double h, FILE*
                 }
             }
         }
+
+        if(get_left(blocks_root)){
+
+            if(get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w){
+                
+                mul_search(get_left(blocks_root), x, y, w, h, txt_results);
+
+            }
+
+        }
+
+        if(get_right(blocks_root)){
+
+            if (get_max_x(get_right(blocks_root)) >= x && get_min_x(get_right(blocks_root)) <= x + w){
+
+                mul_search(get_right(blocks_root), x, y, w, h, txt_results);
+
+            }
+
+        }
+
     }
 }
 
