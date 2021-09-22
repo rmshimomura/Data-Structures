@@ -73,7 +73,7 @@ void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* ce
 
     void* blocks_root = get_root(blocks);
 
-    blocks_root = delete_node(blocks, blocks_root, square, compare_x, free_block_list);
+    // blocks_root = delete_node(blocks, blocks_root, square, compare_x, free_block_list);
 
     fprintf(txt_results, "====================================================\n");
 
@@ -195,17 +195,19 @@ void mud(hash residents, hash blocks_hash, char* cpf, char* cep, char face, int 
                 }
 
             }   else   { // This person moved to other CEP, now I need to remove the person from the void* vector of residents of the old block
-                
-                void** old_residents = get_residents(old_square);
+                if(old_square){
 
-                for(int i = 0; i < get_number_of_persons_living(old_square); i++){
-                
-                    if(old_residents[i] == person_to_update){
-                        
-                        old_residents[i] = NULL;
-                        break;
+                    void** old_residents = get_residents(old_square);
+
+                    for(int i = 0; i < get_number_of_persons_living(old_square); i++){
+                    
+                        if(old_residents[i] == person_to_update){
+                            
+                            old_residents[i] = NULL;
+                            break;
+                        }
+
                     }
-
                 }
 
                 add_resident(new_square, person_to_update);
@@ -247,8 +249,7 @@ void oloc_who(tree blocks, double x, double y, double w, double h, path paths){
     void* blocks_root = get_root(blocks);
 
     fprintf(txt_results, "oloc?(%.2lf, %.2lf, %.2lf, %.2lf):\n\n", x,y,w,h);
-
-
+    
     oloc_who_search(blocks_root, x,y, w, h, txt_results);
 
     fprintf(txt_results, "====================================================\n");
@@ -264,7 +265,7 @@ void oloc_who_search(void* blocks_root, double x, double y, double w, double h, 
         if(get_left(blocks_root)){
 
             if(get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w){
-                
+
                 oloc_who_search(get_left(blocks_root), x, y, w, h, txt_results);
 
             }
@@ -353,18 +354,21 @@ void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, 
 
         }   else   { // This person moved to other CEP, now I need to remove the person from the void* vector of residents of the old block
             
-            void** old_residents = get_residents(old_square);
+            if(old_square){
 
-            for(int i = 0; i < get_number_of_persons_living(old_square); i++){
-            
-                if(old_residents[i] == person){
-                    
-                    old_residents[i] = NULL;
-                    break;
+                void** old_residents = get_residents(old_square);
+
+                for(int i = 0; i < get_number_of_persons_living(old_square); i++){
+                
+                    if(old_residents[i] == person){
+                        
+                        old_residents[i] = NULL;
+                        break;
+                    }
+
                 }
 
             }
-
             add_resident(new_square, person);
 
         }
@@ -646,7 +650,7 @@ void dmpt(tree blocks, char* sfx, path paths){
     fprintf(dot_file, "}\n");
     free(temp);
     fclose(dot_file);
-    
+
 
 }
 
@@ -658,14 +662,14 @@ void dmpt_recursive(void* current_node, FILE* dot_file){
     dmpt_recursive(get_right(current_node), dot_file);
 
     if(get_left(current_node)){
-        fprintf(dot_file, "%lf->%lf;\n", get_x(get_list_element(get_head(get_node_data(current_node)))), get_x(get_list_element(get_head(get_node_data(get_left(current_node))))));
+        fprintf(dot_file, "\t%lf->\t%lf;\n", get_x(get_list_element(get_head(get_node_data(current_node)))), get_x(get_list_element(get_head(get_node_data(get_left(current_node))))));
     }
 
     if(get_right(current_node)){
-        fprintf(dot_file, "%lf->%lf;\n", get_x(get_list_element(get_head(get_node_data(current_node)))), get_x(get_list_element(get_head(get_node_data(get_right(current_node))))));
+        fprintf(dot_file, "\t%lf->\t%lf;\n", get_x(get_list_element(get_head(get_node_data(current_node)))), get_x(get_list_element(get_head(get_node_data(get_right(current_node))))));
     }
 
-    fprintf(dot_file, "%lf[label = \"", get_x(get_list_element(get_head(get_node_data(current_node)))));
+    fprintf(dot_file, "\t%lf[label = \"", get_x(get_list_element(get_head(get_node_data(current_node)))));
 
     void* list_aux = get_node_data(current_node);
 
@@ -673,8 +677,8 @@ void dmpt_recursive(void* current_node, FILE* dot_file){
 
         void* block_data = get_list_element(list_node);
 
-        fprintf(dot_file, "CEP: %s\n", get_cep(block_data));
-        fprintf(dot_file, "X = %.2lf \t Y = %.2lf \t W = %.2lf \t H = %.2lf\n", get_x(block_data), get_y(block_data), get_w(block_data), get_h(block_data));
+        fprintf(dot_file, "\tCEP: %s\n", get_cep(block_data));
+        fprintf(dot_file, "\tX = %.2lf \t Y = %.2lf \t W = %.2lf \t H = %.2lf\n\n", get_x(block_data), get_y(block_data), get_w(block_data), get_h(block_data));
 
     }
 
