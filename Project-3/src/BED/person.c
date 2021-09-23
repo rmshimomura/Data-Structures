@@ -97,10 +97,8 @@ void create_people_data(void* HT, void* blocks_hash,FILE* file_people) {
             
             fscanf(file_people, "%s %s %c %d %s", cpf, cep, &face, &num, compl);
             find_and_update_person(HT, cpf, cep, face, num, compl);
-            
             void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
             add_resident(square, find_item(hash_table_get_register_list(HT, cpf), cpf, compare_CPF));
-            
         }
     }
 }

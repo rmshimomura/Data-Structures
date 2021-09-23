@@ -239,7 +239,7 @@ void get_data(tree blocks, hash blocks_hash, hash residents, path paths, flag fl
     fclose(file_blocks);
     
     set_root(blocks, blocks_root);
-
+    
     if (get_pm_inserted(flags)) {
 
         FILE* file_people = fopen(get_path_people_file(paths), "r");
@@ -249,7 +249,6 @@ void get_data(tree blocks, hash blocks_hash, hash residents, path paths, flag fl
 
         fclose(file_people);
     }
-
     
 }
 
@@ -348,11 +347,9 @@ void format_qry_results(tree blocks, hash blocks_hash, hash residents, hash loca
 
     FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "w+");
     setvbuf(txt_results, 0, _IONBF, 0);
-
     fprintf(txt_results, "Rodrigo Mimura Shimomura\n");
     fprintf(txt_results, "FUNCTIONS EXECUTED:\n\n====================================================\n");
     get_functions(blocks, blocks_hash, residents, locations, paths, flags, txt_results);
-    
     fclose(txt_results);
     
 }
