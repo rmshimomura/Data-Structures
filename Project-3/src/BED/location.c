@@ -39,6 +39,13 @@ void location_info(void* location_data, FILE* txt_results){
 
 }
 
+char* location_get_id(void* current){
+    location* aux = current;
+
+    return aux->id;
+
+}
+
 int compare_id(void* current, void* match){
 
     location* current_node = current;

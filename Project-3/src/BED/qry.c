@@ -39,7 +39,7 @@ void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* ce
                 if (locations_list[i]) {
                     location_info(locations_list[i], txt_results);
 
-                    hash_table_remove_key(locations, location_get_cep(locations_list[i]), location_free, compare_cep);
+                    hash_table_remove_key(locations, location_get_id(locations_list[i]), location_free, compare_id);
                 }
             }
         }
@@ -295,7 +295,7 @@ void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, FILE* m
 
     if (!get_person_living_here(location)) {  //Nobody lives on target location
 
-        char* cep = location_get_cep(location);  //Gather location's cep to search on the blocks_hash hash table
+        
 
         fprintf(txt_results, "\tNobody is living on location with ID = %s...\n\n", id);
 
@@ -303,7 +303,7 @@ void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, FILE* m
 
         fprintf(txt_results, "====================================================\n");
 
-        hash_table_remove_key(locations, cep, location_free, compare_cep);
+        hash_table_remove_key(locations, id, location_free, compare_id);
 
         return;
     }
@@ -330,7 +330,7 @@ void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, FILE* m
             }
         }
 
-        hash_table_remove_key(locations, cep, location_free, compare_cep);
+        hash_table_remove_key(locations, id, location_free, compare_id);
 
     } else {
         fprintf(txt_results, "\tSorry, location ID = %s not found...\n\n", id);
