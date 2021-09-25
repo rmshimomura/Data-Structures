@@ -19,6 +19,7 @@ void destroy_AVL_tree(void* initial_tree, void* initial_node, void (*free_data)(
 void set_root(void* initialTree, void* new_root);
 double get_min_x(void* node);
 double get_max_x(void* node);
-double get_list_max_x(void* sequence);
+double find_max_w(void* sequence);
+int check_nodes(void* node1, void* node2);
 void printing_tree(void* initial_node, int space) ;
 void recursive_print_tree(void* initial_tree) ;

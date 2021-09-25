@@ -297,58 +297,107 @@ void* get_node_data(void* node) {
     return ((node_t*)(node))->data;
 }
 
+void update_min_and_max(void* initial_node){
+
+    node_t* aux = initial_node;
+
+    if(aux->left) {
+
+        if(aux->left->min_x < aux->min_x) {
+            aux->min_x = aux->left->min_x;
+        }
+
+        if(aux->left->max_x > aux->max_x) {
+            aux->max_x = aux->left->max_x;
+        }
+
+    }
+
+    if(aux->right) {
+
+        if(aux->right->min_x < aux->min_x) {
+            aux->min_x = aux->right->min_x;
+        }
+
+        if(aux->right->max_x > aux->max_x) {
+            aux->max_x = aux->right->max_x;
+        }
+
+    }
+
+}
+
 void* delete_node(void* initial_tree, void* initial_node, void* element, int (*compare_nodes)(void*, void*), void (*free_data)(void*)) {
+    
     if (!initial_node || !initial_tree) return initial_node;
-    //TODO need to fix min_x and max_x !!
+
     tree_t* tree_aux = initial_tree;
     node_t* node_aux = initial_node;
 
     if (compare_nodes(node_aux, element) == 1) {
         node_aux->right = delete_node(tree_aux, node_aux->right, element, compare_nodes, free_data);
+        if(node_aux->right) update_min_and_max(node_aux->right);
 
     } else if (compare_nodes(node_aux, element) == -1) {
         node_aux->left = delete_node(tree_aux, node_aux->left, element, compare_nodes, free_data);
+        if(node_aux->left) update_min_and_max(node_aux->left);
 
     } else {
 
         /*TESTING AREA, DANGEROUS BEHAVIOR :P */
 
-        if(get_size(node_aux->data) > 1){
-
-            int flag = 0; //Check if the node that is going to be removed is the node that gives the maximun value to the node
+        if(get_size(node_aux->data) > 1){ //Here, we have more than one block, so removing the node is unnecessary
 
             if(get_x(element) + get_w(element) == node_aux->max_x){
-                //TODO
+                
+                //Check if the block that is going to be removed is the block that gives the maximum value to the node
+
+                remove_node(node_aux->data, element, free_single_block); //Search on the list for the block that we need to remove
+                
+                //After removing the block, element won't exist anymore, so we need to update the rest of the path made until here, using update_max()
+
+                node_aux->max_w = find_max_w(node_aux->data);
+                node_aux->max_x = node_aux->original_x + node_aux->max_w;
+                
+            }else{
+
+                remove_node(node_aux->data, element, free_single_block);
+
             }
 
-            remove_node(node_aux->data, element, free);
-            //TODO update min and max
+            // update_min_and_max(node_aux);
 
-        } else {
+        } else { //Here, we are considering that there is only one block on this node, so it's necessary to remove the node
 
             if (!(node_aux->left) || !(node_aux->right)) {  //One or no child
 
                 node_t* temp = node_aux->left ? node_aux->left : node_aux->right;
 
-                if (!temp) {
+                if (!temp) { //No child case, so this is a leaf!
 
-                    free(node_aux);
                     free_data(node_aux->data);
+                    free(node_aux);
+
                     return temp;
 
-                } else {  
+                } else {  //One child
 
                     if (!node_aux->left) {
+
                         node_t* aux = node_aux->right;
                         free_data(node_aux->data);
-
                         free(node_aux);
+
                         return aux;
+
                     } else if (!node_aux->right) {
+                        
                         node_t* aux = node_aux->left;
                         free_data(node_aux->data);
                         free(node_aux);
+
                         return aux;
+
                     }
                 }
 
@@ -357,6 +406,10 @@ void* delete_node(void* initial_tree, void* initial_node, void* element, int (*c
                 node_t* temp = smallest_node(node_aux->right);
 
                 node_aux->data = temp->data;
+                node_aux->min_x = temp->min_x;
+                node_aux->max_x = temp->max_x;
+                node_aux->max_w = temp->max_w;
+                node_aux->original_x = temp->original_x;
 
                 node_aux->right = delete_node(tree_aux, node_aux->right, temp->data, compare_nodes, free_data);
                 
@@ -446,19 +499,21 @@ double get_max_x(void* node){
     return aux->max_x;
 }
 
-double get_list_max_x(void* sequence){
-    double biggest_x = 0;
+double find_max_w(void* sequence){
+    
+    double biggest_w = 0;
+    
     for(void* aux = get_head(sequence); aux; aux = get_next(aux)){
 
-        if(get_x(get_list_element(aux)) + get_w(get_list_element(aux)) > biggest_x) {
+        if(get_w(get_list_element(aux)) > biggest_w) {
             
-            biggest_x = get_x(get_list_element(aux)) + get_w(get_list_element(aux));
+            biggest_w = get_w(get_list_element(aux));
 
         }
 
     }
 
-    return biggest_x;
+    return biggest_w;
 }
 
 void printing_tree(void* initial_node, int space) {

@@ -52,7 +52,7 @@ void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* ce
 
     void* blocks_root = get_root(blocks);
 
-    // blocks_root = delete_node(blocks, blocks_root, square, compare_x, free_single_block);
+    blocks_root = delete_node(blocks, blocks_root, square, compare_x, free_single_block);
 
     fprintf(txt_results, "====================================================\n");
 }
@@ -495,4 +495,8 @@ void dmpt_recursive(void* current_node, FILE* dot_file) {
 
     fprintf(dot_file, "\"]\n");
 
+}
+
+void catac(tree blocks, hash blocks_hash, hash residents, hash locations, char* cep, FILE* txt_results, FILE* modified_SVG) {
+    
 }
