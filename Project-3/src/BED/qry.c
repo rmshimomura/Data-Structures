@@ -451,31 +451,46 @@ void dmpt(tree blocks, char* sfx, path paths) {
 }
 
 void dmpt_recursive(void* current_node, FILE* dot_file) {
+    
     if (!current_node) return;
 
+    dmpt_recursive(get_left(current_node), dot_file);
+    dmpt_recursive(get_right(current_node), dot_file);
+
     if (get_left(current_node)) {
-        fprintf(dot_file, "\t%lf->\t%lf;\n", get_x(get_list_element(get_head(get_node_data(current_node)))), get_x(get_list_element(get_head(get_node_data(get_left(current_node))))));
+        fprintf(dot_file, "\t%lf->%lf;\n", get_original_x(current_node), get_original_x(get_left(current_node)));
+        
+    }else{
+        fprintf(dot_file, "\t%lf->\"NULL_LEFT_%lf\"[style = invis];\n", get_original_x(current_node), get_original_x(current_node));
+        fprintf(dot_file, "\t\"NULL_LEFT_%lf\"[shape = doublecircle, label = \"NULL_LEFT_NODE_%lf\", style = invisible]\n", get_original_x(current_node), get_original_x(current_node));
+        
     }
 
     if (get_right(current_node)) {
-        fprintf(dot_file, "\t%lf->\t%lf;\n", get_x(get_list_element(get_head(get_node_data(current_node)))), get_x(get_list_element(get_head(get_node_data(get_right(current_node))))));
+        fprintf(dot_file, "\t%lf->%lf;\n", get_original_x(current_node), get_original_x(get_right(current_node)));
+        
+    }else{
+        fprintf(dot_file, "\t%lf->\"NULL_RIGHT_%lf\"[style = invis];\n", get_original_x(current_node), get_original_x(current_node));
+        fprintf(dot_file, "\t\"NULL_RIGHT_%lf\"[shape = doublecircle, label = \"NULL_RIGHT_NODE_%lf\", style = invisible]\n", get_original_x(current_node),get_original_x(current_node));
+        
     }
 
-    fprintf(dot_file, "\t%lf[label = \" MIN_X = %lf\tMAX_X = %lf\n\n", get_x(get_list_element(get_head(get_node_data(current_node)))), get_min_x(current_node), get_max_x(current_node));
-
     void* list_aux = get_node_data(current_node);
+    int i = 0;
+
+    fprintf(dot_file, "\t%lf[label = \" MIN_X = %lf\tMAX_X = %lf\n\nLIST SIZE = %d\n\n", get_original_x(current_node), get_min_x(current_node), get_max_x(current_node), get_size(list_aux));
 
     for (void* list_node = get_head(list_aux); list_node; list_node = get_next(list_node)) {
+        if(i == 3) break;
         void* block_data = get_list_element(list_node);
 
         fprintf(dot_file, "\tCEP: %s\n", get_cep(block_data));
         fprintf(dot_file, "\tX = %.2lf \t Y = %.2lf \t W = %.2lf \t H = %.2lf\n\n", get_x(block_data), get_y(block_data), get_w(block_data), get_h(block_data));
+        i++;
     }
 
     fprintf(dot_file, "Altura = %d \t\t Fator de balanceamento = %d\n", height(current_node), get_balance(current_node));
 
     fprintf(dot_file, "\"]\n");
 
-    dmpt_recursive(get_left(current_node), dot_file);
-    dmpt_recursive(get_right(current_node), dot_file);
 }

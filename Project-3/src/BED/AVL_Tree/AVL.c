@@ -9,6 +9,8 @@ typedef struct node {
     int height;
     double min_x;
     double max_x;
+    double original_x;
+    double max_w;
 
 } node_t;
 
@@ -51,6 +53,8 @@ void* new_node(void* data) {
     node_aux->left = NULL;
     node_aux->right = NULL;
     node_aux->height = 1;
+    node_aux->original_x = get_x(data);
+    node_aux->max_w = get_w(data);
     node_aux->min_x = get_x(data);
     node_aux->max_x = get_x(data) + get_w(data);
 
@@ -95,7 +99,7 @@ void* right_rotate(void* initial_node) {
 
         }else{
 
-            main_node->min_x = get_x(get_list_element(get_head(main_node->data))); //If there's no left child get the x coordinate from the first position on the list
+            main_node->min_x = main_node->original_x; //If there's no left child get the x coordinate from the first position on the list
 
         }
 
@@ -105,7 +109,7 @@ void* right_rotate(void* initial_node) {
 
         }else{
             
-            main_node->max_x = get_list_max_x(main_node->data); //If there's no child, search on the list of blocks this node has
+            main_node->max_x = main_node->original_x + main_node->max_w; //If there's no child, search on the list of blocks this node has
 
         }
 
@@ -160,7 +164,7 @@ void* left_rotate(void* initial_node) {
 
         }else{
 
-            main_node->min_x = get_x(get_list_element(get_head(main_node->data))); //If there's no left child get the x coordinate from the first position on the list
+            main_node->min_x = main_node->original_x; //If there's no left child get the x coordinate from the first position on the list
 
         }
 
@@ -170,7 +174,7 @@ void* left_rotate(void* initial_node) {
 
         }else{
             
-            main_node->max_x = get_list_max_x(main_node->data); //If there's no child, search on the list of blocks this node has
+            main_node->max_x = main_node->original_x + main_node->max_w; //If there's no child, search on the list of blocks this node has
 
         }
 
@@ -209,6 +213,16 @@ void* smallest_node(void* node) {
     return current;
 }
 
+double get_original_x(void* node){
+    node_t* aux = node;
+    return aux->original_x;
+}
+
+double get_max_w(void* node){
+    node_t* aux = node;
+    return aux->max_w;
+}
+
 void* insert(void* initial_tree, void* initial_node, void* element, int (*compare_nodes)(void*, void*)) {
 
     tree_t* tree_aux = initial_tree;
@@ -235,6 +249,10 @@ void* insert(void* initial_tree, void* initial_node, void* element, int (*compar
         node_aux->left = insert(tree_aux, node_aux->left, element, compare_nodes);
 
     } else {
+
+        if(get_w(element) > node_aux->max_w){
+            node_aux->max_w = get_w(element);
+        }
         insert_list(get_node_data(node_aux), element);
     }
 
@@ -410,9 +428,9 @@ int compare_x(void* node, void* element) {
 
 	node_t* aux1 = node; 
 
-	if(get_x(element) > get_x(get_list_element(get_head(aux1->data)))) return 1; //Go to right
+	if(get_x(element) > aux1->original_x) return 1; //Go to right
 
-	else if(get_x(element) < get_x(get_list_element(get_head(aux1->data)))) return -1; //Go to left
+	else if(get_x(element) < aux1->original_x) return -1; //Go to left
 
 	else return 0;
 

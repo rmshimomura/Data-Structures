@@ -11,6 +11,8 @@ void* get_node_data(void* node);
 void* get_root(void* initial_tree);
 int compare_x(void* node, void* element);
 int height(void* node);
+double get_original_x(void* node);
+double get_max_w(void* node);
 int get_balance(void* initial_node);
 void* delete_node(void* initial_tree, void* initial_node, void* element, int (*compare_nodes)(void*, void*), void (*free_data)(void*));
 void destroy_AVL_tree(void* initial_tree, void* initial_node, void (*free_data)(void*));
