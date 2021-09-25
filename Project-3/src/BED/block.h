@@ -18,6 +18,7 @@ char* get_cstroke(void* current_block);
 void** get_residents(void* block_data);
 void** get_locations(void* block_data);
 char* get_cep(void* current_block);
+void free_single_block(void* block_data);
 int get_number_of_persons_living(void* block_data);
 int get_number_of_locations_available(void* block_data);
 void set_x(void* current_block, double newValue);

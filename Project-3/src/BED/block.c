@@ -37,6 +37,17 @@ void* create_block(){
 	return new_block;
 }
 
+void free_single_block(void* block_data){
+	
+	block* block_to_remove = block_data;
+
+	free(block_to_remove->locations_available);
+	free(block_to_remove->persons_living);
+
+	free(block_to_remove);
+
+}
+
 void add_resident(void* block_data, void* person){
 	
 	block* new_block = block_data;
