@@ -178,19 +178,27 @@ void oloc_who(tree blocks, double x, double y, double w, double h, FILE* txt_res
 }
 
 void oloc_who_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results) {
+    
     if (blocks_root) {
-        if (get_min_x(blocks_root) >= x && get_max_x(blocks_root) <= x + w) {
+
+        if (get_original_x(blocks_root) >= x) {
+
             void* list_of_blocks = get_node_data(blocks_root);
 
             for (void* aux = get_head(list_of_blocks); aux; aux = get_next(aux)) {
+
                 void* element = get_list_element(aux);
 
                 if (inside(get_x(element), get_y(element), get_w(element), get_h(element), x, y, w, h)) {
+
                     for (int i = 0; i < get_number_of_locations_available(element); i++) {
+
                         void* location = get_locations(element)[i];
 
                         if (location) {
+
                             if (location_get_available(location)) {
+
                                 location_info(location, txt_results);
                             }
                         }
@@ -214,6 +222,7 @@ void oloc_who_search(void* blocks_root, double x, double y, double w, double h, 
 }
 
 void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, FILE* txt_results, FILE* modified_SVG) {
+    
     void* person = find_item(hash_table_get_register_list(residents, cpf), cpf, compare_CPF);
 
     void* location = find_item(hash_table_get_register_list(locations, id), id, compare_id);
@@ -221,6 +230,13 @@ void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, 
     fprintf(txt_results, "loc(%s, %s):\n\n", id, cpf);
 
     if (person && location) {
+
+        if (!location_get_available(location)) {
+            fprintf(txt_results, "\tI'm sorry, couldn't alloc person with cpf = %s to location with id = %s, because this location is not available\n\tor either removed by dloc.\n\n", cpf, id);
+            fprintf(txt_results, "====================================================\n");
+            return;
+        }
+
         void* old_square = find_item(hash_table_get_register_list(blocks_hash, get_person_cep(person)), get_person_cep(person), compare_cep);  //Find new square where this person will live
 
         void* new_square = find_item(hash_table_get_register_list(blocks_hash, location_get_cep(location)), location_get_cep(location), compare_cep);  //Find new square where this person will live
@@ -295,8 +311,6 @@ void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, FILE* m
 
     if (!get_person_living_here(location)) {  //Nobody lives on target location
 
-        
-
         fprintf(txt_results, "\tNobody is living on location with ID = %s...\n\n", id);
 
         location_info(location, txt_results);
@@ -351,7 +365,7 @@ void hom(tree blocks, double x, double y, double w, double h, FILE* txt_results,
 
 void hom_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results) {
     if (blocks_root) {
-        if (get_min_x(blocks_root) >= x && get_max_x(blocks_root) <= x + w) {
+        if (get_original_x(blocks_root) >= x) {
             void* list_of_blocks = get_node_data(blocks_root);
 
             for (void* aux = get_head(list_of_blocks); aux; aux = get_next(aux)) {
@@ -397,7 +411,7 @@ void mul(tree blocks, double x, double y, double w, double h, FILE* txt_results,
 
 void mul_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results) {
     if (blocks_root) {
-        if (get_min_x(blocks_root) >= x && get_max_x(blocks_root) <= x + w) {
+        if (get_original_x(blocks_root) >= x) {
             void* list_of_blocks = get_node_data(blocks_root);
 
             for (void* aux = get_head(list_of_blocks); aux; aux = get_next(aux)) {
@@ -483,6 +497,7 @@ void dmpt_recursive(void* current_node, FILE* dot_file) {
     for (void* list_node = get_head(list_aux); list_node; list_node = get_next(list_node)) {
         if(i == 3) {
             fprintf(dot_file, "\t...\n");
+            break;
         }
         void* block_data = get_list_element(list_node);
 
@@ -497,6 +512,72 @@ void dmpt_recursive(void* current_node, FILE* dot_file) {
 
 }
 
-void catac(tree blocks, hash blocks_hash, hash residents, hash locations, char* cep, FILE* txt_results, FILE* modified_SVG) {
+void catac(tree blocks, hash residents, hash locations, double x, double y, double w, double h, FILE* txt_results, FILE* modified_SVG) {
     
+    fprintf(txt_results, "catac(%.2lf, %.2lf, %.2lf, %.2lf):\n\n", x, y, w, h);
+
+    void* blocks_root = get_root(blocks);
+
+    catac_search(blocks, blocks_root, residents, locations, x, y, w, h, txt_results, modified_SVG);
+
+    fprintf(txt_results, "====================================================\n");
+
+}
+
+void catac_search(tree blocks, void* blocks_root, hash residents, hash locations, double x, double y, double w, double h, FILE* txt_results, FILE* modified_SVG) {
+
+    if(blocks_root){
+
+        if (get_original_x(blocks_root) >= x) {
+
+            void* list_of_blocks = get_node_data(blocks_root);
+
+            for (void* aux = get_head(list_of_blocks); aux; aux = get_next(aux)) {
+
+                void* element = get_list_element(aux);
+                void* temp = get_next(aux);
+
+                if (inside(get_x(element), get_y(element), get_w(element), get_h(element), x, y, w, h)) {
+
+                    for (int i = 0; i < get_number_of_persons_living(element); i++) {
+
+                        void* person = get_residents(element)[i];
+
+                        if (person) {
+                            print_person_info(person, txt_results);
+                            hash_table_remove_key(residents, get_cpf(person), free_person, compare_CPF);
+                        }
+                    }
+
+                    for(int i = 0; i < get_number_of_locations_available(element); i++) {
+
+                        void* location = get_locations(element)[i];
+
+                        if(location) {
+                            location_info(location, txt_results);
+                            hash_table_remove_key(locations, location_get_id(location), location_free, compare_id);
+                        }
+
+                    }
+                    
+                    blocks_root = delete_node(blocks, blocks_root, element, compare_x, free_single_block);
+                    if(temp) aux = temp;
+                    
+                }
+            }
+        }
+
+        if (get_left(blocks_root)) {
+            if (get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w) {
+                catac_search(blocks, get_left(blocks_root), residents, locations, x, y, w, h, txt_results, modified_SVG);
+            }
+        }
+
+        if (get_right(blocks_root)) {
+            if (get_max_x(get_right(blocks_root)) >= x && get_min_x(get_right(blocks_root)) <= x + w) {
+                catac_search(blocks, get_right(blocks_root), residents, locations, x, y, w, h, txt_results, modified_SVG);
+            }
+        }
+
+    }
 }

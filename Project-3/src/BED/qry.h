@@ -19,6 +19,7 @@ void mul(tree blocks, double x, double y, double w, double h, FILE* txt_results,
 void mul_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results);
 void dmpt(tree blocks, char* sfx, path paths);
 void dmpt_recursive(void* current_node, FILE* dot_file);
-//void catac
+void catac(tree blocks, hash residents, hash locations, double x, double y, double w, double h, FILE* txt_results, FILE* modified_SVG);
+void catac_search(tree blocks, void* blocks_root, hash residents, hash locations, double x, double y, double w, double h, FILE* txt_results, FILE* modified_SVG);
 
 #endif

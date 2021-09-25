@@ -328,12 +328,12 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
             fscanf(functions_file, "%s", sfx);
             dmpt(blocks, sfx, paths);
             
-        }/*else if(!strcmp(command, "catac")){
+        }else if(!strcmp(command, "catac")){
             
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
-            catac(blocks, residents, x, y, w, h, txt_results, modified_SVG);
+            catac(blocks, residents, locations, x, y, w, h, txt_results, modified_SVG);
 
-        }*/
+        }
 
     }
 
