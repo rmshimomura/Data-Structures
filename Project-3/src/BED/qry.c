@@ -52,7 +52,7 @@ void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* ce
 
     void* blocks_root = get_root(blocks);
 
-    // blocks_root = delete_node(blocks, blocks_root, square, compare_x, free_block_list);
+    // blocks_root = delete_node(blocks, blocks_root, square, compare_x, free_single_block);
 
     fprintf(txt_results, "====================================================\n");
 }
@@ -481,7 +481,9 @@ void dmpt_recursive(void* current_node, FILE* dot_file) {
     fprintf(dot_file, "\t%lf[label = \" MIN_X = %lf\tMAX_X = %lf\n\nLIST SIZE = %d\n\n", get_original_x(current_node), get_min_x(current_node), get_max_x(current_node), get_size(list_aux));
 
     for (void* list_node = get_head(list_aux); list_node; list_node = get_next(list_node)) {
-        if(i == 3) break;
+        if(i == 3) {
+            fprintf(dot_file, "\t...\n");
+        }
         void* block_data = get_list_element(list_node);
 
         fprintf(dot_file, "\tCEP: %s\n", get_cep(block_data));
