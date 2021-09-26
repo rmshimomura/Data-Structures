@@ -15,7 +15,7 @@ int inside(double x1, double y1, double p1Width, double p1Height, double x2, dou
     return 0;
 }
 
-void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* cep, FILE* txt_results, FILE* modified_SVG) {
+void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* cep, FILE* txt_results, void* list_of_modifications) {
     fprintf(txt_results, "del(%s):\n\n", cep);
 
     void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
@@ -58,7 +58,8 @@ void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* ce
     fprintf(txt_results, "====================================================\n");
 }
 
-void m_who(hash residents, hash blocks_hash, char* cep, FILE* txt_results, FILE* modified_SVG) {
+void m_who(hash residents, hash blocks_hash, char* cep, FILE* txt_results) {
+    
     void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
 
     fprintf(txt_results, "m?(%s):\n\n", cep);
@@ -84,7 +85,7 @@ void m_who(hash residents, hash blocks_hash, char* cep, FILE* txt_results, FILE*
     }
 }
 
-void dm_who(hash residents, char* cpf, FILE* txt_results, FILE* modified_SVG) {
+void dm_who(hash residents, char* cpf, FILE* txt_results, void* list_of_modifications) {
     fprintf(txt_results, "dm?(%s):\n\n", cpf);
 
     if (find_item(hash_table_get_register_list(residents, cpf), cpf, compare_CPF)) {
@@ -99,10 +100,11 @@ void dm_who(hash residents, char* cpf, FILE* txt_results, FILE* modified_SVG) {
     }
 }
 
-void mud(hash residents, hash blocks_hash, char* cpf, char* cep, char face, int num, char * compl, FILE* txt_results, FILE* modified_SVG) {
+void mud(hash residents, hash blocks_hash, char* cpf, char* cep, char face, int num, char * compl, FILE* txt_results, void* list_of_modifications) {
     //Update September, 14th. mud only makes the person buy a house, so house state = OWN
 
     if (hash_table_list_exist(residents, cpf)) {
+
         void* person_to_update = find_item(hash_table_get_register_list(residents, cpf), cpf, compare_CPF);  //Find person on hash table of residents
 
         void* old_square = find_item(hash_table_get_register_list(blocks_hash, get_person_cep(person_to_update)), get_person_cep(person_to_update), compare_cep);  //Find new square where this person will live
@@ -122,45 +124,64 @@ void mud(hash residents, hash blocks_hash, char* cpf, char* cep, char face, int 
                 int included = 0;
 
                 for (int i = 0; i < get_number_of_persons_living(new_square); i++) {
+
                     if (residents[i] == person_to_update) {
+
                         included = 1;
                         break;
+
                     }
+
                 }
 
                 if (!included) {
+
                     add_resident(new_square, person_to_update);
+
                 }
 
+
             } else {  // This person moved to other CEP, now I need to remove the person from the void* vector of residents of the old block
+                
                 if (old_square) {
+
                     void** old_residents = get_residents(old_square);
 
                     for (int i = 0; i < get_number_of_persons_living(old_square); i++) {
+
                         if (old_residents[i] == person_to_update) {
+
                             old_residents[i] = NULL;
                             break;
+
                         }
+
                     }
+
                 }
 
                 add_resident(new_square, person_to_update);
-            }
 
+            }
+            position_cases_line(old_square, new_square, face, num, person_to_update, list_of_modifications);
             fprintf(txt_results, "AFTER::\n\n");
-            update_person(person_to_update, cep, face, num, compl );
+            update_person(person_to_update, cep, face, num, compl);
             set_house_state(person_to_update, 0);
             print_person_info(person_to_update, txt_results);
-            fprintf(txt_results, "====================================================\n");
+
         }
 
     } else {
+
         fprintf(txt_results, "mud(%s, %s, %c, %d, %s):\n\n\tCouldn't find person with cpf : %s on the hash table.\n\n", cpf, cep, face, num, compl, cpf);
-        fprintf(txt_results, "====================================================\n");
+        
     }
+
+    fprintf(txt_results, "====================================================\n");
+
 }
 
-void oloc(hash locations, hash blocks_hash, char* id, char* cep, char face, int num, char * compl, double ar, double v, FILE* txt_results, FILE* modified_SVG) {
+void oloc(hash locations, hash blocks_hash, char* id, char* cep, char face, int num, char * compl, double ar, double v, FILE* txt_results) {
     void* new_location = create_location();
     set_location_properties(new_location, id, cep, face, num, compl, ar, v);
     hash_table_insert_data(locations, id, new_location);
@@ -168,17 +189,26 @@ void oloc(hash locations, hash blocks_hash, char* id, char* cep, char face, int 
     add_location(square, new_location);
 }
 
-void oloc_who(tree blocks, double x, double y, double w, double h, FILE* txt_results, FILE* modified_SVG) {
+void oloc_who(tree blocks, hash block_hash, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications) {
+    
+    char modification[1000];
+
     void* blocks_root = get_root(blocks);
 
     fprintf(txt_results, "oloc?(%.2lf, %.2lf, %.2lf, %.2lf):\n\n", x, y, w, h);
 
-    oloc_who_search(blocks_root, x, y, w, h, txt_results);
+    sprintf(modification, "<rect x=\"%.3lf\" y=\"%.3lf\" width=\"%.3lf\" height=\"%.3lf\"\n style=\"fill:black;stroke:black;stroke-width:2;fill-opacity:0;stroke-opacity:1;stroke-dasharray:5\" />\n", x, y, w, h);
+
+    char* mod1 = calloc(strlen(modification) + 5, sizeof(char));
+    strcpy(mod1, modification);
+    insert_list(list_of_modifications, mod1);
+
+    oloc_who_search(blocks_root, block_hash, x, y, w, h, txt_results, list_of_modifications);
 
     fprintf(txt_results, "====================================================\n");
 }
 
-void oloc_who_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results) {
+void oloc_who_search(void* blocks_root, hash blocks_hash, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications) {
     
     if (blocks_root) {
 
@@ -199,8 +229,9 @@ void oloc_who_search(void* blocks_root, double x, double y, double w, double h, 
                         if (location) {
 
                             if (location_get_available(location)) {
-
+                                position_cases_text(blocks_hash, location, list_of_modifications, '*');
                                 location_info(location, txt_results);
+
                             }
                         }
                     }
@@ -210,19 +241,19 @@ void oloc_who_search(void* blocks_root, double x, double y, double w, double h, 
 
         if (get_left(blocks_root)) {
             if (get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w) {
-                oloc_who_search(get_left(blocks_root), x, y, w, h, txt_results);
+                oloc_who_search(get_left(blocks_root), blocks_hash, x, y, w, h, txt_results, list_of_modifications);
             }
         }
 
         if (get_right(blocks_root)) {
             if (get_max_x(get_right(blocks_root)) >= x && get_min_x(get_right(blocks_root)) <= x + w) {
-                oloc_who_search(get_right(blocks_root), x, y, w, h, txt_results);
+                oloc_who_search(get_right(blocks_root), blocks_hash, x, y, w, h, txt_results, list_of_modifications);
             }
         }
     }
 }
 
-void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, FILE* txt_results, FILE* modified_SVG) {
+void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, FILE* txt_results, void* list_of_modifications) {
     
     void* person = find_item(hash_table_get_register_list(residents, cpf), cpf, compare_CPF);
 
@@ -274,27 +305,7 @@ void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, 
             add_resident(new_square, person);
         }
 
-        switch(location_get_face(location)) {
-
-            case 'N':
-                fprintf(modified_SVG, "\t<line x1=\"%.2lf\" x2=\"%.2lf\" y1=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:black;stroke-width:2;\"/>\n", get_x(new_square) + location_get_num(location), get_x(new_square) + location_get_num(location), 0, get_y(new_square) + get_h(new_square));
-                // fprintf(modified_SVG, "<text x=\"%.2lf\" y=\"%.2lf\">%s</text>", );
-                //TODO perguntar diferenca de imovel, locacao e quantidade de informacoes da pessoa
-                break;
-
-            case 'S':
-                fprintf(modified_SVG, "\t<line x1=\"%.2lf\" x2=\"%.2lf\" y1=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:black;stroke-width:2;\"/>\n", get_x(new_square) + location_get_num(location), get_x(new_square) + location_get_num(location), 0, get_y(new_square));
-                break;
-
-            case 'L':
-                fprintf(modified_SVG, "\t<line x1=\"%.2lf\" x2=\"%.2lf\" y1=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:black;stroke-width:2;\"/>\n", get_x(new_square), get_x(new_square), 0, get_y(new_square) + location_get_num(location));
-                break;
-
-            case 'O':
-                fprintf(modified_SVG, "\t<line x1=\"%.2lf\" x2=\"%.2lf\" y1=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:black;stroke-width:2;\"/>\n", get_x(new_square) + get_w(new_square), get_x(new_square) + get_w(new_square), 0, get_y(new_square) + location_get_num(location));
-                break;
-                
-        }
+        
 
         
 
@@ -323,7 +334,7 @@ void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, 
 
 }
 
-void loc_who(hash blocks_hash, hash locations, char* id, FILE* txt_results, FILE* modified_SVG) {
+void loc_who(hash blocks_hash, hash locations, char* id, FILE* txt_results, void* list_of_modifications) {
     
     void* location = find_item(hash_table_get_register_list(locations, id), id, compare_id);
 
@@ -335,18 +346,18 @@ void loc_who(hash blocks_hash, hash locations, char* id, FILE* txt_results, FILE
 
             fprintf(txt_results, "\tThis location has been ended by dloc!\n");
             location_info(location, txt_results);
-            position_cases_loc_who(blocks_hash, location, modified_SVG, '#');
+            position_cases_text(blocks_hash, location, list_of_modifications, '#');
 
         } else if (location_get_available(location)) {
 
             location_info(location, txt_results);
-            position_cases_loc_who(blocks_hash, location, modified_SVG, '$');
+            position_cases_text(blocks_hash, location, list_of_modifications, '$');
 
         } else {
 
             location_info(location, txt_results);
             print_person_info(get_person_living_here(location), txt_results);
-            position_cases_loc_who(blocks_hash, location, modified_SVG, "*");
+            position_cases_text(blocks_hash, location, list_of_modifications, '*');
 
         }
 
@@ -359,7 +370,7 @@ void loc_who(hash blocks_hash, hash locations, char* id, FILE* txt_results, FILE
     fprintf(txt_results, "====================================================\n");
 }
 
-void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, FILE* modified_SVG) {
+void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, void* list_of_modifications) {
     fprintf(txt_results, "dloc(%s):\n\n", id);
 
     void* location = find_item(hash_table_get_register_list(locations, id), id, compare_id);
@@ -414,7 +425,7 @@ void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, FILE* m
     fprintf(txt_results, "====================================================\n");
 }
 
-void hom(tree blocks, double x, double y, double w, double h, FILE* txt_results, FILE* modified_SVG) {
+void hom(tree blocks, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications) {
     fprintf(txt_results, "hom(%.2lf, %.2lf, %.2lf, %.2lf):\n\n", x, y, w, h);
 
     void* blocks_root = get_root(blocks);
@@ -460,7 +471,7 @@ void hom_search(void* blocks_root, double x, double y, double w, double h, FILE*
     }
 }
 
-void mul(tree blocks, double x, double y, double w, double h, FILE* txt_results, FILE* modified_SVG) {
+void mul(tree blocks, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications) {
     fprintf(txt_results, "mul(%.2lf, %.2lf, %.2lf, %.2lf):\n\n", x, y, w, h);
 
     void* blocks_root = get_root(blocks);
@@ -573,19 +584,27 @@ void dmpt_recursive(void* current_node, FILE* dot_file) {
 
 }
 
-void catac(tree blocks, hash residents, hash locations, double x, double y, double w, double h, FILE* txt_results, FILE* modified_SVG) {
+void catac(tree blocks, hash residents, hash locations, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications) {
     
     fprintf(txt_results, "catac(%.2lf, %.2lf, %.2lf, %.2lf):\n\n", x, y, w, h);
 
     void* blocks_root = get_root(blocks);
 
-    catac_search(blocks, blocks_root, residents, locations, x, y, w, h, txt_results, modified_SVG);
+    char modification[1000];
+
+    sprintf(modification, "\t<rect x=\"%.2lf\" y=\"%.2lf\" width=\"%.2lf\" height=\"%.2lf\"\n style=\"fill:#AB37C8;stroke:#AA0044;fill-opacity:0.5;stroke-opacity:0.5\" />\n", x,y,w,h); 
+
+    char* command = calloc(strlen(modification) + 5, sizeof(char));
+    strcpy(command, modification);
+    insert_list(list_of_modifications, command);
+
+    catac_search(blocks, blocks_root, residents, locations, x, y, w, h, txt_results, list_of_modifications);
 
     fprintf(txt_results, "====================================================\n");
 
 }
 
-void catac_search(tree blocks, void* blocks_root, hash residents, hash locations, double x, double y, double w, double h, FILE* txt_results, FILE* modified_SVG) {
+void catac_search(tree blocks, void* blocks_root, hash residents, hash locations, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications) {
 
     if(blocks_root){
 
@@ -597,6 +616,7 @@ void catac_search(tree blocks, void* blocks_root, hash residents, hash locations
 
                 void* element = get_list_element(aux);
                 void* temp = get_next(aux);
+                int deletion_happened = 0;
 
                 if (inside(get_x(element), get_y(element), get_w(element), get_h(element), x, y, w, h)) {
 
@@ -622,21 +642,26 @@ void catac_search(tree blocks, void* blocks_root, hash residents, hash locations
                     }
                     
                     blocks_root = delete_node(blocks, blocks_root, element, compare_x, free_single_block);
+                    deletion_happened = 1;
                     if(temp) aux = temp;
+
                     
                 }
+
+                if(deletion_happened) aux = get_previous(aux);
+
             }
         }
 
         if (get_left(blocks_root)) {
             if (get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w) {
-                catac_search(blocks, get_left(blocks_root), residents, locations, x, y, w, h, txt_results, modified_SVG);
+                catac_search(blocks, get_left(blocks_root), residents, locations, x, y, w, h, txt_results, list_of_modifications);
             }
         }
 
         if (get_right(blocks_root)) {
             if (get_max_x(get_right(blocks_root)) >= x && get_min_x(get_right(blocks_root)) <= x + w) {
-                catac_search(blocks, get_right(blocks_root), residents, locations, x, y, w, h, txt_results, modified_SVG);
+                catac_search(blocks, get_right(blocks_root), residents, locations, x, y, w, h, txt_results, list_of_modifications);
             }
         }
 
