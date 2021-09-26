@@ -15,5 +15,7 @@
     char* get_person_cep(void* person_data);
     void set_house_state(void* person_data, int state);
     char get_person_sex(void* person_to_analyze);
+    char get_person_place_face(void* person_data); 
+    int get_person_place_num(void* person_data);
 
 #endif
