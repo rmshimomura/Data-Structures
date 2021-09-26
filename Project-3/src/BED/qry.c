@@ -273,6 +273,30 @@ void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, 
             add_resident(new_square, person);
         }
 
+        switch(location_get_face(location)) {
+
+            case 'N':
+                fprintf(modified_SVG, "\t<line x1=\"%.2lf\" x2=\"%.2lf\" y1=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:black;stroke-width:2;\"/>\n", get_x(new_square) + location_get_num(location), get_x(new_square) + location_get_num(location), 0, get_y(new_square) + get_h(new_square));
+                // fprintf(modified_SVG, "<text x=\"%.2lf\" y=\"%.2lf\">%s</text>", );
+                //TODO perguntar diferenca de imovel, locacao e quantidade de informacoes da pessoa
+                break;
+
+            case 'S':
+                fprintf(modified_SVG, "\t<line x1=\"%.2lf\" x2=\"%.2lf\" y1=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:black;stroke-width:2;\"/>\n", get_x(new_square) + location_get_num(location), get_x(new_square) + location_get_num(location), 0, get_y(new_square));
+                break;
+
+            case 'L':
+                fprintf(modified_SVG, "\t<line x1=\"%.2lf\" x2=\"%.2lf\" y1=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:black;stroke-width:2;\"/>\n", get_x(new_square), get_x(new_square), 0, get_y(new_square) + location_get_num(location));
+                break;
+
+            case 'O':
+                fprintf(modified_SVG, "\t<line x1=\"%.2lf\" x2=\"%.2lf\" y1=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:black;stroke-width:2;\"/>\n", get_x(new_square) + get_w(new_square), get_x(new_square) + get_w(new_square), 0, get_y(new_square) + location_get_num(location));
+                break;
+                
+        }
+
+        
+
         update_person(person, location_get_cep(location), location_get_face(location), location_get_num(location), location_get_complement(location));
         set_house_state(person, 1);
         location_set_available(location, false);
@@ -280,8 +304,22 @@ void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, 
         print_person_info(person, txt_results);
         set_person_living_here(location, person);
 
-        fprintf(txt_results, "====================================================\n");
+    } else if (person && !location) {
+
+        fprintf(txt_results, "\tPerson found, but couldn't find the location!\n\n");
+
+    }else if(!person && location) {
+
+        fprintf(txt_results, "\tLocation found, but couldn't find the person!\n\n");
+
+    }else if (!person && !location) {
+
+        fprintf(txt_results, "\tCouldn't find the person and the location!\n\n");
+
     }
+
+    fprintf(txt_results, "====================================================\n");
+
 }
 
 void loc_who(hash locations, char* id, FILE* txt_results, FILE* modified_SVG) {
@@ -317,7 +355,10 @@ void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, FILE* m
 
         fprintf(txt_results, "====================================================\n");
 
-        hash_table_remove_key(locations, id, location_free, compare_id);
+        // hash_table_remove_key(locations, id, location_free, compare_id);
+
+        location_set_ended(location, 1); //This flag here is going to be used on svg results printing of loc_who
+        location_set_available(location, 0); //Set that this location isn't available anymore
 
         return;
     }
@@ -344,7 +385,10 @@ void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, FILE* m
             }
         }
 
-        hash_table_remove_key(locations, id, location_free, compare_id);
+        // hash_table_remove_key(locations, id, location_free, compare_id);
+
+        location_set_ended(location, 1);
+        location_set_available(location, 0);
 
     } else {
         fprintf(txt_results, "\tSorry, location ID = %s not found...\n\n", id);
