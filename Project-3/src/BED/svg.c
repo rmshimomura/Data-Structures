@@ -18,6 +18,8 @@ void print_on_SVG(tree blocks, path paths) {
 
     recursive_print_svg(blocks_root, original_svg);
 
+    fprintf(original_svg, "</svg>");
+
     fclose(original_svg);
 
 }
@@ -32,6 +34,7 @@ void recursive_print_svg(void* root, FILE* original_svg) {
         for(void* aux = get_head(block_list); aux; aux = get_next(aux)) {
             void* block = get_list_element(aux);
             fprintf(original_svg, "\t<rect x=\"%.2lf\" y=\"%.2lf\" width=\"%.2lf\" height=\"%.2lf\" id=\"%s\"\n style=\"fill:%s;stroke:%s;stroke-width:%.2lf;fill-opacity:0.5;stroke-opacity:1\" />\n", get_x(block), get_y(block), get_w(block), get_h(block), get_cep(block), get_cstroke(block), get_cfill(block), get_sw(block));
+            fprintf(original_svg, "<text x=\"%.2lf\" y=\"%.2lf\">%s</text>", get_x(block), get_y(block), get_cep(block));
         }
 
         recursive_print_svg(get_left(root), original_svg);
@@ -84,7 +87,7 @@ void position_cases_line(void* old_square, void* new_square, char face, int num,
     // (x1,y1) position is going to be the old square
     // (x2,y2) position is going to be the new square
     char mod1[1000], mod2[1000], mod3[1000];
-
+    
     switch(get_person_place_face(person_info)) {
 
         case 'N':
@@ -92,27 +95,27 @@ void position_cases_line(void* old_square, void* new_square, char face, int num,
             switch(face) {
                 
                 case 'N':
-                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + get_h(old_square) - 2, get_x(new_square) + (double)num, get_y(new_square) + get_h(new_square) - 2);
-                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + get_h(old_square) - 2);
-                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + (double)num, get_y(new_square) + get_h(new_square) - 2);
+                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + get_h(old_square), get_x(new_square) + (double)num, get_y(new_square) + get_h(new_square));
+                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + get_h(old_square));
+                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + (double)num, get_y(new_square) + get_h(new_square));
                     break;
 
                 case 'S':
-                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + get_h(old_square) - 2, get_x(new_square) + (double)num, get_y(new_square) + 2);
-                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + get_h(old_square) - 2);
-                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + (double)num, get_y(new_square) + 2);
+                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + get_h(old_square), get_x(new_square) + (double)num, get_y(new_square) + 2);
+                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + get_h(old_square));
+                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + (double)num, get_y(new_square));
                     break;
 
                 case 'L':
-                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + get_h(old_square) - 2, get_x(new_square) + 2, get_y(new_square) + (double)num);
-                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + get_h(old_square) - 2);
-                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + 2, get_y(new_square) + (double)num);
+                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + get_h(old_square), get_x(new_square), get_y(new_square) + (double)num);
+                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + get_h(old_square));
+                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square), get_y(new_square) + (double)num);
                     break;
 
                 case 'O':
-                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + get_h(old_square) - 2, get_x(new_square) + get_w(new_square) - 2, get_y(new_square) + (double)num);
-                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + get_h(old_square) - 2);
-                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + get_w(new_square) - 2, get_y(new_square) + (double)num);
+                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + get_h(old_square), get_x(new_square) + get_w(new_square), get_y(new_square) + (double)num);
+                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + get_h(old_square));
+                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + get_w(new_square), get_y(new_square) + (double)num);
                     break;
             }
 
@@ -123,27 +126,27 @@ void position_cases_line(void* old_square, void* new_square, char face, int num,
             switch(face) {
                 
                 case 'N':
-                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + 2, get_x(new_square) + (double)num, get_y(new_square) + get_h(new_square) - 2);
-                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + 2);
-                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + (double)num, get_y(new_square) + get_h(new_square) - 2);
+                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square), get_x(new_square) + (double)num, get_y(new_square) + get_h(new_square));
+                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square));
+                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + (double)num, get_y(new_square) + get_h(new_square));
                     break;
 
                 case 'S':
-                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + 2, get_x(new_square) + (double)num, get_y(new_square) + 2);
-                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + 2);
-                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + (double)num, get_y(new_square) + 2);
+                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square), get_x(new_square) + (double)num, get_y(new_square));
+                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square));
+                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + (double)num, get_y(new_square));
                     break;
 
                 case 'L':
-                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + 2, get_x(new_square) + 2, get_y(new_square) + (double)num);
-                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + 2);
-                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + 2, get_y(new_square) + (double)num);
+                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square), get_x(new_square), get_y(new_square) + (double)num);
+                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square));
+                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square), get_y(new_square) + (double)num);
                     break;
 
                 case 'O':
-                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + 2, get_x(new_square) + get_w(new_square) - 2, get_y(new_square) + (double)num);
-                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square) + 2);
-                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + get_w(new_square) - 2, get_y(new_square) + (double)num);
+                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square), get_x(new_square) + get_w(new_square), get_y(new_square) + (double)num);
+                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_person_place_num(person_info), get_y(old_square));
+                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + get_w(new_square), get_y(new_square) + (double)num);
                     break;
             }
 
@@ -154,27 +157,27 @@ void position_cases_line(void* old_square, void* new_square, char face, int num,
             switch(face) {
                 
                 case 'N':
-                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + 2, get_y(old_square) + (double)num, get_x(new_square) + (double)num, get_y(new_square) + get_h(new_square) - 2);
-                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + 2, get_y(old_square) + (double)num);
-                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + (double)num, get_y(new_square) + get_h(new_square) - 2);
+                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square), get_y(old_square) + (double)num, get_x(new_square) + (double)num, get_y(new_square) + get_h(new_square));
+                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square), get_y(old_square) + (double)num);
+                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + (double)num, get_y(new_square) + get_h(new_square));
                     break;
 
                 case 'S':
-                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + 2, get_y(old_square) + (double)num, get_x(new_square) + (double)num, get_y(new_square) + 2);
-                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + 2, get_y(old_square) + (double)num);
-                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + (double)num, get_y(new_square) + 2);
+                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square), get_y(old_square) + (double)num, get_x(new_square) + (double)num, get_y(new_square));
+                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square), get_y(old_square) + (double)num);
+                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + (double)num, get_y(new_square));
                     break;
 
                 case 'L':
-                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + 2, get_y(old_square) + (double)num, get_x(new_square) + 2, get_y(new_square) + (double)num);
-                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + 2, get_y(old_square) + (double)num);
-                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + 2, get_y(new_square) + (double)num);
+                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square), get_y(old_square) + (double)num, get_x(new_square), get_y(new_square) + (double)num);
+                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square), get_y(old_square) + (double)num);
+                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square), get_y(new_square) + (double)num);
                     break;
 
                 case 'O':
-                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + 2, get_y(old_square) + (double)num, get_x(new_square) + get_w(new_square) - 2, get_y(new_square) + (double)num);
-                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + 2, get_y(old_square) + (double)num);
-                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + get_w(new_square) - 2, get_y(new_square) + (double)num);
+                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square), get_y(old_square) + (double)num, get_x(new_square) + get_w(new_square), get_y(new_square) + (double)num);
+                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square), get_y(old_square) + (double)num);
+                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + get_w(new_square), get_y(new_square) + (double)num);
                     break;
             }
 
@@ -185,27 +188,27 @@ void position_cases_line(void* old_square, void* new_square, char face, int num,
             switch(face) {
                 
                 case 'N':
-                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_w(old_square) - 2, get_y(old_square) + (double)num, get_x(new_square) + (double)num, get_y(new_square) + get_h(new_square) - 2);
-                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_w(old_square) - 2, get_y(old_square) + (double)num);
-                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + (double)num, get_y(new_square) + get_h(new_square) - 2);
+                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_w(old_square), get_y(old_square) + (double)num, get_x(new_square) + (double)num, get_y(new_square) + get_h(new_square));
+                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_w(old_square), get_y(old_square) + (double)num);
+                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + (double)num, get_y(new_square) + get_h(new_square));
                     break;
 
                 case 'S':
-                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_w(old_square) - 2, get_y(old_square) + (double)num, get_x(new_square) + (double)num, get_y(new_square) + 2);
-                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_w(old_square) - 2, get_y(old_square) + (double)num);
-                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + (double)num, get_y(new_square) + 2);
+                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_w(old_square), get_y(old_square) + (double)num, get_x(new_square) + (double)num, get_y(new_square));
+                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_w(old_square), get_y(old_square) + (double)num);
+                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + (double)num, get_y(new_square));
                     break;
 
                 case 'L':
-                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_w(old_square) - 2, get_y(old_square) + (double)num, get_x(new_square) + 2, get_y(new_square) + (double)num);
-                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_w(old_square) - 2, get_y(old_square) + (double)num);
-                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + 2, get_y(new_square) + (double)num);
+                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_w(old_square), get_y(old_square) + (double)num, get_x(new_square), get_y(new_square) + (double)num);
+                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_w(old_square), get_y(old_square) + (double)num);
+                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square), get_y(new_square) + (double)num);
                     break;
 
                 case 'O':
-                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_w(old_square) - 2, get_y(old_square) + (double)num, get_x(new_square) + get_w(new_square) - 2, get_y(new_square) + (double)num);
-                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_w(old_square) - 2, get_y(old_square) + (double)num);
-                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + get_w(new_square) - 2, get_y(new_square) + (double)num);
+                    sprintf(mod1, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(old_square) + get_w(old_square), get_y(old_square) + (double)num, get_x(new_square) + get_w(new_square), get_y(new_square) + (double)num);
+                    sprintf(mod2, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", get_x(old_square) + get_w(old_square), get_y(old_square) + (double)num);
+                    sprintf(mod3, "\t<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"6\" stroke=\"white\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", get_x(new_square) + get_w(new_square), get_y(new_square) + (double)num);
                     break;
             }
 
