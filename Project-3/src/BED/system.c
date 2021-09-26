@@ -8,6 +8,7 @@
 #include "qry.h"
 #include "location.h"
 #include "DynamicList/dynamicList.h"
+#include "svg.h"
 
 void set_input_directory(path paths, char* newSet);
 void set_output_directory(path paths, char* newSet);
@@ -263,67 +264,67 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
     double ar, v, x, y, h, w;
     int num;
 
-    fprintf(modified_SVG, "<svg>\n");
+    void* list_of_modifications = create_list();
+
+    fprintf(modified_SVG, "<!-- Rodrigo Mimura Shimomura -->\n <svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n");
 
 
     while (fscanf(functions_file, "%s", command) != -1) {
 
-        if(!strcmp(command, "dm?")){
-
-            fscanf(functions_file, "%s", cpf);
-            dm_who(residents, cpf, txt_results, modified_SVG);
-            
-        }
-
-        else if(!strcmp(command, "del")){
+        if(!strcmp(command, "del")){
 
             fscanf(functions_file, "%s", cep);
-            del(blocks, blocks_hash, residents, locations, cep, txt_results, modified_SVG);            
+            del(blocks, blocks_hash, residents, locations, cep, txt_results, list_of_modifications);            
 
         }else if(!strcmp(command, "m?")){
             
             fscanf(functions_file, "%s", cep);
-            m_who(residents, blocks_hash, cep, txt_results, modified_SVG);
+            m_who(residents, blocks_hash, cep, txt_results);
 
+        }else if(!strcmp(command, "dm?")){
+
+            fscanf(functions_file, "%s", cpf);
+            dm_who(residents, cpf, txt_results, list_of_modifications);
+            
         }else if(!strcmp(command, "mud")){
             
             fscanf(functions_file, "%s %s %c %d %s", cpf, cep, &face, &num, compl);
-            mud(residents, blocks_hash, cpf, cep, face, num, compl, txt_results, modified_SVG);
+            mud(residents, blocks_hash, cpf, cep, face, num, compl, txt_results, list_of_modifications);
 
         }else if(!strcmp(command, "oloc")){
 
             fscanf(functions_file,"%s %s %c %d %s %lf %lf", id, cep, &face, &num, compl, &ar, &v);
-            oloc(locations, blocks_hash, id, cep, face, num, compl, ar, v, txt_results, modified_SVG);
+            oloc(locations, blocks_hash, id, cep, face, num, compl, ar, v, txt_results);
             
         }else if(!strcmp(command, "oloc?")){
             
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
-            oloc_who(blocks, x, y, w, h, txt_results, modified_SVG);
+            oloc_who(blocks, blocks_hash, x, y, w, h, txt_results, list_of_modifications);
             
         }else if(!strcmp(command, "loc")){
             
             fscanf(functions_file, "%s %s", id, cpf);
-            loc(residents, blocks_hash, locations, id, cpf, txt_results, modified_SVG);
+            loc(residents, blocks_hash, locations, id, cpf, txt_results, list_of_modifications);
 
         }else if(!strcmp(command, "loc?")){
             
             fscanf(functions_file, "%s", id);
-            loc_who(blocks_hash, locations, id, txt_results, modified_SVG);
+            loc_who(blocks_hash, locations, id, txt_results, list_of_modifications);
 
         }else if(!strcmp(command, "dloc")){
 
             fscanf(functions_file, "%s", id);
-            dloc(locations, blocks_hash, id, txt_results, modified_SVG);
+            dloc(locations, blocks_hash, id, txt_results, list_of_modifications);
             
         }else if(!strcmp(command, "hom")){
 
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
-            hom(blocks, x, y, w, h, txt_results, modified_SVG);
+            hom(blocks, x, y, w, h, txt_results, list_of_modifications);
             
         }else if(!strcmp(command, "mul")){
 
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
-            mul(blocks, x, y, w, h, txt_results, modified_SVG);
+            mul(blocks, x, y, w, h, txt_results, list_of_modifications);
             
         }else if(!strcmp(command, "dmpt")){
 
@@ -333,11 +334,21 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
         }else if(!strcmp(command, "catac")){
             
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
-            catac(blocks, residents, locations, x, y, w, h, txt_results, modified_SVG);
+            catac(blocks, residents, locations, x, y, w, h, txt_results, list_of_modifications);
 
         }
 
     }
+
+    void* blocks_root = get_root(blocks);
+
+    recursive_print_svg(blocks_root, modified_SVG);
+
+    for(void* aux = get_head(list_of_modifications); aux; aux = get_next(aux)) {
+        fprintf(modified_SVG, "%s", (char*)get_list_element(aux));
+    }
+
+    free_list(list_of_modifications, free);
 
     fprintf(modified_SVG, "</svg>\n");
 
