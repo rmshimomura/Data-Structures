@@ -6,7 +6,7 @@ typedef struct location {
     int num;
     double ar, v;
     void* person_living_here;
-    bool available;
+    bool available, ended;
 
 }location;
 
@@ -43,6 +43,18 @@ char* location_get_id(void* current){
     location* aux = current;
 
     return aux->id;
+
+}
+
+bool location_get_ended(void* location_data){
+    location* aux = location_data;
+    return aux->ended;
+}
+
+void location_set_ended(void* location_data, bool state) {
+
+    location* aux = location_data;
+    aux->ended = state;
 
 }
 

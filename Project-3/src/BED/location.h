@@ -11,6 +11,8 @@ char* location_get_cep(void* location_data);
 char* location_get_id(void* current);
 char location_get_face(void* location_data);
 int location_get_num(void* location_data);
+bool location_get_ended(void* location_data);
+void location_set_ended(void* location_data, bool state);
 char* location_get_complement(void* location_data);
 void location_set_available(void* location_data, bool state);
 bool location_get_available(void* location_data);

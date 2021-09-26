@@ -27,14 +27,12 @@ int main(int argc, char** argv){
     if(get_qry_inserted(flags))
         format_qry_results(blocks, blocks_hash, residents, locations, paths, flags);
         
-    freePaths(paths);
-    
     hash_table_destroy(residents, free_person);
     hash_table_destroy_blocks(blocks_hash);
     hash_table_destroy(locations, location_free);
-
     destroy_AVL_tree(blocks, get_root(blocks), free_block_list);
 
+    freePaths(paths);
     free(blocks);
     free(flags);
     

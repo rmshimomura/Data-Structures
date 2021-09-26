@@ -263,6 +263,8 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
     double ar, v, x, y, h, w;
     int num;
 
+    fprintf(modified_SVG, "<svg>\n");
+
 
     while (fscanf(functions_file, "%s", command) != -1) {
 
@@ -336,6 +338,8 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
         }
 
     }
+
+    fprintf(modified_SVG, "</svg>\n");
 
     fclose(functions_file);
     fclose(modified_SVG);
