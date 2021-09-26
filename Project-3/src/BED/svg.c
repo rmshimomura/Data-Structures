@@ -4,7 +4,7 @@
 #include "Hash/hash.h"
 #include "AVL_Tree/AVL.h"
 #include "block.h"
-
+#include "location.h"
 
 void print_on_SVG(tree blocks, path paths) {
 
@@ -36,6 +36,47 @@ void recursive_print_svg(void* root, FILE* original_svg) {
         recursive_print_svg(get_left(root), original_svg);
         recursive_print_svg(get_right(root), original_svg);
 
+    }
+
+}
+
+void position_cases_loc_who(hash blocks_hash, void* location_data, FILE* modified_SVG, char character_to_print){
+
+    void* square = find_item(hash_table_get_register_list(blocks_hash, location_get_cep(location_data)), location_get_cep(location_data), compare_cep);
+
+    /*  
+
+        # if ended
+        * if not available
+        $ if available
+
+    */
+
+    switch(location_get_face(location_data)) {
+
+        case 'N':
+
+            fprintf(modified_SVG, "<text x=\"%.2lf\" y=\"%.2lf\">%c</text>", get_x(square) + location_get_num(location_data), get_y(square) + get_h(square) - 2, character_to_print);
+
+            break;
+
+        case 'S':
+
+            fprintf(modified_SVG, "<text x=\"%.2lf\" y=\"%.2lf\">%c</text>", get_x(square) + location_get_num(location_data), get_y(square) + 2, character_to_print);
+
+            break;
+
+        case 'L':
+
+            fprintf(modified_SVG, "<text x=\"%.2lf\" y=\"%.2lf\">%c</text>", get_x(square) + 2, get_y(square)  + location_get_num(location_data), character_to_print);
+
+            break;
+
+        case 'O':
+
+            fprintf(modified_SVG, "<text x=\"%.2lf\" y=\"%.2lf\">%c</text>", get_x(square) + get_w(location_data) - 2, get_y(square) + location_get_num(location_data), character_to_print);
+
+            break;
     }
 
 }

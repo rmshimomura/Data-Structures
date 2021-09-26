@@ -308,7 +308,7 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
         }else if(!strcmp(command, "loc?")){
             
             fscanf(functions_file, "%s", id);
-            loc_who(locations, id, txt_results, modified_SVG);
+            loc_who(blocks_hash, locations, id, txt_results, modified_SVG);
 
         }else if(!strcmp(command, "dloc")){
 

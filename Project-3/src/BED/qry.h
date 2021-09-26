@@ -11,7 +11,7 @@ void oloc(hash locations, hash blocks_hash, char* id, char* cep, char face, int 
 void oloc_who(tree blocks, double x, double y, double w, double h, FILE* txt_results, FILE* modified_SVG);
 void oloc_who_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results);
 void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, FILE* txt_results, FILE* modified_SVG);
-void loc_who(hash locations, char* id, FILE* txt_results, FILE* modified_SVG);
+void loc_who(hash blocks_hash, hash locations, char* id, FILE* txt_results, FILE* modified_SVG);
 void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, FILE* modified_SVG);
 void hom(tree blocks, double x, double y, double w, double h, FILE* txt_results, FILE* modified_SVG);
 void hom_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results);

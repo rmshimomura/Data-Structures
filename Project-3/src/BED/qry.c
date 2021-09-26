@@ -7,6 +7,7 @@
 #include "location.h"
 #include "paths.h"
 #include "person.h"
+#include "svg.h"
 
 int inside(double x1, double y1, double p1Width, double p1Height, double x2, double y2, double p2Width, double p2Height) {
     if ((x1 >= x2 && x1 <= x2 + p2Width && y1 >= y2 && y1 <= y2 + p2Height && x1 + p1Width <= x2 + p2Width && y1 + p1Height <= y2 + p2Height)) return 1;
@@ -322,24 +323,40 @@ void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, 
 
 }
 
-void loc_who(hash locations, char* id, FILE* txt_results, FILE* modified_SVG) {
+void loc_who(hash blocks_hash, hash locations, char* id, FILE* txt_results, FILE* modified_SVG) {
+    
     void* location = find_item(hash_table_get_register_list(locations, id), id, compare_id);
 
     fprintf(txt_results, "loc?(%s):\n\n", id);
 
     if (location) {
-        if (location_get_available(location)) {
+
+        if (location_get_ended(location)) {
+
+            fprintf(txt_results, "\tThis location has been ended by dloc!\n");
             location_info(location, txt_results);
-            fprintf(txt_results, "====================================================\n");
+            position_cases_loc_who(blocks_hash, location, modified_SVG, '#');
+
+        } else if (location_get_available(location)) {
+
+            location_info(location, txt_results);
+            position_cases_loc_who(blocks_hash, location, modified_SVG, '$');
+
         } else {
+
             location_info(location, txt_results);
             print_person_info(get_person_living_here(location), txt_results);
-            fprintf(txt_results, "====================================================\n");
+            position_cases_loc_who(blocks_hash, location, modified_SVG, "*");
+
         }
+
     } else {
+        
         fprintf(txt_results, "\tSorry, id = %s not found on hash table...\n\n", id);
-        fprintf(txt_results, "====================================================\n");
+        
     }
+
+    fprintf(txt_results, "====================================================\n");
 }
 
 void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, FILE* modified_SVG) {
