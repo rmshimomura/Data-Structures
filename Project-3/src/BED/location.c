@@ -39,6 +39,17 @@ void location_info(void* location_data, FILE* txt_results){
 
 }
 
+char* return_location_info(void* location_data) {
+    
+    location* aux = location_data;
+
+    char info[250];
+    sprintf(info, "ID: %s CEP: %s FACE: %c NUM: %d COMPLEMENT: %s PRICE: %.2lf AREA: %.2lf AVAILABLE: %s", aux->id, aux->cep, aux->face, aux->num, aux->complement, aux->v, aux->ar, aux->available ? "AVAILABLE" : "NOT AVAILABLE");
+    char* temp = calloc(strlen(info) + 2, sizeof(char));
+    strcpy(temp, info);
+    return temp;
+}
+
 char* location_get_id(void* current){
     location* aux = current;
 
