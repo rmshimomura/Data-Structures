@@ -284,7 +284,7 @@ void get_functions(tree blocks, hash blocks_hash, hash residents, hash locations
         }else if(!strcmp(command, "dm?")){
 
             fscanf(functions_file, "%s", cpf);
-            dm_who(residents, cpf, txt_results, list_of_modifications);
+            dm_who(blocks_hash, residents, cpf, txt_results, list_of_modifications);
             
         }else if(!strcmp(command, "mud")){
             
