@@ -35,6 +35,6 @@ int main(int argc, char** argv){
     freePaths(paths);
     free(blocks);
     free(flags);
-    
+    puts("Ok.");
 
 }
