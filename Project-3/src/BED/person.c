@@ -73,7 +73,7 @@ void update_person(void* person_to_update, char* cep, char face, int num, char* 
 
 }
 
-char* get_cpf(void* person_data) {
+char* get_person_cpf(void* person_data) {
     person* aux = person_data;
     return aux->cpf;
 }
@@ -104,7 +104,7 @@ void create_people_data(void* HT, void* blocks_hash,FILE* file_people) {
 }
 
 int compare_CPF(void* element_node_from_list, void* target_node) {
-    if (!strcmp(get_cpf(element_node_from_list), target_node)) return 1;
+    if (!strcmp(get_person_cpf(element_node_from_list), target_node)) return 1;
 
     return 0;
 }
@@ -181,5 +181,30 @@ int get_person_place_num(void* person_data) {
 
     person* aux = person_data;
     return aux->place->num;
+
+}
+
+char* get_person_name(void* person_data) {
+
+    person* aux = person_data;
+    return aux->name;
+
+}
+
+char* get_person_surname(void* person_data) {
+
+    person* aux = person_data;
+    return aux->surname;
+
+}
+
+char* get_person_full_address(void* person_data) {
+
+    person* aux = person_data;
+
+    char* formatted_string = calloc(strlen(aux->place->cep) + strlen(aux->place->complement) + 50, sizeof(char));
+    sprintf(formatted_string, "%s - %s - %c - %d\n", aux->place->cep, aux->place->complement, aux->place->face, aux->place->num);
+
+    return formatted_string;
 
 }
