@@ -313,9 +313,19 @@ void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, 
             add_resident(new_square, person);
         }
 
+        insert_modifications(person, new_square, cpf, list_of_modifications);
         
+        char location_data[300];
+        char* formatted_location_string = return_location_info(location);
+        sprintf(location_data, "<text x=\"%.2lf\" y=\" -%.2lf\">%s</text>\n", get_x(new_square), (double)get_size(list_of_modifications) + 1.00, formatted_location_string);
 
-        
+        char* command = calloc(strlen(location_data) + 5, sizeof(char));
+
+        strcpy(command, location_data);
+
+        insert_list(list_of_modifications, command);
+
+        free(formatted_location_string);
 
         update_person(person, location_get_cep(location), location_get_face(location), location_get_num(location), location_get_complement(location));
         set_house_state(person, 1);
@@ -391,8 +401,6 @@ void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, void* l
 
         fprintf(txt_results, "====================================================\n");
 
-        // hash_table_remove_key(locations, id, location_free, compare_id);
-
         location_set_ended(location, 1); //This flag here is going to be used on svg results printing of loc_who
         location_set_available(location, 0); //Set that this location isn't available anymore
 
@@ -427,6 +435,7 @@ void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, void* l
         location_set_available(location, 0);
 
     } else {
+
         fprintf(txt_results, "\tSorry, location ID = %s not found...\n\n", id);
     }
 
