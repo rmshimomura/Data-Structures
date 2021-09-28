@@ -5,7 +5,7 @@
 
 void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* cep, FILE* txt_results, void* list_of_modifications);
 void m_who(hash residents, hash blocks_hash, char* cep, FILE* txt_results);
-void dm_who(hash residents, char* cpf, FILE* txt_results, void* list_of_modifications);
+void dm_who(hash blocks_hash, hash residents, char* cpf, FILE* txt_results, void* list_of_modifications);
 void mud(hash residents, hash blocks_hash, char* cpf, char* cep, char face, int num, char* compl, FILE* txt_results, void* list_of_modifications);
 void oloc(hash locations, hash blocks_hash, char* id, char* cep, char face, int num, char* compl, double ar, double v, FILE* txt_results);
 void oloc_who(tree blocks, hash blocks_hash, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications);

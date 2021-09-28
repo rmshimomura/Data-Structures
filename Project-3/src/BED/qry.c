@@ -28,7 +28,7 @@ void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* ce
                 if (residents_list[i]) {
                     print_person_info(residents_list[i], txt_results);
 
-                    hash_table_remove_key(residents, get_cpf(residents_list[i]), free_person, compare_CPF);
+                    hash_table_remove_key(residents, get_person_cpf(residents_list[i]), free_person, compare_CPF);
                 }
             }
         }
@@ -85,18 +85,26 @@ void m_who(hash residents, hash blocks_hash, char* cep, FILE* txt_results) {
     }
 }
 
-void dm_who(hash residents, char* cpf, FILE* txt_results, void* list_of_modifications) {
+void dm_who(hash blocks_hash, hash residents, char* cpf, FILE* txt_results, void* list_of_modifications) {
     fprintf(txt_results, "dm?(%s):\n\n", cpf);
 
-    if (find_item(hash_table_get_register_list(residents, cpf), cpf, compare_CPF)) {
-        void* person_to_print = find_item(hash_table_get_register_list(residents, cpf), cpf, compare_CPF);
+    void* person_to_print = find_item(hash_table_get_register_list(residents, cpf), cpf, compare_CPF);
 
+    if (person_to_print) {
+
+        void* square = find_item(hash_table_get_register_list(blocks_hash, get_person_cep(person_to_print)), get_person_cep(person_to_print), compare_cep);
+        
         print_person_info(person_to_print, txt_results);
+
+        insert_modifications(person_to_print, square, cpf, list_of_modifications);
+        
         fprintf(txt_results, "====================================================\n");
 
     } else {
+
         fprintf(txt_results, "\tSorry, CPF = %s not found...\n\n", cpf);
         fprintf(txt_results, "====================================================\n");
+
     }
 }
 
@@ -612,45 +620,51 @@ void catac_search(tree blocks, void* blocks_root, hash residents, hash locations
 
             void* list_of_blocks = get_node_data(blocks_root);
 
-            for (void* aux = get_head(list_of_blocks); aux; aux = get_next(aux)) {
+                if(list_of_blocks){
+                    int flag = 0;
+                    for (void* aux = get_head(list_of_blocks); aux; aux = get_next(aux)) {
+                        
+                        if(flag) aux = get_previous(aux);
 
-                void* element = get_list_element(aux);
-                void* temp = get_next(aux);
-                int deletion_happened = 0;
+                        void* element = get_list_element(aux);
+                        void* temp = get_next(aux);
 
-                if (inside(get_x(element), get_y(element), get_w(element), get_h(element), x, y, w, h)) {
+                        if (inside(get_x(element), get_y(element), get_w(element), get_h(element), x, y, w, h)) {
 
-                    for (int i = 0; i < get_number_of_persons_living(element); i++) {
+                            for (int i = 0; i < get_number_of_persons_living(element); i++) {
 
-                        void* person = get_residents(element)[i];
+                                void* person = get_residents(element)[i];
 
-                        if (person) {
-                            print_person_info(person, txt_results);
-                            hash_table_remove_key(residents, get_cpf(person), free_person, compare_CPF);
+                                if (person) {
+                                    print_person_info(person, txt_results);
+                                    hash_table_remove_key(residents, get_person_cpf(person), free_person, compare_CPF);
+                                }
+                            }
+
+                            for(int i = 0; i < get_number_of_locations_available(element); i++) {
+
+                                void* location = get_locations(element)[i];
+
+                                if(location) {
+                                    location_info(location, txt_results);
+                                    hash_table_remove_key(locations, location_get_id(location), location_free, compare_id);
+                                }
+
+                            }
+                            
+                            blocks_root = delete_node(blocks, blocks_root, element, compare_x, free_single_block);
+                            flag = 1;
+                            if(temp) aux = temp;
+                            
+                        } else{
+                            flag = 0;
                         }
+                        
                     }
 
-                    for(int i = 0; i < get_number_of_locations_available(element); i++) {
 
-                        void* location = get_locations(element)[i];
 
-                        if(location) {
-                            location_info(location, txt_results);
-                            hash_table_remove_key(locations, location_get_id(location), location_free, compare_id);
-                        }
-
-                    }
-                    
-                    blocks_root = delete_node(blocks, blocks_root, element, compare_x, free_single_block);
-                    deletion_happened = 1;
-                    if(temp) aux = temp;
-
-                    
                 }
-
-                if(deletion_happened) aux = get_previous(aux);
-
-            }
         }
 
         if (get_left(blocks_root)) {

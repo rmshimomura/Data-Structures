@@ -230,3 +230,44 @@ void position_cases_line(void* old_square, void* new_square, char face, int num,
 
 
 }
+
+void insert_modifications(void* person_data, void* square, char* cpf, void* list_of_modifications){
+
+    char complete_info[200], line[200];
+    char* full_addr = get_person_full_address(person_data);
+
+    sprintf(complete_info, "<text x=\"%.2lf\" y=\"0\">%s %s - %s %s</text>\n", get_x(square) + 3, get_person_name(person_data), get_person_surname(person_data), cpf, full_addr);
+
+    switch (get_person_place_face(person_data)){
+        
+        case 'N':
+            sprintf(line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"0\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(square) + get_person_place_num(person_data), get_y(square) + get_h(square), get_x(square) + get_person_place_num(person_data));
+            break;
+
+        case 'S':
+            sprintf(line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"0\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(square) + get_person_place_num(person_data), get_y(square), get_x(square) + get_person_place_num(person_data));
+            break;
+
+        case 'L':
+            sprintf(line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"0\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(square), get_y(square) + get_person_place_num(person_data), get_x(square));
+            break;
+
+        case 'O':
+            sprintf(line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"0\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(square) + get_w(square), get_y(square) + get_person_place_num(person_data), get_x(square) + get_w(square));
+
+            break;
+    }
+    
+    
+    char* last_line = calloc(strlen(line) + 3, sizeof(char));
+    strcpy(last_line, line);
+
+    char* text = calloc(strlen(complete_info) + 3, sizeof(char));
+    strcpy(text, complete_info);
+
+    free(full_addr);
+
+    insert_list(list_of_modifications, last_line);
+    insert_list(list_of_modifications, text);
+
+}
