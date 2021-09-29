@@ -43,7 +43,7 @@ void recursive_print_svg(void* root, FILE* original_svg) {
 
 }
 
-void position_cases_text(hash blocks_hash, void* location_data, void* list_of_modifications, char character_to_print){
+void position_cases_character(hash blocks_hash, void* location_data, void* list_of_modifications, char character_to_print){
 
     void* square = find_item(hash_table_get_register_list(blocks_hash, location_get_cep(location_data)), location_get_cep(location_data), compare_cep);
     char modification[1000];
@@ -235,24 +235,24 @@ void insert_modifications(void* person_data, void* square, char* cpf, void* list
     char complete_info[200] = "", line[200] = "";
     char* full_addr = get_person_full_address(person_data);
 
-    sprintf(complete_info, "<text x=\"%.2lf\" y=\"-%.2lf\">%s %s - %s %s</text>\n", get_x(square) + 3, get_size(list_of_modifications) + 2.00,get_person_name(person_data), get_person_surname(person_data), cpf, full_addr);
+    sprintf(complete_info, "<text x=\"%.2lf\" y=\"-%.2lf\">%s %s - %s %s</text>\n", get_x(square) + 3, 5* get_size(list_of_modifications) + 2.00,get_person_name(person_data), get_person_surname(person_data), cpf, full_addr);
 
     switch (get_person_place_face(person_data)){
         
         case 'N':
-            sprintf(line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"-%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(square) + get_person_place_num(person_data), get_y(square) + get_h(square), get_x(square) + get_person_place_num(person_data), get_size(list_of_modifications) + 2.00);
+            sprintf(line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"-%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(square) + get_person_place_num(person_data), get_y(square) + get_h(square), get_x(square) + get_person_place_num(person_data), 5* get_size(list_of_modifications) + 2.00);
             break;
 
         case 'S':
-            sprintf(line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"-%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(square) + get_person_place_num(person_data), get_y(square), get_x(square) + get_person_place_num(person_data), get_size(list_of_modifications) + 2.00);
+            sprintf(line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"-%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(square) + get_person_place_num(person_data), get_y(square), get_x(square) + get_person_place_num(person_data), 5* get_size(list_of_modifications) + 2.00);
             break;
 
         case 'L':
-            sprintf(line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"-%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(square), get_y(square) + get_person_place_num(person_data), get_x(square), get_size(list_of_modifications) + 2.00);
+            sprintf(line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"-%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(square), get_y(square) + get_person_place_num(person_data), get_x(square), 5* get_size(list_of_modifications) + 2.00);
             break;
 
         case 'O':
-            sprintf(line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"-%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(square) + get_w(square), get_y(square) + get_person_place_num(person_data), get_x(square) + get_w(square), get_size(list_of_modifications) + 2.00);
+            sprintf(line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"-%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(square) + get_w(square), get_y(square) + get_person_place_num(person_data), get_x(square) + get_w(square), 5* get_size(list_of_modifications) + 2.00);
 
             break;
     }
@@ -300,6 +300,74 @@ void insert_persons(void* block_data, void* person, char sex, void* list_of_modi
 
     strcpy(command, modification);
 
+    insert_list(list_of_modifications, command);
+
+}
+
+void insert_location_line(void* location, void* square, void* list_of_modifications){
+
+    char line[300];
+
+    switch (location_get_face(location)){
+        
+        case 'N':
+            sprintf(line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"-%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(square) + location_get_num(location), get_y(square) + get_h(square), get_x(square) + location_get_num(location), 5* get_size(list_of_modifications) + 2.00);
+            break;
+
+        case 'S':
+            sprintf(line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"-%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(square) + location_get_num(location), get_y(square), get_x(square) + location_get_num(location), 5* get_size(list_of_modifications) + 2.00);
+            break;
+
+        case 'L':
+            sprintf(line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"-%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(square), get_y(square) + location_get_num(location), get_x(square), 5* get_size(list_of_modifications) + 2.00);
+            break;
+
+        case 'O':
+            sprintf(line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"-%.2lf\" style=\"stroke:red;stroke-width:2;\"/>\n", get_x(square) + get_w(square), get_y(square) + location_get_num(location), get_x(square) + get_w(square), 5* get_size(list_of_modifications) + 2.00);
+
+            break;
+    }
+
+    char* command = calloc(strlen(line) + 5, sizeof(char));
+    strcpy(command, line);
+
+    insert_list(list_of_modifications, command);
+
+}
+
+void position_cases_text(hash blocks_hash, void* location_data, void* list_of_modifications, char* text_to_print){
+
+    void* square = find_item(hash_table_get_register_list(blocks_hash, location_get_cep(location_data)), location_get_cep(location_data), compare_cep);
+    char modification[1000] = "";
+    switch(location_get_face(location_data)) {
+
+        case 'N':
+
+            sprintf(modification, "<text x=\"%.2lf\" y=\"-%.2lf\">%s</text>", get_x(square) + location_get_num(location_data), 5* get_size(list_of_modifications) + 2.00, text_to_print);
+            
+            break;
+
+        case 'S':
+
+            sprintf(modification, "<text x=\"%.2lf\" y=\"-%.2lf\">%s</text>", get_x(square) + location_get_num(location_data), 5* get_size(list_of_modifications) + 2.00, text_to_print);
+            
+            break;
+
+        case 'L':
+
+            sprintf(modification, "<text x=\"%.2lf\" y=\"-%.2lf\">%s</text>", get_x(square) + 2, 5* get_size(list_of_modifications) + 2.00, text_to_print);
+
+            break;
+
+        case 'O':
+
+            sprintf(modification, "<text x=\"%.2lf\" y=\"-%.2lf\">%s</text>", get_x(square) + get_w(square) - 2, 5* get_size(list_of_modifications) + 2.00, text_to_print);
+
+            break;
+    }
+
+    char* command = calloc(strlen(modification) + 5, sizeof(char));
+    strcpy(command, modification);
     insert_list(list_of_modifications, command);
 
 }

@@ -51,6 +51,21 @@ void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* ce
         return;
     }
 
+    char modification_line[300] = "";
+    sprintf(modification_line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"-%.2lf\" style=\"stroke:mediumblue;stroke-width:2;\"/>\n", get_x(square) + get_w(square)/2.0, get_y(square) + get_h(square)/2.0, get_x(square) + get_w(square)/2.0, 5* get_size(list_of_modifications) + 2.00);
+
+    char modification_cep[300] = "";
+    sprintf(modification_cep, "<text x=\"%.2lf\" y=\"-%.2lf\">%s</text>", get_x(square) + get_w(square)/2.0, 5* get_size(list_of_modifications) + 8.00, get_cep(square));
+
+    char* command1 = calloc(strlen(modification_line) + 5, sizeof(char));
+    strcpy(command1, modification_line);
+
+    char* command2 = calloc(strlen(modification_cep) + 5, sizeof(char));
+    strcpy(command2, modification_cep);
+
+    insert_list(list_of_modifications, command1);
+    insert_list(list_of_modifications, command2);
+
     void* blocks_root = get_root(blocks);
 
     blocks_root = delete_node(blocks, blocks_root, square, compare_x, free_single_block);
@@ -237,7 +252,7 @@ void oloc_who_search(void* blocks_root, hash blocks_hash, double x, double y, do
                         if (location) {
 
                             if (location_get_available(location)) {
-                                position_cases_text(blocks_hash, location, list_of_modifications, '*');
+                                position_cases_character(blocks_hash, location, list_of_modifications, '*');
                                 location_info(location, txt_results);
 
                             }
@@ -364,18 +379,18 @@ void loc_who(hash blocks_hash, hash locations, char* id, FILE* txt_results, void
 
             fprintf(txt_results, "\tThis location has been ended by dloc!\n");
             location_info(location, txt_results);
-            position_cases_text(blocks_hash, location, list_of_modifications, '#');
+            position_cases_character(blocks_hash, location, list_of_modifications, '#');
 
         } else if (location_get_available(location)) {
 
             location_info(location, txt_results);
-            position_cases_text(blocks_hash, location, list_of_modifications, '$');
+            position_cases_character(blocks_hash, location, list_of_modifications, '$');
 
         } else {
 
             location_info(location, txt_results);
             print_person_info(get_person_living_here(location), txt_results);
-            position_cases_text(blocks_hash, location, list_of_modifications, '*');
+            position_cases_character(blocks_hash, location, list_of_modifications, '*');
 
         }
 
@@ -392,12 +407,27 @@ void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, void* l
     fprintf(txt_results, "dloc(%s):\n\n", id);
 
     void* location = find_item(hash_table_get_register_list(locations, id), id, compare_id);
+    void* square = find_item(hash_table_get_register_list(blocks_hash, location_get_cep(location)), location_get_cep(location), compare_cep);  //Find the block that this location belongs to
 
     if (!get_person_living_here(location)) {  //Nobody lives on target location
 
         fprintf(txt_results, "\tNobody is living on location with ID = %s...\n\n", id);
 
         location_info(location, txt_results);
+
+        insert_location_line(location, square, list_of_modifications); //Just make the line from the location to the upper part of svg
+
+        char location_data[300] = "";
+        char* formatted_location_string = return_location_info(location);
+        position_cases_text(blocks_hash, location, list_of_modifications, formatted_location_string);
+
+        char* command = calloc(strlen(location_data) + 5, sizeof(char));
+
+        strcpy(command, location_data);
+
+        insert_list(list_of_modifications, command);
+
+        free(formatted_location_string);
 
         fprintf(txt_results, "====================================================\n");
 
@@ -418,7 +448,20 @@ void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, void* l
         set_house_state(person_on_this_location, 2);
         location_info(location, txt_results);
 
-        void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);  //Find the block that this location belongs to
+        insert_modifications(get_person_living_here(location), square, get_person_cpf(get_person_living_here(location)), list_of_modifications);
+        
+        char location_data[300];
+        char* formatted_location_string = return_location_info(location);
+        position_cases_text(blocks_hash, location, list_of_modifications, formatted_location_string);
+        
+
+        char* command = calloc(strlen(location_data) + 5, sizeof(char));
+
+        strcpy(command, location_data);
+
+        insert_list(list_of_modifications, command);
+
+        free(formatted_location_string);
 
         set_person_living_here(location, NULL);
 
