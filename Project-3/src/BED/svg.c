@@ -270,3 +270,36 @@ void insert_modifications(void* person_data, void* square, char* cpf, void* list
     insert_list(list_of_modifications, text);
 
 }
+
+void insert_persons(void* block_data, void* person, char sex, void* list_of_modifications) {
+
+    char modification[200];
+    
+
+    switch (get_person_place_face(person)){
+        
+        case 'N':
+            sprintf(modification, "<ellipse cx=\"%.2lf\" cy=\"%.2lf\" rx=\"3\" ry=\"6\"\nstyle=\"fill:%s;stroke:black;stroke-width:2\" />\n", get_x(block_data) + get_person_place_num(person), get_y(block_data) + get_h(block_data) - 2, sex == 'M' ? "blue" : "pink");
+            break;
+
+        case 'S':
+            sprintf(modification, "<ellipse cx=\"%.2lf\" cy=\"%.2lf\" rx=\"3\" ry=\"6\"\nstyle=\"fill:%s;stroke:black;stroke-width:2\" />\n", get_x(block_data) + get_person_place_num(person), get_y(block_data) + 2, sex == 'M' ? "blue" : "pink");
+            break;
+
+        case 'L':
+            sprintf(modification, "<ellipse cx=\"%.2lf\" cy=\"%.2lf\" rx=\"3\" ry=\"6\"\nstyle=\"fill:%s;stroke:black;stroke-width:2\" />\n", get_x(block_data) + 2, get_y(block_data) + get_person_place_num(person), sex == 'M' ? "blue" : "pink");
+            break;
+
+        case 'O':
+            sprintf(modification, "<ellipse cx=\"%.2lf\" cy=\"%.2lf\" rx=\"3\" ry=\"6\"\nstyle=\"fill:%s;stroke:black;stroke-width:2\" />\n", get_x(block_data) + get_w(block_data) - 2, get_y(block_data) + get_person_place_num(person), sex == 'M' ? "blue" : "pink");
+
+            break;
+    }
+
+    char* command = calloc(strlen(modification) + 5, sizeof(char));
+
+    strcpy(command, modification);
+
+    insert_list(list_of_modifications, command);
+
+}

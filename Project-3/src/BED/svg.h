@@ -9,5 +9,6 @@ void position_cases_text(hash blocks_hash, void* location_data, void* list_of_mo
 void position_cases_line(void* old_square, void* new_square, char face, int num, void* person_info, void* list_of_modifications);
 void insert_modifications(void* person_data, void* square, char* cpf, void* list_of_modifications);
 void insert_location_data(void* location_data, void* list_of_modifications);
+void insert_persons(void* block_data, void* person, char sex, void* list_of_modifications);
 
 #endif

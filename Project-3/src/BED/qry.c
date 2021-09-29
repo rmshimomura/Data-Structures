@@ -447,12 +447,12 @@ void hom(tree blocks, double x, double y, double w, double h, FILE* txt_results,
 
     void* blocks_root = get_root(blocks);
 
-    qry_person_search(blocks_root, x, y, w, h, 'M', txt_results);
+    qry_person_search(blocks_root, x, y, w, h, 'M', txt_results, list_of_modifications);
 
     fprintf(txt_results, "====================================================\n");
 }
 
-void qry_person_search(void* blocks_root, double x, double y, double w, double h, char sex, FILE* txt_results) {
+void qry_person_search(void* blocks_root, double x, double y, double w, double h, char sex, FILE* txt_results, void* list_of_modifications) {
     
     if (blocks_root) {
 
@@ -471,6 +471,7 @@ void qry_person_search(void* blocks_root, double x, double y, double w, double h
                         if (person) {
                             if (get_person_sex(person) == sex) {
                                 print_person_info(person, txt_results);
+                                insert_persons(element, person, sex, list_of_modifications);
                             }
                         }
                     }
@@ -480,13 +481,13 @@ void qry_person_search(void* blocks_root, double x, double y, double w, double h
 
         if (get_left(blocks_root)) {
             if (get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w) {
-                qry_person_search(get_left(blocks_root), x, y, w, h, sex, txt_results);
+                qry_person_search(get_left(blocks_root), x, y, w, h, sex, txt_results, list_of_modifications);
             }
         }
 
         if (get_right(blocks_root)) {
             if (get_max_x(get_right(blocks_root)) >= x && get_min_x(get_right(blocks_root)) <= x + w) {
-                qry_person_search(get_right(blocks_root), x, y, w, h, sex, txt_results);
+                qry_person_search(get_right(blocks_root), x, y, w, h, sex, txt_results, list_of_modifications);
             }
         }
     }
@@ -497,7 +498,7 @@ void mul(tree blocks, double x, double y, double w, double h, FILE* txt_results,
 
     void* blocks_root = get_root(blocks);
 
-    qry_person_search(blocks_root, x, y, w, h, 'F', txt_results);
+    qry_person_search(blocks_root, x, y, w, h, 'F', txt_results, list_of_modifications);
 
     fprintf(txt_results, "====================================================\n");
 }
