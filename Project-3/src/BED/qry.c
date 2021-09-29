@@ -447,17 +447,21 @@ void hom(tree blocks, double x, double y, double w, double h, FILE* txt_results,
 
     void* blocks_root = get_root(blocks);
 
-    hom_search(blocks_root, x, y, w, h, txt_results);
+    qry_person_search(blocks_root, x, y, w, h, 'M', txt_results);
 
     fprintf(txt_results, "====================================================\n");
 }
 
-void hom_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results) {
+void qry_person_search(void* blocks_root, double x, double y, double w, double h, char sex, FILE* txt_results) {
+    
     if (blocks_root) {
+
         if (get_original_x(blocks_root) >= x) {
+
             void* list_of_blocks = get_node_data(blocks_root);
 
             for (void* aux = get_head(list_of_blocks); aux; aux = get_next(aux)) {
+
                 void* element = get_list_element(aux);
 
                 if (inside(get_x(element), get_y(element), get_w(element), get_h(element), x, y, w, h)) {
@@ -465,7 +469,7 @@ void hom_search(void* blocks_root, double x, double y, double w, double h, FILE*
                         void* person = get_residents(element)[i];
 
                         if (person) {
-                            if (get_person_sex(person) == 'M') {
+                            if (get_person_sex(person) == sex) {
                                 print_person_info(person, txt_results);
                             }
                         }
@@ -476,13 +480,13 @@ void hom_search(void* blocks_root, double x, double y, double w, double h, FILE*
 
         if (get_left(blocks_root)) {
             if (get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w) {
-                hom_search(get_left(blocks_root), x, y, w, h, txt_results);
+                qry_person_search(get_left(blocks_root), x, y, w, h, sex, txt_results);
             }
         }
 
         if (get_right(blocks_root)) {
             if (get_max_x(get_right(blocks_root)) >= x && get_min_x(get_right(blocks_root)) <= x + w) {
-                hom_search(get_right(blocks_root), x, y, w, h, txt_results);
+                qry_person_search(get_right(blocks_root), x, y, w, h, sex, txt_results);
             }
         }
     }
@@ -493,45 +497,9 @@ void mul(tree blocks, double x, double y, double w, double h, FILE* txt_results,
 
     void* blocks_root = get_root(blocks);
 
-    mul_search(blocks_root, x, y, w, h, txt_results);
+    qry_person_search(blocks_root, x, y, w, h, 'F', txt_results);
 
     fprintf(txt_results, "====================================================\n");
-}
-
-void mul_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results) {
-    if (blocks_root) {
-        if (get_original_x(blocks_root) >= x) {
-            void* list_of_blocks = get_node_data(blocks_root);
-
-            for (void* aux = get_head(list_of_blocks); aux; aux = get_next(aux)) {
-                void* element = get_list_element(aux);
-
-                if (inside(get_x(element), get_y(element), get_w(element), get_h(element), x, y, w, h)) {
-                    for (int i = 0; i < get_number_of_persons_living(element); i++) {
-                        void* person = get_residents(element)[i];
-
-                        if (person) {
-                            if (get_person_sex(person) == 'F') {
-                                print_person_info(person, txt_results);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (get_left(blocks_root)) {
-            if (get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w) {
-                mul_search(get_left(blocks_root), x, y, w, h, txt_results);
-            }
-        }
-
-        if (get_right(blocks_root)) {
-            if (get_max_x(get_right(blocks_root)) >= x && get_min_x(get_right(blocks_root)) <= x + w) {
-                mul_search(get_right(blocks_root), x, y, w, h, txt_results);
-            }
-        }
-    }
 }
 
 void dmpt(tree blocks, char* sfx, path paths) {

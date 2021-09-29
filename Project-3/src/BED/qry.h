@@ -14,8 +14,8 @@ void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, 
 void loc_who(hash blocks_hash, hash locations, char* id, FILE* txt_results, void* list_of_modifications);
 void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, void* list_of_modifications);
 void hom(tree blocks, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications);
-void hom_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results);
-void mul(tree blocks, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications) ;
+void qry_person_search(void* blocks_root, double x, double y, double w, double h, char sex, FILE* txt_results);
+void mul(tree blocks, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications);
 void mul_search(void* blocks_root, double x, double y, double w, double h, FILE* txt_results);
 void dmpt(tree blocks, char* sfx, path paths);
 void dmpt_recursive(void* current_node, FILE* dot_file);
