@@ -28,5 +28,5 @@ $(OBJ)/AVL.o: AVL_Tree/AVL.c |$(OBJ)
 	$(CC) $(CFLAGS) -c -o $@ $<
 $(OBJ)/Hash.o: Hash/hash.c |$(OBJ)
 	$(CC) $(CFLAGS) -c -o $@ $<
-$(OBJ)/DynamicList.o: DynamicList/dynamiclist.c |$(OBJ)
+$(OBJ)/DynamicList.o: DynamicList/dynamicList.c |$(OBJ)
 	$(CC) $(CFLAGS) -c -o $@ $<
