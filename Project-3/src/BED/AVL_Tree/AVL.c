@@ -344,8 +344,6 @@ void* delete_node(void* initial_tree, void* initial_node, void* element, int (*c
 
     } else {
 
-        /*TESTING AREA, DANGEROUS BEHAVIOR :P */
-
         if(get_size(node_aux->data) > 1){ //Here, we have more than one block, so removing the node is unnecessary
 
             if(get_x(element) + get_w(element) == node_aux->max_x){
@@ -415,8 +413,6 @@ void* delete_node(void* initial_tree, void* initial_node, void* element, int (*c
                 
             }
         }
-
-        /*END OF THE TESTING AREA*/
 
     }
 
