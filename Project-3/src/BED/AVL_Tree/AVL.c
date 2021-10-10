@@ -363,8 +363,6 @@ void* delete_node(void* initial_tree, void* initial_node, void* element, int (*c
 
             }
 
-            // update_min_and_max(node_aux);
-
         } else { //Here, we are considering that there is only one block on this node, so it's necessary to remove the node
 
             if (!(node_aux->left) || !(node_aux->right)) {  //One or no child
