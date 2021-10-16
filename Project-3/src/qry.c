@@ -341,7 +341,7 @@ void loc(hash residents, hash blocks_hash, hash locations, char* id, char* cpf, 
         strcpy(command, location_data);
 
         insert_list(list_of_modifications, command);
-        insert_location_line(location, new_square, list_of_modifications);
+        
         free(formatted_location_string);
 
         update_person(person, location_get_cep(location), location_get_face(location), location_get_num(location), location_get_complement(location));
