@@ -32,8 +32,8 @@ void recursive_print_svg(void* root, FILE* original_svg) {
 
         for(void* aux = get_head(block_list); aux; aux = get_next(aux)) {
             void* block = get_list_element(aux);
-            fprintf(original_svg, "\t<rect x=\"%.2lf\" y=\"%.2lf\" width=\"%.2lf\" height=\"%.2lf\" id=\"%s\"\n style=\"fill:%s;stroke:%s;stroke-width:%.2lf;fill-opacity:0.5;stroke-opacity:1\" />\n", get_x(block), get_y(block), get_w(block), get_h(block), get_cep(block), get_cstroke(block), get_cfill(block), get_sw(block));
-            fprintf(original_svg, "<text x=\"%.2lf\" y=\"%.2lf\">%s</text>", get_x(block), get_y(block), get_cep(block));
+            fprintf(original_svg, "\t<rect x=\"%.2lf\" y=\"%.2lf\" width=\"%.2lf\" height=\"%.2lf\" id=\"%s\"\n style=\"fill:%s;stroke:%s;stroke-width:%s;fill-opacity:0.5;stroke-opacity:1\" />\n", get_x(block), get_y(block), get_w(block), get_h(block), get_cep(block), get_cfill(block), get_cstroke(block), get_sw(block));
+            fprintf(original_svg, "<text x=\"%.2lf\" y=\"%.2lf\">%s</text>\n", get_x(block), get_y(block), get_cep(block));
         }
 
         recursive_print_svg(get_left(root), original_svg);
@@ -52,25 +52,25 @@ void position_cases_character(hash blocks_hash, void* location_data, void* list_
 
         case 'N':
 
-            sprintf(modification, "<text x=\"%.2lf\" y=\"%.2lf\">%c</text>", get_x(square) + location_get_num(location_data), get_y(square) + get_h(square) - 2, character_to_print);
+            sprintf(modification, "<text x=\"%.2lf\" y=\"%.2lf\">%c</text>\n", get_x(square) + location_get_num(location_data), get_y(square) + get_h(square), character_to_print);
             
             break;
 
         case 'S':
 
-            sprintf(modification, "<text x=\"%.2lf\" y=\"%.2lf\">%c</text>", get_x(square) + location_get_num(location_data), get_y(square) + 2, character_to_print);
+            sprintf(modification, "<text x=\"%.2lf\" y=\"%.2lf\">%c</text>\n", get_x(square) + location_get_num(location_data), get_y(square), character_to_print);
             
             break;
 
         case 'L':
 
-            sprintf(modification, "<text x=\"%.2lf\" y=\"%.2lf\">%c</text>", get_x(square) + 2, get_y(square)  + location_get_num(location_data), character_to_print);
+            sprintf(modification, "<text x=\"%.2lf\" y=\"%.2lf\">%c</text>\n", get_x(square), get_y(square)  + location_get_num(location_data), character_to_print);
 
             break;
 
         case 'O':
 
-            sprintf(modification, "<text x=\"%.2lf\" y=\"%.2lf\">%c</text>", get_x(square) + get_w(square) - 2, get_y(square) + location_get_num(location_data), character_to_print);
+            sprintf(modification, "<text x=\"%.2lf\" y=\"%.2lf\">%c</text>\n", get_x(square) + get_w(square), get_y(square) + location_get_num(location_data), character_to_print);
 
             break;
     }
