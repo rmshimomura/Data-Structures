@@ -216,13 +216,14 @@ void get_data(tree blocks, hash blocks_hash, hash residents, path paths, flag fl
     void* blocks_root = get_root(blocks);
 
     char command[20], cep[50], cfill[30], cstroke[30];
-    double x, y, w, h, sw;
+    double x, y, w, h;
+    char sw[10];
 
     while (fscanf(file_blocks, "%s", command) != -1) {
         
         if (!strcmp(command, "cq")) {
-
-            fscanf(file_blocks, "%lf %s %s", &sw, cfill, cstroke);
+            
+            fscanf(file_blocks, "%s %s %s", sw, cfill, cstroke);
 
         }
 

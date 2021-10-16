@@ -7,7 +7,7 @@ typedef struct block {
     double y;
     double w;
     double h;
-    double sw;
+    char sw[10];
     char cfill[30];
 	char cep[50];
     char cstroke[30];
@@ -18,13 +18,13 @@ typedef struct block {
 
 } block;
 
-void set_block_properties(void* block_to_set, char* cep, double x, double y, double w, double h, double sw, char* cfill, char* cstroke){
+void set_block_properties(void* block_to_set, char* cep, double x, double y, double w, double h, char* sw, char* cfill, char* cstroke){
 	block* aux = block_to_set;
 	aux->x = x;
 	aux->y = y;
 	aux->w = w;
 	aux->h = h;
-	aux->sw = sw;
+	strcpy(aux->sw, sw);
 	strcpy(aux->cep, cep);
 	strcpy(aux->cfill, cfill);
 	strcpy(aux->cstroke, cstroke);
@@ -157,14 +157,14 @@ void set_h(void* current_block, double newValue){
 	aux->h = newValue;
 }
 
-double get_sw(void* current_block){
+char* get_sw(void* current_block){
 	block* aux = current_block;
 	return aux->sw; 
 }
 
-void set_sw(void* current_block, double newValue){
+void set_sw(void* current_block, char* newValue){
 	block* aux = current_block;
-	aux->sw = newValue;
+	strcpy(aux->sw, newValue);
 }
 
 char* get_cfill(void* current_block){
