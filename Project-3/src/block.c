@@ -43,7 +43,6 @@ void free_single_block(void* block_data){
 
 	free(block_to_remove->locations_available);
 	free(block_to_remove->persons_living);
-
 	free(block_to_remove);
 
 }
@@ -201,8 +200,11 @@ void set_cep(void* current_block, char* newValue){
 int compare_cep(void* node, void* element){
 	
 	block* aux1 = node;
-
-	if(!strcmp(aux1->cep, element)) return 1;
+	if(aux1 && element){
+		if(aux1->cep){
+			if(!strcmp(aux1->cep, element)) return 1;
+		}
+	}
 
 	return 0;	
 

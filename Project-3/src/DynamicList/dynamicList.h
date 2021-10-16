@@ -21,6 +21,7 @@ void* get_previous(void* current);
 void free_list(void* sequence, void (*freeList)(void*));
 void* at_pos(void* sequence, int index);
 void free_block_list(void* sequence);
+void remove_node_special(void* sequence, void* current);
 void* find_item(void* sequence, void* match, int (*compare_info)(void*, void*));
 
 #endif

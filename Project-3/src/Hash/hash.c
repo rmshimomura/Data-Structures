@@ -95,6 +95,25 @@ void hash_table_remove_key(void* HT, char* key, void (*free_data)(void*), int (*
 
 }
 
+void hash_table_remove_key_special(void* HT, char* key, int (*compare_nodes)(void*, void*)){
+    
+    if(!hash_table_list_exist(HT, key)){
+        puts("Key passed does not match any data in the hash table...");
+        printf("Key = %s\n", key);
+        return;
+    }
+
+    int pos_created_by_the_key = hash_table_create_key(HT, key);
+
+    hashTable* aux = HT;
+
+    void* to_remove = find_item(aux->registers[pos_created_by_the_key].list, key, compare_nodes);
+
+    if(to_remove){
+        remove_node_special(aux->registers[pos_created_by_the_key].list, to_remove);
+    }
+
+}
 
 void hash_table_destroy(void* HT, void (*free_function)(void*)) {
     

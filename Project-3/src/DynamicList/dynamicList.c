@@ -261,6 +261,74 @@ void remove_node(void* sequence, void* current, void (free_data)(void*)) {
     }
 }
 
+void remove_node_special(void* sequence, void* current) {
+    
+    if(!sequence) return;
+    
+    list_t* listAux = sequence;
+    data_t* aux1;
+    data_t* aux2;
+
+    data_t* posToRemove = listAux->head;
+    int pos = 0;
+
+    while (posToRemove->element != current) {
+        posToRemove = posToRemove->next;
+        pos++;
+
+        if (pos > listAux->size) {
+            puts("Nao encontrado.");
+            return;
+        }
+    }
+
+    if (pos < 0)
+        return;
+
+    else if (pos > listAux->size)
+        return;
+
+    else if (pos == listAux->size - 1 && listAux->size > 1) {
+        // If it is the last position from the list
+
+        aux1 = at_pos(listAux, pos - 1);
+        aux2 = at_pos(listAux, pos);
+        
+        free(aux2);
+        aux1->next = NULL;
+        listAux->end = aux1;
+        listAux->size--;
+
+    } else if (pos == 0 && listAux->size > 1) {
+        // Remove first element from list
+
+        aux1 = at_pos(listAux, 0);
+        listAux->head = listAux->head->next;
+        free(aux1);
+        listAux->size--;
+
+    } else if (pos == 0 && listAux->size == 1) {
+        // Remove the only element of the list
+
+        aux1 = at_pos(listAux, 0);
+        
+        listAux->head = NULL;
+        listAux->end = NULL;
+        
+        
+        free(aux1);
+        listAux->size--;
+
+    } else {
+        aux1 = at_pos(listAux, pos - 1);
+        aux2 = at_pos(listAux, pos);
+        
+        aux1->next = aux2->next;
+        aux2->next->prev = aux1;
+        free(aux2);
+        listAux->size--;
+    }
+}
 void* find_item(void* sequence, void* match, int (*compare_info)(void*, void*)){
     
     if(!sequence) return NULL;

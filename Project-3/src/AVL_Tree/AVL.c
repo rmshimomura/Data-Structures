@@ -1,6 +1,7 @@
 #include "AVL.h"
 #include "../DynamicList/dynamicList.h"
 #include "../block.h"
+#include "../location.h"
 
 typedef struct node {
     struct node* left;
@@ -407,7 +408,7 @@ void* delete_node(void* initial_tree, void* initial_node, void* element, int (*c
                 node_aux->max_w = temp->max_w;
                 node_aux->original_x = temp->original_x;
 
-                node_aux->right = delete_node(tree_aux, node_aux->right, temp->data, compare_nodes, free_data);
+                node_aux->right = delete_node(tree_aux, node_aux->right, location_get_cep(temp->data), compare_nodes, free_data);
                 
             }
         }

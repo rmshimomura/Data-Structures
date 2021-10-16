@@ -46,7 +46,7 @@ void recursive_print_svg(void* root, FILE* original_svg) {
 void position_cases_character(hash blocks_hash, void* location_data, void* list_of_modifications, char character_to_print){
 
     void* square = find_item(hash_table_get_register_list(blocks_hash, location_get_cep(location_data)), location_get_cep(location_data), compare_cep);
-    char modification[1000];
+    char modification[1000] = " ";
 
     switch(location_get_face(location_data)) {
 
@@ -85,7 +85,7 @@ void position_cases_line(void* old_square, void* new_square, char face, int num,
 
     // (x1,y1) position is going to be the old square
     // (x2,y2) position is going to be the new square
-    char mod1[1000], mod2[1000], mod3[1000];
+    char mod1[1000] = " ", mod2[1000] = " ", mod3[1000] = " ";
     
     switch(get_person_place_face(person_info)) {
 
@@ -232,7 +232,7 @@ void position_cases_line(void* old_square, void* new_square, char face, int num,
 
 void insert_modifications(void* person_data, void* square, char* cpf, void* list_of_modifications){
 
-    char complete_info[200] = "", line[200] = "";
+    char complete_info[200] = " ", line[200] = " ";
     char* full_addr = get_person_full_address(person_data);
 
     sprintf(complete_info, "<text x=\"%.2lf\" y=\"-%.2lf\">%s %s - %s %s</text>\n", get_x(square) + 3, 5* get_size(list_of_modifications) + 2.00,get_person_name(person_data), get_person_surname(person_data), cpf, full_addr);
@@ -273,7 +273,7 @@ void insert_modifications(void* person_data, void* square, char* cpf, void* list
 
 void insert_persons(void* block_data, void* person, char sex, void* list_of_modifications) {
 
-    char modification[200];
+    char modification[200] = " ";
     
 
     switch (get_person_place_face(person)){
@@ -306,7 +306,7 @@ void insert_persons(void* block_data, void* person, char sex, void* list_of_modi
 
 void insert_location_line(void* location, void* square, void* list_of_modifications){
 
-    char line[300];
+    char line[300] = " ";
 
     switch (location_get_face(location)){
         
@@ -338,7 +338,7 @@ void insert_location_line(void* location, void* square, void* list_of_modificati
 void position_cases_text(hash blocks_hash, void* location_data, void* list_of_modifications, char* text_to_print){
 
     void* square = find_item(hash_table_get_register_list(blocks_hash, location_get_cep(location_data)), location_get_cep(location_data), compare_cep);
-    char modification[1000] = "";
+    char modification[1000] = " ";
     switch(location_get_face(location_data)) {
 
         case 'N':

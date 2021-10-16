@@ -19,6 +19,7 @@ void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* ce
     fprintf(txt_results, "del(%s):\n\n", cep);
 
     void* square = find_item(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
+    
 
     if (square) {
         void** residents_list = get_residents(square);
@@ -45,30 +46,33 @@ void del(tree blocks, hash blocks_hash, hash residents, hash locations, char* ce
             }
         }
 
+        char modification_line[300] = "";
+        sprintf(modification_line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"-%.2lf\" style=\"stroke:mediumblue;stroke-width:2;\"/>\n", get_x(square) + get_w(square)/2.0, get_y(square) + get_h(square)/2.0, get_x(square) + get_w(square)/2.0, 5* get_size(list_of_modifications) + 2.00);
+
+        char modification_cep[300] = "";
+        sprintf(modification_cep, "<text x=\"%.2lf\" y=\"-%.2lf\">%s</text>", get_x(square) + get_w(square)/2.0, 5* get_size(list_of_modifications) + 8.00, get_cep(square));
+
+        char* command1 = calloc(strlen(modification_line) + 5, sizeof(char));
+        strcpy(command1, modification_line);
+
+        char* command2 = calloc(strlen(modification_cep) + 5, sizeof(char));
+        strcpy(command2, modification_cep);
+
+        insert_list(list_of_modifications, command1);
+        insert_list(list_of_modifications, command2);
+
+        hash_table_remove_key_special(blocks_hash, cep, compare_cep);
+
+        void* blocks_root = get_root(blocks);
+        blocks_root = delete_node(blocks, blocks_root, square, compare_x, free_single_block);
+        
+
     } else {
+
         fprintf(txt_results, "\tSorry, CEP = %s not found...\n\n", cep);
         fprintf(txt_results, "====================================================\n");
         return;
     }
-
-    char modification_line[300] = "";
-    sprintf(modification_line, "\t<line x1=\"%.2lf\" y1=\"%.2lf\" x2=\"%.2lf\" y2=\"-%.2lf\" style=\"stroke:mediumblue;stroke-width:2;\"/>\n", get_x(square) + get_w(square)/2.0, get_y(square) + get_h(square)/2.0, get_x(square) + get_w(square)/2.0, 5* get_size(list_of_modifications) + 2.00);
-
-    char modification_cep[300] = "";
-    sprintf(modification_cep, "<text x=\"%.2lf\" y=\"-%.2lf\">%s</text>", get_x(square) + get_w(square)/2.0, 5* get_size(list_of_modifications) + 8.00, get_cep(square));
-
-    char* command1 = calloc(strlen(modification_line) + 5, sizeof(char));
-    strcpy(command1, modification_line);
-
-    char* command2 = calloc(strlen(modification_cep) + 5, sizeof(char));
-    strcpy(command2, modification_cep);
-
-    insert_list(list_of_modifications, command1);
-    insert_list(list_of_modifications, command2);
-
-    void* blocks_root = get_root(blocks);
-
-    blocks_root = delete_node(blocks, blocks_root, square, compare_x, free_single_block);
 
     fprintf(txt_results, "====================================================\n");
 }
@@ -417,7 +421,7 @@ void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, void* l
 
         insert_location_line(location, square, list_of_modifications); //Just make the line from the location to the upper part of svg
 
-        char location_data[300] = "";
+        char location_data[300] = " ";
         char* formatted_location_string = return_location_info(location);
         position_cases_text(blocks_hash, location, list_of_modifications, formatted_location_string);
 
@@ -450,7 +454,7 @@ void dloc(hash locations, hash blocks_hash, char* id, FILE* txt_results, void* l
 
         insert_modifications(get_person_living_here(location), square, get_person_cpf(get_person_living_here(location)), list_of_modifications);
         
-        char location_data[300];
+        char location_data[300] = " ";
         char* formatted_location_string = return_location_info(location);
         position_cases_text(blocks_hash, location, list_of_modifications, formatted_location_string);
         
