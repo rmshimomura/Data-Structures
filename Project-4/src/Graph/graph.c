@@ -104,3 +104,49 @@ void graph_insert_edge (void* connections, char* name, char* vertex_1, char* ver
     insert_list(v1->edges, aux_edge);
 
 }
+
+void graph_remove_edge(void* connections, char* vertex_1, char* vertex_2) {
+
+    graph* aux_graph = connections;
+
+    vertex* v1 = graph_find_vertex(connections, vertex_1);
+    vertex* v2 = graph_find_vertex(connections, vertex_2);
+
+    if(!v1) {
+        printf("Vertex 1 with id = %s doesn't exist on graph!\n", vertex_1);
+        return;
+    }
+
+    if(!v2) {
+        printf("Vertex 2 with id = %s doesn't exist on graph!\n", vertex_2);
+        return;
+    }
+
+    edge* aux = find_edge(v1->edges, v2);
+
+    (aux) ? remove_node(v1->edges, aux, free_edge_data, true) : printf("There's no edge linking %s and %s!\n", vertex_1, vertex_2); return;
+
+}
+
+void* find_edge(void* v1_edges, void* v2){
+
+    if(!v1_edges) {
+        puts("There's no edges on this vertex!");
+        return NULL;
+    }
+
+    void* list_head = get_head(v1_edges);
+    edge* list_node = get_list_element(list_head);
+
+    for(int i = 0; i < get_size(v1_edges); i++) {
+
+        if(list_node->to == v2) return list_node;
+
+        list_head = get_next(list_head);
+        list_node = get_list_element(list_head);
+
+    }
+
+    return NULL;
+
+}
