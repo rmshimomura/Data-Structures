@@ -135,15 +135,15 @@ void* find_edge(void* v1_edges, void* v2){
         return NULL;
     }
 
-    void* list_head = get_head(v1_edges);
-    edge* list_node = get_list_element(list_head);
+    void* list_node = get_head(v1_edges);
+    edge* list_element = get_list_element(list_node);
 
     for(int i = 0; i < get_size(v1_edges); i++) {
 
-        if(list_node->to == v2) return list_node;
+        if(list_element->to == v2) return list_node;
 
-        list_head = get_next(list_head);
-        list_node = get_list_element(list_head);
+        list_node = get_next(list_node);
+        list_element = get_list_element(list_node);
 
     }
 
