@@ -50,16 +50,6 @@ void* create_vertex (char* id, double x, double y) {
 
 }
 
-void* graph_find_vertex(void* connections, char* vertex_id) {
-
-    graph* graph_aux = connections;
-
-    for(int i = 0; i < graph_aux->size; i++) if(!strcmp(vertex_get_id(graph_aux->vertexes[i].vertex_data), vertex_id)) return &(graph_aux->vertexes[i]);
-
-    return NULL;
-
-}
-
 void graph_insert_vertex(void* connections, void* vertex_created) {
 
     graph* aux_graph = connections;
@@ -78,12 +68,22 @@ void graph_insert_vertex(void* connections, void* vertex_created) {
 
 }
 
+void* graph_find_vertex(void* connections, char* vertex_id) {
+
+    graph* graph_aux = connections;
+
+    for(int i = 0; i < graph_aux->size; i++) if(!strcmp(vertex_get_id(graph_aux->vertexes[i].vertex_data), vertex_id)) return &(graph_aux->vertexes[i]);
+
+    return NULL;
+
+}
+
 void graph_insert_edge (void* connections, char* name, char* vertex_1, char* vertex_2, char* left_side_square, char* right_side_square, double length, double average_speed) {
 
     graph* aux_graph = connections;
 
-    void* v1 = graph_find_vertex(connections, vertex_1);
-    void* v2 = graph_find_vertex(connections, vertex_2);
+    vertex* v1 = graph_find_vertex(connections, vertex_1);
+    vertex* v2 = graph_find_vertex(connections, vertex_2);
 
     if(!v1) {
         printf("Vertex 1 with id = %s doesn't exist on graph!\n", vertex_1);
@@ -98,6 +98,9 @@ void graph_insert_edge (void* connections, char* name, char* vertex_1, char* ver
     edge* aux_edge = calloc(1, sizeof(edge));
     aux_edge->from = v1;
     aux_edge->to = v2;
-    aux_edge->edge_data = new_edge_data(name, left_side_square, right_side_square, length, average_speed);
+
+    aux_edge->edge_data = new_edge_data(name, left_side_square, right_side_square, length, average_speed, v1->vertex_data, v2->vertex_data);
+
+    insert_list(v1->edges, aux_edge);
 
 }
