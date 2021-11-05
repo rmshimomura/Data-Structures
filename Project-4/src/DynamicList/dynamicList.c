@@ -217,3 +217,21 @@ void remove_node(void* sequence, void* node_to_remove, void (*free_node)(void*),
         list_aux->size--;
     }
 }
+
+void* find_element(void* sequence, void* match, int (*compare_info)(void*, void*)) {
+    
+    if(!sequence) return NULL;
+    
+    list* list_aux = sequence;
+    node* node_aux = list_aux->head;
+    
+
+    for(int i = 0; i < list_aux->size; i++) {
+
+        if(compare_info(node_aux->element, match)) return node_aux->element;
+    
+        node_aux = node_aux->next;
+
+    }
+    return NULL;
+}
