@@ -19,6 +19,14 @@ void* new_vertex_data(char* id, double x, double y) {
 
 }
 
+void free_vertex_data(void* data) {
+
+    vertex_data* aux = data;
+    free(aux->id);
+    free(aux);
+
+}
+
 char* vertex_get_id(void* data) {
     vertex_data* aux = data;
     return aux->id;

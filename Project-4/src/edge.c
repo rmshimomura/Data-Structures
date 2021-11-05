@@ -35,6 +35,16 @@ void* new_edge_data(char* name, char* left_side_square, char* right_side_square,
 
 }
 
+void free_edge_data (void* data) {
+
+    edge_data* aux = data;
+    free(aux->name);
+    free(aux->left_side_square);
+    free(aux->right_side_square);
+    free(aux);
+
+}
+
 char* edge_get_name(void* data) {
     edge_data* aux = data;
     return aux->name;
