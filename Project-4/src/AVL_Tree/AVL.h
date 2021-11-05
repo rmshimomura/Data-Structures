@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-
+#include "libs.h"
 
 void* create_tree();
 void* insert_tree(void* initial_tree, void* initial_node, void* element, int (*compare_nodes)(void*, void*));
