@@ -8,6 +8,17 @@ typedef struct vertex_data {
 
 } vertex_data;
 
+void* new_vertex_data(char* id, double x, double y) {
+
+    vertex_data* aux = calloc(1, sizeof(vertex_data));
+    strcpy(aux->id, id);
+    aux->x = x;
+    aux->y = y;
+
+    return aux;
+
+}
+
 char* vertex_get_id(void* data) {
     vertex_data* aux = data;
     return aux->id;

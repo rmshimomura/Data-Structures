@@ -1,5 +1,6 @@
 #include "libs.h"
 
+void* new_edge_data(char* name, char* left_side_square, char* right_side_square, double length, double average_speed);
 char* edge_get_name(void* data);
 char* edge_get_left_side_square(void* data);
 char* edge_get_right_side_square(void* data);
