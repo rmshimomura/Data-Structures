@@ -50,6 +50,27 @@ void* create_vertex (char* id, double x, double y) {
 
 }
 
+void* vertex_get_data(void* v) {
+    return ((vertex*)v)->vertex_data;
+}
+
+void* vertex_get_edges(void* v) {
+    return ((vertex*)v)->edges;
+}
+
+void* edges_get_data(void* e) {
+    return ((edge*)e)->edge_data;
+}
+
+void* edges_get_from(void* e) {
+    return ((edge*)e)->from;
+}
+
+void* edges_get_to(void* e) {
+    return ((edge*)e)->to;
+}
+
+
 void graph_insert_vertex(void* connections, void* vertex_created) {
 
     graph* aux_graph = connections;
