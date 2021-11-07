@@ -1,5 +1,5 @@
 #include "block.h"
-#include "DynamicList/dynamicList.h"
+#include "Dynamic_list/dynamic_list.h"
 
 typedef struct block {
 
