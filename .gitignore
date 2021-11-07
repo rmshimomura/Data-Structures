@@ -9,5 +9,6 @@ gettesSetters.txt
 *.svg
 test.c
 t1
+t2
 *.dot
 *.zip
