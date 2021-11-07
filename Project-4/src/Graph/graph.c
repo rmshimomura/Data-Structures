@@ -1,5 +1,5 @@
 #include "graph.h"
-#include "../DynamicList/dynamicList.h"
+#include "../Dynamic_list/dynamic_list.h"
 #include "../edge.h"
 #include "../vertex.h"
 
@@ -58,15 +58,15 @@ void* vertex_get_edges(void* v) {
     return ((vertex*)v)->edges;
 }
 
-void* edges_get_data(void* e) {
+void* edge_get_data(void* e) {
     return ((edge*)e)->edge_data;
 }
 
-void* edges_get_from(void* e) {
+void* edge_get_from(void* e) {
     return ((edge*)e)->from;
 }
 
-void* edges_get_to(void* e) {
+void* edge_get_to(void* e) {
     return ((edge*)e)->to;
 }
 

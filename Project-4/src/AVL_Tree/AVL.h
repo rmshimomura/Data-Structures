@@ -1,4 +1,4 @@
-#include "libs.h"
+#include "../libs.h"
 
 #ifndef AVL_H
 #define AVL_H

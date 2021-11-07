@@ -1,5 +1,5 @@
 #include "AVL.h"
-#include "../DynamicList/dynamicList.h"
+#include "../Dynamic_list/dynamic_list.h"
 #include "../block.h"
 
 typedef struct node {

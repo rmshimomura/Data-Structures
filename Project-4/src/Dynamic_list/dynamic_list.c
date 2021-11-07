@@ -1,4 +1,4 @@
-#include "dynamicList.h"
+#include "dynamic_list.h"
 
 typedef struct node {
 
