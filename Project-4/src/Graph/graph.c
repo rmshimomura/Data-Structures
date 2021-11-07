@@ -150,3 +150,41 @@ void* find_edge(void* v1_edges, void* v2){
     return NULL;
 
 }
+
+int adjacent(void* connections, char* vertex_1, char* vertex_2) {
+
+    graph* aux_graph = connections;
+
+    vertex* v1 = graph_find_vertex(connections, vertex_1);
+    vertex* v2 = graph_find_vertex(connections, vertex_2);
+
+    if(!v1) {
+        printf("Vertex 1 with id = %s doesn't exist on graph!\n", vertex_1);
+        return;
+    }
+
+    if(!v2) {
+        printf("Vertex 2 with id = %s doesn't exist on graph!\n", vertex_2);
+        return;
+    }
+
+    edge* aux = find_edge(v1->edges, v2);
+
+    return aux ? 1 : 0;
+
+}
+
+void* list_of_adjacents(void* connections, char* vertex_1) {
+
+    graph* aux_graph = connections;
+
+    vertex* v1 = graph_find_vertex(connections, vertex_1);
+
+    if(!v1) {
+        printf("Vertex 1 with id = %s doesn't exist on graph!\n", vertex_1);
+        return;
+    }
+
+    return v1->edges;
+
+}
