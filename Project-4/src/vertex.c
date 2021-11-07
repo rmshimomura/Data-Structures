@@ -27,32 +27,32 @@ void free_vertex_data(void* data) {
 
 }
 
-char* vertex_get_id(void* data) {
+char* vertex_data_get_id(void* data) {
     vertex_data* aux = data;
     return aux->id;
 }
 
-double vertex_get_x(void* data) {
+double vertex_data_get_x(void* data) {
     vertex_data* aux = data;
     return aux->x;
 }
 
-double vertex_get_y(void* data) {
+double vertex_data_get_y(void* data) {
     vertex_data* aux = data;
     return aux->y;
 }
 
-void vertex_set_id(void* data, char* id) {
+void vertex_data_set_id(void* data, char* id) {
     vertex_data* aux = data;
     strcpy(aux->id, id);
 }
 
-void vertex_set_x(void* data, double x) {
+void vertex_data_set_x(void* data, double x) {
     vertex_data* aux = data;
     aux->x = x;
 }
 
-void vertex_set_y(void* data, double y) {
+void vertex_data_set_y(void* data, double y) {
     vertex_data* aux = data;
     aux->y = y;
 }
