@@ -67,12 +67,14 @@ void* priority_queue_insert(void* sequence, void* element, double priority) {
                 aux->prev = priority_queue_aux->end;
                 priority_queue_aux->end = aux;
 
-            }
+            } else{
             
-            aux->next = runner->next;
-            aux->prev = runner;
-            runner->next->prev = aux;
-            runner->next = aux;
+                aux->next = runner->next;
+                aux->prev = runner;
+                runner->next->prev = aux;
+                runner->next = aux;
+                
+            }
 
         }
 
