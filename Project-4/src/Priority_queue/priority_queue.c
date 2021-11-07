@@ -146,10 +146,10 @@ void* priority_queue_pop(void* sequence, bool remove_elements, void (*free_eleme
 
         free(priority_queue_aux->head);
 
-        if(!remove_elements) return temp;
-
         priority_queue_aux->head = aux1;
         priority_queue_aux->size--;
+
+        if(!remove_elements) return temp;
 
     } else if (priority_queue_aux->size == 1) {
 
@@ -161,12 +161,13 @@ void* priority_queue_pop(void* sequence, bool remove_elements, void (*free_eleme
 
         free(priority_queue_aux->head);
 
-        if(!remove_elements) return temp;
 
         priority_queue_aux->head = NULL;
         priority_queue_aux->end = NULL;
 
         priority_queue_aux->size--;
+        
+        if(!remove_elements) return temp;
 
     }
 

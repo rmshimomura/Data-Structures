@@ -30,7 +30,7 @@ void free_vertex_data(void* data) {
 
 char* vertex_data_get_id(void* data) {
     vertex_data* aux = data;
-    return aux->id;
+    return data ? aux->id : "none";
 }
 
 double vertex_data_get_x(void* data) {

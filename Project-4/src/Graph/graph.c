@@ -53,7 +53,7 @@ void* create_vertex (char* id, double x, double y) {
 }
 
 void* vertex_get_data(void* v) {
-    return ((vertex*)v)->vertex_data;
+    return v ? ((vertex*)v)->vertex_data : NULL;
 }
 
 void* vertex_get_edges(void* v) {
