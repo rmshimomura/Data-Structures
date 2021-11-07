@@ -153,7 +153,7 @@ void* right_rotate(void* initial_node) {
         return aux1;
 
     }
-
+    return NULL;
 }
 
 void* left_rotate(void* initial_node) {
@@ -232,7 +232,7 @@ void* left_rotate(void* initial_node) {
         return aux1;
 
     }
-
+    return NULL;
 }
 
 void* smallest_node(void* node) {

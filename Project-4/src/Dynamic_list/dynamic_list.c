@@ -159,10 +159,10 @@ void* remove_node(void* sequence, void* node_to_remove, void (*free_node)(void*)
     }
 
     if (pos < 0)
-        return;
+        return NULL;
 
     else if (pos > list_aux->size)
-        return;
+        return NULL;
 
     else if (pos == list_aux->size - 1 && list_aux->size > 1) {
         

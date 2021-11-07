@@ -33,6 +33,8 @@ void* new_edge_data(char* name, char* left_side_square, char* right_side_square,
 
     //TODO NW, NE, SW, SE
 
+    return aux;
+
 }
 
 void free_edge_data (void* data) {

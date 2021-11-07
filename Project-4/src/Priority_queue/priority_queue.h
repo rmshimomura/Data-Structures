@@ -1,4 +1,4 @@
-#include "libs.h"
+#include "../libs.h"
 
 #ifndef PRIORITY_QUEUE_H
 #define PRIORITY_QUEUE_H
