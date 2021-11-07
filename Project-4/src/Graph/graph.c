@@ -72,7 +72,7 @@ void* graph_find_vertex(void* connections, char* vertex_id) {
 
     graph* graph_aux = connections;
 
-    for(int i = 0; i < graph_aux->size; i++) if(!strcmp(vertex_get_id(graph_aux->vertexes[i].vertex_data), vertex_id)) return &(graph_aux->vertexes[i]);
+    for(int i = 0; i < graph_aux->size; i++) if(!strcmp(vertex_data_get_id(graph_aux->vertexes[i].vertex_data), vertex_id)) return &(graph_aux->vertexes[i]);
 
     return NULL;
 
@@ -174,7 +174,7 @@ int adjacent(void* connections, char* vertex_1, char* vertex_2) {
 
 }
 
-void* list_of_adjacents(void* connections, char* vertex_1) {
+void* list_of_adjacents_by_name(void* connections, char* vertex_1) {
 
     graph* aux_graph = connections;
 
@@ -186,5 +186,11 @@ void* list_of_adjacents(void* connections, char* vertex_1) {
     }
 
     return v1->edges;
+
+}
+
+void* list_of_adjacents_by_address(void* vertex_1) {
+
+    return vertex_1 ? ((vertex*)vertex_1)->edges : NULL;
 
 }
