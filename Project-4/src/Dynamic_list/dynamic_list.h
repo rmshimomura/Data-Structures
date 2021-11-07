@@ -9,6 +9,7 @@ void* insert_list(void* sequence, void* element);
 void* remove_node(void* sequence, void* node_to_remove, void (*free_node)(void*), bool remove_elements);
 void* get_list_element(void* current);
 void* get_head(void* sequence);
+void* get_end(void* sequence);
 void* get_next(void* current);
 void* getLast(void* sequence);
 void* get_previous(void* current);

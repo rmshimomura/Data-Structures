@@ -66,6 +66,13 @@ void* get_head(void* sequence) {
 
 }
 
+void* get_end(void* sequence) {
+
+    list* list_aux = sequence;
+    return list_aux->end;
+
+}
+
 void* get_next(void* current) {
     
     node* aux = current;
