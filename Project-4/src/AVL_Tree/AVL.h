@@ -1,5 +1,8 @@
 #include "libs.h"
 
+#ifndef AVL_H
+#define AVL_H
+
 void* create_tree();
 void* insert_tree(void* initial_tree, void* initial_node, void* element, int (*compare_nodes)(void*, void*));
 void* get_left(void* node);
@@ -20,3 +23,5 @@ double find_max_w(void* sequence);
 int check_nodes(void* node1, void* node2);
 void printing_tree(void* initial_node, int space);
 void recursive_print_tree(void* initial_tree); 
+
+#endif
