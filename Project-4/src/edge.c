@@ -15,8 +15,11 @@ typedef struct edge_data {
 void* new_edge_data(char* name, char* left_side_square, char* right_side_square, double length, double average_speed, void* vertex_1_data, void* vertex_2_data) {
 
     edge_data* aux = calloc(1, sizeof(edge_data));
+    aux->name = calloc(strlen(name) + 1, sizeof(char));
     strcpy(aux->name, name);
+    aux->left_side_square = calloc(strlen(left_side_square) + 1, sizeof(char));
     strcpy(aux->left_side_square, left_side_square);
+    aux->right_side_square = calloc(strlen(right_side_square) + 1, sizeof(char));
     strcpy(aux->right_side_square, right_side_square);
     aux->length = length;
     aux->average_speed = average_speed;

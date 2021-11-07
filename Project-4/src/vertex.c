@@ -11,6 +11,7 @@ typedef struct vertex_data {
 void* new_vertex_data(char* id, double x, double y) {
 
     vertex_data* aux = calloc(1, sizeof(vertex_data));
+    aux->id = calloc(strlen(id) + 1, sizeof(char));
     strcpy(aux->id, id);
     aux->x = x;
     aux->y = y;

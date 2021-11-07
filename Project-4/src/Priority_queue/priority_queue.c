@@ -45,7 +45,7 @@ void* priority_queue_insert(void* sequence, void* element, double priority) {
 
         node* runner = priority_queue_aux->head;
 
-        if(runner->priority > aux->priority) {
+        if(runner->priority > aux->priority) { // Insert first on the start
 
             runner->prev = aux;
             aux->prev = NULL;
@@ -54,26 +54,26 @@ void* priority_queue_insert(void* sequence, void* element, double priority) {
 
         } else {
 
-            while(runner->next->priority < aux->priority || runner->next != NULL) { 
-
+            while(runner->next != NULL && runner->priority < aux->priority) {
                 runner = runner->next;
-
             }
 
-            if(!runner->next) {
-
-                aux->next = NULL;
-                priority_queue_aux->end->next = aux;
-                aux->prev = priority_queue_aux->end;
-                priority_queue_aux->end = aux;
-
-            } else{
+            if(runner->prev) runner = runner->prev;
             
+            if(runner->next) {
+
                 aux->next = runner->next;
                 aux->prev = runner;
                 runner->next->prev = aux;
                 runner->next = aux;
-                
+
+            } else {
+
+                runner->next = aux;
+                aux->prev = runner;
+                aux->next = NULL;
+                priority_queue_aux->end = aux;
+
             }
 
         }
