@@ -50,6 +50,18 @@ void free_edge_data (void* data) {
 
 }
 
+double shortest_path(void* data) {
+
+    return ((edge_data*)data)->length;
+
+}
+
+double fastest_path(void* data) {
+
+    return (((edge_data*)data)->length/((edge_data*)data)->average_speed);
+
+}
+
 char* edge_data_get_name(void* data) {
     edge_data* aux = data;
     return aux->name;

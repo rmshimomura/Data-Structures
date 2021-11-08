@@ -5,6 +5,8 @@
 
 void* new_edge_data(char* name, char* left_side_square, char* right_side_square, double length, double average_speed, void* vertex_1_data, void* vertex_2_data);
 void free_edge_data (void* data);
+double shortest_path(void* data);
+double fastest_path(void* data);
 char* edge_data_get_name(void* data);
 char* edge_data_get_left_side_square(void* data);
 char* edge_data_get_right_side_square(void* data);
