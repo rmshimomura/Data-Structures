@@ -24,7 +24,12 @@ void* new_helper(void* vertex, void* from, double cost) {
 
 }
 
-void* dijkstra(void* connections, char* start, char* end) {
+int compare(void* a, void* b) {
+    helper* aux = a;
+    return aux->vertex == b ? 1 : 0;
+}
+
+void* dijkstra(void* connections, char* start, char* end, double (*operation_mode)(void*)) {
     
     void* origin = graph_find_vertex(connections, start);
     void* destination = graph_find_vertex(connections, end);
@@ -48,33 +53,36 @@ void* dijkstra(void* connections, char* start, char* end) {
 
     priority_queue_insert(prior_queue, new_helper(origin, NULL, 0), 0); // S
 
-    while(search != destination) {
+    while(search != destination && search != NULL) {
 
         void* search_adjacents = list_of_adjacents_by_address(search);
 
         for(void* aux = get_head(search_adjacents); aux; aux = get_next(aux)){
 
             void* edge = get_list_element(aux);
-
             void* edge_data = edge_get_data(edge);
-
             void* edge_to = edge_get_to(edge);
 
-            if(edge_to != back_track){ // Prevent self looping
+            double cost_until_this_point = operation_mode(edge_data) + search_cost;
+            void* found = find_element(visited_vertexes, edge_to, compare);
 
-                double cost_until_this_point = ((edge_data_get_length(edge_data)/edge_data_get_average_speed(edge_data)) + search_cost);
+            if(found == NULL && edge_to != back_track) {
                 priority_queue_insert(prior_queue, new_helper(edge_to, search, cost_until_this_point), cost_until_this_point);
-
             }
-
+            
         }
+
+        back_track = search; // Update to compare with the next vertex
 
         insert_list(visited_vertexes, priority_queue_pop(prior_queue, false, free)); // Updated visited vertexes, remove from the priority queue
 
         helper* aux = priority_queue_get_element(priority_queue_get_head(prior_queue));
 
-        search = aux->vertex; // Go to the next vertex of the priority queue
-        search_cost = aux->cost; // Update search cost to the next vertex
+        if(!aux) break;
+
+        search = aux->vertex;
+        search_cost = aux->cost;
+        
 
     }
 
@@ -82,18 +90,21 @@ void* dijkstra(void* connections, char* start, char* end) {
 
     void* optimized_path = create_list(); // List of the vertexes to the optimized path
 
-    for(void* aux = get_end(visited_vertexes); aux; aux = get_previous(aux)) {
-        
-        helper* builder = get_list_element(aux);
+    if(((helper*)get_list_element(get_end(visited_vertexes)))->vertex == destination) {
 
-        if(builder->vertex == destination || back_track == builder->vertex) {
+        for(void* aux = get_end(visited_vertexes); aux; aux = get_previous(aux)) {
 
-            back_track = builder->from;
-            insert_list(optimized_path, builder);
+            helper* builder = get_list_element(aux);
+
+            if(builder->vertex == destination || back_track == builder->vertex) {
+
+                back_track = builder->from;
+                insert_list(optimized_path, builder);
+
+            }
 
         }
-
-    } 
+    }
 
     return optimized_path;
 

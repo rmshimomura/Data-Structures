@@ -3,7 +3,7 @@
 #ifndef DIJKSTRA_H
 #define DIJKSTRA_H
 
-void* dijkstra(void* connections, char* start, char* end);
+void* dijkstra(void* connections, char* start, char* end, double (*operation_mode)(void*));
 void to_string(void* path_node);
 
 #endif
