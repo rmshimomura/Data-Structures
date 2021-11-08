@@ -54,21 +54,26 @@ void* priority_queue_insert(void* sequence, void* element, double priority) {
 
         } else {
 
-            while(runner->next != NULL && runner->priority < aux->priority) {
-                runner = runner->next;
+            while(runner->priority < aux->priority) {
+                if(runner->next != NULL) {
+                    runner = runner->next;
+                } else {
+                    break;
+                }
+            } 
+            
+            if(runner->prev && runner->priority >= aux->priority){
+                runner = runner->prev;
             }
-
-            if(runner->prev) runner = runner->prev;
             
             if(runner->next) {
-
                 aux->next = runner->next;
                 aux->prev = runner;
                 runner->next->prev = aux;
                 runner->next = aux;
 
-            } else {
-
+            } else { // Last position
+                
                 runner->next = aux;
                 aux->prev = runner;
                 aux->next = NULL;
@@ -81,6 +86,10 @@ void* priority_queue_insert(void* sequence, void* element, double priority) {
     }
 
     priority_queue_aux->size++;
+    // for(node* aux = priority_queue_get_head(sequence); aux; aux = priority_queue_get_next(aux)) {
+    //     printf("%.2lf ", aux->priority);
+    // }
+    // puts(" ");
     return aux;
 
 }
@@ -95,7 +104,7 @@ int priority_queue_get_size(void* sequence) {
 void* priority_queue_get_head(void* sequence) {
 
     priority_queue* priority_queue_aux = sequence;
-    return priority_queue_aux->head;
+    return priority_queue_aux ? priority_queue_aux->head : NULL;
 
 }
 
@@ -131,6 +140,8 @@ void priority_queue_free(void* sequence, bool remove_elements, void (*free_eleme
 }
 
 void* priority_queue_pop(void* sequence, bool remove_elements, void (*free_element)(void*)) {
+
+    if(!sequence) return NULL;
 
     priority_queue* priority_queue_aux = sequence;
     
@@ -178,7 +189,7 @@ void* priority_queue_pop(void* sequence, bool remove_elements, void (*free_eleme
 void* priority_queue_get_element(void* current) {
 
     node* aux = current;
-    return aux->element;
+    return aux ? aux->element : NULL;
 
 }
 

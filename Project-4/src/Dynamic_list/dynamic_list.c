@@ -28,6 +28,8 @@ void* create_list() {
 
 void* insert_list(void* sequence, void* element) {
 
+    if(!element) return NULL;
+
     list* list_aux = sequence;
     node* node_aux = calloc(1, sizeof(node));
     node_aux->element = element;
