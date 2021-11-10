@@ -5,11 +5,11 @@ typedef struct generalPaths {
     char* output_directory;        //Diretorio de saida
     char* initial_geo_file;        //Arquivo .geo (sem diretorio)
     char* current_qry_file;        //Arquivo .qry (sem diretorio)
-    char* via_file;                 //Arquivo .pm (sem diretorio)
+    char* roads_file;               //Arquivo .via (sem diretorio)
     char* qry_name;                //Nome do .qry sem o .qry
     char* geo_name;                //Nome do .geo sem o .geo
     char* final_SVG_file_name;     //Nome do .svg final sem o .svg
-    char* path_via_file;            //Path ate o .pm inicial
+    char* path_roads_file;          //Path ate o .via inicial
     char* path_initial_geo_file;   //Path ate o .geo inicial
     char* path_current_qry_file;   //Path ate o .qry que esta sendo usado
     char* path_original_SVG;       //Path ate o svg que sera gerado sem alteracoes
@@ -43,9 +43,9 @@ char* get_current_qry_file(path paths) {
     return aux->current_qry_file;
 }
 
-char* get_via_file(path paths){
+char* get_roads_file(path paths){
     generalPaths* aux = paths;
-    return aux->via_file;
+    return aux->roads_file;
 }
 
 char* get_qry_name(path paths) {
@@ -63,9 +63,9 @@ char* get_final_SVG_file_name(path paths) {
     return aux->final_SVG_file_name;
 }
 
-char* get_path_via_file(path paths){
+char* get_path_roads_file(path paths){
     generalPaths* aux = paths;
-    return aux->path_via_file;
+    return aux->path_roads_file;
 }
 
 char* get_path_initial_geo_file(path paths) {
@@ -123,9 +123,9 @@ void set_geo_name(path paths, char* newSet) {
     aux->geo_name = newSet;
 }
 
-void set_via_file(path paths, char* newSet) {
+void set_roads_file(path paths, char* newSet) {
     generalPaths* aux = paths;
-    aux->via_file = newSet;
+    aux->roads_file = newSet;
 }
 
 void set_final_SVG_file_name(path paths, char* newSet) {
@@ -133,9 +133,9 @@ void set_final_SVG_file_name(path paths, char* newSet) {
     aux->final_SVG_file_name = newSet;
 }
 
-void set_path_via_file(path paths, char* newSet) {
+void set_path_roads_file(path paths, char* newSet) {
     generalPaths* aux = paths;
-    aux->path_via_file = newSet;
+    aux->path_roads_file = newSet;
 }
 
 void set_path_initial_geo_file(path paths, char* newSet) {
@@ -185,9 +185,9 @@ void showPaths(path paths) {
         puts(aux->current_qry_file);
         puts("====================");
     }
-    if(aux->via_file){
+    if(aux->roads_file){
         puts("ArquivoVia : ");
-        puts(aux->via_file);
+        puts(aux->roads_file);
         puts("====================");
     }
     if (aux->final_SVG_file_name) {
@@ -205,9 +205,9 @@ void showPaths(path paths) {
         puts(aux->qry_name);
         puts("====================");
     }
-    if (aux->path_via_file) {
+    if (aux->path_roads_file) {
         puts("Path arquivo Via : ");
-        puts(aux->path_via_file);
+        puts(aux->path_roads_file);
         puts("====================");
     }
     if (aux->path_initial_geo_file) {
@@ -256,8 +256,8 @@ void freePaths(path paths) {
     if(aux->current_qry_file){
         free(aux->current_qry_file);
     }
-    if(aux->via_file) {
-        free(aux->via_file);
+    if(aux->roads_file) {
+        free(aux->roads_file);
     }
     if (aux->geo_name) {
         free(aux->geo_name);
@@ -265,8 +265,8 @@ void freePaths(path paths) {
     if (aux->qry_name) {
         free(aux->qry_name);
     }
-    if(aux->path_via_file){
-        free(aux->path_via_file);
+    if(aux->path_roads_file){
+        free(aux->path_roads_file);
     }
     if (aux->path_initial_geo_file) {
         free(aux->path_initial_geo_file);

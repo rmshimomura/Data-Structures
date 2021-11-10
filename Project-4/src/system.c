@@ -14,11 +14,11 @@ void set_initial_geo_file(path paths, char* newSet);
 void set_current_qry_file(path paths, char* newSet);
 void set_qry_name(path paths, char* newSet);
 void set_geo_name(path paths, char* newSet);
-void set_via_file(path paths, char* newSet);
+void set_roads_file(path paths, char* newSet);
 void set_final_SVG_file_name(path paths, char* newSet);
 void set_path_initial_geo_file(path paths, char* newSet);
 void set_path_current_qry_file(path paths, char* newSet);
-void set_path_via_file(path paths, char* newSet);
+void set_path_roads_file(path paths, char* newSet);
 void set_path_original_SVG(path paths, char* newSet);
 void set_path_modified_SVG(path paths, char* newSet);
 void set_path_TXT_with_qry(path paths, char* newSet);
@@ -185,7 +185,7 @@ void get_arguments(int argc, char** argv, path paths, flag flags) {
             
             char* via_file = calloc(strlen(argv[i + 1]) + 1, sizeof(char));
             strcpy(via_file, argv[i + 1]);
-            set_via_file(paths, via_file);
+            set_roads_file(paths, via_file);
             via_inserted = true;
             set_via_inserted(flags, true);
 
@@ -219,9 +219,9 @@ void get_arguments(int argc, char** argv, path paths, flag flags) {
 
     if (via_inserted) {
 
-        char* path_via_file = calloc(strlen(get_input_directory(paths)) + strlen(get_via_file(paths)) + 10, sizeof(char));
-        sprintf(path_via_file, "%s%s", get_input_directory(paths), get_via_file(paths));
-        set_path_via_file(paths, path_via_file);
+        char* path_via_file = calloc(strlen(get_input_directory(paths)) + strlen(get_roads_file(paths)) + 10, sizeof(char));
+        sprintf(path_via_file, "%s%s", get_input_directory(paths), get_roads_file(paths));
+        set_path_roads_file(paths, path_via_file);
 
     }
 
