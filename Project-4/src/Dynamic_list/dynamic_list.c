@@ -54,6 +54,34 @@ void* insert_list(void* sequence, void* element) {
 
 }
 
+void* insert_first(void* sequence, void* element) {
+
+    if(!element) return NULL;
+
+    list* list_aux = sequence;
+    node* node_aux = calloc(1, sizeof(node));
+    node_aux->element = element;
+
+    if (list_aux->size == 0) {
+
+        node_aux->next = NULL;
+        node_aux->prev = NULL;
+        list_aux->head = node_aux;
+        list_aux->end = node_aux;
+
+    } else {
+
+        list_aux->head->prev = node_aux;
+        node_aux->next = list_aux->head;
+        node_aux->prev = NULL;
+        list_aux->head = node_aux;
+    }
+
+    list_aux->size++;
+    return node_aux;
+
+}
+
 int get_size(void* sequence) {
     
     list* list_aux = sequence;
