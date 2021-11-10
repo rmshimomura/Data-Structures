@@ -3,7 +3,7 @@
 typedef struct flags {
 
     bool qry_inserted;
-    bool pm_inserted;
+	bool via_inserted;
 
 } flags;
 
@@ -19,7 +19,17 @@ bool get_qry_inserted(void* current_flags){
 	return aux->qry_inserted; 
 }
 
-void set_qry_inserted(void* current_flags, bool newValue){
+void set_qry_inserted(void* current_flags, bool new_value){
 	flags* aux = current_flags;
-	aux->qry_inserted = newValue;
+	aux->qry_inserted = new_value;
+}
+
+bool get_via_inserted(void* current_flags){
+	flags* aux = current_flags;
+	return aux->via_inserted; 
+}
+
+void set_via_inserted(void* current_flags, bool new_value){
+	flags* aux = current_flags;
+	aux->via_inserted = new_value;
 }
