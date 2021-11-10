@@ -19,5 +19,7 @@ void* find_edge(void* v1_edges, void* v2);
 int adjacent(void* connections, char* vertex_1, char* vertex_2);
 void* list_of_adjacents_by_name(void* connections, char* vertex_1);
 void* list_of_adjacents_by_address(void* vertex_1);
+void free_graph(void* connections);
+void free_edge(void* edge_);
 
 #endif

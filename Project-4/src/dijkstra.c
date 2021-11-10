@@ -24,6 +24,15 @@ void* new_helper(void* vertex, void* from, double cost) {
 
 }
 
+void free_helper(void* data) {
+
+    helper* aux = data;
+    aux->vertex = NULL;
+    aux->from = NULL;
+    free(aux);
+
+}
+
 int compare(void* a, void* b) {
     helper* aux = a;
     return aux->vertex == b ? 1 : 0;
@@ -74,7 +83,9 @@ void* dijkstra(void* connections, char* start, char* end, double (*operation_mod
 
         back_track = search; // Update to compare with the next vertex
 
-        insert_list(visited_vertexes, priority_queue_pop(prior_queue, false, free)); // Updated visited vertexes, remove from the priority queue
+        helper* top = priority_queue_pop(prior_queue, false, free_helper);
+
+        insert_list(visited_vertexes, top); // Updated visited vertexes, remove from the priority queue
 
         helper* aux = priority_queue_get_element(priority_queue_get_head(prior_queue));
 
@@ -88,7 +99,10 @@ void* dijkstra(void* connections, char* start, char* end, double (*operation_mod
 
     insert_list(visited_vertexes, priority_queue_pop(prior_queue, false, free)); // Remove the destination vertex
 
+    free_list(prior_queue, true, free_helper);
+
     void* optimized_path = create_list(); // List of the vertexes to the optimized path
+    void* unused_helpers = create_list();
 
     if(((helper*)get_list_element(get_end(visited_vertexes)))->vertex == destination) {
 
@@ -97,14 +111,17 @@ void* dijkstra(void* connections, char* start, char* end, double (*operation_mod
             helper* builder = get_list_element(aux);
 
             if(builder->vertex == destination || back_track == builder->vertex) {
-
                 back_track = builder->from;
-                insert_list(optimized_path, builder);
-
+                insert_first(optimized_path, builder);
+            } else{
+                insert_first(unused_helpers, builder);
             }
 
         }
     }
+
+    free_list(visited_vertexes, false, free_helper);
+    free_list(unused_helpers, true, free_helper);
 
     return optimized_path;
 

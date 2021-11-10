@@ -72,7 +72,6 @@ void* edge_get_to(void* e) {
     return ((edge*)e)->to;
 }
 
-
 void graph_insert_vertex(void* connections, void* vertex_created) {
 
     graph* aux_graph = connections;
@@ -141,10 +140,11 @@ void graph_remove_edge(void* connections, char* vertex_1, char* vertex_2, bool r
         return;
     }
 
-    edge* aux = find_edge(v1->edges, v2);
+    edge* aux = get_list_element(find_edge(v1->edges, v2));
 
     if(aux) {
-        remove_node(v1->edges, aux, free_edge_data, remove_vertexes);
+        remove_node(v1->edges, aux, free_edge, remove_vertexes);
+        free(aux);
     } else {
         printf("There's no edge linking %s and %s!\n", vertex_1, vertex_2);
     }
@@ -211,5 +211,37 @@ void* list_of_adjacents_by_name(void* connections, char* vertex_1) {
 void* list_of_adjacents_by_address(void* vertex_1) {
 
     return vertex_1 ? ((vertex*)vertex_1)->edges : NULL;
+
+}
+
+void free_graph(void* connections) {
+
+    graph* aux = connections;
+
+    for(int i = 0; i < aux->size; i++) {
+
+        if(aux->vertexes[i].vertex_data) free_vertex_data(aux->vertexes[i].vertex_data);
+
+        for(void* runner = get_head(aux->vertexes[i].edges); runner; runner = get_next(runner)){
+
+            free_edge(get_list_element(runner));
+
+        }
+
+        free_list(aux->vertexes[i].edges, true, free);
+
+    }
+
+    free(aux->vertexes);
+    free(aux);
+
+}
+
+void free_edge(void* edge_) {
+
+    edge* aux = edge_;
+    aux->from = NULL;
+    aux->to = NULL;
+    free_edge_data(aux->edge_data);
 
 }

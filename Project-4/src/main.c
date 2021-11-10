@@ -1,8 +1,8 @@
 #include "libs.h"
 #include "vertex.h"
 #include "edge.h"
-#include "Graph/graph.h"
 #include "dijkstra.h"
+#include "Graph/graph.h"
 #include "Dynamic_list/dynamic_list.h"
 
 
@@ -23,8 +23,8 @@ int main () {
     graph_insert_vertex(graph, new_vertex_data("K", 0, 0));
     graph_insert_vertex(graph, new_vertex_data("L", 0, 0));
 
-    // graph_insert_edge(graph, "Rua", "S", "A", "esq", "dir", 7, 1);
-    // graph_insert_edge(graph, "Rua", "S", "B", "esq", "dir", 2, 1);
+    graph_insert_edge(graph, "Rua", "S", "A", "esq", "dir", 7, 1);
+    graph_insert_edge(graph, "Rua", "S", "B", "esq", "dir", 2, 1);
     graph_insert_edge(graph, "Rua", "S", "C", "esq", "dir", 3, 1);
     graph_insert_edge(graph, "Rua", "A", "B", "esq", "dir", 3, 1);
     graph_insert_edge(graph, "Rua", "A", "D", "esq", "dir", 4, 1);
@@ -53,5 +53,9 @@ int main () {
     if(get_size(result) == 0) {
         puts("[ ]");
     }
+
+    graph_remove_edge(graph, "S", "A", true);
+    free_list(result, true, free_helper);
+    free_graph(graph);
 
 }
