@@ -91,30 +91,10 @@ void hash_table_remove_key(void* HT, char* key, void (*free_data)(void*), int (*
 
     hashTable* aux = HT;
 
-    void* to_remove = find_item(aux->registers[pos_created_by_the_key].list, key, compare_nodes);
+    void* to_remove = find_element(aux->registers[pos_created_by_the_key].list, key, compare_nodes);
 
     if(to_remove){
         remove_node(aux->registers[pos_created_by_the_key].list, to_remove, free_data, remove_elements);
-    }
-
-}
-
-void hash_table_remove_key_special(void* HT, char* key, int (*compare_nodes)(void*, void*)){
-    
-    if(!hash_table_list_exist(HT, key)){
-        puts("Key passed does not match any data in the hash table...");
-        printf("Key = %s\n", key);
-        return;
-    }
-
-    int pos_created_by_the_key = hash_table_create_key(HT, key);
-
-    hashTable* aux = HT;
-
-    void* to_remove = find_item(aux->registers[pos_created_by_the_key].list, key, compare_nodes);
-
-    if(to_remove){
-        remove_node_special(aux->registers[pos_created_by_the_key].list, to_remove);
     }
 
 }
@@ -124,16 +104,6 @@ void hash_table_destroy(void* HT, void (*free_function)(void*), bool remove_elem
     hashTable* aux = HT;
 
     for(int i = 0; i < aux->size; i++) free_list(aux->registers[i].list, remove_elements, free_function);
-
-    free(aux->registers);
-    free(aux);
-}
-
-void hash_table_destroy_blocks(void* HT) {
-    
-    hashTable* aux = HT;
-
-    for(int i = 0; i < aux->size; i++) free_list_hash(aux->registers[i].list);
 
     free(aux->registers);
     free(aux);

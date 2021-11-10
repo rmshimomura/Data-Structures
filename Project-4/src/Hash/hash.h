@@ -1,4 +1,4 @@
-#include "libs.h"
+#include "../libs.h"
 
 #ifndef HASH_H
 #define HASH_H

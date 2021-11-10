@@ -9,7 +9,7 @@ typedef struct flags {
 
 void* create_checkers(){
     flags* new_checkers = calloc(1, sizeof(flags));
-    set_pm_inserted(new_checkers, false);
+    set_via_inserted(new_checkers, false);
     set_qry_inserted(new_checkers, false);
 	return new_checkers;
 }
