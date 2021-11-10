@@ -8,4 +8,7 @@
 #ifndef LIBS_H_INCLUDED
 #define LIBS_H_INCLUDED
 
+typedef void* flag;
+typedef void* path;
+
 #endif
