@@ -187,7 +187,7 @@ void get_arguments(int argc, char** argv, path paths, flag flags) {
             strcpy(via_file, argv[i + 1]);
             set_roads_file(paths, via_file);
             via_inserted = true;
-            set_via_inserted(flags, true);
+            set_roads_inserted(flags, true);
 
         }
     }
@@ -239,6 +239,68 @@ void get_arguments(int argc, char** argv, path paths, flag flags) {
 
     }
     
+}
+
+/*
+void get_data (void* connections, void* blocks, void* blocks_hash, void* paths, void* flags) {
+
+    FILE* file_blocks = fopen(get_path_initial_geo_file(paths), "r");
+    setvbuf(file_blocks, 0, _IONBF, 0);
+
+    void* blocks_root = get_root(blocks);
+
+    char command[20], cep[50], cfill[30], cstroke[30];
+    double x, y, w, h;
+    char sw[10];
+
+    while (fscanf(file_blocks, "%s", command) != -1) {
+        
+        if (!strcmp(command, "cq")) {
+            
+            fscanf(file_blocks, "%s %s %s", sw, cfill, cstroke);
+
+        }
+
+        if (!strcmp(command, "q")) {
+
+            fscanf(file_blocks, "%s %lf %lf %lf %lf", cep, &x, &y, &w, &h);
+            void* new_block = create_block();
+            set_block_properties(new_block, cep, x, y, w, h, sw, cfill, cstroke);
+            blocks_root = insert(blocks, blocks_root, new_block, compare_x);
+            hash_table_insert_data(blocks_hash, cep, new_block);
+            
+        }
+    }
+
+    if(get_roads_inserted(flags)) {
+
+        FILE* file_roads = fopen(get_path_roads_file(paths), "r");
+        setvbuf(file_roads, 0, _IONBF, 0);
+
+        create_graph_with_data(connections, file_roads);
+
+        fclose(file_roads);
+
+    }
+
+    fclose(file_blocks);
+    
+    set_root(blocks, blocks_root);
+
+}
+*/
+
+int structures_size(void* paths) {
+
+    int size = 0;
+    FILE* arq = fopen(get_path_roads_file(paths), "r");
+    setvbuf(arq, 0, _IONBF, 0);
+    fscanf(arq, "%d", &size);
+
+    fclose(arq);
+
+    return size > 0 ? size : -1;
+
 }
 
 // void format_qry_results(tree blocks, hash blocks_hash, hash residents, hash locations, path paths, flag flags) {

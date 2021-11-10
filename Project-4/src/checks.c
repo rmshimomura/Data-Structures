@@ -3,13 +3,13 @@
 typedef struct flags {
 
     bool qry_inserted;
-	bool via_inserted;
+	bool roads_inserted;
 
 } flags;
 
 void* create_checkers(){
     flags* new_checkers = calloc(1, sizeof(flags));
-    set_via_inserted(new_checkers, false);
+    set_roads_inserted(new_checkers, false);
     set_qry_inserted(new_checkers, false);
 	return new_checkers;
 }
@@ -24,12 +24,12 @@ void set_qry_inserted(void* current_flags, bool new_value){
 	aux->qry_inserted = new_value;
 }
 
-bool get_via_inserted(void* current_flags){
+bool get_roads_inserted(void* current_flags){
 	flags* aux = current_flags;
-	return aux->via_inserted; 
+	return aux->roads_inserted; 
 }
 
-void set_via_inserted(void* current_flags, bool new_value){
+void set_roads_inserted(void* current_flags, bool new_value){
 	flags* aux = current_flags;
-	aux->via_inserted = new_value;
+	aux->roads_inserted = new_value;
 }

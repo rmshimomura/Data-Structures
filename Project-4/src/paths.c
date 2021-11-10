@@ -1,6 +1,6 @@
 #include "paths.h"
 
-typedef struct generalPaths {
+typedef struct general_paths {
     char* input_directory;         //Diretorio de entrada
     char* output_directory;        //Diretorio de saida
     char* initial_geo_file;        //Arquivo .geo (sem diretorio)
@@ -16,155 +16,155 @@ typedef struct generalPaths {
     char* path_modified_SVG;       //Path ate o svg com as alteracoes do qry
     char* path_TXT_with_qry;       //Path ate o txt com as alteracoes do qry
 
-} generalPaths;
+} general_paths;
 
 path create_general_paths() {
-    generalPaths* aux = calloc(1, sizeof(generalPaths));
+    general_paths* aux = calloc(1, sizeof(general_paths));
     return aux;
 }
 
 char* get_input_directory(path paths) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     return aux->input_directory;
 }
 
 char* get_output_directory(path paths) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     return aux->output_directory;
 }
 
 char* get_initial_geo_file(path paths) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     return aux->initial_geo_file;
 }
 
 char* get_current_qry_file(path paths) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     return aux->current_qry_file;
 }
 
 char* get_roads_file(path paths){
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     return aux->roads_file;
 }
 
 char* get_qry_name(path paths) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     return aux->qry_name;
 }
 
 char* get_geo_name(path paths) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     return aux->geo_name;
 }
 
 char* get_final_SVG_file_name(path paths) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     return aux->final_SVG_file_name;
 }
 
 char* get_path_roads_file(path paths){
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     return aux->path_roads_file;
 }
 
 char* get_path_initial_geo_file(path paths) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     return aux->path_initial_geo_file;
 }
 
 char* get_path_current_qry_file(path paths) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     return aux->path_current_qry_file;
 }
 
 char* get_path_original_SVG(path paths) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     return aux->path_original_SVG;
 }
 
 char* get_path_modified_SVG(path paths) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     return aux->path_modified_SVG;
 }
 
 char* get_path_TXT_with_qry(path paths) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     return aux->path_TXT_with_qry;
 }
 
 void set_input_directory(path paths, char* newSet) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     aux->input_directory = newSet;
 }
 
 void set_output_directory(path paths, char* newSet) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     aux->output_directory = newSet;
 }
 
 void set_initial_geo_file(path paths, char* newSet) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     aux->initial_geo_file = newSet;
 }
 
 void set_current_qry_file(path paths, char* newSet) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     aux->current_qry_file = newSet;
 }
 
 void set_qry_name(path paths, char* newSet) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     aux->qry_name = newSet;
 }
 
 void set_geo_name(path paths, char* newSet) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     aux->geo_name = newSet;
 }
 
 void set_roads_file(path paths, char* newSet) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     aux->roads_file = newSet;
 }
 
 void set_final_SVG_file_name(path paths, char* newSet) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     aux->final_SVG_file_name = newSet;
 }
 
 void set_path_roads_file(path paths, char* newSet) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     aux->path_roads_file = newSet;
 }
 
 void set_path_initial_geo_file(path paths, char* newSet) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     aux->path_initial_geo_file = newSet;
 }
 
 void set_path_current_qry_file(path paths, char* newSet) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     aux->path_current_qry_file = newSet;
 }
 
 void set_path_original_SVG(path paths, char* newSet) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     aux->path_original_SVG = newSet;
 }
 
 void set_path_modified_SVG(path paths, char* newSet) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     aux->path_modified_SVG = newSet;
 }
 
 void set_path_TXT_with_qry(path paths, char* newSet) {
-    generalPaths* aux = paths;
+    general_paths* aux = paths;
     aux->path_TXT_with_qry = newSet;
 }
 
-void showPaths(path paths) {
-    generalPaths* aux = paths;
+void show_paths(path paths) {
+    general_paths* aux = paths;
     if (aux->input_directory) {
         puts("DirBaseDeEntrada :");
         puts(aux->input_directory);
@@ -239,8 +239,8 @@ void showPaths(path paths) {
     
 }
 
-void freePaths(path paths) {
-    generalPaths* aux = paths;
+void free_paths(path paths) {
+    general_paths* aux = paths;
     if (aux->input_directory) {
         free(aux->input_directory);
     }

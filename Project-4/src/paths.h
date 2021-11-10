@@ -18,7 +18,7 @@ char* get_path_current_qry_file(path paths);
 char* get_path_original_SVG(path paths);
 char* get_path_modified_SVG(path paths);
 char* get_path_TXT_with_qry(path paths);
-void showPaths(path paths);
-void freePaths(path paths);
+void show_paths(path paths);
+void free_paths(path paths);
 
 #endif
