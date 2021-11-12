@@ -104,6 +104,43 @@ int find_index_kruskal(group* groups, char* id, int iteration_size) {
     return -1;
 }
 
+void future_rv(void* edges[], int num_of_edges, void* root, int height, double factor){
+
+    for(int i = 0; i < num_of_edges; i++) {
+
+        edge* aux = edges[i];
+
+        if(aux){
+
+            if(!strcmp(vertex_data_get_id(vertex_get_data(aux->from)), vertex_data_get_id(root))) {
+
+                edge_data_set_average_speed(aux->edge_data, edge_data_get_average_speed(aux->edge_data) - edge_data_get_average_speed(aux->edge_data) * factor);
+
+                void* other_one = aux->to;
+
+                edges[i] = NULL;
+
+                future_rv(edges, num_of_edges, vertex_get_data(other_one), height + 1, factor + factor);
+
+
+            } else if (!strcmp(vertex_data_get_id(vertex_get_data(aux->to)), vertex_data_get_id(root))) {
+
+                edge_data_set_average_speed(aux->edge_data, edge_data_get_average_speed(aux->edge_data) - edge_data_get_average_speed(aux->edge_data) * factor);
+
+                void* other_one = aux->from;
+
+                edges[i] = NULL;
+
+                future_rv(edges, num_of_edges, vertex_get_data(other_one), height + 1, factor + factor);
+
+            }
+
+        }
+
+    }
+
+}
+
 void** kruskal(void* edges_list) {
 
     list_sort(edges_list, compare_edges);
@@ -146,19 +183,34 @@ void** kruskal(void* edges_list) {
 
     for(void* aux = get_head(result); aux; aux = get_next(aux)) {
         edge* print = get_list_element(aux);
-        printf("%s-%s ", print->from->vertex_data->id, print->to->vertex_data->id);
+        printf("%s-%s %.2lf\n", print->from->vertex_data->id, print->to->vertex_data->id, print->edge_data->average_speed);
 
     }
 
-    puts(" ");
+    puts("=================== ");
 
-    for(int i = 0; i < get_size(vertex_list); i++) {
+    edge* analize = get_list_element(get_next(get_head(edges_list)));
 
-        printf("groups[%d].rank = %d vertex = %s\n", i, groups[i].rank, vertex_data_get_id(groups[i].vertex));
+    void* origin_root = groups[k_find(groups, find_index_kruskal(groups, analize->from->vertex_data->id, get_size(vertex_list)))].vertex;
+
+    void** pop = calloc(get_size(result), sizeof(void*));
+
+    void* head = get_head(result);
+
+    for(int i = 0; i < get_size(result); i++) {
+        pop[i] = get_list_element(head);
+        head = get_next(head);
+    }
+
+    future_rv(pop, get_size(result), origin_root, 1, 0.01);
+
+    for(void* aux = get_head(result); aux; aux = get_next(aux)) {
+        edge* print = get_list_element(aux);
+        printf("%s-%s %.2lf\n", print->from->vertex_data->id, print->to->vertex_data->id, print->edge_data->average_speed);
 
     }
 
-    puts(" ");
+    puts("=================== ");
 
     return NULL;
 }
