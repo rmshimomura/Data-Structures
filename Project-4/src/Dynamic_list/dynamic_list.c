@@ -294,3 +294,50 @@ void* find_element(void* sequence, void* match, int (*compare_info)(void*, void*
     }
     return NULL;
 }
+
+void list_swap (void* a, void* b){
+    node *node_a = a, *node_b = b;
+    void* t = node_b->element;
+    node_b->element = node_a->element;
+    node_a->element = t;
+}
+
+node* list_partition(node *l, node *h, int (*cmp)(void*, void*)){
+
+    void *x = h->element;
+ 
+    node *i = l->prev;
+ 
+    for (node *j = l; j != h; j = j->next){
+
+        if (cmp(j->element, x) < 0){
+            i = (i == NULL) ? l : i->next;
+ 
+            list_swap(i, j);
+        }
+    }
+    i = (i == NULL) ? l : i->next;
+    list_swap(i, h);
+    return i;
+}
+ 
+void list_quick_sort_(node* l, node *h, int (*cmp)(void*, void*)){
+    
+    if (h != NULL && l != h && l != h->next) {
+
+        node* p = list_partition(l, h, cmp);
+        list_quick_sort_(l, p->prev, cmp);
+        list_quick_sort_(p->next, h, cmp);
+
+    }
+
+}
+ 
+void list_sort(void* list_, int (*cmp)(void*, void*)) {
+
+    list* sequence = list_;
+    node* head = sequence->head;
+    node* h = sequence->end;
+ 
+    list_quick_sort_(head, h, cmp);
+}

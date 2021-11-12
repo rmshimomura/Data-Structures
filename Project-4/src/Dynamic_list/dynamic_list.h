@@ -8,6 +8,7 @@ int get_size(void* sequence);
 void* insert_list(void* sequence, void* element);
 void* insert_first(void* sequence, void* element);
 void* remove_node(void* sequence, void* node_to_remove, void (*free_node)(void*), bool remove_elements);
+void list_sort(void* list_, int (*cmp)(void*, void*));
 void* get_list_element(void* current);
 void* get_head(void* sequence);
 void* get_end(void* sequence);
