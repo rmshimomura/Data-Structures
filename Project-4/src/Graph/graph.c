@@ -72,6 +72,23 @@ void* edge_get_to(void* e) {
     return ((edge*)e)->to;
 }
 
+void* extract_all_edges(void* connections) {
+
+    graph* aux = connections;
+
+    void* all_edges = create_list();
+
+    for(int i = 0; i < aux->size; i++) {
+
+        for(void* temp = get_head(aux->vertexes[i].edges); temp; temp = get_next(temp))
+            insert_list(all_edges, get_list_element(temp));
+
+    }
+
+    return all_edges;
+
+}
+
 void graph_insert_vertex(void* connections, void* vertex_created) {
 
     graph* aux_graph = connections;
