@@ -19,4 +19,6 @@ void free_list(void* sequence, bool remove_elements, void (*free_node)(void*));
 void* at_pos(void* sequence, int index);
 void* find_element(void* sequence, void* match, int (*compare_info)(void*, void*));
 
+void* find_element_by_vertex_name(void* sequence, void* match);
+
 #endif

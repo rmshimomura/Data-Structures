@@ -1,4 +1,5 @@
 #include "dynamic_list.h"
+#include "../vertex.h"
 
 typedef struct node {
 
@@ -288,6 +289,24 @@ void* find_element(void* sequence, void* match, int (*compare_info)(void*, void*
     for(int i = 0; i < list_aux->size; i++) {
 
         if(compare_info(node_aux->element, match)) return node_aux->element;
+    
+        node_aux = node_aux->next;
+
+    }
+    return NULL;
+}
+
+void* find_element_by_vertex_name(void* sequence, void* match) {
+    
+    if(!sequence) return NULL;
+    
+    list* list_aux = sequence;
+    node* node_aux = list_aux->head;
+    
+
+    for(int i = 0; i < list_aux->size; i++) {
+
+        if(!strcmp(vertex_data_get_id(node_aux->element), match)) return node_aux->element;
     
         node_aux = node_aux->next;
 
