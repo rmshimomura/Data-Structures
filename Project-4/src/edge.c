@@ -112,9 +112,9 @@ void edge_data_set_length(void* data, double length) {
     aux->length = length;
 }
 
-void edge_data_set_average_speed(void* data, double length) {
+void edge_data_set_average_speed(void* data, double average_speed) {
     edge_data* aux = data;
-    aux->length = length;
+    aux->average_speed = average_speed;
 }
 
 void edge_data_set_direction(void* data, char* direction) {
