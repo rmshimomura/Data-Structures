@@ -15,6 +15,7 @@ typedef struct vertex {
 
     void* edges; //List of edges
     void* vertex_data; // Data
+    int activated;
 
 } vertex;
 
@@ -25,6 +26,14 @@ typedef struct graph {
 
 } graph;
 
+int compare_vertexes(void* data_1, void* data_2) {
+
+    vertex* aux_1 = data_1;
+    vertex* aux_2 = data_2;
+
+    return !strcmp(vertex_data_get_id(aux_1->vertex_data), vertex_data_get_id(aux_2->vertex_data));
+
+}
 
 void* create_graph(int size) {
 
@@ -60,6 +69,10 @@ void* vertex_get_edges(void* v) {
     return ((vertex*)v)->edges;
 }
 
+int vertex_get_activated(void* v) {
+    return ((vertex*)v)->activated;
+}
+
 void* edge_get_data(void* e) {
     return ((edge*)e)->edge_data;
 }
@@ -89,6 +102,25 @@ void* extract_all_edges(void* connections) {
 
 }
 
+void* extract_all_activated_vertexes_from_list(void* sequence) {
+
+    void* vertex_list = create_list();
+
+    for(void* aux = get_head(sequence); aux; aux = get_next(aux)) {
+
+        if(vertex_get_activated(edge_get_to(get_list_element(aux))) && !find_element_by_vertex_name(vertex_list, vertex_data_get_id(vertex_get_data(edge_get_to(get_list_element(aux)))))) {            
+            insert_list(vertex_list, vertex_get_data(edge_get_to(get_list_element(aux))));               
+        }
+        if(vertex_get_activated(edge_get_from(get_list_element(aux))) && !find_element_by_vertex_name(vertex_list, vertex_data_get_id(vertex_get_data(edge_get_from(get_list_element(aux)))))) {
+            insert_list(vertex_list, vertex_get_data(edge_get_from(get_list_element(aux))));               
+        }
+
+    }
+
+    return vertex_list;
+
+}
+
 void graph_insert_vertex(void* connections, void* vertex_created) {
 
     graph* aux_graph = connections;
@@ -102,7 +134,7 @@ void graph_insert_vertex(void* connections, void* vertex_created) {
 
     aux_graph->vertexes[aux_graph->next_free_space].vertex_data = vertex_created;
     aux_graph->vertexes[aux_graph->next_free_space].edges = create_list();
-
+    aux_graph->vertexes[aux_graph->next_free_space].activated = true;
     aux_graph->next_free_space++;
 
 }
