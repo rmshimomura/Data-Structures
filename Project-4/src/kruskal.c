@@ -47,6 +47,22 @@ typedef struct group {
 
 } group;
 
+typedef struct package {
+
+    void* list_of_edges;
+    void* root;
+
+} package;
+
+void* new_package(void* original_root) {
+
+    package* aux = calloc(1, sizeof(package));
+    aux->list_of_edges = create_list();
+    aux->root = original_root;
+    return aux;
+
+}
+
 int compare_edges(void* data_1, void* data_2) {
 
     if(edge_data_get_length(edge_get_data(data_1)) > edge_data_get_length(edge_get_data(data_2))) {
@@ -164,7 +180,6 @@ void** kruskal(void* edges_list) {
 
     void* result = create_list();
 
-
     for(void* runner = get_head(edges_list); runner; runner = get_next(runner)) {
 
         edge* analize = get_list_element(runner);
@@ -173,44 +188,57 @@ void** kruskal(void* edges_list) {
         int j = k_find(groups, find_index_kruskal(groups, analize->to->vertex_data->id, get_size(vertex_list)));
 
         if(i != j) {
+
             insert_list(result, analize);
             k_union(groups, i, j);
+            
         } else if(!strcmp(analize->from->vertex_data->id, analize->to->vertex_data->id)) {
+            
             insert_list(result, analize);
+            
         }
 
     }
 
-    for(void* aux = get_head(result); aux; aux = get_next(aux)) {
-        edge* print = get_list_element(aux);
-        printf("%s-%s %.2lf\n", print->from->vertex_data->id, print->to->vertex_data->id, print->edge_data->average_speed);
+    void* packaging = create_list();
+
+    for(void* edge_aux = get_head(result); edge_aux; edge_aux = get_next(edge_aux)) { // For each edge of the result list, we'll pack them sorted by root
+
+        edge* analize = get_list_element(edge_aux);
+
+        void* origin_root_from = groups[k_find(groups, find_index_kruskal(groups, analize->from->vertex_data->id, get_size(vertex_list)))].vertex;
+
+        bool found = false;
+
+        for(void* package_runner = get_head(packaging); package_runner; package_runner = get_next(package_runner)){ // Check if the root of the current element already exists on the packaging list
+
+            package* look = get_list_element(package_runner);
+
+            if(look->root == origin_root_from){
+
+                insert_list(look->list_of_edges, analize);
+                found = true;
+                break;
+
+            }
+
+        }
+
+        if(!found){
+
+            insert_list(packaging, new_package(origin_root_from));
+
+            package* look = get_list_element(get_end(packaging));
+
+            insert_list(look->list_of_edges, analize);
+
+            look->root = origin_root_from;
+
+        }
 
     }
 
     puts("=================== ");
 
-    edge* analize = get_list_element(get_next(get_head(edges_list)));
-
-    void* origin_root = groups[k_find(groups, find_index_kruskal(groups, analize->from->vertex_data->id, get_size(vertex_list)))].vertex;
-
-    void** pop = calloc(get_size(result), sizeof(void*));
-
-    void* head = get_head(result);
-
-    for(int i = 0; i < get_size(result); i++) {
-        pop[i] = get_list_element(head);
-        head = get_next(head);
-    }
-
-    future_rv(pop, get_size(result), origin_root, 1, 0.01);
-
-    for(void* aux = get_head(result); aux; aux = get_next(aux)) {
-        edge* print = get_list_element(aux);
-        printf("%s-%s %.2lf\n", print->from->vertex_data->id, print->to->vertex_data->id, print->edge_data->average_speed);
-
-    }
-
-    puts("=================== ");
-
-    return NULL;
+    return packaging;
 }
