@@ -7,10 +7,10 @@ typedef struct block {
     double y;
     double w;
     double h;
-    char sw[10];
-    char cfill[30];
-	char cep[50];
-    char cstroke[30];
+    char* sw;
+    char* cfill;
+	char* cep;
+    char* cstroke;
 
 } block;
 
@@ -21,9 +21,13 @@ void set_block_properties(void* block_to_set, char* cep, double x, double y, dou
 	aux->y = y;
 	aux->w = w;
 	aux->h = h;
+	aux->sw = calloc(strlen(sw) + 1, sizeof(char));
 	strcpy(aux->sw, sw);
+	aux->cep = calloc(strlen(cep) + 1, sizeof(char));
 	strcpy(aux->cep, cep);
+	aux->cfill = calloc(strlen(cfill) + 1, sizeof(char));
 	strcpy(aux->cfill, cfill);
+	aux->cstroke = calloc(strlen(cstroke) + 1, sizeof(char));
 	strcpy(aux->cstroke, cstroke);
 	
 }
