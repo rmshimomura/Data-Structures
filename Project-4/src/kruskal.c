@@ -238,7 +238,11 @@ void** kruskal(void* edges_list) {
 
     }
 
-    /*
+    free(groups);
+    free_list(result, false, NULL);
+    free_list(vertex_list, false, NULL);
+
+    
 
     for(void* aux = get_head(packaging); aux; aux = get_next(aux)){
 
@@ -261,7 +265,7 @@ void** kruskal(void* edges_list) {
 
     puts("=================== ");
 
-    */
+    
 
     return packaging;
 }
