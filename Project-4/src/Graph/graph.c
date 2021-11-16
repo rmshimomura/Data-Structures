@@ -135,6 +135,16 @@ void graph_insert_vertex(void* connections, void* vertex_created) {
     aux_graph->vertexes[aux_graph->next_free_space].vertex_data = vertex_created;
     aux_graph->vertexes[aux_graph->next_free_space].edges = create_list();
     aux_graph->vertexes[aux_graph->next_free_space].activated = true;
+
+    edge* aux_edge = calloc(1, sizeof(edge));
+    aux_edge->from = &(aux_graph->vertexes[aux_graph->next_free_space]);
+    aux_edge->to = &(aux_graph->vertexes[aux_graph->next_free_space]);
+    char prime_name[512] = " ";
+    sprintf(prime_name, "%s-%s", vertex_data_get_id(vertex_created), vertex_data_get_id(vertex_created));
+    aux_edge->edge_data = new_edge_data(prime_name, "-", "-", 0, 1, vertex_created, vertex_created);
+
+    insert_list(aux_graph->vertexes[aux_graph->next_free_space].edges, aux_edge);
+
     aux_graph->next_free_space++;
 
 }
@@ -294,3 +304,26 @@ void free_edge(void* edge_) {
     free_edge_data(aux->edge_data);
 
 }
+
+void create_graph_with_data(void* connections, FILE* file_roads) {
+
+    char command[512], id[512], ldir[512], lesq[512], nome[512], i[512], j[512];
+    double x, y, cmp, vm; 
+
+    while(fscanf(file_roads, "%s", command) != EOF) {
+
+        if(!strcmp(command, "v")){
+
+            fscanf(file_roads, "%s %lf %lf", id, &x, &y);
+            graph_insert_vertex(connections, new_vertex_data(id, x, y));
+
+        } else if (!strcmp(command, "e")) { 
+
+            fscanf(file_roads, "%s %s %s %s %lf %lf %s", i, j, ldir, lesq, &cmp, &vm, nome);
+            graph_insert_edge(connections, nome, i, j, lesq, ldir, cmp, vm);
+
+        }
+
+    }
+
+} 
