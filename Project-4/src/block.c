@@ -42,6 +42,11 @@ void* create_block(){
 void free_single_block(void* block_data){
 	
 	block* block_to_remove = block_data;
+	free(block_to_remove->sw);
+	free(block_to_remove->cep);
+	free(block_to_remove->cfill);
+	free(block_to_remove->cstroke);
+	
 	free(block_to_remove);
 
 }
