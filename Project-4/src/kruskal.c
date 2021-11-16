@@ -183,21 +183,25 @@ void** kruskal(void* edges_list) {
     for(void* runner = get_head(edges_list); runner; runner = get_next(runner)) {
 
         edge* analize = get_list_element(runner);
-
-        int i = k_find(groups, find_index_kruskal(groups, analize->from->vertex_data->id, get_size(vertex_list)));
-        int j = k_find(groups, find_index_kruskal(groups, analize->to->vertex_data->id, get_size(vertex_list)));
-
-        if(i != j) {
-
-            insert_list(result, analize);
-            k_union(groups, i, j);
+        
+        // if(analize->to != analize->from) {
             
-        } else if(!strcmp(analize->from->vertex_data->id, analize->to->vertex_data->id)) {
-            
-            insert_list(result, analize);
-            
-        }
 
+            int i = k_find(groups, find_index_kruskal(groups, analize->from->vertex_data->id, get_size(vertex_list)));
+            int j = k_find(groups, find_index_kruskal(groups, analize->to->vertex_data->id, get_size(vertex_list)));
+
+            if(i != j) {
+
+                insert_list(result, analize);
+                k_union(groups, i, j);
+                
+            } else if(!strcmp(analize->from->vertex_data->id, analize->to->vertex_data->id)) {
+                
+                insert_list(result, analize);
+                
+            }
+
+        // }
     }
 
     void* packaging = create_list();
