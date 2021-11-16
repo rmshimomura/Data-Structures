@@ -1,21 +1,34 @@
+#include "AVL_Tree/AVL.h"
 #include "Dynamic_list/dynamic_list.h"
 #include "Graph/graph.h"
+#include "Hash/hash.h"
 #include "checks.h"
 #include "dijkstra.h"
 #include "edge.h"
+#include "kruskal.h"
 #include "libs.h"
 #include "paths.h"
 #include "system.h"
 #include "vertex.h"
-#include "kruskal.h"
 
 int main(int argc, char** argv) {
-    path paths = create_general_paths();
-    flag flags = create_checkers();
-    get_arguments(argc, argv, paths, flags);
 
-    show_paths(paths);
-    free_paths(paths);
+    void* paths = create_general_paths();
+    void* flags = create_checkers();
+    get_arguments(argc, argv, paths, flags);
+    int size = structures_size(paths);
+    if(size == -1) { 
+        puts("Size not inseted!");
+        free_paths(paths);
+        free(flags);
+        return -1;
+    }
+    void* blocks = create_tree();
+    void* blocks_hash = hash_table_create_table(size);
+    void* connections = create_graph(size);
+    get_data(connections, blocks, blocks_hash, paths, flags);
+
+    
 
     /*
     void* graph = create_graph(7);
@@ -43,21 +56,26 @@ int main(int argc, char** argv) {
     void* final_result = kruskal(aux);
     free_list(aux, false, NULL);
 
-    void* result = dijkstra(graph, "S", "E", fastest_path);
+    // void* result = dijkstra(graph, "S", "E", fastest_path);
 
-    for(void* aux = get_head(result); aux ; aux = get_next(aux)) {
-        to_string(get_list_element(aux));
-        if(get_next(aux)) printf("-> ");
-        else puts(".");
-    }
+    // for(void* aux = get_head(result); aux ; aux = get_next(aux)) {
+    //     to_string(get_list_element(aux));
+    //     if(get_next(aux)) printf("-> ");
+    //     else puts(".");
+    // }
 
-    if(get_size(result) == 0) {
-        puts("[ ]");
-    }
+    // if(get_size(result) == 0) {
+    //     puts("[ ]");
+    // }
 
     free_graph(graph);
 
     */
 
-    // free(flags);
+    free_graph(connections);
+    hash_table_destroy(blocks_hash, free, false);
+    destroy_AVL_tree(blocks, get_root(blocks), free_block_list);
+    free(blocks);
+    free_paths(paths);
+    free(flags);
 }
