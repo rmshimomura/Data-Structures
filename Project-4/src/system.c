@@ -241,7 +241,6 @@ void get_arguments(int argc, char** argv, path paths, flag flags) {
     
 }
 
-/*
 void get_data (void* connections, void* blocks, void* blocks_hash, void* paths, void* flags) {
 
     FILE* file_blocks = fopen(get_path_initial_geo_file(paths), "r");
@@ -288,7 +287,7 @@ void get_data (void* connections, void* blocks, void* blocks_hash, void* paths, 
     set_root(blocks, blocks_root);
 
 }
-*/
+
 
 int structures_size(void* paths) {
 
