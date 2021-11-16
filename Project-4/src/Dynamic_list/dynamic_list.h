@@ -20,5 +20,6 @@ void* at_pos(void* sequence, int index);
 void* find_element(void* sequence, void* match, int (*compare_info)(void*, void*));
 
 void* find_element_by_vertex_name(void* sequence, void* match);
+void free_block_list(void* sequence);
 
 #endif

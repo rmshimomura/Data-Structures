@@ -1,5 +1,6 @@
 #include "dynamic_list.h"
 #include "../vertex.h"
+#include "../block.h"
 
 typedef struct node {
 
@@ -359,4 +360,34 @@ void list_sort(void* list_, int (*cmp)(void*, void*)) {
     node* h = sequence->end;
  
     list_quick_sort_(head, h, cmp);
+}
+
+void free_block_list(void* sequence){
+
+    if(!sequence){
+        return;
+    }
+
+    list* list_aux = sequence;
+
+    if(!list_aux->size){
+        free(list_aux);
+        return;
+    }
+
+    node* aux_node = list_aux->head;
+    node* aux_element = list_aux->head->element;
+
+    while(list_aux->head != NULL) {
+        
+        aux_node = list_aux->head;
+        aux_element = list_aux->head->element;
+        list_aux->head = list_aux->head->next;
+        free_single_block(aux_element);
+        free(aux_node);
+    }
+
+    free(sequence);
+
+
 }
