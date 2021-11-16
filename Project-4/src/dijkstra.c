@@ -38,6 +38,12 @@ int compare(void* a, void* b) {
     return aux->vertex == b ? 1 : 0;
 }
 
+double distance(void* vertex_1, void* vertex_2) {
+
+    return sqrt(pow(vertex_data_get_x(vertex_get_data(vertex_1)) - vertex_data_get_x(vertex_get_data(vertex_2)), 2.0) + pow(vertex_data_get_y(vertex_get_data(vertex_1)) - vertex_data_get_y(vertex_get_data(vertex_2)), 2.0));
+
+}
+
 void* dijkstra(void* connections, char* start, char* end, double (*operation_mode)(void*)) {
     
     void* origin = graph_find_vertex(connections, start);
@@ -76,7 +82,7 @@ void* dijkstra(void* connections, char* start, char* end, double (*operation_mod
             void* found = find_element(visited_vertexes, edge_to, compare);
 
             if(found == NULL && edge_to != back_track) {
-                priority_queue_insert(prior_queue, new_helper(edge_to, search, cost_until_this_point), cost_until_this_point);
+                priority_queue_insert(prior_queue, new_helper(edge_to, search, cost_until_this_point), cost_until_this_point + distance(edge_to, destination));
             }
             
         }
