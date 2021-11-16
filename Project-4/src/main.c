@@ -15,10 +15,11 @@ int main(int argc, char** argv) {
 
     void* paths = create_general_paths();
     void* flags = create_checkers();
+
     get_arguments(argc, argv, paths, flags);
     int size = structures_size(paths);
     if(size == -1) { 
-        puts("Size not inseted!");
+        puts("Size not inserted!");
         free_paths(paths);
         free(flags);
         return -1;
@@ -27,9 +28,7 @@ int main(int argc, char** argv) {
     void* blocks_hash = hash_table_create_table(size);
     void* connections = create_graph(size);
     get_data(connections, blocks, blocks_hash, paths, flags);
-
     
-
     /*
     void* graph = create_graph(7);
     graph_insert_vertex(graph, new_vertex_data("a", 0.0, 0.0));
@@ -76,6 +75,6 @@ int main(int argc, char** argv) {
     hash_table_destroy(blocks_hash, free, false);
     destroy_AVL_tree(blocks, get_root(blocks), free_block_list);
     free(blocks);
-    free_paths(paths);
     free(flags);
+    free_paths(paths);
 }
