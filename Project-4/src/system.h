@@ -6,7 +6,8 @@
 void get_arguments(int argc, char** argv, path paths, flag flags);    
 int structures_size(void* paths);
 void get_data (void* connections, void* blocks, void* blocks_hash, void* paths, void* flags);
-// void format_qry_results(tree blocks, hash blocks_hash, hash residents, hash locations, path paths, flag flags);
+void get_functions(void* connections, void* blocks, void* blocks_hash, void* paths, void* flags, FILE* txt_results);
+void format_qry_results(void* connections, void* blocks, void* blocks_hash, void* paths, void* flags);
 
 path create_general_paths(); 
 

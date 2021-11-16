@@ -21,7 +21,8 @@ double get_min_x(void* node);
 double get_max_x(void* node);
 double find_max_w(void* sequence);
 int check_nodes(void* node1, void* node2);
+void* insert(void* initial_tree, void* initial_node, void* element, int (*compare_nodes)(void*, void*));
 void printing_tree(void* initial_node, int space);
-void recursive_print_tree(void* initial_tree); 
+void recursive_print_tree(void* initial_tree);
 
 #endif

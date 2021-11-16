@@ -1,12 +1,13 @@
 #include "system.h"
 
 #include "AVL_Tree/AVL.h"
+#include "Dynamic_list/dynamic_list.h"
+#include "Graph/graph.h"
 #include "Hash/hash.h"
 #include "block.h"
 #include "checks.h"
 #include "paths.h"
-#include "Dynamic_list/dynamic_list.h"
-
+#include "svg.h"
 
 void set_input_directory(path paths, char* newSet);
 void set_output_directory(path paths, char* newSet);
@@ -252,7 +253,7 @@ void get_data (void* connections, void* blocks, void* blocks_hash, void* paths, 
     double x, y, w, h;
     char sw[10];
 
-    while (fscanf(file_blocks, "%s", command) != -1) {
+    while (fscanf(file_blocks, "%s", command) != EOF) {
         
         if (!strcmp(command, "cq")) {
             
@@ -288,7 +289,6 @@ void get_data (void* connections, void* blocks, void* blocks_hash, void* paths, 
 
 }
 
-
 int structures_size(void* paths) {
 
     int size = 0;
@@ -302,13 +302,68 @@ int structures_size(void* paths) {
 
 }
 
-// void format_qry_results(tree blocks, hash blocks_hash, hash residents, hash locations, path paths, flag flags) {
+void format_qry_results(void* connections, void* blocks, void* blocks_hash, void* paths, void* flags) {
 
-//     FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "w+");
-//     setvbuf(txt_results, 0, _IONBF, 0);
-//     fprintf(txt_results, "Rodrigo Mimura Shimomura\n");
-//     fprintf(txt_results, "FUNCTIONS EXECUTED:\n\n====================================================\n");
-//     get_functions(blocks, blocks_hash, residents, locations, paths, flags, txt_results);
-//     fclose(txt_results);
+    FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "w+");
+    setvbuf(txt_results, 0, _IONBF, 0);
+    fprintf(txt_results, "Rodrigo Mimura Shimomura\n");
+    fprintf(txt_results, "FUNCTIONS EXECUTED:\n\n====================================================\n");
+    get_functions(connections, blocks, blocks_hash, paths, flags, txt_results);
+    fclose(txt_results);
     
-// }
+}
+
+void get_functions(void* connections, void* blocks, void* blocks_hash, void* paths, void* flags, FILE* txt_results) {
+
+    FILE* modified_SVG = fopen(get_path_modified_SVG(paths), "w+");
+    setvbuf(modified_SVG, 0, _IONBF, 0);
+    FILE* functions_file = fopen(get_path_current_qry_file(paths), "r");
+    setvbuf(functions_file, 0, _IONBF, 0);
+
+    fprintf(modified_SVG, "<!-- Rodrigo Mimura Shimomura -->\n <svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n");
+
+    char command[512], cep[512], face, cmc[512], cmr[512];
+    double num, x, y, w, h, f, limiar;
+    
+
+    while(fscanf(functions_file, "%s", command) != EOF) {
+
+        if(!strcmp(command, "@o?")) {
+
+            fscanf(functions_file, "%s %c %lf", cep, &face, &num);
+
+        } else if (!strcmp(command, "catac")) {
+
+            fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
+
+        } else if (!strcmp(command, "rv")) {
+
+            fscanf(functions_file, "%lf %lf %lf %lf %lf", &x, &y, &w, &h, &f);
+
+        } else if (!strcmp(command, "cx")) {
+
+            fscanf(functions_file, "%lf", &limiar);
+
+        } else if (!strcmp(command, "p?")) {
+
+            fscanf(functions_file, "%s %c %lf %s %s", cep, &face, &num, cmc, cmr);
+
+        }
+
+    }
+
+
+
+    void* blocks_root = get_root(blocks);
+
+    recursive_print_svg(blocks_root, modified_SVG);
+
+
+
+
+
+    fprintf(modified_SVG, "</svg>\n");
+    fclose(functions_file);
+    fclose(modified_SVG);
+
+}

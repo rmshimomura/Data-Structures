@@ -28,7 +28,8 @@ int main(int argc, char** argv) {
     void* blocks_hash = hash_table_create_table(size);
     void* connections = create_graph(size);
     get_data(connections, blocks, blocks_hash, paths, flags);
-    
+    if(get_qry_inserted(flags))
+        format_qry_results(connections, blocks, blocks_hash, paths, flags);
     /*
     void* graph = create_graph(7);
     graph_insert_vertex(graph, new_vertex_data("a", 0.0, 0.0));
