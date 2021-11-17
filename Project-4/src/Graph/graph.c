@@ -61,12 +61,45 @@ void* create_vertex (char* id, double x, double y) {
 
 }
 
+void vertex_set_activated(void* v, bool activated) {
+
+    vertex* aux = v;
+    aux->activated = activated;
+
+}
+
+void* graph_get_vertexes(void* connections) {
+    graph* aux = connections;
+    return aux->vertexes;
+}
+
+void* return_vertex_address_by_index(void* connections, int index) {
+
+    graph* aux = connections;
+    
+    if(index > aux->size){
+        puts("Index > size!");
+        return NULL;
+    }
+    return &(aux->vertexes[index]);
+
+}
+
+int graph_get_size(void* connections) {
+    graph* aux = connections;
+    return aux->size;
+}
+
 void* vertex_get_data(void* v) {
     return v ? ((vertex*)v)->vertex_data : NULL;
 }
 
+void vertex_set_edges(void* v, void* address) {
+    ((vertex*)v)->edges = address;
+}
+
 void* vertex_get_edges(void* v) {
-    return ((vertex*)v)->edges;
+    return ((vertex*)v)->edges ? ((vertex*)v)->edges : NULL;
 }
 
 int vertex_get_activated(void* v) {
@@ -153,7 +186,7 @@ void* graph_find_vertex(void* connections, char* vertex_id) {
 
     graph* graph_aux = connections;
 
-    for(int i = 0; i < graph_aux->size; i++) if(!strcmp(vertex_data_get_id(graph_aux->vertexes[i].vertex_data), vertex_id)) return &(graph_aux->vertexes[i]);
+    for(int i = 0; i < graph_aux->size; i++) if(!strcmp(vertex_data_get_id(graph_aux->vertexes[i].vertex_data), vertex_id)) return &graph_aux->vertexes[i];
 
     return NULL;
 
@@ -287,7 +320,7 @@ void free_graph(void* connections) {
 
         }
 
-        free_list(aux->vertexes[i].edges, true, free);
+        if(aux->vertexes[i].edges) free_list(aux->vertexes[i].edges, false, free);        
 
     }
 
@@ -302,6 +335,7 @@ void free_edge(void* edge_) {
     aux->from = NULL;
     aux->to = NULL;
     free_edge_data(aux->edge_data);
+    free(aux);
 
 }
 

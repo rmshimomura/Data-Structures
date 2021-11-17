@@ -8,6 +8,7 @@
 #include "checks.h"
 #include "paths.h"
 #include "svg.h"
+#include "qry.h"
 
 void set_input_directory(path paths, char* newSet);
 void set_output_directory(path paths, char* newSet);
@@ -320,6 +321,8 @@ void get_functions(void* connections, void* blocks, void* blocks_hash, void* pat
     FILE* functions_file = fopen(get_path_current_qry_file(paths), "r");
     setvbuf(functions_file, 0, _IONBF, 0);
 
+    void* list_of_modifications = create_list();
+
     fprintf(modified_SVG, "<!-- Rodrigo Mimura Shimomura -->\n <svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n");
 
     char command[512], cep[512], face, cmc[512], cmr[512];
@@ -335,6 +338,7 @@ void get_functions(void* connections, void* blocks, void* blocks_hash, void* pat
         } else if (!strcmp(command, "catac")) {
 
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
+            catac(connections, blocks, x, y, w, h, txt_results, list_of_modifications);
 
         } else if (!strcmp(command, "rv")) {
 
@@ -360,7 +364,7 @@ void get_functions(void* connections, void* blocks, void* blocks_hash, void* pat
 
 
 
-
+    free_list(list_of_modifications, true, free);
 
     fprintf(modified_SVG, "</svg>\n");
     fclose(functions_file);

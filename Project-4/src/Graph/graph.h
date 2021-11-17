@@ -5,9 +5,14 @@
 
 void* create_graph(int size);
 void* create_vertex(char* id, double x, double y);
+void* graph_get_vertexes(void* connections);
+int graph_get_size(void* connections);
 void* vertex_get_data(void* v);
 void* vertex_get_edges(void* v);
 int vertex_get_activated(void* v);
+void vertex_set_activated(void* v, bool activated);
+void vertex_set_edges(void* v, void* address);
+void* return_vertex_address_by_index(void* connections, int index);
 void* edge_get_data(void* e);
 void* edge_get_from(void* e);
 void* edge_get_to(void* e);
