@@ -86,6 +86,8 @@ void* insert_first(void* sequence, void* element) {
 
 int get_size(void* sequence) {
     
+    if(!sequence) return -1;
+
     list* list_aux = sequence;
     return list_aux->size;
 
@@ -93,6 +95,8 @@ int get_size(void* sequence) {
 
 void* get_head(void* sequence) {
 
+    if(!sequence) return NULL;
+    
     list* list_aux = sequence;
     return list_aux->head;
 
@@ -131,11 +135,9 @@ void* get_list_element(void* current) {
 }
 
 void free_list(void* sequence, bool remove_elements, void (*free_node)(void*)) {
-    
     if(!sequence) return;
 
     list* list_aux = sequence;
-
     
     if (list_aux->size == 0) {
 
@@ -153,9 +155,12 @@ void free_list(void* sequence, bool remove_elements, void (*free_node)(void*)) {
         aux_element = list_aux->head->element;
         list_aux->head = list_aux->head->next;
 
-        if(remove_elements == true) free_node(aux_element);
+        if(remove_elements == true){
+             free_node(aux_element);
+        }
 
         free(aux_node);
+        list_aux->size--;
     }
 
     free(sequence);
