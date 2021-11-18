@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -std=c99 -fstack-protector-all -g -Wall
+CFLAGS = -std=c99 -fstack-protector-all -g -Wall -lm
 OBJ = Objects
 
 t2: $(OBJ)/main.o $(OBJ)/block.o $(OBJ)/dijkstra.o $(OBJ)/edge.o $(OBJ)/vertex.o $(OBJ)/AVL.o $(OBJ)/Dynamic_list.o $(OBJ)/Graph.o $(OBJ)/Prior.o $(OBJ)/Hash.o $(OBJ)/system.o $(OBJ)/paths.o $(OBJ)/checks.o $(OBJ)/kruskal.o $(OBJ)/svg.o $(OBJ)/qry.o
