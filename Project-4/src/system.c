@@ -362,7 +362,11 @@ void get_functions(void* connections, void* blocks, void* blocks_hash, void* pat
 
     recursive_print_svg(blocks_root, modified_SVG);
 
+    print_graph(connections, modified_SVG);
 
+    for(void* aux = get_head(list_of_modifications); aux; aux = get_next(aux)) {
+        fprintf(modified_SVG, "%s", (char*)get_list_element(aux));
+    }
 
     free_list(list_of_modifications, true, free);
 

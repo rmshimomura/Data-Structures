@@ -10,6 +10,7 @@
 #include "paths.h"
 #include "system.h"
 #include "vertex.h"
+#include "svg.h"
 
 int main(int argc, char** argv) {
 
@@ -24,10 +25,13 @@ int main(int argc, char** argv) {
         free(flags);
         return -1;
     }
+
     void* blocks = create_tree();
     void* blocks_hash = hash_table_create_table(size);
     void* connections = create_graph(size);
     get_data(connections, blocks, blocks_hash, paths, flags);
+    print_on_SVG(connections, blocks, paths);
+
     if(get_qry_inserted(flags))
         format_qry_results(connections, blocks, blocks_hash, paths, flags);
         
