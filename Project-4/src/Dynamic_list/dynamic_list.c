@@ -1,6 +1,8 @@
 #include "dynamic_list.h"
-#include "../vertex.h"
+
+#include "../Graph/graph.h"
 #include "../block.h"
+#include "../vertex.h"
 
 typedef struct node {
 
@@ -395,4 +397,35 @@ void free_block_list(void* sequence){
     free(sequence);
 
 
+}
+
+void free_list_catac(void* sequence, FILE* txt_results, void (*free_node)(void*)) {
+    if(!sequence) return;
+
+    list* list_aux = sequence;
+    
+    if (list_aux->size == 0) {
+
+        free(sequence);
+        return;
+
+    }
+
+    node* aux_node = list_aux->head;
+    node* aux_element = list_aux->head->element;
+
+    while (list_aux->head != NULL) {
+
+        aux_node = list_aux->head;
+        aux_element = list_aux->head->element;
+        list_aux->head = list_aux->head->next;
+        fprintf(txt_results, "Edge %s -> %s removed!\n", vertex_data_get_id(vertex_get_data(edge_get_to(aux_element))), vertex_data_get_id(vertex_get_data(edge_get_from(aux_element))));
+
+        free_node(aux_element);
+        
+        free(aux_node);
+        list_aux->size--;
+    }
+    fprintf(txt_results, "\n\n");
+    free(sequence);
 }

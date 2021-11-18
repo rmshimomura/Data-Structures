@@ -6,6 +6,7 @@
 #include "Dynamic_list/dynamic_list.h"
 
 void catac_search(void* blocks, void* blocks_root, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications);
+void free_list_catac(void* sequence, FILE* txt_results, void (*free_node)(void*));
 
 int inside(double x1, double y1, double p1Width, double p1Height, double x2, double y2, double p2Width, double p2Height) {
     if ((x1 >= x2 && x1 <= x2 + p2Width && y1 >= y2 && y1 <= y2 + p2Height && x1 + p1Width <= x2 + p2Width && y1 + p1Height <= y2 + p2Height)) return 1;
@@ -38,8 +39,9 @@ void catac(void* connections, void* blocks, double x, double y, double w, double
 
         if(inside(vertex_data_get_x(aux_vertex_data), vertex_data_get_y(aux_vertex_data), 0, 0, x, y, w, h)) {
             
+            fprintf(txt_results, "Vertex %s is inside CATAC's rectangle, deactivating...\n", vertex_data_get_id(aux_vertex_data));
             vertex_set_activated(current_vertex, 0);
-            free_list(vertex_get_edges(current_vertex), true, free_edge);
+            free_list_catac(vertex_get_edges(current_vertex), txt_results, free_edge);
             vertex_set_edges(current_vertex, NULL);
             
         }
@@ -63,7 +65,8 @@ void catac(void* connections, void* blocks, double x, double y, double w, double
                     void* next = get_next(aux);
 
                     if(!vertex_get_activated(edge_get_to(get_list_element(aux)))) {
-
+                        
+                        fprintf(txt_results, "Edge %s -> %s removed because it points to a deactivated vertex!\n", vertex_data_get_id(vertex_get_data(edge_get_to(get_list_element(aux)))), vertex_data_get_id(vertex_get_data(edge_get_from(get_list_element(aux)))));
                         remove_node(vertex_get_edges(current_vertex), get_list_element(aux), free_edge, true);
         
                     }
