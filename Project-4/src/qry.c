@@ -4,6 +4,17 @@
 #include "Graph/graph.h"
 #include "vertex.h"
 #include "Dynamic_list/dynamic_list.h"
+#include "Hash/hash.h"
+
+typedef struct point {
+
+    double x, y;
+    int num;
+    char* cep;
+    char face;
+    void* vertex;
+
+} point;
 
 void catac_search(void* blocks, void* blocks_root, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications);
 void free_list_catac(void* sequence, FILE* txt_results, void (*free_node)(void*));
@@ -14,6 +25,123 @@ int inside(double x1, double y1, double p1Width, double p1Height, double x2, dou
     return 0;
 }
 
+void free_point(void* data) {
+
+    point* aux = data;
+    free(aux->cep);
+    aux->vertex = NULL;
+    free(aux);
+}
+
+double distance(double x1, double y1, double x2, double y2) {
+
+    return sqrt(pow(x2-x1, 2.0) + pow(y2 - y1, 2.0));
+
+}
+
+void find_closest_vertex (void* connections, point* aux) {
+
+    for(int i = 0; i < graph_get_size(connections); i++) {
+
+        void* current_vertex = return_vertex_address_by_index(connections, i);
+
+        void* current_vertex_data = vertex_get_data(current_vertex);
+
+        if(aux->vertex) { 
+            
+            if(distance(aux->x, aux->y, vertex_data_get_x(vertex_get_data(aux->vertex)), vertex_data_get_y(vertex_get_data(aux->vertex))) > distance(aux->x, aux->y, vertex_data_get_x(current_vertex_data), vertex_data_get_y(current_vertex_data))){
+                aux->vertex = current_vertex;                
+            }
+
+        } else {
+
+            aux->vertex = current_vertex;
+
+        }
+
+    }
+
+}
+
+void find_spacial_position(void* blocks_hash, point* aux, char* cep, char face, int num) {
+
+    void* square = find_element(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
+
+    if(square) {
+
+        if(face == 'N') {
+
+            aux->x = get_x(square) + num;
+            aux->y = get_y(square) + get_h(square);
+
+        } else if (face == 'S') {
+
+            aux->x = get_x(square) + num;
+            aux->y = get_y(square);
+
+        } else if (face == 'O') {
+
+            aux->x = get_x(square) + get_w(square);
+            aux->y = get_y(square) + num;
+
+        } else if (face == 'L') {
+
+            aux->x = get_x(square);
+            aux->y = get_y(square) + num;
+
+        }
+
+    } else {
+
+        puts("ERRO!, Square nao encontrada!");
+
+    }
+
+}
+
+void* find_position(void* connections, void* blocks_hash, char* cep, char face, int num, FILE* txt_results, void* list_of_modifications) {
+
+    fprintf(txt_results, "@o?(%s, %c, %d):\n\n", cep, face, num);
+
+    point* aux = calloc(1, sizeof(point));
+    aux->cep = calloc(strlen(cep) + 1, sizeof(char));
+    strcpy(aux->cep, cep);
+    aux->face = face;
+    aux->num = num;
+
+    find_spacial_position(blocks_hash, aux, cep, face, num);
+
+    find_closest_vertex(connections, aux);
+
+    char modification_1[1000] = "";
+    sprintf(modification_1, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"-50\" stroke=\"black\" stroke-width=\"3\" stroke-dasharray=\"4\" />\n", aux->x, aux->y, aux->x);
+    char* command_1 = calloc(strlen(modification_1) + 5, sizeof(char));
+    strcpy(command_1, modification_1);
+    insert_list(list_of_modifications, command_1);
+
+    char function_parameters[1000] = "";
+    sprintf(function_parameters, "@o?(%s, %c, %d)", cep, face, num);
+    char* parameters = calloc(strlen(function_parameters) + 2, sizeof(char));
+    strcpy(parameters, function_parameters);
+    char modification_2[1000] = "";
+    sprintf(modification_2, "<text x=\"%.2lf\" y=\"-50\">%s</text>\n", aux->x + 2, parameters);
+    char* command_2 = calloc(strlen(modification_2) + 5, sizeof(char));
+    strcpy(command_2, modification_2);
+    insert_list(list_of_modifications, command_2);
+
+    char modification_3[1000] = "";
+    sprintf(modification_3, "<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"3\" stroke=\"black\" stroke-width=\"2\" fill=\"red\" fill-opacity = \"1\" />\n", aux->x, aux->y);
+    char* command_3 = calloc(strlen(modification_3) + 5, sizeof(char));
+    strcpy(command_3, modification_3);
+    insert_list(list_of_modifications, command_3);
+
+    free(parameters);
+    
+
+    return aux;
+
+
+}
 
 void catac(void* connections, void* blocks, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications) {
     
@@ -145,3 +273,4 @@ void catac_search(void* blocks, void* blocks_root, double x, double y, double w,
 
     }
 }
+

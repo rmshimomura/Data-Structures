@@ -327,13 +327,14 @@ void get_functions(void* connections, void* blocks, void* blocks_hash, void* pat
 
     char command[512], cep[512], face, cmc[512], cmr[512];
     double num, x, y, w, h, f, limiar;
-    
+    void* function_register = NULL;
 
     while(fscanf(functions_file, "%s", command) != EOF) {
 
         if(!strcmp(command, "@o?")) {
 
             fscanf(functions_file, "%s %c %lf", cep, &face, &num);
+            function_register = find_position(connections, blocks_hash, cep, face, num, txt_results, list_of_modifications);
 
         } else if (!strcmp(command, "catac")) {
 
@@ -356,8 +357,6 @@ void get_functions(void* connections, void* blocks, void* blocks_hash, void* pat
 
     }
 
-
-
     void* blocks_root = get_root(blocks);
 
     recursive_print_svg(blocks_root, modified_SVG);
@@ -369,6 +368,8 @@ void get_functions(void* connections, void* blocks, void* blocks_hash, void* pat
     }
 
     free_list(list_of_modifications, true, free);
+
+    free_point(function_register);
 
     fprintf(modified_SVG, "</svg>\n");
     fclose(functions_file);
