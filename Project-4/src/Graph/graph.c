@@ -2,6 +2,7 @@
 #include "../Dynamic_list/dynamic_list.h"
 #include "../edge.h"
 #include "../vertex.h"
+#include "../qry.h"
 
 typedef struct edge {
 
@@ -135,6 +136,33 @@ void* extract_all_edges(void* connections) {
 
 }
 
+void* extract_all_edges_inside_rectangle(void* connections, double x, double y, double w, double h) {
+
+    graph* aux = connections;
+
+    void* all_edges = create_list();
+
+    for(int i = 0; i < aux->size; i++) {
+
+        if(inside(vertex_data_get_x(aux->vertexes[i].vertex_data), vertex_data_get_y(aux->vertexes[i].vertex_data), 0, 0, x, y, w, h) && aux->vertexes[i].activated == true) { //Check if the current vertex is inside the given rectangle
+
+            for(void* temp = get_head(aux->vertexes[i].edges); temp; temp = get_next(temp)) { 
+
+                if(inside(vertex_data_get_x(vertex_get_data(edge_get_to(get_list_element(temp)))), vertex_data_get_y(vertex_get_data(edge_get_to(get_list_element(temp)))), 0, 0, x, y, w, h)) {  //Check if the end point of this edge is still inside the rectangle
+                    
+                    insert_list(all_edges, get_list_element(temp)); // If so, add to the list
+
+                }
+            }
+
+        }
+
+    }
+
+    return all_edges;
+
+}
+
 void* extract_all_activated_vertexes_from_list(void* sequence) {
 
     void* vertex_list = create_list();
@@ -172,7 +200,7 @@ void graph_insert_vertex(void* connections, void* vertex_created) {
     edge* aux_edge = calloc(1, sizeof(edge));
     aux_edge->from = &(aux_graph->vertexes[aux_graph->next_free_space]);
     aux_edge->to = &(aux_graph->vertexes[aux_graph->next_free_space]);
-    char prime_name[512] = " ";
+    char prime_name[512] = "";
     sprintf(prime_name, "%s-%s", vertex_data_get_id(vertex_created), vertex_data_get_id(vertex_created));
     aux_edge->edge_data = new_edge_data(prime_name, "-", "-", 0, 1, vertex_created, vertex_created);
 

@@ -344,6 +344,7 @@ void get_functions(void* connections, void* blocks, void* blocks_hash, void* pat
         } else if (!strcmp(command, "rv")) {
 
             fscanf(functions_file, "%lf %lf %lf %lf %lf", &x, &y, &w, &h, &f);
+            rv(connections, x, y, w, h, f, txt_results, list_of_modifications);
 
         } else if (!strcmp(command, "cx")) {
 

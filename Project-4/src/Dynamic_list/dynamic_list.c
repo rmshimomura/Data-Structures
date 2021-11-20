@@ -369,6 +369,21 @@ void list_sort(void* list_, int (*cmp)(void*, void*)) {
     list_quick_sort_(head, h, cmp);
 }
 
+void** list_to_array(void* sequence) {
+
+    void** aux = calloc(get_size(sequence), sizeof(void*));
+
+    void* head = get_head(sequence);
+
+    for(int i = 0; i < get_size(sequence); i++) {
+        aux[i] = get_list_element(head);
+        head = get_next(head);
+    }
+
+    return aux;
+
+}
+
 void free_block_list(void* sequence){
 
     if(!sequence){

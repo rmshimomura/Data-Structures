@@ -54,6 +54,18 @@ typedef struct package {
 
 } package;
 
+void* get_package_list_of_edges (void* data) {
+
+    return data ? ((package*)data)->list_of_edges : NULL;
+
+}
+
+void* get_package_root (void* data) {
+
+    return data ? ((package*)data)->root : NULL;
+
+}
+
 void* new_package(void* original_root) {
 
     package* aux = calloc(1, sizeof(package));
@@ -120,7 +132,7 @@ int find_index_kruskal(group* groups, char* id, int iteration_size) {
     return -1;
 }
 
-void future_rv(void* edges[], int num_of_edges, void* root, int height, double factor){
+void rv_function_aux(void* edges[], int num_of_edges, void* root, int height, double factor){
 
     for(int i = 0; i < num_of_edges; i++) {
 
@@ -130,24 +142,44 @@ void future_rv(void* edges[], int num_of_edges, void* root, int height, double f
 
             if(!strcmp(vertex_data_get_id(vertex_get_data(aux->from)), vertex_data_get_id(root))) {
 
-                edge_data_set_average_speed(aux->edge_data, edge_data_get_average_speed(aux->edge_data) - edge_data_get_average_speed(aux->edge_data) * factor);
+                if(edge_data_get_average_speed(aux->edge_data) > 0) {
+
+                    edge_data_set_average_speed(aux->edge_data, edge_data_get_average_speed(aux->edge_data) - edge_data_get_average_speed(aux->edge_data) * (factor * height));
+                    
+                    if(edge_data_get_average_speed(aux->edge_data) < 0) { 
+
+                        edge_data_set_average_speed(aux->edge_data, 0);
+
+                    }
+
+                }
 
                 void* other_one = aux->to;
 
                 edges[i] = NULL;
 
-                future_rv(edges, num_of_edges, vertex_get_data(other_one), height + 1, factor + factor);
+                rv_function_aux(edges, num_of_edges, vertex_get_data(other_one), height + 1, factor);
 
 
             } else if (!strcmp(vertex_data_get_id(vertex_get_data(aux->to)), vertex_data_get_id(root))) {
 
-                edge_data_set_average_speed(aux->edge_data, edge_data_get_average_speed(aux->edge_data) - edge_data_get_average_speed(aux->edge_data) * factor);
+                if(edge_data_get_average_speed(aux->edge_data) > 0) {
+
+                    edge_data_set_average_speed(aux->edge_data, edge_data_get_average_speed(aux->edge_data) - edge_data_get_average_speed(aux->edge_data) * (factor * height));
+
+                    if(edge_data_get_average_speed(aux->edge_data) < 0) { 
+
+                        edge_data_set_average_speed(aux->edge_data, 0);
+
+                    }
+
+                }
 
                 void* other_one = aux->from;
 
                 edges[i] = NULL;
 
-                future_rv(edges, num_of_edges, vertex_get_data(other_one), height + 1, factor + factor);
+                rv_function_aux(edges, num_of_edges, vertex_get_data(other_one), height + 1, factor);
 
             }
 
@@ -246,30 +278,26 @@ void** kruskal(void* edges_list) {
     free_list(result, false, NULL);
     free_list(vertex_list, false, NULL);
 
-    
+    // for(void* aux = get_head(packaging); aux; aux = get_next(aux)){
 
-    for(void* aux = get_head(packaging); aux; aux = get_next(aux)){
+    //     package* look = get_list_element(aux);
 
-        package* look = get_list_element(aux);
+    //     printf("Root = %s\n", vertex_data_get_id(look->root));
+    //     printf("[");
 
-        printf("Root = %s\n", vertex_data_get_id(look->root));
-        printf("[");
+    //     for(void* aux = get_head(look->list_of_edges); aux; aux = get_next(aux)) {
 
-        for(void* aux = get_head(look->list_of_edges); aux; aux = get_next(aux)) {
+    //         edge* printer = get_list_element(aux);
 
-            edge* printer = get_list_element(aux);
+    //         printf(" |%s - %s| ", vertex_data_get_id(vertex_get_data(printer->from)), vertex_data_get_id(vertex_get_data(printer->to)));
 
-            printf(" |%s - %s| ", vertex_data_get_id(vertex_get_data(printer->from)), vertex_data_get_id(vertex_get_data(printer->to)));
+    //     }
 
-        }
+    //     printf("]\n");
 
-        printf("]\n");
+    // }
 
-    }
-
-    puts("=================== ");
-
-    
+    // puts("=================== ");
 
     return packaging;
 }

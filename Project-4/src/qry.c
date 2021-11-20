@@ -1,10 +1,14 @@
 #include "qry.h"
+
 #include "AVL_Tree/AVL.h"
-#include "block.h"
-#include "Graph/graph.h"
-#include "vertex.h"
 #include "Dynamic_list/dynamic_list.h"
+#include "Graph/graph.h"
 #include "Hash/hash.h"
+#include "block.h"
+#include "dijkstra.h"
+#include "kruskal.h"
+#include "vertex.h"
+#include "edge.h"
 
 typedef struct point {
 
@@ -18,6 +22,7 @@ typedef struct point {
 
 void catac_search(void* blocks, void* blocks_root, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications);
 void free_list_catac(void* sequence, FILE* txt_results, void (*free_node)(void*));
+void* extract_all_edges_inside_rectangle(void* connections, double x, double y, double w, double h);
 
 int inside(double x1, double y1, double p1_width, double p1_height, double x2, double y2, double p2_width, double p2_height) {
     if ((x1 >= x2 && x1 <= x2 + p2_width && y1 >= y2 && y1 <= y2 + p2_height && x1 + p1_width <= x2 + p2_width && y1 + p1_height <= y2 + p2_height)) return 1;
@@ -26,6 +31,8 @@ int inside(double x1, double y1, double p1_width, double p1_height, double x2, d
 }
 
 void free_point(void* data) {
+
+    if(!data) return;
 
     point* aux = data;
     free(aux->cep);
@@ -93,7 +100,7 @@ void find_spacial_position(void* blocks_hash, point* aux, char* cep, char face, 
 
     } else {
 
-        puts("ERRO!, Square nao encontrada!");
+        puts("ERROR!, square not found!");
 
     }
 
@@ -137,9 +144,7 @@ void* find_position(void* connections, void* blocks_hash, char* cep, char face, 
 
     free(parameters);
     
-
     return aux;
-
 
 }
 
@@ -287,3 +292,56 @@ void catac_search(void* blocks, void* blocks_root, double x, double y, double w,
     }
 }
 
+void rv(void* connections, double x, double y, double w, double h, double f, FILE* txt_results, void* list_of_modifications) {
+    
+    fprintf(txt_results, "rv(%.2lf, %.2lf, %.2lf, %.2lf, %.2lf):\n\n", x, y, w, h, f);
+
+    void* list_of_edges = extract_all_edges_inside_rectangle(connections, x, y, w, h);
+
+    void* packaging = kruskal(list_of_edges);
+
+    for(void* mst = get_head(packaging); mst; mst = get_next(mst)) {
+
+        void* mst_data = get_list_element(mst);
+
+        void** array_of_edges = list_to_array(get_package_list_of_edges(mst_data));
+
+        rv_function_aux(array_of_edges, get_size(get_package_list_of_edges(mst_data)), get_package_root(mst_data), 1, f);
+
+        fprintf(txt_results, "ROOT = %s\n\n", vertex_data_get_id(get_package_root(mst_data)));
+
+        for(void* edge_aux = get_head(get_package_list_of_edges(mst_data)); edge_aux; edge_aux = get_next(edge_aux)) {
+
+            void* edge_element = get_list_element(edge_aux);
+
+            if(get_size(get_package_list_of_edges(mst_data)) == 1) {
+
+                fprintf(txt_results,
+                    "EDGE = [%s ----> %s]:\nName = %s\nLength = %.2lf\nAverage Speed = %.2lf\nLeft side square ZIP = %s\nRight side ZIP = %s\n\n",
+                    vertex_data_get_id(vertex_get_data(edge_get_from(edge_element))), vertex_data_get_id(vertex_get_data(edge_get_to(edge_element))), 
+                    edge_data_get_name(edge_get_data(edge_element)), edge_data_get_length(edge_get_data(edge_element)), edge_data_get_average_speed(edge_get_data(edge_element)),
+                    edge_data_get_left_side_square(edge_get_data(edge_element)), edge_data_get_right_side_square(edge_get_data(edge_element))   
+                    );
+
+            } else {
+
+                if(edge_get_from(edge_element) != edge_get_to(edge_element)) {
+
+                    fprintf(txt_results,
+                    "EDGE = [%s ----> %s]:\nName = %s\nLength = %.2lf\nAverage Speed = %.2lf\nLeft side square ZIP = %s\nRight side ZIP = %s\n\n",
+                    vertex_data_get_id(vertex_get_data(edge_get_from(edge_element))), vertex_data_get_id(vertex_get_data(edge_get_to(edge_element))), 
+                    edge_data_get_name(edge_get_data(edge_element)), edge_data_get_length(edge_get_data(edge_element)), edge_data_get_average_speed(edge_get_data(edge_element)),
+                    edge_data_get_left_side_square(edge_get_data(edge_element)), edge_data_get_right_side_square(edge_get_data(edge_element))   
+                    );
+
+                }
+
+            }
+
+        }
+
+    }
+
+    fprintf(txt_results, "====================================================\n");
+
+}
