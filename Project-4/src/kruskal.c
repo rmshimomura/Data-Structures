@@ -301,3 +301,14 @@ void** kruskal(void* edges_list) {
 
     return packaging;
 }
+
+void free_package(void* pack) {
+
+    if(!pack) return;
+    
+    package* aux = pack;
+    free_list(aux->list_of_edges, false, free);
+    aux->root = NULL;
+    free(aux);
+
+}

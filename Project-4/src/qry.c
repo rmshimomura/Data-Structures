@@ -296,6 +296,14 @@ void rv(void* connections, double x, double y, double w, double h, double f, FIL
     
     fprintf(txt_results, "rv(%.2lf, %.2lf, %.2lf, %.2lf, %.2lf):\n\n", x, y, w, h, f);
 
+    char modification[1000];
+
+    sprintf(modification, "\t<rect x=\"%.2lf\" y=\"%.2lf\" width=\"%.2lf\" height=\"%.2lf\"\n style=\"fill:white;stroke:red;fill-opacity:0;stroke-opacity:1;stroke-width:7\" stroke-dasharray=\"4\"/>\n", x,y,w,h); 
+
+    char* command = calloc(strlen(modification) + 5, sizeof(char));
+    strcpy(command, modification);
+    insert_list(list_of_modifications, command);
+
     void* list_of_edges = extract_all_edges_inside_rectangle(connections, x, y, w, h);
 
     void* packaging = kruskal(list_of_edges);
@@ -321,7 +329,7 @@ void rv(void* connections, double x, double y, double w, double h, double f, FIL
                     vertex_data_get_id(vertex_get_data(edge_get_from(edge_element))), vertex_data_get_id(vertex_get_data(edge_get_to(edge_element))), 
                     edge_data_get_name(edge_get_data(edge_element)), edge_data_get_length(edge_get_data(edge_element)), edge_data_get_average_speed(edge_get_data(edge_element)),
                     edge_data_get_left_side_square(edge_get_data(edge_element)), edge_data_get_right_side_square(edge_get_data(edge_element))   
-                    );
+                );
 
             } else {
 
@@ -340,7 +348,13 @@ void rv(void* connections, double x, double y, double w, double h, double f, FIL
 
         }
 
+        free_list(array_of_edges, false, free);
+
     }
+
+    free_list(list_of_edges, false, free);
+
+    free_list(packaging, true, free_package);
 
     fprintf(txt_results, "====================================================\n");
 
