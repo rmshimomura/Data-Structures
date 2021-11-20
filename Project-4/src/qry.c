@@ -19,8 +19,8 @@ typedef struct point {
 void catac_search(void* blocks, void* blocks_root, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications);
 void free_list_catac(void* sequence, FILE* txt_results, void (*free_node)(void*));
 
-int inside(double x1, double y1, double p1Width, double p1Height, double x2, double y2, double p2Width, double p2Height) {
-    if ((x1 >= x2 && x1 <= x2 + p2Width && y1 >= y2 && y1 <= y2 + p2Height && x1 + p1Width <= x2 + p2Width && y1 + p1Height <= y2 + p2Height)) return 1;
+int inside(double x1, double y1, double p1_width, double p1_height, double x2, double y2, double p2_width, double p2_height) {
+    if ((x1 >= x2 && x1 <= x2 + p2_width && y1 >= y2 && y1 <= y2 + p2_height && x1 + p1_width <= x2 + p2_width && y1 + p1_height <= y2 + p2_height)) return 1;
     //Fix the search on the p2 and vary on p1
     return 0;
 }
@@ -143,7 +143,7 @@ void* find_position(void* connections, void* blocks_hash, char* cep, char face, 
 
 }
 
-void catac(void* connections, void* blocks, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications) {
+void catac(void* connections, void* blocks, double x, double y, double w, double h, void* point_location, FILE* txt_results, void* list_of_modifications) {
     
     fprintf(txt_results, "catac(%.2lf, %.2lf, %.2lf, %.2lf):\n\n", x, y, w, h);
 
@@ -158,6 +158,19 @@ void catac(void* connections, void* blocks, double x, double y, double w, double
     insert_list(list_of_modifications, command);
 
     catac_search(blocks, blocks_root, x, y, w, h, txt_results, list_of_modifications);
+
+    if(point_location) { // @o? exists, so we need to check if this specific point was inside catac's rectangle, if so, we set him NULL
+
+        point* aux = point_location;
+
+        if(inside(aux->x, aux->y, 0, 0, x, y, w, h)) {
+
+            fprintf(txt_results, "@o?(%s, %c, %d) is inside catac's rectangle!, removing...\n", aux->cep, aux->face, aux->num);
+            free_point(aux);
+            point_location = NULL;
+        }
+
+    }
 
     for(int i = 0; i < graph_get_size(connections); i++) {
 

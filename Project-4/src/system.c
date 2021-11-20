@@ -339,7 +339,7 @@ void get_functions(void* connections, void* blocks, void* blocks_hash, void* pat
         } else if (!strcmp(command, "catac")) {
 
             fscanf(functions_file, "%lf %lf %lf %lf", &x, &y, &w, &h);
-            catac(connections, blocks, x, y, w, h, txt_results, list_of_modifications);
+            catac(connections, blocks, x, y, w, h, function_register, txt_results, list_of_modifications);
 
         } else if (!strcmp(command, "rv")) {
 
