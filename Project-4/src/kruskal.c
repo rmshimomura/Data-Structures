@@ -142,15 +142,13 @@ void rv_function_aux(void* edges[], int num_of_edges, void* root, int height, do
 
             if(!strcmp(vertex_data_get_id(vertex_get_data(aux->from)), vertex_data_get_id(root))) {
 
-                if(edge_data_get_average_speed(aux->edge_data) > 0) {
+                if(factor * height < 1) {
 
-                    edge_data_set_average_speed(aux->edge_data, edge_data_get_average_speed(aux->edge_data) - edge_data_get_average_speed(aux->edge_data) * (factor * height));
-                    
-                    if(edge_data_get_average_speed(aux->edge_data) < 0) { 
+                    edge_data_set_average_speed(aux->edge_data, edge_data_get_average_speed(aux->edge_data) - (edge_data_get_average_speed(aux->edge_data) * (factor * height)));
 
-                        edge_data_set_average_speed(aux->edge_data, 0);
+                } else {
 
-                    }
+                    edge_data_set_average_speed(aux->edge_data, edge_data_get_average_speed(aux->edge_data) * (0.01));
 
                 }
 
@@ -163,15 +161,13 @@ void rv_function_aux(void* edges[], int num_of_edges, void* root, int height, do
 
             } else if (!strcmp(vertex_data_get_id(vertex_get_data(aux->to)), vertex_data_get_id(root))) {
 
-                if(edge_data_get_average_speed(aux->edge_data) > 0) {
+                if(factor * height < 1) {
 
-                    edge_data_set_average_speed(aux->edge_data, edge_data_get_average_speed(aux->edge_data) - edge_data_get_average_speed(aux->edge_data) * (factor * height));
+                    edge_data_set_average_speed(aux->edge_data, edge_data_get_average_speed(aux->edge_data) - (edge_data_get_average_speed(aux->edge_data) * (factor * height)));
 
-                    if(edge_data_get_average_speed(aux->edge_data) < 0) { 
+                } else {
 
-                        edge_data_set_average_speed(aux->edge_data, 0);
-
-                    }
+                    edge_data_set_average_speed(aux->edge_data, edge_data_get_average_speed(aux->edge_data) * (0.01));
 
                 }
 

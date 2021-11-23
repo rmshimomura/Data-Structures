@@ -318,14 +318,6 @@ void rv(void* connections, double x, double y, double w, double h, double f, FIL
 
         fprintf(txt_results, "ROOT = %s\n\n", vertex_data_get_id(get_package_root(mst_data)));
 
-        char modification_root[1000] = "";
-
-        sprintf(modification_root, "<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"8\" stroke=\"blue\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", vertex_data_get_x(get_package_root(mst_data)), vertex_data_get_y(get_package_root(mst_data))); 
-
-        char* command_root = calloc(strlen(modification_root) + 5, sizeof(char));
-        strcpy(command_root, modification_root);
-        insert_list(list_of_modifications, command_root);
-
         char line[1000] = "";
 
         for(void* edge_aux = get_head(get_package_list_of_edges(mst_data)); edge_aux; edge_aux = get_next(edge_aux)) {
@@ -363,6 +355,14 @@ void rv(void* connections, double x, double y, double w, double h, double f, FIL
             }
 
         }
+
+        char modification_root[1000] = "";
+
+        sprintf(modification_root, "<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"8\" stroke=\"blue\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", vertex_data_get_x(get_package_root(mst_data)), vertex_data_get_y(get_package_root(mst_data))); 
+
+        char* command_root = calloc(strlen(modification_root) + 5, sizeof(char));
+        strcpy(command_root, modification_root);
+        insert_list(list_of_modifications, command_root);
 
         free_list(array_of_edges, false, free);
 
