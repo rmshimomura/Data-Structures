@@ -30,4 +30,6 @@ void free_graph(void* connections);
 void free_edge(void* edge_);
 void create_graph_with_data(void* connections, FILE* file_roads);
 
+void* extract_all_edges_cx(void* connections, double limiar, void* list_of_modifications);
+
 #endif

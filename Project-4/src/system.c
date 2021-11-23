@@ -349,6 +349,7 @@ void get_functions(void* connections, void* blocks, void* blocks_hash, void* pat
         } else if (!strcmp(command, "cx")) {
 
             fscanf(functions_file, "%lf", &limiar);
+            cx(connections, limiar, txt_results, list_of_modifications);
 
         } else if (!strcmp(command, "p?")) {
 

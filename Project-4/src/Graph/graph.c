@@ -136,6 +136,44 @@ void* extract_all_edges(void* connections) {
 
 }
 
+void* extract_all_edges_cx(void* connections, double limiar, void* list_of_modifications) {
+
+    graph* aux = connections;
+
+    void* all_edges = create_list();
+
+    for(int i = 0; i < aux->size; i++) {
+
+        if(aux->vertexes[i].activated == true) {
+
+            for(void* temp = get_head(aux->vertexes[i].edges); temp; temp = get_next(temp)) {
+
+                if(edge_data_get_average_speed(edge_get_data(get_list_element(temp))) >= limiar && !find_element_by_edge_name(aux->vertexes[i].edges, temp)) {
+
+                    insert_list(all_edges, get_list_element(temp));
+
+                } else {
+
+                    char line[1000] = "";
+
+                    sprintf(line, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"red\" stroke-width=\"8\"/>\n", vertex_data_get_x(vertex_get_data(edge_get_from(get_list_element(temp)))), vertex_data_get_y(vertex_get_data(edge_get_from(get_list_element(temp)))), vertex_data_get_x(vertex_get_data(edge_get_to(get_list_element(temp)))), vertex_data_get_y(vertex_get_data(edge_get_to(get_list_element(temp))))); 
+
+                    char* command = calloc(strlen(line) + 5, sizeof(char));
+                    strcpy(command, line);
+                    insert_list(list_of_modifications, command);
+
+                }
+
+            }
+
+        }
+
+    }
+
+    return all_edges;
+
+}
+
 void* extract_all_edges_inside_rectangle(void* connections, double x, double y, double w, double h) {
 
     graph* aux = connections;

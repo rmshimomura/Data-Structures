@@ -212,7 +212,7 @@ void** kruskal(void* edges_list) {
 
         edge* analize = get_list_element(runner);
         
-        // if(analize->to != analize->from) {
+        if(analize->to != analize->from) {
             
 
             int i = k_find(groups, find_index_kruskal(groups, analize->from->vertex_data->id, get_size(vertex_list)));
@@ -229,7 +229,11 @@ void** kruskal(void* edges_list) {
                 
             }
 
-        // }
+        } else {
+
+            insert_list(result, analize);
+
+        }
     }
 
     void* packaging = create_list();

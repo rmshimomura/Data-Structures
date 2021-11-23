@@ -3,6 +3,7 @@
 #include "../Graph/graph.h"
 #include "../block.h"
 #include "../vertex.h"
+#include "../edge.h"
 
 typedef struct node {
 
@@ -315,6 +316,24 @@ void* find_element_by_vertex_name(void* sequence, void* match) {
     for(int i = 0; i < list_aux->size; i++) {
 
         if(!strcmp(vertex_data_get_id(node_aux->element), match)) return node_aux->element;
+    
+        node_aux = node_aux->next;
+
+    }
+    return NULL;
+}
+
+void* find_element_by_edge_name(void* sequence, void* match) {
+    
+    if(!sequence) return NULL;
+    
+    list* list_aux = sequence;
+    node* node_aux = list_aux->head;
+    
+
+    for(int i = 0; i < list_aux->size; i++) {
+
+        if(!strcmp(edge_data_get_name(edge_get_data(node_aux->element)), match)) return node_aux->element;
     
         node_aux = node_aux->next;
 
