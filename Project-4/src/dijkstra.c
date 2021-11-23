@@ -33,6 +33,13 @@ void free_helper(void* data) {
 
 }
 
+void* get_dijkstra_vertex(void* data){
+
+    helper* aux = data;
+    return aux->vertex;
+
+}
+
 int compare(void* a, void* b) {
     helper* aux = a;
     return aux->vertex == b ? 1 : 0;
@@ -66,7 +73,7 @@ void* dijkstra(void* connections, char* start, char* end, double (*operation_mod
     void* prior_queue = create_priority_queue();
     void* visited_vertexes = create_list();
 
-    priority_queue_insert(prior_queue, new_helper(origin, NULL, 0), 0); // S
+    priority_queue_insert(prior_queue, new_helper(origin, NULL, 0), 0); 
 
     while(search != destination && search != NULL) {
 
@@ -75,14 +82,22 @@ void* dijkstra(void* connections, char* start, char* end, double (*operation_mod
         for(void* aux = get_head(search_adjacents); aux; aux = get_next(aux)){
 
             void* edge = get_list_element(aux);
-            void* edge_data = edge_get_data(edge);
-            void* edge_to = edge_get_to(edge);
 
-            double cost_until_this_point = operation_mode(edge_data) + search_cost;
-            void* found = find_element(visited_vertexes, edge_to, compare);
+            if(edge_get_from(edge) != edge_get_to(edge)) {
 
-            if(found == NULL && edge_to != back_track) {
-                priority_queue_insert(prior_queue, new_helper(edge_to, search, cost_until_this_point), cost_until_this_point + distance_dijkstra(edge_to, destination));
+                void* edge_data = edge_get_data(edge);
+                void* edge_to = edge_get_to(edge);
+
+                double cost_until_this_point = operation_mode(edge_data) + search_cost;
+                
+                void* found = find_element(visited_vertexes, edge_to, compare);
+
+                if(found == NULL && edge_to != back_track) {
+
+                    priority_queue_insert(prior_queue, new_helper(edge_to, search, cost_until_this_point), cost_until_this_point); // Are we able to use a* ?
+
+                }
+
             }
             
         }

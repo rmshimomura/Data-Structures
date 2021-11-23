@@ -108,8 +108,6 @@ void find_spacial_position(void* blocks_hash, point* aux, char* cep, char face, 
 
 void* find_position(void* connections, void* blocks_hash, char* cep, char face, int num, FILE* txt_results, void* list_of_modifications) {
 
-    fprintf(txt_results, "@o?(%s, %c, %d):\n\n", cep, face, num);
-
     point* aux = calloc(1, sizeof(point));
     aux->cep = calloc(strlen(cep) + 1, sizeof(char));
     strcpy(aux->cep, cep);
@@ -432,6 +430,126 @@ void cx(void* connections, double limiar, FILE* txt_results, void* list_of_modif
     free_list(list_of_edges, false, free);
 
     free_list(packaging, true, free_package);
+
+    fprintf(txt_results, "====================================================\n");
+
+}
+
+void route(void* connections, void* blocks_hash, char* cep, char face, int num, char* cmc, char* cmr, void* departure, FILE* txt_results, void* list_of_modifications) {
+
+    fprintf(txt_results, "p?(%s, %c, %d, %s, %s):\n\n", cep, face, num, cmc, cmr);
+
+    if(!departure) {
+
+        fprintf(txt_results, "@o is NOT set or was removed because of catac!\n");
+
+        return;
+
+    }
+
+    point* starting_point = departure;
+    point* end_point = find_position(connections, blocks_hash, cep, face, num, txt_results, list_of_modifications);
+
+    char modification_root[1000] = "";
+
+    //Shortest path
+    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"\"/>\n", starting_point->x, starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, cmc); 
+
+    char* command_root_start_short_1 = calloc(strlen(modification_root) + 5, sizeof(char));
+    strcpy(command_root_start_short_1, modification_root);
+    insert_list(list_of_modifications, command_root_start_short_1);
+
+    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"\"/>\n", vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), vertex_data_get_y(vertex_get_data(starting_point->vertex)), cmc); 
+
+    char* command_root_start_short_2 = calloc(strlen(modification_root) + 5, sizeof(char));
+    strcpy(command_root_start_short_2, modification_root);
+    insert_list(list_of_modifications, command_root_start_short_2);
+
+    void* short_path = dijkstra(connections, vertex_data_get_id(vertex_get_data(starting_point->vertex)),
+    vertex_data_get_id(vertex_get_data(end_point->vertex)), shortest_path);
+
+    for(void* runner = get_head(short_path); runner; runner = get_next(runner)) {
+
+        void* aux_1 = get_list_element(runner);
+
+        if(get_next(runner)) {
+
+            void* aux_2 = get_list_element(get_next(runner));
+
+            sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"\"/>\n", vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2))), cmc); 
+
+            char* line = calloc(strlen(modification_root) + 5, sizeof(char));
+            strcpy(line, modification_root);
+            insert_list(list_of_modifications, line);
+
+        }
+
+    }
+
+    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\" \" />\n", end_point->x, end_point->y, vertex_data_get_x(vertex_get_data(end_point->vertex)), vertex_data_get_y(vertex_get_data(end_point->vertex)), cmc); 
+
+    char* command_root_end_short_1 = calloc(strlen(modification_root) + 5, sizeof(char));
+    strcpy(command_root_end_short_1, modification_root);
+    insert_list(list_of_modifications, command_root_end_short_1);
+
+    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"\"/>\n", vertex_data_get_x(vertex_get_data(end_point->vertex)), end_point->y, vertex_data_get_x(vertex_get_data(end_point->vertex)), vertex_data_get_y(vertex_get_data(end_point->vertex)), cmc); 
+
+    char* command_root_end_short_2 = calloc(strlen(modification_root) + 5, sizeof(char));
+    strcpy(command_root_end_short_2, modification_root);
+    insert_list(list_of_modifications, command_root_end_short_2);
+
+    free_list(short_path, true, free_helper);
+
+    //========================================================================================================================================================================//
+    
+    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", starting_point->x, starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, cmc); 
+
+    char* command_root_start_fast_1 = calloc(strlen(modification_root) + 5, sizeof(char));
+    strcpy(command_root_start_fast_1, modification_root);
+    insert_list(list_of_modifications, command_root_start_fast_1);
+
+    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), vertex_data_get_y(vertex_get_data(starting_point->vertex)), cmc); 
+
+    char* command_root_start_fast_2 = calloc(strlen(modification_root) + 5, sizeof(char));
+    strcpy(command_root_start_fast_2, modification_root);
+    insert_list(list_of_modifications, command_root_start_fast_2);
+
+    void* fast_path = dijkstra(connections, vertex_data_get_id(vertex_get_data(starting_point->vertex)),
+    vertex_data_get_id(vertex_get_data(end_point->vertex)), fastest_path);
+
+    for(void* runner = get_head(fast_path); runner; runner = get_next(runner)) {
+
+        void* aux_1 = get_list_element(runner);
+
+        if(get_next(runner)) {
+
+            void* aux_2 = get_list_element(get_next(runner));
+
+            sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2))), cmr); 
+
+            char* line = calloc(strlen(modification_root) + 5, sizeof(char));
+            strcpy(line, modification_root);
+            insert_list(list_of_modifications, line);
+
+        }
+
+    }
+
+    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\" \" />\n", end_point->x, end_point->y, vertex_data_get_x(vertex_get_data(end_point->vertex)), vertex_data_get_y(vertex_get_data(end_point->vertex)), cmr); 
+
+    char* command_root_end_fast_1 = calloc(strlen(modification_root) + 5, sizeof(char));
+    strcpy(command_root_end_fast_1, modification_root);
+    insert_list(list_of_modifications, command_root_end_fast_1);
+
+    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", vertex_data_get_x(vertex_get_data(end_point->vertex)), end_point->y, vertex_data_get_x(vertex_get_data(end_point->vertex)), vertex_data_get_y(vertex_get_data(end_point->vertex)), cmr); 
+
+    char* command_root_end_fast_2 = calloc(strlen(modification_root) + 5, sizeof(char));
+    strcpy(command_root_end_fast_2, modification_root);
+    insert_list(list_of_modifications, command_root_end_fast_2);
+
+    free_list(fast_path, true, free_helper);
+
+    free_point(end_point);
 
     fprintf(txt_results, "====================================================\n");
 

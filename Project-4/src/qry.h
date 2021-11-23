@@ -9,6 +9,7 @@ void catac(void* connections, void* blocks, double x, double y, double w, double
 void* find_position(void* connections, void* blocks_hash, char* cep, char face, int num, FILE* txt_results, void* list_of_modifications); // @o?
 void rv(void* connections, double x, double y, double w, double h, double f, FILE* txt_results, void* list_of_modifications); // rv
 void cx(void* connections, double limiar, FILE* txt_results, void* list_of_modifications); // cx
+void route(void* connections, void* blocks_hash, char* cep, char face, int num, char* cmc, char* cmr, void* departure, FILE* txt_results, void* list_of_modifications); // p?
 void free_point(void* data);
 
 #endif

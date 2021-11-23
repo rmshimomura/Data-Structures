@@ -158,6 +158,7 @@ void* priority_queue_pop(void* sequence, bool remove_elements, void (*free_eleme
         free(priority_queue_aux->head);
 
         priority_queue_aux->head = aux1;
+        priority_queue_aux->head->prev = NULL;
         priority_queue_aux->size--;
 
         return temp;

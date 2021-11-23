@@ -354,6 +354,7 @@ void get_functions(void* connections, void* blocks, void* blocks_hash, void* pat
         } else if (!strcmp(command, "p?")) {
 
             fscanf(functions_file, "%s %c %lf %s %s", cep, &face, &num, cmc, cmr);
+            route(connections, blocks_hash, cep, face, num, cmc, cmr, function_register, txt_results, list_of_modifications);
 
         }
 
