@@ -502,13 +502,13 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
 
     //========================================================================================================================================================================//
     
-    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", starting_point->x, starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, cmc); 
+    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", starting_point->x, starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, cmr); 
 
     char* command_root_start_fast_1 = calloc(strlen(modification_root) + 5, sizeof(char));
     strcpy(command_root_start_fast_1, modification_root);
     insert_list(list_of_modifications, command_root_start_fast_1);
 
-    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), vertex_data_get_y(vertex_get_data(starting_point->vertex)), cmc); 
+    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), vertex_data_get_y(vertex_get_data(starting_point->vertex)), cmr); 
 
     char* command_root_start_fast_2 = calloc(strlen(modification_root) + 5, sizeof(char));
     strcpy(command_root_start_fast_2, modification_root);

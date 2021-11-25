@@ -94,7 +94,7 @@ void* dijkstra(void* connections, char* start, char* end, double (*operation_mod
 
                 if(found == NULL && edge_to != back_track) {
 
-                    priority_queue_insert(prior_queue, new_helper(edge_to, search, cost_until_this_point), cost_until_this_point); // Are we able to use a* ?
+                    priority_queue_insert(prior_queue, new_helper(edge_to, search, cost_until_this_point + distance_dijkstra(edge_to, destination)), cost_until_this_point + distance_dijkstra(edge_to, destination)); // Are we able to use a* ?
 
                 }
 
