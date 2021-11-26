@@ -75,31 +75,35 @@ void* dijkstra(void* connections, char* start, char* end, double (*operation_mod
 
     priority_queue_insert(prior_queue, new_helper(origin, NULL, 0), 0); 
 
-    while(search != destination && search != NULL) {
+    while(search != destination) {
 
         void* search_adjacents = list_of_adjacents_by_address(search);
 
-        for(void* aux = get_head(search_adjacents); aux; aux = get_next(aux)){
+        if(find_element(visited_vertexes, search, compare) == NULL) {
 
-            void* edge = get_list_element(aux);
+            for(void* aux = get_head(search_adjacents); aux; aux = get_next(aux)){
 
-            if(edge_get_from(edge) != edge_get_to(edge)) {
+                void* edge = get_list_element(aux);
 
-                void* edge_data = edge_get_data(edge);
-                void* edge_to = edge_get_to(edge);
+                if(edge_get_from(edge) != edge_get_to(edge)) {
 
-                double cost_until_this_point = operation_mode(edge_data) + search_cost;
-                
-                void* found = find_element(visited_vertexes, edge_to, compare);
+                    void* edge_data = edge_get_data(edge);
+                    void* edge_to = edge_get_to(edge);
 
-                if(found == NULL && edge_to != back_track) {
+                    double cost_until_this_point = operation_mode(edge_data) + search_cost;
+                    
+                    void* found = find_element(visited_vertexes, edge_to, compare);
 
-                    priority_queue_insert(prior_queue, new_helper(edge_to, search, cost_until_this_point + distance_dijkstra(edge_to, destination)), cost_until_this_point + distance_dijkstra(edge_to, destination)); // Are we able to use a* ?
+                    if(found == NULL && edge_to != back_track) {
+
+                        priority_queue_insert(prior_queue, new_helper(edge_to, search, cost_until_this_point + distance_dijkstra(edge_to, destination)), cost_until_this_point + distance_dijkstra(edge_to, destination)); // Are we able to use a* ?
+
+                    }
 
                 }
-
+                
             }
-            
+
         }
 
         back_track = search; // Update to compare with the next vertex
@@ -108,14 +112,13 @@ void* dijkstra(void* connections, char* start, char* end, double (*operation_mod
 
         insert_list(visited_vertexes, top); // Updated visited vertexes, remove from the priority queue
 
-        helper* aux = priority_queue_get_element(priority_queue_get_head(prior_queue));
+        helper* next_vertex = priority_queue_get_element(priority_queue_get_head(prior_queue));
 
-        if(!aux) break;
+        if(!next_vertex) break;
 
-        search = aux->vertex;
-        search_cost = aux->cost;
+        search = next_vertex->vertex;
+        search_cost = next_vertex->cost;
         
-
     }
 
     insert_list(visited_vertexes, priority_queue_pop(prior_queue, false, free)); // Remove the destination vertex
