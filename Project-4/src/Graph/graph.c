@@ -17,6 +17,7 @@ typedef struct vertex {
     void* edges; //List of edges
     void* vertex_data; // Data
     int activated;
+    int visited;
 
 } vertex;
 
@@ -234,6 +235,7 @@ void graph_insert_vertex(void* connections, void* vertex_created) {
     aux_graph->vertexes[aux_graph->next_free_space].vertex_data = vertex_created;
     aux_graph->vertexes[aux_graph->next_free_space].edges = create_list();
     aux_graph->vertexes[aux_graph->next_free_space].activated = true;
+    aux_graph->vertexes[aux_graph->next_free_space].visited = false;
 
     edge* aux_edge = calloc(1, sizeof(edge));
     aux_edge->from = &(aux_graph->vertexes[aux_graph->next_free_space]);
@@ -392,6 +394,33 @@ void free_graph(void* connections) {
 
     free(aux->vertexes);
     free(aux);
+
+}
+
+void free_graph_vertexes(void* connections) {
+
+    graph* aux = connections;
+
+    free(aux->vertexes);
+    free(aux);
+
+}
+
+void free_vertex(void* data) {
+
+    if(!data) return;
+
+    vertex* aux = data;
+
+    free_vertex_data(aux->vertex_data);
+
+    for(void* runner = get_head(aux->edges); runner; runner = get_next(runner)){
+
+        free_edge(get_list_element(runner));
+
+    }
+
+    free_list(aux->edges, false, free);
 
 }
 

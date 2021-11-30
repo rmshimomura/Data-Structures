@@ -9,6 +9,7 @@
 #include "kruskal.h"
 #include "vertex.h"
 #include "edge.h"
+#include "kosaraju.h"
 
 typedef struct point {
 
@@ -374,62 +375,59 @@ void rv(void* connections, double x, double y, double w, double h, double f, FIL
 
 }
 
-void cx(void* connections, double limiar, FILE* txt_results, void* list_of_modifications) {
+void cx(void* connections, double threshold, FILE* txt_results, void* list_of_modifications) {
 
-    fprintf(txt_results, "cx(%.2lf):\n\n", limiar);
+    fprintf(txt_results, "cx(%.2lf):\n\n", threshold);
 
     char svg_colors[146][50] = {"blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", "cyan", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkgrey", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange", "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", "darkslategrey", "darkturquoise", "darkviolet", "deeppink", "deepskyblue", "dimgray", "dimgrey", "dodgerblue", "firebrick", "floralwhite", "forestgreen", "fuchsia", "gainsboro", "ghostwhite", "gold", "goldenrod", "gray", "grey", "green", "greenyellow", "honeydew", "hotpink", "indianred", "indigo", "ivory", "khaki", "lavender", "lavenderblush", "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgray", "lightgreen", "lightgrey", "lightpink", "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", "lightslategrey", "lightsteelblue", "lightyellow", "lime", "limegreen", "linen", "magenta", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", "mediumseagreen", "mediumslateblue", "mediumspringgreen", "mediumturquoise", "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", "navajowhite", "navy", "oldlace", "olive", "olivedrab", "orange", "orangered", "orchid", "palegoldenrod", "palegreen", "paleturquoise", "palevioletred", "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon", "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "slategrey", "snow", "springgreen", "steelblue", "tan", "teal", "thistle", "tomato", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen"};
-
-    void* list_of_edges = extract_all_edges_cx(connections, limiar, list_of_modifications);
-
-    void* packaging = kruskal(list_of_edges);
 
     int region_count = 0;
 
     int color_count = 0;
 
-    for(void* mst = get_head(packaging); mst; mst = get_next(mst)) {
+    void** kosaraju_return = kosaraju(connections, threshold, list_of_modifications);
 
-        void* mst_data = get_list_element(mst);
+    void* regions = kosaraju_return[0];
 
-        void* vertexes = extract_all_activated_vertexes_from_list(get_package_list_of_edges(mst_data));
+    for(void* region_runner = get_head(regions); region_runner; region_runner = get_next(region_runner)) {
 
-        if(get_size(vertexes)) {
+        void* region = get_list_element(region_runner);
 
-            fprintf(txt_results, "Region %d vertexes:\n\n", region_count + 1);
-            
-            for(void* vertex_runner = get_head(vertexes); vertex_runner; vertex_runner = get_next(vertex_runner)) {
+        fprintf(txt_results, "Region %d vertexes:\n\n", region_count + 1);
 
-                fprintf(txt_results, "Vertex %s (%.2lf, %.2lf)\n", vertex_data_get_id(get_list_element(vertex_runner)), vertex_data_get_x(get_list_element(vertex_runner)), vertex_data_get_y(get_list_element(vertex_runner)));
+        for(void* vertex_runner = get_head(region); vertex_runner; vertex_runner = get_next(vertex_runner)) {
 
-                char modification_root[1000] = "";
+            fprintf(txt_results, "Vertex %s (%.2lf, %.2lf)\n", vertex_data_get_id(vertex_get_data(get_list_element(vertex_runner))), vertex_data_get_x(vertex_get_data(get_list_element(vertex_runner))), vertex_data_get_y(vertex_get_data(get_list_element(vertex_runner))));
 
-                sprintf(modification_root, "<ellipse cx=\"%.2lf\" cy=\"%.2lf\" rx=\"8\" ry=\"10\"\nstyle=\"fill:%s;stroke:black;stroke-width:0.01\" />\n", vertex_data_get_x(get_list_element(vertex_runner)), vertex_data_get_y(get_list_element(vertex_runner)), svg_colors[color_count]); 
+            char modification_root[1000] = "";
 
-                char* command_root = calloc(strlen(modification_root) + 5, sizeof(char));
-                strcpy(command_root, modification_root);
-                insert_list(list_of_modifications, command_root);
+            sprintf(modification_root, "<ellipse cx=\"%.2lf\" cy=\"%.2lf\" rx=\"8\" ry=\"10\"\nstyle=\"fill:%s;stroke:black;stroke-width:0.01\" />\n", vertex_data_get_x(vertex_get_data(get_list_element(vertex_runner))), vertex_data_get_y(vertex_get_data(get_list_element(vertex_runner))), svg_colors[color_count]); 
 
-
-            }
-
-            fprintf(txt_results, "\n\n");
+            char* command_root = calloc(strlen(modification_root) + 5, sizeof(char));
+            strcpy(command_root, modification_root);
+            insert_list(list_of_modifications, command_root);
 
         }
 
-        free_list(vertexes, false, free);
-
         region_count++;
-
         color_count++;
-
-        if(color_count > 146) color_count = 0;
+        if(color_count == 146) color_count = 0;
 
     }
 
-    free_list(list_of_edges, false, free);
+    for(void* runner = get_head(regions); runner; runner = get_next(runner)) { // List of lists of nodes with vertexes
 
-    free_list(packaging, true, free_package);
+        void* region = get_list_element(runner); // List of nodes with vertexes
+
+        free_list(region, true, free_vertex);
+
+    }
+
+    free_list(regions, false, free);
+
+    free_graph_vertexes(kosaraju_return[1]);
+
+    free(kosaraju_return);
 
     fprintf(txt_results, "====================================================\n");
 

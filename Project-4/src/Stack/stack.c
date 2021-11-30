@@ -65,11 +65,11 @@ void* stack_get_element(void* current) {
 
 }
 
-void* stack_pop(void* sequence, void (*free_node)(void*), bool remove_elements) {
+void* stack_pop(void* sequence) {
     
     stack* stack_aux = sequence;
 
-    if(!stack_aux->size){
+    if(!stack_aux->size) {
 
         return NULL;
 
@@ -78,13 +78,12 @@ void* stack_pop(void* sequence, void (*free_node)(void*), bool remove_elements) 
     node* aux = stack_aux->top;
     stack_aux->top = aux->down;
     stack_aux->size--;
+    
+    void* temp = aux->element;
 
-    if(remove_elements){
-        free_node(aux->element);
-        return NULL;
-    } else {
-        return aux->element;
-    }
+    free(aux);
+
+    return temp;
 
 }
 

@@ -28,6 +28,8 @@ void* list_of_adjacents_by_name(void* connections, char* vertex_1);
 void* list_of_adjacents_by_address(void* vertex_1);
 void free_graph(void* connections);
 void free_edge(void* edge_);
+void free_vertex(void* data);
+void free_graph_vertexes(void* connections);
 void create_graph_with_data(void* connections, FILE* file_roads);
 
 void* extract_all_edges_cx(void* connections, double limiar, void* list_of_modifications);
