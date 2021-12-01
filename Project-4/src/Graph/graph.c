@@ -3,6 +3,7 @@
 #include "../edge.h"
 #include "../vertex.h"
 #include "../qry.h"
+#include "../viewbox.h"
 
 typedef struct edge {
 
@@ -434,7 +435,7 @@ void free_edge(void* edge_) {
 
 }
 
-void create_graph_with_data(void* connections, FILE* file_roads) {
+void create_graph_with_data(void* connections, void* view_box, FILE* file_roads) {
 
     char command[512], id[512], ldir[512], lesq[512], nome[512], i[512], j[512];
     double x, y, cmp, vm; 
@@ -445,6 +446,14 @@ void create_graph_with_data(void* connections, FILE* file_roads) {
 
             fscanf(file_roads, "%s %lf %lf", id, &x, &y);
             graph_insert_vertex(connections, new_vertex_data(id, x, y));
+
+            if(x < get_smallest_x(view_box)) set_smallest_x(view_box, x);
+
+            if(y < get_smallest_y(view_box)) set_smallest_y(view_box, y);
+
+            if(x > get_biggest_x(view_box)) set_biggest_x(view_box, x);
+
+            if(y > get_biggest_y(view_box)) set_biggest_y(view_box, y);
 
         } else if (!strcmp(command, "e")) { 
 

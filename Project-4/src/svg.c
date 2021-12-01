@@ -8,15 +8,16 @@
 #include "paths.h"
 #include "vertex.h"
 #include "edge.h"
+#include "viewbox.h"
 
-void print_on_SVG(void* connections, void* blocks, path paths) {
+void print_on_SVG(void* connections, void* blocks, void* view_box, path paths) {
 
     FILE* original_svg = fopen(get_path_original_SVG(paths), "w+");
     setvbuf(original_svg, 0, _IONBF, 0);
 
     void* blocks_root = get_root(blocks);
 
-    fprintf(original_svg, "<!-- Rodrigo Mimura Shimomura -->\n <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-100 -100 16000 5000\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n");
+    fprintf(original_svg, "<!-- Rodrigo Mimura Shimomura -->\n <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"%.2lf %.2lf %.2lf %.2lf\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n", get_smallest_x(view_box) - 100, get_smallest_y(view_box) - 100, get_biggest_x(view_box) + 200, get_biggest_y(view_box) + 200);
 
     recursive_print_svg(blocks_root, original_svg);
 

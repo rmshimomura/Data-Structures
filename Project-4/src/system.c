@@ -9,6 +9,7 @@
 #include "paths.h"
 #include "svg.h"
 #include "qry.h"
+#include "viewbox.h"
 
 void set_input_directory(path paths, char* newSet);
 void set_output_directory(path paths, char* newSet);
@@ -243,7 +244,7 @@ void get_arguments(int argc, char** argv, path paths, flag flags) {
     
 }
 
-void get_data (void* connections, void* blocks, void* blocks_hash, void* paths, void* flags) {
+void get_data (void* connections, void* blocks, void* blocks_hash, void* paths, void* flags, void* view_box) {
 
     FILE* file_blocks = fopen(get_path_initial_geo_file(paths), "r");
     setvbuf(file_blocks, 0, _IONBF, 0);
@@ -278,7 +279,7 @@ void get_data (void* connections, void* blocks, void* blocks_hash, void* paths, 
         FILE* file_roads = fopen(get_path_roads_file(paths), "r");
         setvbuf(file_roads, 0, _IONBF, 0);
 
-        create_graph_with_data(connections, file_roads);
+        create_graph_with_data(connections, view_box, file_roads);
 
         fclose(file_roads);
 
@@ -303,18 +304,18 @@ int structures_size(void* paths) {
 
 }
 
-void format_qry_results(void* connections, void* blocks, void* blocks_hash, void* paths, void* flags) {
+void format_qry_results(void* connections, void* blocks, void* blocks_hash, void* paths, void* flags, void* view_box) {
 
     FILE* txt_results = fopen(get_path_TXT_with_qry(paths), "w+");
     setvbuf(txt_results, 0, _IONBF, 0);
     fprintf(txt_results, "Rodrigo Mimura Shimomura\n");
     fprintf(txt_results, "FUNCTIONS EXECUTED:\n\n====================================================\n");
-    get_functions(connections, blocks, blocks_hash, paths, flags, txt_results);
+    get_functions(connections, blocks, blocks_hash, paths, flags, view_box, txt_results);
     fclose(txt_results);
     
 }
 
-void get_functions(void* connections, void* blocks, void* blocks_hash, void* paths, void* flags, FILE* txt_results) {
+void get_functions(void* connections, void* blocks, void* blocks_hash, void* paths, void* flags, void* view_box, FILE* txt_results) {
 
     FILE* modified_SVG = fopen(get_path_modified_SVG(paths), "w+");
     setvbuf(modified_SVG, 0, _IONBF, 0);
@@ -323,7 +324,7 @@ void get_functions(void* connections, void* blocks, void* blocks_hash, void* pat
 
     void* list_of_modifications = create_list();
 
-    fprintf(modified_SVG, "<!-- Rodrigo Mimura Shimomura -->\n <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-100 -100 16000 5000\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n");
+    fprintf(modified_SVG, "<!-- Rodrigo Mimura Shimomura -->\n <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"%.2lf %.2lf %.2lf %.2lf\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n", get_smallest_x(view_box) - 100, get_smallest_y(view_box) - 100, get_biggest_x(view_box) + 200, get_biggest_y(view_box) + 200);
 
     char command[512], cep[512], face, cmc[512], cmr[512];
     double num, x, y, w, h, f, limiar;

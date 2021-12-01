@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -std=c99 -fstack-protector-all -g -Wall -lm
 OBJ = Objects
 
-t2: $(OBJ)/main.o $(OBJ)/block.o $(OBJ)/dijkstra.o $(OBJ)/edge.o $(OBJ)/vertex.o $(OBJ)/AVL.o $(OBJ)/Dynamic_list.o $(OBJ)/Graph.o $(OBJ)/Prior.o $(OBJ)/Hash.o $(OBJ)/system.o $(OBJ)/paths.o $(OBJ)/checks.o $(OBJ)/kruskal.o $(OBJ)/svg.o $(OBJ)/qry.o $(OBJ)/Stack.o $(OBJ)/kosaraju.o
+t2: $(OBJ)/main.o $(OBJ)/block.o $(OBJ)/dijkstra.o $(OBJ)/edge.o $(OBJ)/vertex.o $(OBJ)/AVL.o $(OBJ)/Dynamic_list.o $(OBJ)/Graph.o $(OBJ)/Prior.o $(OBJ)/Hash.o $(OBJ)/system.o $(OBJ)/paths.o $(OBJ)/checks.o $(OBJ)/kruskal.o $(OBJ)/svg.o $(OBJ)/qry.o $(OBJ)/Stack.o $(OBJ)/kosaraju.o $(OBJ)/viewbox.o
 	$(CC) $(CFLAGS) $(OBJ)/*.o -o t2 -lm
 
 $(OBJ)/main.o: main.c |$(OBJ)
@@ -28,6 +28,8 @@ $(OBJ)/svg.o: svg.c svg.h |$(OBJ)
 $(OBJ)/qry.o: qry.c qry.h |$(OBJ)
 	$(CC) $(CFLAGS) -c -o $@ $<
 $(OBJ)/kosaraju.o: kosaraju.c kosaraju.h |$(OBJ)
+	$(CC) $(CFLAGS) -c -o $@ $<
+$(OBJ)/viewbox.o: viewbox.c viewbox.h |$(OBJ)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(OBJ)/AVL.o: AVL_Tree/AVL.c |$(OBJ)
