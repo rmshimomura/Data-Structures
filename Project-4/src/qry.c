@@ -18,6 +18,7 @@ typedef struct point {
     char* cep;
     char face;
     void* vertex;
+    int valid;
 
 } point;
 
@@ -114,6 +115,7 @@ void* find_position(void* connections, void* blocks_hash, char* cep, char face, 
     strcpy(aux->cep, cep);
     aux->face = face;
     aux->num = num;
+    aux->valid = true;
 
     find_spacial_position(blocks_hash, aux, cep, face, num);
 
@@ -170,8 +172,7 @@ void catac(void* connections, void* blocks, double x, double y, double w, double
         if(inside(aux->x, aux->y, 0, 0, x, y, w, h)) {
 
             fprintf(txt_results, "@o?(%s, %c, %d) is inside catac's rectangle!, removing...\n", aux->cep, aux->face, aux->num);
-            free_point(aux);
-            point_location = NULL;
+            aux->valid = false;
         }
 
     }
@@ -215,7 +216,6 @@ void catac(void* connections, void* blocks, double x, double y, double w, double
                         remove_node(vertex_get_edges(current_vertex), get_list_element(aux), free_edge, true);
         
                     }
-
 
                     if(next) { 
 
@@ -437,115 +437,149 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
 
     fprintf(txt_results, "p?(%s, %c, %d, %s, %s):\n\n", cep, face, num, cmc, cmr);
 
-    if(!departure) {
-
-        fprintf(txt_results, "@o is NOT set or was removed because of catac!\n");
-
-        return;
-
-    }
-
     point* starting_point = departure;
     point* end_point = find_position(connections, blocks_hash, cep, face, num, txt_results, list_of_modifications);
 
+    //Shortest path
     char modification_root[1000] = "";
 
-    //Shortest path
-    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"\"/>\n", starting_point->x, starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, cmc); 
+    if(starting_point->valid) { // Check if the point wasn't inside a catac rectangle
 
-    char* command_root_start_short_1 = calloc(strlen(modification_root) + 5, sizeof(char));
-    strcpy(command_root_start_short_1, modification_root);
-    insert_list(list_of_modifications, command_root_start_short_1);
+        sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"\"/>\n", vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), vertex_data_get_y(vertex_get_data(starting_point->vertex)), cmc); 
 
-    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"\"/>\n", vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), vertex_data_get_y(vertex_get_data(starting_point->vertex)), cmc); 
+        char* command_root_start_short = calloc(strlen(modification_root) + 5, sizeof(char));
+        strcpy(command_root_start_short, modification_root);
+        insert_list(list_of_modifications, command_root_start_short);
 
-    char* command_root_start_short_2 = calloc(strlen(modification_root) + 5, sizeof(char));
-    strcpy(command_root_start_short_2, modification_root);
-    insert_list(list_of_modifications, command_root_start_short_2);
+        void* short_path = dijkstra(connections, vertex_data_get_id(vertex_get_data(starting_point->vertex)),
+        vertex_data_get_id(vertex_get_data(end_point->vertex)), shortest_path);
 
-    void* short_path = dijkstra(connections, vertex_data_get_id(vertex_get_data(starting_point->vertex)),
-    vertex_data_get_id(vertex_get_data(end_point->vertex)), shortest_path);
+        if(!short_path) { // If the point is still valid, but there's no way to go to it
 
-    for(void* runner = get_head(short_path); runner; runner = get_next(runner)) {
+            fprintf(txt_results, "There's no shortest path to this address!\n");
+            char problem[1000] = "";
 
-        void* aux_1 = get_list_element(runner);
+            sprintf(problem, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"red\" stroke-width=\"8\"\" stroke-dasharray =\"4 1\" />\n", starting_point->x, starting_point->y, end_point->x, end_point->y);
 
-        if(get_next(runner)) {
+            char* command_not_found = calloc(strlen(modification_root) + 5, sizeof(char));
+            strcpy(command_not_found, modification_root);
+            insert_list(list_of_modifications, command_not_found);
 
-            void* aux_2 = get_list_element(get_next(runner));
 
-            sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"\"/>\n", vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2))), cmc); 
+        } else {
 
-            char* line = calloc(strlen(modification_root) + 5, sizeof(char));
-            strcpy(line, modification_root);
-            insert_list(list_of_modifications, line);
+            for(void* runner = get_head(short_path); runner; runner = get_next(runner)) {
+
+                void* aux_1 = get_list_element(runner);
+
+                if(get_next(runner)) {
+
+                    void* aux_2 = get_list_element(get_next(runner));
+
+                    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"\"/>\n", vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2))), cmc); 
+
+                    char* line = calloc(strlen(modification_root) + 5, sizeof(char));
+                    strcpy(line, modification_root);
+                    insert_list(list_of_modifications, line);
+
+                }
+
+            }
+
+            sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"\"/>\n", vertex_data_get_x(vertex_get_data(end_point->vertex)), end_point->y, vertex_data_get_x(vertex_get_data(end_point->vertex)), vertex_data_get_y(vertex_get_data(end_point->vertex)), cmc); 
+
+            char* command_root_end_short = calloc(strlen(modification_root) + 5, sizeof(char));
+            strcpy(command_root_end_short, modification_root);
+            insert_list(list_of_modifications, command_root_end_short);
 
         }
+        free_list(short_path, true, free_helper);
+
+    } else { 
+
+        fprintf(txt_results, "@o? point was removed by a catac!\n");
+
+        char problem[1000] = "";
+
+        sprintf(problem, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"red\" stroke-width=\"8\"\" stroke-dasharray =\"4 1\" />\n", starting_point->x, starting_point->y, end_point->x, end_point->y);
+
+        char* command_not_found = calloc(strlen(modification_root) + 5, sizeof(char));
+        strcpy(command_not_found, modification_root);
+        insert_list(list_of_modifications, command_not_found);
+
 
     }
 
-    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\" \" />\n", end_point->x, end_point->y, vertex_data_get_x(vertex_get_data(end_point->vertex)), vertex_data_get_y(vertex_get_data(end_point->vertex)), cmc); 
-
-    char* command_root_end_short_1 = calloc(strlen(modification_root) + 5, sizeof(char));
-    strcpy(command_root_end_short_1, modification_root);
-    insert_list(list_of_modifications, command_root_end_short_1);
-
-    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"\"/>\n", vertex_data_get_x(vertex_get_data(end_point->vertex)), end_point->y, vertex_data_get_x(vertex_get_data(end_point->vertex)), vertex_data_get_y(vertex_get_data(end_point->vertex)), cmc); 
-
-    char* command_root_end_short_2 = calloc(strlen(modification_root) + 5, sizeof(char));
-    strcpy(command_root_end_short_2, modification_root);
-    insert_list(list_of_modifications, command_root_end_short_2);
-
-    free_list(short_path, true, free_helper);
 
     //========================================================================================================================================================================//
-    
-    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", starting_point->x, starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, cmr); 
 
-    char* command_root_start_fast_1 = calloc(strlen(modification_root) + 5, sizeof(char));
-    strcpy(command_root_start_fast_1, modification_root);
-    insert_list(list_of_modifications, command_root_start_fast_1);
+    // Fastest path 
 
-    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), vertex_data_get_y(vertex_get_data(starting_point->vertex)), cmr); 
+    if(starting_point->valid) { // Check if the point wasn't inside a catac rectangle
 
-    char* command_root_start_fast_2 = calloc(strlen(modification_root) + 5, sizeof(char));
-    strcpy(command_root_start_fast_2, modification_root);
-    insert_list(list_of_modifications, command_root_start_fast_2);
+        sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), vertex_data_get_y(vertex_get_data(starting_point->vertex)), cmr); 
 
-    void* fast_path = dijkstra(connections, vertex_data_get_id(vertex_get_data(starting_point->vertex)),
-    vertex_data_get_id(vertex_get_data(end_point->vertex)), fastest_path);
+        char* command_root_start_fast = calloc(strlen(modification_root) + 5, sizeof(char));
+        strcpy(command_root_start_fast, modification_root);
+        insert_list(list_of_modifications, command_root_start_fast);
 
-    for(void* runner = get_head(fast_path); runner; runner = get_next(runner)) {
+        void* fast_path = dijkstra(connections, vertex_data_get_id(vertex_get_data(starting_point->vertex)),
+        vertex_data_get_id(vertex_get_data(end_point->vertex)), fastest_path);
 
-        void* aux_1 = get_list_element(runner);
+        if(!fast_path) { // If the point is still valid, but there's no way to go to it
 
-        if(get_next(runner)) {
+            fprintf(txt_results, "There's no fastest path to this address!\n");
+            char problem[1000] = "";
 
-            void* aux_2 = get_list_element(get_next(runner));
+            sprintf(problem, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"red\" stroke-width=\"8\"\" stroke-dasharray =\"4 1\" />\n", starting_point->x, starting_point->y, end_point->x, end_point->y);
 
-            sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2))), cmr); 
+            char* command_not_found = calloc(strlen(modification_root) + 5, sizeof(char));
+            strcpy(command_not_found, modification_root);
+            insert_list(list_of_modifications, command_not_found);
 
-            char* line = calloc(strlen(modification_root) + 5, sizeof(char));
-            strcpy(line, modification_root);
-            insert_list(list_of_modifications, line);
+        } else {
+
+            for(void* runner = get_head(fast_path); runner; runner = get_next(runner)) {
+
+                void* aux_1 = get_list_element(runner);
+
+                if(get_next(runner)) {
+
+                    void* aux_2 = get_list_element(get_next(runner));
+
+                    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2))), cmr); 
+
+                    char* line = calloc(strlen(modification_root) + 5, sizeof(char));
+                    strcpy(line, modification_root);
+                    insert_list(list_of_modifications, line);
+
+                }
+
+            }
+
+            sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", vertex_data_get_x(vertex_get_data(end_point->vertex)), end_point->y, vertex_data_get_x(vertex_get_data(end_point->vertex)), vertex_data_get_y(vertex_get_data(end_point->vertex)), cmr); 
+
+            char* command_root_end_fast = calloc(strlen(modification_root) + 5, sizeof(char));
+            strcpy(command_root_end_fast, modification_root);
+            insert_list(list_of_modifications, command_root_end_fast);
+            free_list(fast_path, true, free_helper);
 
         }
 
+
+    } else {
+
+        fprintf(txt_results, "@o? point was removed by a catac!\n");
+
+        char problem[1000] = "";
+
+        sprintf(problem, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"red\" stroke-width=\"8\"\" stroke-dasharray =\"4 1\" />\n", starting_point->x, starting_point->y, end_point->x, end_point->y);
+
+        char* command_not_found = calloc(strlen(modification_root) + 5, sizeof(char));
+        strcpy(command_not_found, modification_root);
+        insert_list(list_of_modifications, command_not_found);
+
     }
-
-    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\" \" />\n", end_point->x, end_point->y, vertex_data_get_x(vertex_get_data(end_point->vertex)), vertex_data_get_y(vertex_get_data(end_point->vertex)), cmr); 
-
-    char* command_root_end_fast_1 = calloc(strlen(modification_root) + 5, sizeof(char));
-    strcpy(command_root_end_fast_1, modification_root);
-    insert_list(list_of_modifications, command_root_end_fast_1);
-
-    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", vertex_data_get_x(vertex_get_data(end_point->vertex)), end_point->y, vertex_data_get_x(vertex_get_data(end_point->vertex)), vertex_data_get_y(vertex_get_data(end_point->vertex)), cmr); 
-
-    char* command_root_end_fast_2 = calloc(strlen(modification_root) + 5, sizeof(char));
-    strcpy(command_root_end_fast_2, modification_root);
-    insert_list(list_of_modifications, command_root_end_fast_2);
-
-    free_list(fast_path, true, free_helper);
 
     free_point(end_point);
 

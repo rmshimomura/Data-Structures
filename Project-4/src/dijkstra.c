@@ -142,6 +142,10 @@ void* dijkstra(void* connections, char* start, char* end, double (*operation_mod
             }
 
         }
+    } else { //No path found
+
+        return optimized_path;
+
     }
 
     free_list(visited_vertexes, false, free_helper);
