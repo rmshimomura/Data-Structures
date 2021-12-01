@@ -437,6 +437,18 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
 
     fprintf(txt_results, "p?(%s, %c, %d, %s, %s):\n\n", cep, face, num, cmc, cmr);
 
+    char function_calling[1000];
+    sprintf(function_calling, "p?(%s, %c, %d, %s, %s)", cep, face, num, cmc, cmr);
+
+    char* function_calling_F = calloc(strlen(function_calling) + 10, sizeof(char));
+    strcpy(function_calling_F, function_calling);
+    strcat(function_calling_F, "F");
+
+    char* function_calling_S = calloc(strlen(function_calling) + 10, sizeof(char));
+    strcpy(function_calling_S, function_calling);
+    strcat(function_calling_S, "S");
+
+
     point* starting_point = departure;
     point* end_point = find_position(connections, blocks_hash, cep, face, num, txt_results, list_of_modifications);
 
@@ -462,13 +474,14 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
 
         } else {
 
-            sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"\"/>\n", vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), vertex_data_get_y(vertex_get_data(starting_point->vertex)), cmc); 
+            sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"/>\n", vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), vertex_data_get_y(vertex_get_data(starting_point->vertex)), cmc); 
 
             char* command_root_start_short = calloc(strlen(modification_root) + 5, sizeof(char));
             strcpy(command_root_start_short, modification_root);
             insert_list(list_of_modifications, command_root_start_short);
 
-            char* animation_motion_shortest_path = calloc(1, sizeof(char));
+            char* animation_motion_shortest_path = calloc(strlen("<path d=\"") + 2, sizeof(char));
+            strcpy(animation_motion_shortest_path, "<path d=\"");
 
             for(void* runner = get_head(short_path); runner; runner = get_next(runner)) {
 
@@ -478,7 +491,9 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
 
                     void* aux_2 = get_list_element(get_next(runner));
 
-                    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"\"/>\n", vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2))), cmc); 
+                    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"/>\n", vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2))), cmc); 
+
+                    animation_motion_shortest_path = update_path(animation_motion_shortest_path, vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2))));
 
                     char* line = calloc(strlen(modification_root) + 5, sizeof(char));
                     strcpy(line, modification_root);
@@ -487,15 +502,27 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
                 }
 
             }
+            sprintf(modification_root, "\" id = \"%s\"/> \n", function_calling_S);
+            animation_motion_shortest_path = realloc(animation_motion_shortest_path, strlen(animation_motion_shortest_path) + strlen(modification_root) + 5);
+            strcat(animation_motion_shortest_path, modification_root);
 
-            sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"\"/>\n", vertex_data_get_x(vertex_get_data(end_point->vertex)), end_point->y, vertex_data_get_x(vertex_get_data(end_point->vertex)), vertex_data_get_y(vertex_get_data(end_point->vertex)), cmc); 
+            insert_list(list_of_modifications, animation_motion_shortest_path);
+
+            sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"/>\n", vertex_data_get_x(vertex_get_data(end_point->vertex)), end_point->y, vertex_data_get_x(vertex_get_data(end_point->vertex)), vertex_data_get_y(vertex_get_data(end_point->vertex)), cmc); 
 
             char* command_root_end_short = calloc(strlen(modification_root) + 5, sizeof(char));
             strcpy(command_root_end_short, modification_root);
             insert_list(list_of_modifications, command_root_end_short);
 
+            sprintf(modification_root, "<circle r=\"15\" fill=\"black\">\n\t<animateMotion dur=\"12s\" repeatCount=\"indefinite\">\n\t\t<mpath xlink:href=\"#%s\"/>\n\t</animateMotion>\n</circle>\n", function_calling_S);
+
+            char* motion = calloc(strlen(modification_root) + 5, sizeof(char));
+            strcpy(motion, modification_root);
+            insert_list(list_of_modifications, motion);
+
+            free_list(short_path, true, free_helper);
+
         }
-        free_list(short_path, true, free_helper);
 
     } else { 
 
@@ -503,7 +530,7 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
 
         char problem[1000] = "";
 
-        sprintf(problem, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"red\" stroke-width=\"8\"\" stroke-dasharray =\"4 1\" />\n", starting_point->x, starting_point->y, end_point->x, end_point->y);
+        sprintf(problem, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"red\" stroke-width=\"8\" stroke-dasharray =\"4 1\" />\n", starting_point->x, starting_point->y, end_point->x, end_point->y);
 
         char* command_not_found = calloc(strlen(modification_root) + 5, sizeof(char));
         strcpy(command_not_found, modification_root);
@@ -525,7 +552,7 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
             fprintf(txt_results, "There's no fastest path to this address!\n");
             char problem[1000] = "";
 
-            sprintf(problem, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"red\" stroke-width=\"8\"\" stroke-dasharray =\"4 1\" />\n", starting_point->x, starting_point->y, end_point->x, end_point->y);
+            sprintf(problem, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"red\" stroke-width=\"8\" stroke-dasharray =\"4 1\" />\n", starting_point->x, starting_point->y, end_point->x, end_point->y);
 
             char* command_not_found = calloc(strlen(modification_root) + 5, sizeof(char));
             strcpy(command_not_found, modification_root);
@@ -533,13 +560,14 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
 
         } else {
 
-            sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), vertex_data_get_y(vertex_get_data(starting_point->vertex)), cmr); 
+            sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"/>\n", vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), vertex_data_get_y(vertex_get_data(starting_point->vertex)), cmr); 
 
             char* command_root_start_fast = calloc(strlen(modification_root) + 5, sizeof(char));
             strcpy(command_root_start_fast, modification_root);
             insert_list(list_of_modifications, command_root_start_fast);
 
-            char* animation_motion_fastest_path = calloc(1, sizeof(char));
+            char* animation_motion_fastest_path = calloc(strlen("<path d=\"") + 1, sizeof(char));
+            strcpy(animation_motion_fastest_path, "<path d=\"");
 
             for(void* runner = get_head(fast_path); runner; runner = get_next(runner)) {
 
@@ -549,8 +577,10 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
 
                     void* aux_2 = get_list_element(get_next(runner));
 
-                    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2))), cmr); 
+                    sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"/>\n", vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2))), cmr); 
 
+                    animation_motion_fastest_path = update_path(animation_motion_fastest_path, vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2))));
+        
                     char* line = calloc(strlen(modification_root) + 5, sizeof(char));
                     strcpy(line, modification_root);
                     insert_list(list_of_modifications, line);
@@ -558,12 +588,24 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
                 }
 
             }
+            sprintf(modification_root, "\" id = \"%s\"/> \n", function_calling_F);
+            animation_motion_fastest_path = realloc(animation_motion_fastest_path, strlen(animation_motion_fastest_path) + strlen(modification_root) + 1);
+            strcat(animation_motion_fastest_path, modification_root);
 
-            sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", vertex_data_get_x(vertex_get_data(end_point->vertex)), end_point->y, vertex_data_get_x(vertex_get_data(end_point->vertex)), vertex_data_get_y(vertex_get_data(end_point->vertex)), cmr); 
+            insert_list(list_of_modifications, animation_motion_fastest_path);
+
+            sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"/>\n", vertex_data_get_x(vertex_get_data(end_point->vertex)), end_point->y, vertex_data_get_x(vertex_get_data(end_point->vertex)), vertex_data_get_y(vertex_get_data(end_point->vertex)), cmr); 
 
             char* command_root_end_fast = calloc(strlen(modification_root) + 5, sizeof(char));
             strcpy(command_root_end_fast, modification_root);
             insert_list(list_of_modifications, command_root_end_fast);
+
+            sprintf(modification_root, "<circle r=\"15\" fill=\"black\">\n\t<animateMotion dur=\"12s\" repeatCount=\"indefinite\">\n\t\t<mpath xlink:href=\"#%s\"/>\n\t</animateMotion>\n</circle>\n", function_calling_F);
+
+            char* motion = calloc(strlen(modification_root) + 5, sizeof(char));
+            strcpy(motion, modification_root);
+            insert_list(list_of_modifications, motion);
+
             free_list(fast_path, true, free_helper);
 
         }
@@ -574,7 +616,7 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
 
         char problem[1000] = "";
 
-        sprintf(problem, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"red\" stroke-width=\"8\"\" stroke-dasharray =\"4 1\" />\n", starting_point->x, starting_point->y, end_point->x, end_point->y);
+        sprintf(problem, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"red\" stroke-width=\"8\" stroke-dasharray =\"4 1\" />\n", starting_point->x, starting_point->y, end_point->x, end_point->y);
 
         char* command_not_found = calloc(strlen(modification_root) + 5, sizeof(char));
         strcpy(command_not_found, modification_root);
@@ -584,6 +626,23 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
 
     free_point(end_point);
 
+    free(function_calling_S);
+    free(function_calling_F);
+
     fprintf(txt_results, "====================================================\n");
+
+}
+
+char* update_path(char* path, double x1, double y1, double x2, double y2) {
+
+    char part[1024] = "";
+
+    sprintf(part, " M%.2lf,%.2lf L%.2lf,%.2lf ", x1, y1, x2, y2);
+    
+    path = realloc(path, strlen(path) + strlen(part) + 1);
+
+    strcat(path, part);
+
+    return path;
 
 }

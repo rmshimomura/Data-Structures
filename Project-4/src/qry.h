@@ -10,6 +10,7 @@ void* find_position(void* connections, void* blocks_hash, char* cep, char face, 
 void rv(void* connections, double x, double y, double w, double h, double f, FILE* txt_results, void* list_of_modifications); // rv
 void cx(void* connections, double threshold, FILE* txt_results, void* list_of_modifications); // cx
 void route(void* connections, void* blocks_hash, char* cep, char face, int num, char* cmc, char* cmr, void* departure, FILE* txt_results, void* list_of_modifications); // p?
+char* update_path(char* path, double x1, double y1, double x2, double y2);
 void free_point(void* data);
 
 #endif

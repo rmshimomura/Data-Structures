@@ -323,7 +323,7 @@ void get_functions(void* connections, void* blocks, void* blocks_hash, void* pat
 
     void* list_of_modifications = create_list();
 
-    fprintf(modified_SVG, "<!-- Rodrigo Mimura Shimomura -->\n <svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n");
+    fprintf(modified_SVG, "<!-- Rodrigo Mimura Shimomura -->\n <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-100 -100 16000 5000\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n");
 
     char command[512], cep[512], face, cmc[512], cmr[512];
     double num, x, y, w, h, f, limiar;

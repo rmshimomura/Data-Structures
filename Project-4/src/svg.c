@@ -16,7 +16,7 @@ void print_on_SVG(void* connections, void* blocks, path paths) {
 
     void* blocks_root = get_root(blocks);
 
-    fprintf(original_svg, "<!-- Rodrigo Mimura Shimomura -->\n <svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n");
+    fprintf(original_svg, "<!-- Rodrigo Mimura Shimomura -->\n <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"-100 -100 16000 5000\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n");
 
     recursive_print_svg(blocks_root, original_svg);
 
