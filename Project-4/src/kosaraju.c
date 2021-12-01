@@ -172,8 +172,6 @@ void** kosaraju(void* connections, double threshold, void* list_of_modifications
 
     }
 
-    // free(transpose_graph);
-
     void** package = calloc(2, sizeof(void*));
 
     package[0] = list_of_regions;

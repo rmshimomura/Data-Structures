@@ -445,12 +445,6 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
 
     if(starting_point->valid) { // Check if the point wasn't inside a catac rectangle
 
-        sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"\"/>\n", vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), vertex_data_get_y(vertex_get_data(starting_point->vertex)), cmc); 
-
-        char* command_root_start_short = calloc(strlen(modification_root) + 5, sizeof(char));
-        strcpy(command_root_start_short, modification_root);
-        insert_list(list_of_modifications, command_root_start_short);
-
         void* short_path = dijkstra(connections, vertex_data_get_id(vertex_get_data(starting_point->vertex)),
         vertex_data_get_id(vertex_get_data(end_point->vertex)), shortest_path);
 
@@ -467,6 +461,14 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
 
 
         } else {
+
+            sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"\"/>\n", vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), vertex_data_get_y(vertex_get_data(starting_point->vertex)), cmc); 
+
+            char* command_root_start_short = calloc(strlen(modification_root) + 5, sizeof(char));
+            strcpy(command_root_start_short, modification_root);
+            insert_list(list_of_modifications, command_root_start_short);
+
+            char* animation_motion_shortest_path = calloc(1, sizeof(char));
 
             for(void* runner = get_head(short_path); runner; runner = get_next(runner)) {
 
@@ -507,21 +509,13 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
         strcpy(command_not_found, modification_root);
         insert_list(list_of_modifications, command_not_found);
 
-
     }
-
 
     //========================================================================================================================================================================//
 
     // Fastest path 
 
     if(starting_point->valid) { // Check if the point wasn't inside a catac rectangle
-
-        sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), vertex_data_get_y(vertex_get_data(starting_point->vertex)), cmr); 
-
-        char* command_root_start_fast = calloc(strlen(modification_root) + 5, sizeof(char));
-        strcpy(command_root_start_fast, modification_root);
-        insert_list(list_of_modifications, command_root_start_fast);
 
         void* fast_path = dijkstra(connections, vertex_data_get_id(vertex_get_data(starting_point->vertex)),
         vertex_data_get_id(vertex_get_data(end_point->vertex)), fastest_path);
@@ -538,6 +532,14 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
             insert_list(list_of_modifications, command_not_found);
 
         } else {
+
+            sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"\"/>\n", vertex_data_get_x(vertex_get_data(starting_point->vertex)), starting_point->y, vertex_data_get_x(vertex_get_data(starting_point->vertex)), vertex_data_get_y(vertex_get_data(starting_point->vertex)), cmr); 
+
+            char* command_root_start_fast = calloc(strlen(modification_root) + 5, sizeof(char));
+            strcpy(command_root_start_fast, modification_root);
+            insert_list(list_of_modifications, command_root_start_fast);
+
+            char* animation_motion_fastest_path = calloc(1, sizeof(char));
 
             for(void* runner = get_head(fast_path); runner; runner = get_next(runner)) {
 
@@ -565,7 +567,6 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
             free_list(fast_path, true, free_helper);
 
         }
-
 
     } else {
 
