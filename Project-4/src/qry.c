@@ -22,7 +22,7 @@ typedef struct point {
 
 } point;
 
-void catac_search(void* blocks, void* blocks_root, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications);
+void catac_search(void* blocks, void* blocks_root, void* blocks_hash, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications);
 void free_list_catac(void* sequence, FILE* txt_results, void (*free_node)(void*));
 void* extract_all_edges_inside_rectangle(void* connections, double x, double y, double w, double h);
 
@@ -72,7 +72,7 @@ void find_closest_vertex (void* connections, point* aux) {
 
 }
 
-void find_spacial_position(void* blocks_hash, point* aux, char* cep, char face, int num) {
+bool find_spacial_position(void* blocks_hash, point* aux, char* cep, char face, int num) {
 
     void* square = find_element(hash_table_get_register_list(blocks_hash, cep), cep, compare_cep);
 
@@ -100,9 +100,11 @@ void find_spacial_position(void* blocks_hash, point* aux, char* cep, char face, 
 
         }
 
+        return true;
+
     } else {
 
-        puts("ERROR!, square not found!");
+        return false;
 
     }
 
@@ -117,7 +119,10 @@ void* find_position(void* connections, void* blocks_hash, char* cep, char face, 
     aux->num = num;
     aux->valid = true;
 
-    find_spacial_position(blocks_hash, aux, cep, face, num);
+    if(!find_spacial_position(blocks_hash, aux, cep, face, num)) {
+        free_point(aux);
+        return NULL;
+    }
 
     find_closest_vertex(connections, aux);
 
@@ -149,7 +154,7 @@ void* find_position(void* connections, void* blocks_hash, char* cep, char face, 
 
 }
 
-void catac(void* connections, void* blocks, double x, double y, double w, double h, void* point_location, FILE* txt_results, void* list_of_modifications) {
+void catac(void* connections, void* blocks, void* blocks_hash, double x, double y, double w, double h, void* point_location, FILE* txt_results, void* list_of_modifications) {
     
     fprintf(txt_results, "catac(%.2lf, %.2lf, %.2lf, %.2lf):\n\n", x, y, w, h);
 
@@ -163,7 +168,9 @@ void catac(void* connections, void* blocks, double x, double y, double w, double
     strcpy(command, modification);
     insert_list(list_of_modifications, command);
 
-    catac_search(blocks, blocks_root, x, y, w, h, txt_results, list_of_modifications);
+    catac_search(blocks, blocks_root, blocks_hash, x, y, w, h, txt_results, list_of_modifications);
+
+    fprintf(txt_results, "\n");
 
     if(point_location) { // @o? exists, so we need to check if this specific point was inside catac's rectangle, if so, we set him NULL
 
@@ -237,7 +244,7 @@ void catac(void* connections, void* blocks, double x, double y, double w, double
 
 }
 
-void catac_search(void* blocks, void* blocks_root, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications) {
+void catac_search(void* blocks, void* blocks_root, void* blocks_hash, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications) {
 
     if(blocks_root){
 
@@ -259,7 +266,9 @@ void catac_search(void* blocks, void* blocks_root, double x, double y, double w,
                     int deletion_happened = 0;
 
                     if (inside(get_x(element), get_y(element), get_w(element), get_h(element), x, y, w, h)) {
-                        
+
+                        fprintf(txt_results, "BLOCK WITH CEP = %s REMOVED.\n", get_cep(element));
+                        hash_table_remove_key(blocks_hash, get_cep(element), false, compare_cep, false);
                         blocks_root = delete_node(blocks, blocks_root, element, compare_x, free_single_block, true);
                         deletion_happened = 1;
                     
@@ -278,13 +287,13 @@ void catac_search(void* blocks, void* blocks_root, double x, double y, double w,
 
         if (get_left(blocks_root)) {
             if (get_max_x(get_left(blocks_root)) >= x && get_min_x(get_left(blocks_root)) <= x + w) {
-                catac_search(blocks, get_left(blocks_root), x, y, w, h, txt_results, list_of_modifications);
+                catac_search(blocks, get_left(blocks_root), blocks_hash, x, y, w, h, txt_results, list_of_modifications);
             }
         }
 
         if (get_right(blocks_root)) {
             if (get_max_x(get_right(blocks_root)) >= x && get_min_x(get_right(blocks_root)) <= x + w) {
-                catac_search(blocks, get_right(blocks_root), x, y, w, h, txt_results, list_of_modifications);
+                catac_search(blocks, get_right(blocks_root), blocks_hash, x, y, w, h, txt_results, list_of_modifications);
             }
         }
 
@@ -453,9 +462,10 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
     point* end_point = find_position(connections, blocks_hash, cep, face, num, txt_results, list_of_modifications);
 
     //Shortest path
+
     char modification_root[1000] = "";
 
-    if(starting_point->valid) { // Check if the point wasn't inside a catac rectangle
+    if(starting_point->valid && end_point) { // Check if the point wasn't inside a catac rectangle
 
         void* short_path = dijkstra(connections, vertex_data_get_id(vertex_get_data(starting_point->vertex)),
         vertex_data_get_id(vertex_get_data(end_point->vertex)), shortest_path);
@@ -524,7 +534,7 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
 
         }
 
-    } else { 
+    } else if (!starting_point->valid) { 
 
         fprintf(txt_results, "@o? point was removed by a catac!\n");
 
@@ -536,13 +546,17 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
         strcpy(command_not_found, modification_root);
         insert_list(list_of_modifications, command_not_found);
 
+    } else if (!end_point) {
+
+        fprintf(txt_results, "Destination is not available for shortest path.\n");
+
     }
 
     //========================================================================================================================================================================//
 
     // Fastest path 
 
-    if(starting_point->valid) { // Check if the point wasn't inside a catac rectangle
+    if(starting_point->valid && end_point) { // Check if the point wasn't inside a catac rectangle
 
         void* fast_path = dijkstra(connections, vertex_data_get_id(vertex_get_data(starting_point->vertex)),
         vertex_data_get_id(vertex_get_data(end_point->vertex)), fastest_path);
@@ -610,7 +624,7 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
 
         }
 
-    } else {
+    } else if (!starting_point->valid) {
 
         fprintf(txt_results, "@o? point was removed by a catac!\n");
 
@@ -621,6 +635,10 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
         char* command_not_found = calloc(strlen(modification_root) + 5, sizeof(char));
         strcpy(command_not_found, modification_root);
         insert_list(list_of_modifications, command_not_found);
+
+    } else if (!end_point) {
+
+        fprintf(txt_results, "Destination not available for fastest path.\n");
 
     }
 
