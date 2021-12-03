@@ -335,7 +335,7 @@ void rv(void* connections, double x, double y, double w, double h, double f, FIL
             if(get_size(get_package_list_of_edges(mst_data)) == 1) {
 
                 fprintf(txt_results,
-                    "EDGE = [%s ----> %s]:\nName = %s\nLength = %.2lf\nAverage Speed = %.2lf\nLeft side square ZIP = %s\nRight side ZIP = %s\n\n",
+                    "EDGE = [%s ----> %s]:\nName = %s\nLength = %.2lf\nAverage Speed = %.2lf\nLeft side square ZIP = %s\nRight side square ZIP = %s\n\n",
                     vertex_data_get_id(vertex_get_data(edge_get_from(edge_element))), vertex_data_get_id(vertex_get_data(edge_get_to(edge_element))), 
                     edge_data_get_name(edge_get_data(edge_element)), edge_data_get_length(edge_get_data(edge_element)), edge_data_get_average_speed(edge_get_data(edge_element)),
                     edge_data_get_left_side_square(edge_get_data(edge_element)), edge_data_get_right_side_square(edge_get_data(edge_element))   
@@ -352,7 +352,7 @@ void rv(void* connections, double x, double y, double w, double h, double f, FIL
                     insert_list(list_of_modifications, command);
 
                     fprintf(txt_results,
-                    "EDGE = [%s ----> %s]:\nName = %s\nLength = %.2lf\nAverage Speed = %.2lf\nLeft side square ZIP = %s\nRight side ZIP = %s\n\n",
+                    "EDGE = [%s ----> %s]:\nName = %s\nLength = %.2lf\nAverage Speed = %.2lf\nLeft side square ZIP = %s\nRight side square ZIP = %s\n\n",
                     vertex_data_get_id(vertex_get_data(edge_get_from(edge_element))), vertex_data_get_id(vertex_get_data(edge_get_to(edge_element))), 
                     edge_data_get_name(edge_get_data(edge_element)), edge_data_get_length(edge_get_data(edge_element)), edge_data_get_average_speed(edge_get_data(edge_element)),
                     edge_data_get_left_side_square(edge_get_data(edge_element)), edge_data_get_right_side_square(edge_get_data(edge_element))   
