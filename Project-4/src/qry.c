@@ -25,6 +25,7 @@ typedef struct point {
 void catac_search(void* blocks, void* blocks_root, void* blocks_hash, double x, double y, double w, double h, FILE* txt_results, void* list_of_modifications);
 void free_list_catac(void* sequence, FILE* txt_results, void (*free_node)(void*));
 void* extract_all_edges_inside_rectangle(void* connections, double x, double y, double w, double h);
+void report_txt(void* vertex_start, void* vertex_end, void* vertex_next, FILE* txt_results, bool* first_time);
 
 int inside(double x1, double y1, double p1_width, double p1_height, double x2, double y2, double p2_width, double p2_height) {
     if ((x1 >= x2 && x1 <= x2 + p2_width && y1 >= y2 && y1 <= y2 + p2_height && x1 + p1_width <= x2 + p2_width && y1 + p1_height <= y2 + p2_height)) return 1;
@@ -493,6 +494,10 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
             char* animation_motion_shortest_path = calloc(strlen("<path d=\"") + 2, sizeof(char));
             strcpy(animation_motion_shortest_path, "<path d=\"");
 
+            bool first_time = true;
+
+            fprintf(txt_results, "Shortest way:\n\n");
+
             for(void* runner = get_head(short_path); runner; runner = get_next(runner)) {
 
                 void* aux_1 = get_list_element(runner);
@@ -502,6 +507,12 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
                     void* aux_2 = get_list_element(get_next(runner));
 
                     sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"8\"/>\n", vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2))), cmc); 
+
+                    void* aux_3 = NULL;
+
+                    if(get_next(get_next(runner))) aux_3 = get_list_element(get_next(get_next(runner)));
+
+                    report_txt(aux_1, aux_2, aux_3, txt_results, &first_time);
 
                     animation_motion_shortest_path = update_path(animation_motion_shortest_path, vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2))));
 
@@ -583,6 +594,10 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
             char* animation_motion_fastest_path = calloc(strlen("<path d=\"") + 1, sizeof(char));
             strcpy(animation_motion_fastest_path, "<path d=\"");
 
+            bool first_time = true;
+            
+            fprintf(txt_results, "Fastest way:\n\n");
+
             for(void* runner = get_head(fast_path); runner; runner = get_next(runner)) {
 
                 void* aux_1 = get_list_element(runner);
@@ -592,6 +607,12 @@ void route(void* connections, void* blocks_hash, char* cep, char face, int num, 
                     void* aux_2 = get_list_element(get_next(runner));
 
                     sprintf(modification_root, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"%s\" stroke-width=\"5\"/>\n", vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2))), cmr); 
+
+                    void* aux_3 = NULL;
+
+                    if(get_next(get_next(runner))) aux_3 = get_list_element(get_next(get_next(runner)));
+
+                    report_txt(aux_1, aux_2, aux_3, txt_results, &first_time);
 
                     animation_motion_fastest_path = update_path(animation_motion_fastest_path, vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2))));
         
@@ -662,5 +683,55 @@ char* update_path(char* path, double x1, double y1, double x2, double y2) {
     strcat(path, part);
 
     return path;
+
+}
+
+int compare_report(void* a, void* b) {
+
+    return edge_get_to(a) == b ? 1 : 0;
+
+}
+
+void report_txt(void* vertex_start, void* vertex_end, void* vertex_next, FILE* txt_results, bool* first_time) {
+
+    // vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2)));
+
+    if(*first_time == true) {
+        // printf("%s - %s\n", vertex_data_get_id(vertex_get_data(get_dijkstra_vertex(vertex_start))), vertex_data_get_id(vertex_get_data(get_dijkstra_vertex(vertex_end))));
+
+        // printf("%s - %s\n", vertex_data_get_id(vertex_get_data(edge_get_from(get_list_element(get_next(get_head(vertex_get_edges(get_dijkstra_vertex(vertex_start)))))))), vertex_data_get_id(vertex_get_data(edge_get_to(get_list_element(get_next(get_head(vertex_get_edges(get_dijkstra_vertex(vertex_start)))))))));
+
+        char* road_name = edge_data_get_name(edge_get_data(find_element(vertex_get_edges(get_dijkstra_vertex(vertex_start)), get_dijkstra_vertex(vertex_end), compare_report)));
+        fprintf(txt_results, "From the starting point:\n→ Go the closest street (%s)\n", road_name);  
+        
+        *first_time = false;
+
+    } else {
+
+        if(vertex_next) {
+
+            char* way = direction(vertex_get_data(get_dijkstra_vertex(vertex_start)), vertex_get_data(get_dijkstra_vertex(vertex_end)), vertex_get_data(get_dijkstra_vertex(vertex_next)));
+            char* road_name_1 = edge_data_get_name(edge_get_data(find_element(vertex_get_edges(get_dijkstra_vertex(vertex_start)), get_dijkstra_vertex(vertex_end), compare_report)));
+            char* road_name_2 = edge_data_get_name(edge_get_data(find_element(vertex_get_edges(get_dijkstra_vertex(vertex_end)), get_dijkstra_vertex(vertex_next), compare_report)));
+
+            if(!strcmp(way, "FOWARD")) {
+
+            } else if(!strcmp(way, "RIGHT")) {
+
+                if(strcmp(road_name_1, road_name_2)) fprintf(txt_results, "→ Go to the street crossing between %s and %s, then turn right on street %s\n", road_name_1, road_name_2, road_name_2);
+
+            } else if(!strcmp(way, "LEFT")) {
+
+                if(strcmp(road_name_1, road_name_2)) fprintf(txt_results, "→ Go to the street crossing between %s and %s, then turn left on street %s\n", road_name_1, road_name_2, road_name_2);
+
+            }
+
+        } else {
+
+            fprintf(txt_results, "→ Go straight forward until you reach your destination\n\n\n");
+
+        }
+
+    }
 
 }

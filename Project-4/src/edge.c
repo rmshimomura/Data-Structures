@@ -8,7 +8,6 @@ typedef struct edge_data {
     char* right_side_square;
     double length;
     double average_speed;
-    char direction[2];
 
 } edge_data;
 
@@ -23,18 +22,6 @@ void* new_edge_data(char* name, char* left_side_square, char* right_side_square,
     strcpy(aux->right_side_square, right_side_square);
     aux->length = length;
     aux->average_speed = average_speed;
-
-    if(vertex_data_get_x(vertex_1_data) == vertex_data_get_x(vertex_2_data)) {
-
-        vertex_data_get_y(vertex_1_data) > vertex_data_get_y(vertex_2_data) ? strcpy(aux->direction, "S") : strcpy(aux->direction, "N");
-        
-    } else if (vertex_data_get_y(vertex_1_data) == vertex_data_get_y(vertex_2_data)){
-
-        vertex_data_get_x(vertex_1_data) > vertex_data_get_x(vertex_2_data) ? strcpy(aux->direction, "W") : strcpy(aux->direction, "E");
-
-    }
-
-    //TODO NW, NE, SW, SE
 
     return aux;
 
@@ -87,11 +74,6 @@ double edge_data_get_average_speed(void* data) {
     return aux->average_speed;
 }
 
-char* edge_data_get_direction(void* data) {
-    edge_data* aux = data;
-    return aux->direction;
-}
-
 void edge_data_set_name(void* data, char* name) {
     edge_data* aux = data;
     strcpy(aux->name, name);
@@ -115,9 +97,4 @@ void edge_data_set_length(void* data, double length) {
 void edge_data_set_average_speed(void* data, double average_speed) {
     edge_data* aux = data;
     aux->average_speed = average_speed;
-}
-
-void edge_data_set_direction(void* data, char* direction) {
-    edge_data* aux = data;
-    strcpy(aux->direction, direction);
 }

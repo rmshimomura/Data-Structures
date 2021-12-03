@@ -11,5 +11,6 @@ double vertex_data_get_y(void* data);
 void vertex_data_set_id(void* data, char* id);
 void vertex_data_set_x(void* data, double x);
 void vertex_data_set_y(void* data, double y);
+char* direction(void* vertex_1, void* vertex_2, void* vertex_3);
 
 #endif
