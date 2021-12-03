@@ -345,7 +345,7 @@ void rv(void* connections, double x, double y, double w, double h, double f, FIL
 
                 if(edge_get_from(edge_element) != edge_get_to(edge_element)) {
 
-                    sprintf(line, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"yellow\" stroke-width=\"5\" \" />\n", vertex_data_get_x(vertex_get_data(edge_get_from(edge_element))), vertex_data_get_y(vertex_get_data(edge_get_from(edge_element))), vertex_data_get_x(vertex_get_data(edge_get_to(edge_element))), vertex_data_get_y(vertex_get_data(edge_get_to(edge_element)))); 
+                    sprintf(line, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"yellow\" stroke-width=\"5\"/>\n", vertex_data_get_x(vertex_get_data(edge_get_from(edge_element))), vertex_data_get_y(vertex_get_data(edge_get_from(edge_element))), vertex_data_get_x(vertex_get_data(edge_get_to(edge_element))), vertex_data_get_y(vertex_get_data(edge_get_to(edge_element)))); 
 
                     char* command = calloc(strlen(line) + 5, sizeof(char));
                     strcpy(command, line);
@@ -366,7 +366,7 @@ void rv(void* connections, double x, double y, double w, double h, double f, FIL
 
         char modification_root[1000] = "";
 
-        sprintf(modification_root, "<circle cx=\"%.2lf\" cy=\"%.2lf\" r=\"8\" stroke=\"blue\" stroke-width=\"2\" fill=\"blue\" fill-opacity = \"1\" />\n", vertex_data_get_x(get_package_root(mst_data)), vertex_data_get_y(get_package_root(mst_data))); 
+        sprintf(modification_root, "<rect x=\"%.2lf\" y=\"%.2lf\" width=\"15\" height=\"15\"\n style=\"fill:red;stroke:red;fill-opacity:1;stroke-opacity:1\"/>\n", vertex_data_get_x(get_package_root(mst_data)) - 7.5, vertex_data_get_y(get_package_root(mst_data)) - 7.5); 
 
         char* command_root = calloc(strlen(modification_root) + 5, sizeof(char));
         strcpy(command_root, modification_root);
