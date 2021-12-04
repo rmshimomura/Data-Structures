@@ -42,5 +42,5 @@ $(OBJ)/Hash.o: Hash/hash.c |$(OBJ)
 	$(CC) $(CFLAGS) -c -o $@ $<
 $(OBJ)/Prior.o: Priority_queue/priority_queue.c |$(OBJ)
 	$(CC) $(CFLAGS) -c -o $@ $<
-$(OBJ)/Stack.o: Stack/Stack.c |$(OBJ)
+$(OBJ)/Stack.o: Stack/stack.c |$(OBJ)
 	$(CC) $(CFLAGS) -c -o $@ $<
