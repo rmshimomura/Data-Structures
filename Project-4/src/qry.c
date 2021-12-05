@@ -694,12 +694,8 @@ int compare_report(void* a, void* b) {
 
 void report_txt(void* vertex_start, void* vertex_end, void* vertex_next, FILE* txt_results, bool* first_time) {
 
-    // vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_1))), vertex_data_get_x(vertex_get_data(get_dijkstra_vertex(aux_2))), vertex_data_get_y(vertex_get_data(get_dijkstra_vertex(aux_2)));
 
     if(*first_time == true) {
-        // printf("%s - %s\n", vertex_data_get_id(vertex_get_data(get_dijkstra_vertex(vertex_start))), vertex_data_get_id(vertex_get_data(get_dijkstra_vertex(vertex_end))));
-
-        // printf("%s - %s\n", vertex_data_get_id(vertex_get_data(edge_get_from(get_list_element(get_next(get_head(vertex_get_edges(get_dijkstra_vertex(vertex_start)))))))), vertex_data_get_id(vertex_get_data(edge_get_to(get_list_element(get_next(get_head(vertex_get_edges(get_dijkstra_vertex(vertex_start)))))))));
 
         char* road_name = edge_data_get_name(edge_get_data(find_element(vertex_get_edges(get_dijkstra_vertex(vertex_start)), get_dijkstra_vertex(vertex_end), compare_report)));
         fprintf(txt_results, "From the starting point:\n→ Go the closest street (%s)\n", road_name);  
