@@ -21,6 +21,7 @@ int main(int argc, char** argv) {
 
     get_arguments(argc, argv, paths, flags);
     int size = structures_size(paths);
+    
     if(size == -1) { 
         puts("Size not inserted!");
         free_paths(paths);
@@ -38,7 +39,6 @@ int main(int argc, char** argv) {
     if(get_qry_inserted(flags))
         format_qry_results(connections, blocks, blocks_hash, paths, flags, view_box);
         
-
     free_graph(connections);
     hash_table_destroy(blocks_hash, free, false);
     destroy_AVL_tree(blocks, get_root(blocks), free_block_list);

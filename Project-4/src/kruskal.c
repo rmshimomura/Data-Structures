@@ -278,27 +278,6 @@ void** kruskal(void* edges_list) {
     free_list(result, false, NULL);
     free_list(vertex_list, false, NULL);
 
-    // for(void* aux = get_head(packaging); aux; aux = get_next(aux)){
-
-    //     package* look = get_list_element(aux);
-
-    //     printf("Root = %s\n", vertex_data_get_id(look->root));
-    //     printf("[");
-
-    //     for(void* aux = get_head(look->list_of_edges); aux; aux = get_next(aux)) {
-
-    //         edge* printer = get_list_element(aux);
-
-    //         printf(" |%s - %s| ", vertex_data_get_id(vertex_get_data(printer->from)), vertex_data_get_id(vertex_get_data(printer->to)));
-
-    //     }
-
-    //     printf("]\n");
-
-    // }
-
-    // puts("=================== ");
-
     return packaging;
 }
 
