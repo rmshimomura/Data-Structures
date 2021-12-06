@@ -251,6 +251,26 @@ void graph_insert_vertex(void* connections, void* vertex_created) {
 
 }
 
+void graph_insert_vertex_transpose(void* connections, void* vertex_created) {
+
+    graph* aux_graph = connections;
+
+    if(aux_graph->next_free_space == aux_graph->size) {
+
+        puts("No more space available on the graph!");
+        return;
+
+    }
+
+    aux_graph->vertexes[aux_graph->next_free_space].vertex_data = vertex_created;
+    aux_graph->vertexes[aux_graph->next_free_space].edges = create_list();
+    aux_graph->vertexes[aux_graph->next_free_space].activated = true;
+    aux_graph->vertexes[aux_graph->next_free_space].visited = false;
+
+    aux_graph->next_free_space++;
+
+}
+
 void* graph_find_vertex(void* connections, char* vertex_id) {
 
     graph* graph_aux = connections;

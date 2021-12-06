@@ -47,13 +47,13 @@ typedef struct graph {
 
 } graph;
 
-void* transform_graph(graph* original_graph) {
+void* transform_graph(graph* original_graph, double threshold, void* list_of_modifications) {
 
     graph* transpose_graph = create_graph(original_graph->size);
 
     for(int i = 0; i < original_graph->size; i++) {
         
-        graph_insert_vertex(transpose_graph, new_vertex_data(original_graph->vertexes[i].vertex_data->id, original_graph->vertexes[i].vertex_data->x, original_graph->vertexes[i].vertex_data->y));
+        graph_insert_vertex_transpose(transpose_graph, new_vertex_data(original_graph->vertexes[i].vertex_data->id, original_graph->vertexes[i].vertex_data->x, original_graph->vertexes[i].vertex_data->y));
 
     }
 
@@ -62,12 +62,26 @@ void* transform_graph(graph* original_graph) {
         for(void* runner = get_head(original_graph->vertexes[i].edges); runner; runner = get_next(runner)) { 
             
             edge* edge_runner = get_list_element(runner);
-            graph_insert_edge(
-                transpose_graph,
-                edge_runner->edge_data->name, edge_runner->to->vertex_data->id, edge_runner->from->vertex_data->id,
-                edge_runner->edge_data->left_side_square, edge_runner->edge_data->right_side_square,
-                edge_runner->edge_data->length, edge_runner->edge_data->average_speed
-             );
+
+            if(edge_runner->edge_data->average_speed >= threshold && edge_runner->from != edge_runner->to) {
+
+                graph_insert_edge(
+                    transpose_graph,
+                    edge_runner->edge_data->name, edge_runner->to->vertex_data->id, edge_runner->from->vertex_data->id,
+                    edge_runner->edge_data->left_side_square, edge_runner->edge_data->right_side_square,
+                    edge_runner->edge_data->length, edge_runner->edge_data->average_speed
+                );
+
+            } else {
+
+                char line[1000] = "";
+                sprintf(line, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"red\" stroke-width=\"8\"/>\n", edge_runner->from->vertex_data->x, edge_runner->from->vertex_data->y, edge_runner->to->vertex_data->x, edge_runner->to->vertex_data->y); 
+                char* command = calloc(strlen(line) + 5, sizeof(char));
+                strcpy(command, line);
+                insert_list(list_of_modifications, command);
+
+            }
+
         }
     }
 
@@ -75,7 +89,7 @@ void* transform_graph(graph* original_graph) {
 
 }
 
-void dfs_stacking(void* stack, vertex* current_vertex) {
+void dfs_stacking(void* stack, vertex* current_vertex, double threshold) {
 
     if(current_vertex->visited)
         return;
@@ -86,8 +100,8 @@ void dfs_stacking(void* stack, vertex* current_vertex) {
 
         edge* analize = get_list_element(runner);
 
-        if(!analize->to->visited) {
-            dfs_stacking(stack, analize->to);
+        if(!analize->to->visited && analize->edge_data->average_speed >= threshold) {
+            dfs_stacking(stack, analize->to, threshold);
         }
 
     }
@@ -104,21 +118,13 @@ void region_find(vertex* current_vertex, void* region, double threshold, void* l
 
         edge* analize = get_list_element(runner);
 
-        if(analize->edge_data->average_speed > threshold) {
+        if(analize->edge_data->average_speed >= threshold) {
 
             if(!analize->to->visited) {
                 
                 region_find(analize->to, region, threshold, list_of_modifications);
 
             }
-
-        } else { 
-
-            char line[1000] = "";
-            sprintf(line, "<line x1=\"%lf\" y1=\"%lf\" x2=\"%lf\" y2=\"%lf\" stroke=\"red\" stroke-width=\"8\"/>\n", analize->from->vertex_data->x, analize->from->vertex_data->y, analize->to->vertex_data->x, analize->to->vertex_data->y); 
-            char* command = calloc(strlen(line) + 5, sizeof(char));
-            strcpy(command, line);
-            insert_list(list_of_modifications, command);
 
         }
 
@@ -135,11 +141,11 @@ void** kosaraju(void* connections, double threshold, void* list_of_modifications
 
     for(int i = 0; i < graph_aux->size; i++) {
 
-        dfs_stacking(stack, &graph_aux->vertexes[i]);
+        dfs_stacking(stack, &graph_aux->vertexes[i], threshold);
 
     }
 
-    graph* transpose_graph = transform_graph(graph_aux);
+    graph* transpose_graph = transform_graph(graph_aux, threshold, list_of_modifications);
 
     void* list_of_regions = create_list();
 
@@ -160,9 +166,13 @@ void** kosaraju(void* connections, double threshold, void* list_of_modifications
 
             edge* aux = get_list_element(runner);
 
-            if(!aux->to->visited) {
+            if(aux->edge_data->average_speed >= threshold) {
 
-                region_find(aux->to, new_region, threshold, list_of_modifications);
+                if(!aux->to->visited) {
+
+                    region_find(aux->to, new_region, threshold, list_of_modifications);
+
+                }
 
             }
 
