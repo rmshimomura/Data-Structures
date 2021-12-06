@@ -367,7 +367,7 @@ void rv(void* connections, double x, double y, double w, double h, double f, FIL
 
         char modification_root[1000] = "";
 
-        sprintf(modification_root, "<rect x=\"%.2lf\" y=\"%.2lf\" width=\"15\" height=\"15\"\n style=\"fill:red;stroke:red;fill-opacity:1;stroke-opacity:1\"/>\n", vertex_data_get_x(get_package_root(mst_data)) - 7.5, vertex_data_get_y(get_package_root(mst_data)) - 7.5); 
+        sprintf(modification_root, "<rect x=\"%.2lf\" y=\"%.2lf\" width=\"20\" height=\"20\"\n style=\"fill:black;stroke:red;fill-opacity:1;stroke-opacity:1\"/>\n", vertex_data_get_x(get_package_root(mst_data)) - 10, vertex_data_get_y(get_package_root(mst_data)) - 10); 
 
         char* command_root = calloc(strlen(modification_root) + 5, sizeof(char));
         strcpy(command_root, modification_root);
