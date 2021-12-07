@@ -81,7 +81,7 @@ char* direction(void* vertex_1, void* vertex_2, void* vertex_3) {
 
     if(coef_1 == coef_2) {
 
-        return "FOWARD";
+        return "FORWARD";
 
     } else if (coef_1 > coef_2) {
 

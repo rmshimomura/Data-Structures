@@ -710,7 +710,7 @@ void report_txt(void* vertex_start, void* vertex_end, void* vertex_next, FILE* t
             char* road_name_1 = edge_data_get_name(edge_get_data(find_element(vertex_get_edges(get_dijkstra_vertex(vertex_start)), get_dijkstra_vertex(vertex_end), compare_report)));
             char* road_name_2 = edge_data_get_name(edge_get_data(find_element(vertex_get_edges(get_dijkstra_vertex(vertex_end)), get_dijkstra_vertex(vertex_next), compare_report)));
 
-            if(!strcmp(way, "FOWARD")) {
+            if(!strcmp(way, "FORWARD")) {
 
             } else if(!strcmp(way, "RIGHT")) {
 
