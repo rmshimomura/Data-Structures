@@ -27,10 +27,20 @@ On every project, it is ***strictly prohibited*** declaring structs on headers f
   - Introduction to SVG.
   - Introduction to using Cartesian plane with C language.
 
+
+![project1-2](https://user-images.githubusercontent.com/65873681/145121677-c0884bcc-2b55-412e-b452-372ba7e37e29.png)
+
+Example of a tp and a bbi function execution
+
 ## Second project
   Same format of first project, however, now circles will be added too.
   
   The plot of this project is to consider the rectangles as buildings, and circles as people on a colony of "New Grimesland". There will be some radioactive meteors falling in the village with radiation level varying between [0, 25] mSv. Each side of the rectangles will produce a shadow that blocks 20% of the meteor radiation.
+  
+  ![radiation](https://user-images.githubusercontent.com/65873681/145122040-dcae2187-9f30-4f0c-a286-8955265773ae.png)
+  ![bombs](https://user-images.githubusercontent.com/65873681/145122075-a0a07c2e-f4f7-4c04-82a0-23129cd14cce.png)
+
+
   
   Important to notice that rectangles and circles ***must*** be stored in K-Dimensional trees, shadows can be stored either on K-D or BS trees. Also, whenever is possible only search in promising sub-trees.
   
@@ -53,39 +63,46 @@ On every project, it is ***strictly prohibited*** declaring structs on headers f
   - Basic animation on SVG.
   - Introduction to basic Computational Geometry.
 
+![project2](https://user-images.githubusercontent.com/65873681/145121899-ae892ba2-bea4-480d-9940-da6b5a78eb95.png)
+
+Example of a fg function (animated with <animatemotion>)
+
 ## Third project
- Same format of the previous two projects, with .geo files and .qry. However, on this project we're doing a city map, using information of buildings, people and tenancies.
+ Same format of the previous two projects, with .geo files and .qry. However, on this project we're doing a city map, using information of buildings, people and locations.
  
  Every building has a ZIP code, face, and number.
  
  Every person has a SSN (social security number), a name, a surname, sex and birth date.
  
- Also, the tenancies can be rented.
+ Also, the locations can be rented.
  
  The plot is to build a system to manipulate the map of a city and some relatable info. The map of a city is composed by a rectangle set representing the buildings.
  The number of a house or store is the distance of the front of the place to a anchor point.
  
  Also, the buildings ***must*** be stored on lists of buildings with the same x coordinate. Then this list is stored inside a node of the AVL tree.
  
- All persons and tenancies ***must*** be stored on hash tables.
+ All persons and locations ***must*** be stored on hash tables.
  
  (P.S - I also stored the buildings on hash tables using the ZIP code to optimize search).
  
+ ![project3](https://user-images.githubusercontent.com/65873681/145122300-6c4301d6-d854-494a-9ba2-d4e4ad89bc4f.png)
+ ![p3](https://user-images.githubusercontent.com/65873681/145122686-99d3e7c7-9909-4eb0-aa28-9b38a8e1eb7d.png)
+
  *In total there are 13 functions:* 
  
-  - del: Given a ZIP code, remove all the persons living here, as well the tenancies available.
+  - del: Given a ZIP code, remove all the persons living here, as well the locations available.
   - m?: List all the persons that lives on the given ZIP code.
   - dm?: Show all the person data given the specific SSN.
   - mud: The person with given SSN number move to another place (given new ZIP code, number, face).
-  - oloc: Add a new tenancy offer to the given ZIP code.
-  - oloc?: Show all available tenancies inside a given rectangle.
-  - loc: The person with given SSN number rent tenancy identified with given ID.
-  - loc?: Show the situation of a specific tenancy (given ID).
-  - dloc: The person living on tenancy (with given ID) end the contract, the tenancy offer is removed.
+  - oloc: Add a new location offer to the given ZIP code.
+  - oloc?: Show all available locations inside a given rectangle.
+  - loc: The person with given SSN number rent location identified with given ID.
+  - loc?: Show the situation of a specific location (given ID).
+  - dloc: The person living on location (with given ID) end the contract, the location offer is removed.
   - hom: Show the info of all men inside a given rectangle.
   - mul: Show the info of all woman inside a given rectangle.
   - dmpt: Generate the .dot file with the current state of the AVL tree.
-  - catac: Remove buildings, persons, and tenancies offers inside given rectagle.
+  - catac: Remove buildings, persons, and locations offers inside given rectagle.
   
   #### *Concepts used:*
   - Information hiding.
