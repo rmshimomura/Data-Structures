@@ -4,7 +4,7 @@ Some the projects I made through Data structures, from second and third semester
 
 On every project, it is ***strictly prohibited*** declaring structs on headers files.
 
- ## Project 1
+ ## First project
   Given a file .geo containing data for rectangles, and functions from a .qry file, the goal is to execute predetermined functions from the .qry file and show modifications each function does to the rectangles in a SVG and a text file.
   
   Important to notice that the rectangles ***must*** be stored in a double linked list.
@@ -27,7 +27,7 @@ On every project, it is ***strictly prohibited*** declaring structs on headers f
   - Introduction to SVG.
   - Introduction to using Cartesian plane with C language.
 
-## Project-2:
+## Second project
   Same format of first project, however, now circles will be added too.
   
   The plot of this project is to consider the rectangles as buildings, and circles as people on a colony of "New Grimesland". There will be some radioactive meteors falling in the village with radiation level varying between [0, 25] mSv. Each side of the rectangles will produce a shadow that blocks 20% of the meteor radiation.
@@ -53,7 +53,7 @@ On every project, it is ***strictly prohibited*** declaring structs on headers f
   - Basic animation on SVG.
   - Introduction to basic Computational Geometry.
 
-## Project-3:
+## Third project
  Same format of the previous two projects, with .geo files and .qry. However, on this project we're doing a city map, using information of buildings, people and tenancies.
  
  Every building has a ZIP code, face, and number.
