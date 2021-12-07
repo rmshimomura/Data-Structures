@@ -86,10 +86,6 @@ void* priority_queue_insert(void* sequence, void* element, double priority) {
     }
 
     priority_queue_aux->size++;
-    // for(node* aux = priority_queue_get_head(sequence); aux; aux = priority_queue_get_next(aux)) {
-    //     printf("%.2lf ", aux->priority);
-    // }
-    // puts(" ");
     return aux;
 
 }
