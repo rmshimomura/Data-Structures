@@ -65,7 +65,7 @@ Example of a tp and a bbi function execution
 
 ![project2](https://user-images.githubusercontent.com/65873681/145121899-ae892ba2-bea4-480d-9940-da6b5a78eb95.png)
 
-Example of a fg function (animated with <animatemotion>)
+Example of a fg function (animated with animatemotion)
 
 ## Third project
  Same format of the previous two projects, with .geo files and .qry. However, on this project we're doing a city map, using information of buildings, people and locations.
