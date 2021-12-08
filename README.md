@@ -102,12 +102,52 @@ Example of a fg function (animated with <animatemotion>)
   - hom: Show the info of all men inside a given rectangle.
   - mul: Show the info of all woman inside a given rectangle.
   - dmpt: Generate the .dot file with the current state of the AVL tree.
-  - catac: Remove buildings, persons, and locations offers inside given rectagle.
+  - catac: Remove buildings, persons, and locations offers inside given rectangle.
   
   #### *Concepts used:*
   - Information hiding.
   - Double Linked Lists.
   - AVL Trees.
   - Hash Tables.
+  - Computational Geometry.
+  - Optimizing search on Trees.
+
+ 
+ ## Fourth project (Final)
+ 
+  The last project is very simmilar to the third one. We're operating a city map, but without persons and loactions, instead we now have streets and vertexes (representing street crossings). Now, we also have a .via file with the information of the vertexes and the edges. The functions are focused on calculating the shortest and the fastest way to reach a building. 
+ 
+ Important to notice that the road system ***must*** be stored in a directed graph, using adjacency lists
+ 
+ ![project4-1](https://user-images.githubusercontent.com/65873681/145129664-12560f6b-d0ea-4b79-9c55-b1b0ebd2144a.png)
+
+ ![project4-2](https://user-images.githubusercontent.com/65873681/145129940-a689715d-9986-419d-930a-03f86ac07f81.png)
+ 
+ *In total there are 5 functions:* 
+  
+ - @o?: Stores a spacial point in the void*
+ - catac: Remove buildings, vertexes, and edges inside given rectangle.
+ - rv: Find the MST of a sub-graph of vertexes that are inside a given rectangle, from the root, slow down the average speed of the child's streets (using a given factor, multiplied by the height in the tree). Also, do not consider the graph directed in this function. (Needed to use Kruskal's algorithm).
+ - cx: Find the SCC and color them with distinct colors by region. (Needed to use Kosaraju's algorithm).
+ - p?: Find the fastest and the shortest way from the void* stored by @o? and the given point. (Needed to use Dijkstra's algorithm, also, the path must be animated).
+ 
+ ![catac-cx-rv](https://user-images.githubusercontent.com/65873681/145130492-bfacecb3-fea9-46fe-b366-3b235efcc003.png)
+
+ Example of a catac + cx + rv function
+ 
+ ![path](https://user-images.githubusercontent.com/65873681/145130681-bf23ca95-00cd-45d9-9bf8-2019e2907664.png)
+
+ Example of animation path
+ 
+   #### *Concepts used:*
+  - Information hiding.
+  - Double Linked Lists.
+  - AVL Trees.
+  - Hash Tables.
+  - Graphs.
+  - SVG animation
+  - Dijkstra's algorithm.
+  - Kosaraju's algorithm.
+  - Kruskal's algorithm.
   - Computational Geometry.
   - Optimizing search on Trees.
