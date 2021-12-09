@@ -40,6 +40,7 @@ Example of a tp and a bbi function execution
   ![radiation](https://user-images.githubusercontent.com/65873681/145122040-dcae2187-9f30-4f0c-a286-8955265773ae.png)
   ![bombs](https://user-images.githubusercontent.com/65873681/145122075-a0a07c2e-f4f7-4c04-82a0-23129cd14cce.png)
 
+ Huge thanks to @MateusKomarchesqui (lol)
 
   
   Important to notice that rectangles and circles ***must*** be stored in K-Dimensional trees, shadows can be stored either on K-D or BS trees. Also, whenever is possible only search in promising sub-trees.
