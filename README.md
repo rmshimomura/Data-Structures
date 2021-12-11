@@ -12,13 +12,13 @@ On every project, it is ***strictly prohibited*** declaring structs on headers f
   *In total there are 8 functions:*
   
   - TP: On the final SVG, only the rectangles that intercepts any other should appear, and fill color must be changed every pair formed.
-  - TPR: Similar to TP, but only consider rectangles with intersections within a rectangle passed as an argument to the function.
+  - TPR: Like TP function, but only consider rectangles with intersections within a rectangle passed as an argument to the function.
   - DPI: Remove every rectangle that the point passed as an argument to the function is inner.
   - DR: Remove every rectangle that is inside a rectangle whose ID is passed to this function. 
   - BBI: Draw a bounding box containing all the rectangles that the point passed to this function is inner.
-  - BBID: Analogous to BBI, but select all the rectangles that are inner to the rectangle whose ID is passed to this function.
+  - BBID: Analogous to BBI but select all the rectangles that are inner to the rectangle whose ID is passed to this function.
   - IID: Report data from the passed ID and k elements before (*k* < 0) or after (*k* > 0) this rectangle. 
-  - DIID: Similar to IID, but remove the rectangles (excluding the passed ID rectangle). 
+  - DIID: Like IID function but remove the rectangles (excluding the given ID rectangle). 
 
   #### *Concepts used:*
   - Information hiding.
@@ -69,16 +69,16 @@ Example of a tp and a bbi function execution
 Example of a fg function (animated with animatemotion)
 
 ## Third project
- Same format of the previous two projects, with .geo files and .qry. However, on this project we're doing a city map, using information of buildings, people and locations.
+ Same format of the previous two projects, with .geo files and .qry. However, on this project we're doing a city map, using information of buildings, people, and locations.
  
  Every building has a ZIP code, face, and number.
  
- Every person has a SSN (social security number), a name, a surname, sex and birth date.
+ Every person has an SSN (social security number), a name, a surname, sex and birth date.
  
  Also, the locations can be rented.
  
  The plot is to build a system to manipulate the map of a city and some relatable info. The map of a city is composed by a rectangle set representing the buildings.
- The number of a house or store is the distance of the front of the place to a anchor point.
+ The number of a house or store is the distance of the front of the place to an anchor point.
  
  Also, the buildings ***must*** be stored on lists of buildings with the same x coordinate. Then this list is stored inside a node of the AVL tree.
  
@@ -116,9 +116,9 @@ Example of a fg function (animated with animatemotion)
  
  ## Fourth project (Final)
  
-  The last project is very simmilar to the third one. We're operating a city map, but without persons and loactions, instead we now have streets and vertexes (representing street crossings). Now, we also have a .via file with the information of the vertexes and the edges. The functions are focused on calculating the shortest and the fastest way to reach a building. 
+  The last project is very similar to the third one. We're operating a city map, but without persons and locations, instead we now have streets and vertexes (representing street crossings). Now, we also have a .via file with the information of the vertexes and the edges. The functions are focused on calculating the shortest and the fastest way to reach a building. 
  
- Important to notice that the road system ***must*** be stored in a directed graph, using adjacency lists
+ Important to notice that the road system ***must*** be stored in a directed graph, using adjacency lists.
  
  ![project4-1](https://user-images.githubusercontent.com/65873681/145129664-12560f6b-d0ea-4b79-9c55-b1b0ebd2144a.png)
 
